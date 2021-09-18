@@ -1,0 +1,11 @@
+---
+nautobot_plugin_firewall_model:
+  project_name: "nautobot-plugin-firewall-model"
+  nautobot_ver: "1.1.0"
+  local: false
+  python_ver: "3.6"
+  compose_dir: "development"
+  compose_files:
+    - "docker-compose.requirements.yml"
+    - "docker-compose.base.yml"
+    - "docker-compose.dev.yml"

@@ -1,0 +1,23 @@
+---
+dev_addr: "127.0.0.1:8001"
+edit_uri: "edit/main/nautobot-plugin-firewall-model/docs"
+site_name: "NautobotPluginFirewallModel Documentation"
+site_url: "https://nautobot-plugin-firewall-model.readthedocs.io/"
+repo_url: "https://github.com/networktocode-llc/nautobot-plugin-firewall-model"
+python:
+  install:
+    - requirements: "docs/requirements.txt"
+theme:
+  name: "readthedocs"
+  navigation_depth: 4
+  hljs_languages:
+    - "django"
+    - "yaml"
+extra_css:
+  - "extra.css"
+markdown_extensions:
+  - "admonition"
+  - toc:
+      permalink: true
+nav:
+  - Introduction: "index.md"
