@@ -1,9 +1,9 @@
 """Test VIPPartition model."""
-
+# flake8: noqa: F403,405
 from django.test import TestCase
 
 from nautobot.ipam.models import VRF
-from nautobot_plugin_firewall_model.models import IPRange, Zone, AddressGroup, Protocol, ServiceGroup, User, UserGroup
+from nautobot_plugin_firewall_model.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
 
 class TestModels(TestCase):
@@ -157,3 +157,17 @@ class TestModels(TestCase):
         self.assertEqual(user_group.name, "group1")
         self.assertEqual(user_group.users.first(), user)
         self.assertEqual(str(user_group), "group1")
+
+    def test_create_fqdn_only_required(self):
+        """Creates a fqdn with only required fields."""
+        fqdn = FQDN.objects.create(name="test.local")
+
+        self.assertEqual(fqdn.description, "")
+        self.assertEqual(fqdn.name, "test.local")
+
+    def test_create_fqdn_all_fields(self):
+        """Creates a fqdn with all fields."""
+        fqdn = FQDN.objects.create(name="test.local", description="test domain")
+
+        self.assertEqual(fqdn.description, "test domain")
+        self.assertEqual(fqdn.name, "test.local")

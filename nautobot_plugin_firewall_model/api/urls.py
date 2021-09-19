@@ -16,5 +16,6 @@ router.register("user-group", views.UserGroupViewSet)
 router.register("source-destination", views.SourceDestinationViewSet)
 router.register("term", views.TermViewSet)
 router.register("policy", views.PolicyViewSet)
+router.register("fqdn", views.FQDNViewSet)
 
 urlpatterns = router.urls

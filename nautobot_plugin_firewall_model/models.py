@@ -15,7 +15,7 @@ from nautobot.ipam.fields import VarbinaryIPField
 from netaddr import IPAddress
 from taggit.managers import TaggableManager
 
-from nautobot_plugin_firewall_model.choices import TCP_UDP_CHOICES, ADDRESS_ASSIGNMENT_MODELS, ACTION_CHOICES
+from nautobot_plugin_firewall_model import choices
 
 
 @extras_features("custom_validators", "relationships", "graphql")
@@ -148,7 +148,7 @@ class Protocol(BaseModel, ChangeLoggedModel):
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50, editable=False)
     port = models.IntegerField()
-    tcp_udp = models.CharField(choices=TCP_UDP_CHOICES, null=True, blank=True, max_length=3)
+    tcp_udp = models.CharField(choices=choices.TCP_UDP_CHOICES, null=True, blank=True, max_length=3)
 
     class Meta:
         """Meta class."""
@@ -200,6 +200,31 @@ class ServiceGroup(BaseModel, ChangeLoggedModel):
     def get_absolute_url(self):
         """Return detail view URL."""
         return reverse("plugins:nautobot_plugin_firewall_model:servicegroup", args=[self.pk])
+
+    def __str__(self):
+        """Stringify instance."""
+        return self.name
+
+
+@extras_features("custom_validators", "relationships", "graphql")
+class FQDN(BaseModel, ChangeLoggedModel):
+    """FQDN model."""
+
+    description = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+    name = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["name"]
+        verbose_name_plural = "FQDNs"
+
+    def get_absolute_url(self):
+        """Return detail view URL."""
+        return reverse("plugins:nautobot_plugin_firewall_model:fqdn", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""
@@ -270,7 +295,7 @@ class SourceDestination(BaseModel, ChangeLoggedModel):
     )
     assigned_address_type = models.ForeignKey(
         to=ContentType,
-        limit_choices_to=ADDRESS_ASSIGNMENT_MODELS,
+        limit_choices_to=choices.ADDRESS_ASSIGNMENT_MODELS,
         on_delete=models.PROTECT,
         related_name="+",
         blank=True,
@@ -278,14 +303,26 @@ class SourceDestination(BaseModel, ChangeLoggedModel):
     )
     assigned_address_id = models.UUIDField(blank=True, null=True)
     address = GenericForeignKey(ct_field="assigned_address_type", fk_field="assigned_address_id")
-    address_group = models.ForeignKey(to=AddressGroup, on_delete=models.CASCADE, blank=True, null=True)
-    fqdn = models.CharField(max_length=50, blank=True)
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, blank=True, null=True)
-    user_group = models.ForeignKey(to=UserGroup, on_delete=models.CASCADE, blank=True, null=True)
-    port = models.IntegerField(blank=True)
-    tcp_udp = models.CharField(choices=TCP_UDP_CHOICES, null=True, blank=True, max_length=3)
-    service = models.ForeignKey(to=Protocol, on_delete=models.CASCADE)
-    service_group = models.ForeignKey(to=ServiceGroup, on_delete=models.CASCADE)
+    assigned_user_type = models.ForeignKey(
+        to=ContentType,
+        limit_choices_to=choices.USER_ASSIGNMENT_MODELS,
+        on_delete=models.PROTECT,
+        related_name="+",
+        blank=True,
+        null=True,
+    )
+    assigned_user_id = models.UUIDField(blank=True, null=True)
+    user = GenericForeignKey(ct_field="assigned_user_type", fk_field="assigned_user_id")
+    assigned_service_type = models.ForeignKey(
+        to=ContentType,
+        limit_choices_to=choices.SERVICE_ASSIGNMENT_MODELS,
+        on_delete=models.PROTECT,
+        related_name="+",
+        blank=True,
+        null=True,
+    )
+    assigned_service_id = models.UUIDField(blank=True, null=True)
+    service = GenericForeignKey(ct_field="assigned_service_type", fk_field="assigned_service_id")
     zone = models.ForeignKey(to=Zone, on_delete=models.CASCADE)
 
     class Meta:
@@ -314,7 +351,7 @@ class Term(BaseModel, ChangeLoggedModel):
     destination = models.ForeignKey(
         to=SourceDestination, on_delete=models.CASCADE, related_name="%(class)s_destination"
     )
-    action = models.CharField(choices=ACTION_CHOICES, max_length=20)
+    action = models.CharField(choices=choices.ACTION_CHOICES, max_length=20)
     log = models.BooleanField(default=False)
 
     class Meta:

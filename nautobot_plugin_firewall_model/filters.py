@@ -62,6 +62,17 @@ class ServiceGroupFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         fields = ["id", "name", "protocols", "description"]
 
 
+class FQDNFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+    """Filter for FQDN."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.FQDN
+
+        fields = ["id", "name", "description"]
+
+
 class UserFilter(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for User."""
 
@@ -92,14 +103,8 @@ class SourceDestinationFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         fields = [
             "id",
             # "address",
-            "address_group",
-            "fqdn",
-            "user",
-            "user_group",
-            "port",
-            "tcp_udp",
-            "service",
-            "service_group",
+            # "user",
+            # "service",
             "zone",
             "description",
         ]

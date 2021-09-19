@@ -30,6 +30,14 @@ class AddressGroupViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
     filterset_class = filters.AddressGroupFilter
 
 
+class FQDNViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
+    """AddressGroup viewset."""
+
+    queryset = models.FQDN.objects.all()
+    serializer_class = serializers.FQDNSerializer
+    filterset_class = filters.FQDNFilter
+
+
 class ProtocolViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
     """Protocol viewset."""
 
@@ -50,7 +58,7 @@ class UserViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
     """User viewset."""
 
     queryset = models.User.objects.all()
-    serializer_class = serializers.UserSerializer
+    serializer_class = serializers.FirewallUserSerializer
     filterset_class = filters.UserFilter
 
 

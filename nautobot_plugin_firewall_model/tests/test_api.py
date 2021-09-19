@@ -1,16 +1,9 @@
 """Unit tests for API views."""
+# flake8: noqa: F403,405
 from nautobot.ipam.models import Prefix
 from nautobot.utilities.testing import APIViewTestCases
 
-from nautobot_plugin_firewall_model.models import (
-    IPRange,
-    Zone,
-    AddressGroup,
-    Protocol,
-    ServiceGroup,
-    User,
-    UserGroup,
-)
+from nautobot_plugin_firewall_model.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
 
 class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -162,6 +155,27 @@ class UserGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"name": "test1", "users": [user.id]},
             {"name": "test2", "users": [user.id]},
         ]
+
+    def test_list_objects_brief(self):
+        pass
+
+
+class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
+    # pylint: disable=R0901
+    """Test the Protocol viewsets."""
+    model = FQDN
+    bulk_update_data = {"description": "test update description"}
+    create_data = [
+        {"name": "test.local"},
+        {"name": "sub.test.local"},
+    ]
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        FQDN.objects.create(name="test.dev")
+        FQDN.objects.create(name="test.uat")
+        FQDN.objects.create(name="test.prod")
 
     def test_list_objects_brief(self):
         pass
