@@ -68,7 +68,14 @@
                 <tr>
                     <td>Description</td>
                     <td>{{ object.description|placeholder }}</td>
+                </tr>
                 <tr>
+                    <td>Service Objects</td>
+                    <td>{% for i in object.service_objects.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a> {% endfor %}</td>
+                </tr>
+                <tr>
+                    <td>Service Object Groups</td>
+                    <td>{% for i in object.service_object_groups.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a> {% endfor %}</td>
                 </tr>
             </table>
         </div>

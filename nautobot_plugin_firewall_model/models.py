@@ -1,13 +1,11 @@
 """Models for the Firewall plugin."""
 
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
 from django.db.models.deletion import PROTECT
-from django.template.defaultfilters import add, slugify
+from django.template.defaultfilters import slugify
 from django.urls import reverse
 from nautobot.core.models import BaseModel
 from nautobot.extras.models.change_logging import ChangeLoggedModel
@@ -72,10 +70,8 @@ class IPRange(BaseModel, ChangeLoggedModel):
         """Overloads to validate attr for form verification."""
         if not hasattr(self, "start_address") or not hasattr(self, "end_address"):
             raise ValidationError("Must have `start_address` and `end_address`.")
-        elif IPAddress(self.start_address) > IPAddress(self.end_address) or IPAddress(self.start_address) == IPAddress(
-            self.end_address
-        ):
-            raise ValidationError("`end_address` must be higher than `start_address`.")
+        if IPAddress(self.start_address) > IPAddress(self.end_address):
+            raise ValidationError("`end_address` must be >= than `start_address`.")
 
         super().clean(*args, **kwargs)
 
@@ -138,7 +134,7 @@ class AddressObject(BaseModel, ChangeLoggedModel):
         address_types = ["fqdn", "ip_range", "ip_address", "prefix"]
         address_count = 0
         for i in address_types:
-            if hasattr(self, i) and getattr(self, i) != None:
+            if hasattr(self, i) and getattr(self, i) is not None:
                 address_count += 1
         if address_count != 1:
             raise ValidationError(f"Must specify only one address from type {address_types}, {address_count} found.")
@@ -146,7 +142,7 @@ class AddressObject(BaseModel, ChangeLoggedModel):
         super().clean(*args, **kwargs)
 
     @property
-    def address(self):
+    def address(self):  # pylint: disable=inconsistent-return-statements
         """Returns the assigned address object."""
         for i in ["fqdn", "ip_range", "ip_address", "prefix"]:
             if getattr(self, i):
@@ -462,8 +458,9 @@ class Source(BaseModel, ChangeLoggedModel):
 
     def __str__(self):
         """Stringify instance."""
-        # TODO: Need to determine better __str__
-        return self.description
+        if self.user:
+            return f"{self.address} - {self.service} - {self.user} - {self.zone}"
+        return f"{self.address} - {self.service} - {self.zone}"
 
 
 @extras_features("custom_validators", "relationships", "graphql")
@@ -490,8 +487,7 @@ class Destination(BaseModel, ChangeLoggedModel):
 
     def __str__(self):
         """Stringify instance."""
-        # TODO: Need to determine better __str__
-        return self.description
+        return f"{self.address} - {self.service} - {self.zone}"
 
 
 @extras_features("custom_validators", "relationships", "graphql")

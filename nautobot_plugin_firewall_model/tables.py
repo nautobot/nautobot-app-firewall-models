@@ -1,6 +1,7 @@
 """Tables for Firewall models."""
 
 import django_tables2 as tables
+from django_tables2.utils import A
 from nautobot.utilities.tables import BaseTable, ButtonsColumn, ToggleColumn
 
 from nautobot_plugin_firewall_model import models
@@ -246,7 +247,11 @@ class SourceTable(BaseTable):
     """Table for list view."""
 
     pk = ToggleColumn()
-    display = tables.Column(linkify=True)
+    display = tables.LinkColumn(
+        "plugins:nautobot_plugin_firewall_model:source",
+        text=lambda record: str(record),  # pylint: disable=W0108
+        args=[A("pk")],
+    )
     actions = ButtonsColumn(models.Source, buttons=("edit", "delete"))
 
     class Meta(BaseTable.Meta):
@@ -269,7 +274,11 @@ class DestinationTable(BaseTable):
     """Table for list view."""
 
     pk = ToggleColumn()
-    display = tables.Column(linkify=True)
+    display = tables.LinkColumn(
+        "plugins:nautobot_plugin_firewall_model:destination",
+        text=lambda record: str(record),  # pylint: disable=W0108
+        args=[A("pk")],
+    )
     actions = ButtonsColumn(models.Destination, buttons=("edit", "delete"))
 
     class Meta(BaseTable.Meta):
@@ -291,7 +300,11 @@ class PolicyRuleTable(BaseTable):
     """Table for list view."""
 
     pk = ToggleColumn()
-    display = tables.Column(linkify=True)
+    display = tables.LinkColumn(
+        "plugins:nautobot_plugin_firewall_model:policyrule",
+        text=lambda record: str(record),  # pylint: disable=W0108
+        args=[A("pk")],
+    )
     actions = ButtonsColumn(models.PolicyRule, buttons=("edit", "delete"))
     source = tables.LinkColumn()
     destination = tables.LinkColumn()

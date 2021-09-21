@@ -1,10 +1,6 @@
 """API serializers for firewall models."""
 
-from django.contrib.contenttypes.models import ContentType
-from drf_yasg.utils import swagger_serializer_method
-from nautobot.core.api import ContentTypeField
 from nautobot.core.api.serializers import ValidatedModelSerializer
-from nautobot.utilities.api import get_serializer_for_model
 from rest_framework import serializers
 
 from nautobot_plugin_firewall_model import models, choices

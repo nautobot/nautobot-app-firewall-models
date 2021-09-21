@@ -68,7 +68,18 @@
                 <tr>
                     <td>Description</td>
                     <td>{{ object.description|placeholder }}</td>
+                </tr>
                 <tr>
+                    <td>Address</td>
+                    <td><a href="{{ object.address.get_absolute_url }}">{{ object.address|placeholder }}</a></td>
+                </tr>
+                <tr>
+                    <td>Service</td>
+                    <td><a href="{{ object.service.get_absolute_url }}">{{ object.service|placeholder }}</a></td>
+                </tr>
+                <tr>
+                    <td>Zone</td>
+                    <td><a href="{{ object.zone.get_absolute_url }}">{{ object.zone|placeholder }}</a></td>
                 </tr>
             </table>
         </div>

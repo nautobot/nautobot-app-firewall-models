@@ -68,7 +68,14 @@
                 <tr>
                     <td>Description</td>
                     <td>{{ object.description|placeholder }}</td>
+                </tr>
                 <tr>
+                    <td>VRFs</td>
+                    <td>{% for i in object.vrfs.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a> {% endfor %}</td>
+                </tr>
+                <tr>
+                    <td>Interfaces</td>
+                    <td>{% for i in object.interfaces.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a> {% endfor %}</td>
                 </tr>
             </table>
         </div>

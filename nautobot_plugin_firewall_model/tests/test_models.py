@@ -98,7 +98,7 @@ class TestModels(TestCase):
         self.assertEqual(protocol.name, "HTTPS")
         self.assertEqual(protocol.slug, "https")
         self.assertEqual(protocol.port, 443)
-        self.assertEqual(str(protocol), "https:443:tcp")
+        self.assertEqual(str(protocol), "https:443:TCP")
 
     def test_create_service_group_only_required(self):
         """Creates a service group with only required fields."""
@@ -108,7 +108,7 @@ class TestModels(TestCase):
 
         self.assertEqual(serv_grp.description, "")
         self.assertEqual(serv_grp.name, "Web")
-        self.assertEqual(serv_grp.protocols.first(), protocol)
+        self.assertEqual(serv_grp.service_objects.first(), protocol)
         self.assertEqual(str(serv_grp), "Web")
 
     def test_create_service_group_all_fields(self):
@@ -119,7 +119,7 @@ class TestModels(TestCase):
 
         self.assertEqual(serv_grp.description, "Web protocols")
         self.assertEqual(serv_grp.name, "Web")
-        self.assertEqual(serv_grp.protocols.first(), protocol)
+        self.assertEqual(serv_grp.service_objects.first(), protocol)
         self.assertEqual(str(serv_grp), "Web")
 
     def test_create_user_only_required(self):
@@ -146,7 +146,7 @@ class TestModels(TestCase):
 
         self.assertEqual(user_group.description, "")
         self.assertEqual(user_group.name, "group1")
-        self.assertEqual(user_group.users.first(), user)
+        self.assertEqual(user_group.user_objects.first(), user)
         self.assertEqual(str(user_group), "group1")
 
     def test_create_user_group_all_fields(self):
@@ -157,7 +157,7 @@ class TestModels(TestCase):
 
         self.assertEqual(user_group.description, "Test group 1.")
         self.assertEqual(user_group.name, "group1")
-        self.assertEqual(user_group.users.first(), user)
+        self.assertEqual(user_group.user_objects.first(), user)
         self.assertEqual(str(user_group), "group1")
 
     def test_create_fqdn_only_required(self):

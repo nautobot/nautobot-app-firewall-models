@@ -66,14 +66,30 @@
             </div>
             <table class="table table-hover panel-body attr-table">
                 <tr>
-                    <td>Description</td>
-                    <td>{{ object.description|placeholder }}</td>
+                    <td>Index</td>
+                    <td>{{ object.index|placeholder }}</td>
+                </tr>
                 <tr>
+                    <td>Source</td>
+                    <td><a href="{{ object.source.get_absolute_url }}">{{ object.source|placeholder }}</a></td>
+                </tr>
+                <tr>
+                    <td>Destination</td>
+                    <td><a href="{{ object.destination.get_absolute_url }}">{{ object.destination|placeholder }}</a></td>
+                </tr>
+                <tr>
+                    <td>Action</td>
+                    <td>{{ object.action|placeholder }}</td>
+                </tr>
+                <tr>
+                    <td>Log</td>
+                    <td>{{ object.log|placeholder }}</td>
                 </tr>
             </table>
         </div>
         {% include 'inc/custom_fields_panel.html' %}
         {% include 'inc/relationships_panel.html' %}
+        {% include 'extras/inc/tags_panel.html' with tags=object.tags.all url='plugins:nautobot_plugin_firewall_model:policyrule_list' %}
         {% plugin_left_page object %}
     </div>
 </div>

@@ -5,10 +5,8 @@ from nautobot.extras.views import ObjectChangeLogView
 
 from nautobot_plugin_firewall_model import models
 from nautobot_plugin_firewall_model.views import (
-    destination,
     fqdn,
     iprange,
-    service_object,
     zone,
     address_object,
     address_object_group,
@@ -440,7 +438,7 @@ urlpatterns = [
     path("policy-rule/add/", policy_rule.PolicyRuleCreateView.as_view(), name="policyrule_add"),
     path("policy-rule/delete/", policy_rule.PolicyRuleBulkDeleteView.as_view(), name="policyrule_bulk_delete"),
     path("policy-rule/edit/", policy_rule.PolicyRuleBulkEditView.as_view(), name="policyrule_bulk_edit"),
-    path("policy-rule/<uuid:pk>/", policy_rule.PolicyRuleView.as_view(), name="term"),
+    path("policy-rule/<uuid:pk>/", policy_rule.PolicyRuleView.as_view(), name="policyrule"),
     path("policy-rule/<uuid:pk>/delete/", policy_rule.PolicyRuleDeleteView.as_view(), name="policyrule_delete"),
     path("policy-rule/<uuid:pk>/edit/", policy_rule.PolicyRuleEditView.as_view(), name="policyrule_edit"),
     path(
