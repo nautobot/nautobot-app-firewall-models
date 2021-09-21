@@ -2,10 +2,12 @@
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
-from django.template.defaultfilters import slugify
+from django.db.models.deletion import PROTECT
+from django.template.defaultfilters import add, slugify
 from django.urls import reverse
 from nautobot.core.models import BaseModel
 from nautobot.extras.models.change_logging import ChangeLoggedModel
@@ -66,6 +68,239 @@ class IPRange(BaseModel, ChangeLoggedModel):
 
         super().save(*args, **kwargs)
 
+    def clean(self, *args, **kwargs):
+        """Overloads to validate attr for form verification."""
+        if not hasattr(self, "start_address") or not hasattr(self, "end_address"):
+            raise ValidationError("Must have `start_address` and `end_address`.")
+        elif IPAddress(self.start_address) > IPAddress(self.end_address) or IPAddress(self.start_address) == IPAddress(
+            self.end_address
+        ):
+            raise ValidationError("`end_address` must be higher than `start_address`.")
+
+        super().clean(*args, **kwargs)
+
+
+@extras_features("custom_validators", "relationships", "graphql")
+class FQDN(BaseModel, ChangeLoggedModel):
+    """FQDN model."""
+
+    description = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+    name = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["name"]
+        verbose_name_plural = "FQDNs"
+
+    def get_absolute_url(self):
+        """Return detail view URL."""
+        return reverse("plugins:nautobot_plugin_firewall_model:fqdn", args=[self.pk])
+
+    def __str__(self):
+        """Stringify instance."""
+        return self.name
+
+
+@extras_features("custom_validators", "relationships", "graphql")
+class AddressObject(BaseModel, ChangeLoggedModel):
+    """FQDN model."""
+
+    description = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+    name = models.CharField(max_length=100, unique=True)
+    fqdn = models.ForeignKey(to=FQDN, on_delete=models.PROTECT, null=True)
+    ip_range = models.ForeignKey(to=IPRange, on_delete=models.PROTECT, null=True)
+    ip_address = models.ForeignKey(to="ipam.IPAddress", on_delete=models.PROTECT, null=True)
+    prefix = models.ForeignKey(to="ipam.Prefix", on_delete=models.PROTECT, null=True)
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["name"]
+        verbose_name_plural = "Address Objects"
+
+    def get_absolute_url(self):
+        """Return detail view URL."""
+        return reverse("plugins:nautobot_plugin_firewall_model:addressobject", args=[self.pk])
+
+    def __str__(self):
+        """Stringify instance."""
+        return self.name
+
+    def clean(self, *args, **kwargs):
+        """Overloads to validate attr for form verification."""
+        address_types = ["fqdn", "ip_range", "ip_address", "prefix"]
+        address_count = 0
+        for i in address_types:
+            if hasattr(self, i) and getattr(self, i) != None:
+                address_count += 1
+        if address_count != 1:
+            raise ValidationError(f"Must specify only one address from type {address_types}, {address_count} found.")
+
+        super().clean(*args, **kwargs)
+
+    @property
+    def address(self):
+        """Returns the assigned address object."""
+        for i in ["fqdn", "ip_range", "ip_address", "prefix"]:
+            if getattr(self, i):
+                return getattr(self, i)
+
+
+@extras_features("custom_validators", "relationships", "graphql")
+class AddressObjectGroup(BaseModel, ChangeLoggedModel):
+    """AddressObjectGroup model."""
+
+    description = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+    name = models.CharField(max_length=50, unique=True)
+    address_objects = models.ManyToManyField(
+        to=AddressObject,
+        blank=True,
+    )
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["name"]
+        verbose_name_plural = "Address Object Groups"
+
+    def get_absolute_url(self):
+        """Return detail view URL."""
+        return reverse("plugins:nautobot_plugin_firewall_model:addressobjectgroup", args=[self.pk])
+
+    def __str__(self):
+        """Stringify instance."""
+        return self.name
+
+
+@extras_features("custom_validators", "relationships", "graphql")
+class AddressPolicyObject(BaseModel, ChangeLoggedModel):
+    """AddressPolicyObject model."""
+
+    description = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+    name = models.CharField(max_length=50, unique=True)
+    address_objects = models.ManyToManyField(
+        to=AddressObject,
+        blank=True,
+    )
+    address_object_groups = models.ManyToManyField(
+        to=AddressObjectGroup,
+        blank=True,
+    )
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["name"]
+        verbose_name_plural = "Address Policy Objects"
+
+    def get_absolute_url(self):
+        """Return detail view URL."""
+        return reverse("plugins:nautobot_plugin_firewall_model:addresspolicyobject", args=[self.pk])
+
+    def __str__(self):
+        """Stringify instance."""
+        return self.name
+
+
+@extras_features("custom_validators", "relationships", "graphql")
+class UserObject(BaseModel, ChangeLoggedModel):
+    """UserObject model."""
+
+    username = models.CharField(
+        max_length=50,
+        unique=True,
+    )
+    name = models.CharField(max_length=50, blank=True)
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["username"]
+        verbose_name_plural = "User Objects"
+
+    def get_absolute_url(self):
+        """Return detail view URL."""
+        return reverse("plugins:nautobot_plugin_firewall_model:userobject", args=[self.pk])
+
+    def __str__(self):
+        """Stringify instance."""
+        return self.username
+
+
+@extras_features("custom_validators", "relationships", "graphql")
+class UserObjectGroup(BaseModel, ChangeLoggedModel):
+    """UserObjectGroup model."""
+
+    description = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+    name = models.CharField(max_length=50, unique=True)
+    user_objects = models.ManyToManyField(
+        to=UserObject,
+        blank=True,
+    )
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["name"]
+        verbose_name_plural = "User Object Groups"
+
+    def get_absolute_url(self):
+        """Return detail view URL."""
+        return reverse("plugins:nautobot_plugin_firewall_model:userobjectgroup", args=[self.pk])
+
+    def __str__(self):
+        """Stringify instance."""
+        return self.name
+
+
+@extras_features("custom_validators", "relationships", "graphql")
+class UserPolicyObject(BaseModel, ChangeLoggedModel):
+    """UserPolicyObject model."""
+
+    description = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+    name = models.CharField(max_length=50, unique=True)
+    user_objects = models.ManyToManyField(
+        to=UserObject,
+        blank=True,
+    )
+    user_object_groups = models.ManyToManyField(
+        to=UserObjectGroup,
+        blank=True,
+    )
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["name"]
+        verbose_name_plural = "User Policy Objects"
+
+    def get_absolute_url(self):
+        """Return detail view URL."""
+        return reverse("plugins:nautobot_plugin_firewall_model:userpolicyobject", args=[self.pk])
+
+    def __str__(self):
+        """Stringify instance."""
+        return self.name
+
 
 @extras_features("custom_validators", "relationships", "graphql")
 class Zone(BaseModel, ChangeLoggedModel):
@@ -101,45 +336,8 @@ class Zone(BaseModel, ChangeLoggedModel):
 
 
 @extras_features("custom_validators", "relationships", "graphql")
-class AddressGroup(BaseModel, ChangeLoggedModel):
-    """Zone model."""
-
-    description = models.CharField(
-        max_length=200,
-        blank=True,
-    )
-    name = models.CharField(max_length=50, unique=True)
-    ip_addresses = models.ManyToManyField(
-        to="ipam.IPAddress",
-        blank=True,
-    )
-    ip_ranges = models.ManyToManyField(
-        to=IPRange,
-        blank=True,
-    )
-    prefixes = models.ManyToManyField(
-        to="ipam.Prefix",
-        blank=True,
-    )
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["name"]
-        verbose_name_plural = "Zones"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_plugin_firewall_model:zone", args=[self.pk])
-
-    def __str__(self):
-        """Stringify instance."""
-        return self.name
-
-
-@extras_features("custom_validators", "relationships", "graphql")
-class Protocol(BaseModel, ChangeLoggedModel):
-    """Zone model."""
+class ServiceObject(BaseModel, ChangeLoggedModel):
+    """ServiceObject model."""
 
     description = models.CharField(
         max_length=200,
@@ -148,26 +346,26 @@ class Protocol(BaseModel, ChangeLoggedModel):
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50, editable=False)
     port = models.IntegerField()
-    tcp_udp = models.CharField(choices=choices.TCP_UDP_CHOICES, null=True, blank=True, max_length=3)
+    ip_protocol = models.CharField(choices=choices.IP_PROTOCOL_CHOICES, null=True, blank=True, max_length=20)
 
     class Meta:
         """Meta class."""
 
         ordering = ["name"]
-        verbose_name_plural = "Protocols"
+        verbose_name_plural = "Service Objects"
         constraints = [
-            UniqueConstraint(fields=["slug", "port", "tcp_udp"], name="unique_with_tcp_udp"),
-            UniqueConstraint(fields=["slug", "port"], condition=Q(tcp_udp=None), name="unique_without_tcp_udp"),
+            UniqueConstraint(fields=["slug", "port", "ip_protocol"], name="unique_with_ip_protocol"),
+            UniqueConstraint(fields=["slug", "port"], condition=Q(ip_protocol=None), name="unique_without_ip_protocol"),
         ]
 
     def get_absolute_url(self):
         """Return detail view URL."""
-        return reverse("plugins:nautobot_plugin_firewall_model:protocol", args=[self.pk])
+        return reverse("plugins:nautobot_plugin_firewall_model:serviceobject", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""
-        if self.tcp_udp:
-            return f"{self.slug}:{self.port}:{self.tcp_udp}"
+        if self.ip_protocol:
+            return f"{self.slug}:{self.port}:{self.ip_protocol}"
         return f"{self.slug}:{self.port}"
 
     def save(self, *args, **kwargs):
@@ -178,7 +376,7 @@ class Protocol(BaseModel, ChangeLoggedModel):
 
 
 @extras_features("custom_validators", "relationships", "graphql")
-class ServiceGroup(BaseModel, ChangeLoggedModel):
+class ServiceObjectGroup(BaseModel, ChangeLoggedModel):
     """ServiceGroup model."""
 
     description = models.CharField(
@@ -186,8 +384,8 @@ class ServiceGroup(BaseModel, ChangeLoggedModel):
         blank=True,
     )
     name = models.CharField(max_length=50, unique=True)
-    protocols = models.ManyToManyField(
-        to=Protocol,
+    service_objects = models.ManyToManyField(
+        to=ServiceObject,
         blank=True,
     )
 
@@ -195,11 +393,11 @@ class ServiceGroup(BaseModel, ChangeLoggedModel):
         """Meta class."""
 
         ordering = ["name"]
-        verbose_name_plural = "ServiceGroups"
+        verbose_name_plural = "Service Object Groups"
 
     def get_absolute_url(self):
         """Return detail view URL."""
-        return reverse("plugins:nautobot_plugin_firewall_model:servicegroup", args=[self.pk])
+        return reverse("plugins:nautobot_plugin_firewall_model:serviceobjectgroup", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""
@@ -207,66 +405,20 @@ class ServiceGroup(BaseModel, ChangeLoggedModel):
 
 
 @extras_features("custom_validators", "relationships", "graphql")
-class FQDN(BaseModel, ChangeLoggedModel):
-    """FQDN model."""
-
-    description = models.CharField(
-        max_length=200,
-        blank=True,
-    )
-    name = models.CharField(max_length=100, unique=True)
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["name"]
-        verbose_name_plural = "FQDNs"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_plugin_firewall_model:fqdn", args=[self.pk])
-
-    def __str__(self):
-        """Stringify instance."""
-        return self.name
-
-
-@extras_features("custom_validators", "relationships", "graphql")
-class User(BaseModel, ChangeLoggedModel):
-    """ServiceGroup model."""
-
-    username = models.CharField(
-        max_length=50,
-        unique=True,
-    )
-    name = models.CharField(max_length=50, blank=True)
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["username"]
-        verbose_name_plural = "User"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_plugin_firewall_model:user", args=[self.pk])
-
-    def __str__(self):
-        """Stringify instance."""
-        return self.username
-
-
-@extras_features("custom_validators", "relationships", "graphql")
-class UserGroup(BaseModel, ChangeLoggedModel):
-    """UserGroup model."""
+class ServicePolicyObject(BaseModel, ChangeLoggedModel):
+    """ServicePolicyObject model."""
 
     description = models.CharField(
         max_length=200,
         blank=True,
     )
     name = models.CharField(max_length=50, unique=True)
-    users = models.ManyToManyField(
-        to=User,
+    service_objects = models.ManyToManyField(
+        to=ServiceObject,
+        blank=True,
+    )
+    service_object_groups = models.ManyToManyField(
+        to=ServiceObjectGroup,
         blank=True,
     )
 
@@ -274,11 +426,11 @@ class UserGroup(BaseModel, ChangeLoggedModel):
         """Meta class."""
 
         ordering = ["name"]
-        verbose_name_plural = "User Groups"
+        verbose_name_plural = "Service Policy Objects"
 
     def get_absolute_url(self):
         """Return detail view URL."""
-        return reverse("plugins:nautobot_plugin_firewall_model:usergroup", args=[self.pk])
+        return reverse("plugins:nautobot_plugin_firewall_model:servicepolicyobject", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""
@@ -286,54 +438,27 @@ class UserGroup(BaseModel, ChangeLoggedModel):
 
 
 @extras_features("custom_validators", "relationships", "graphql")
-class SourceDestination(BaseModel, ChangeLoggedModel):
-    """SourceDestination model."""
+class Source(BaseModel, ChangeLoggedModel):
+    """Source model."""
 
     description = models.CharField(
         max_length=200,
         blank=True,
     )
-    assigned_address_type = models.ForeignKey(
-        to=ContentType,
-        limit_choices_to=choices.ADDRESS_ASSIGNMENT_MODELS,
-        on_delete=models.PROTECT,
-        related_name="+",
-        blank=True,
-        null=True,
-    )
-    assigned_address_id = models.UUIDField(blank=True, null=True)
-    address = GenericForeignKey(ct_field="assigned_address_type", fk_field="assigned_address_id")
-    assigned_user_type = models.ForeignKey(
-        to=ContentType,
-        limit_choices_to=choices.USER_ASSIGNMENT_MODELS,
-        on_delete=models.PROTECT,
-        related_name="+",
-        blank=True,
-        null=True,
-    )
-    assigned_user_id = models.UUIDField(blank=True, null=True)
-    user = GenericForeignKey(ct_field="assigned_user_type", fk_field="assigned_user_id")
-    assigned_service_type = models.ForeignKey(
-        to=ContentType,
-        limit_choices_to=choices.SERVICE_ASSIGNMENT_MODELS,
-        on_delete=models.PROTECT,
-        related_name="+",
-        blank=True,
-        null=True,
-    )
-    assigned_service_id = models.UUIDField(blank=True, null=True)
-    service = GenericForeignKey(ct_field="assigned_service_type", fk_field="assigned_service_id")
+    address = models.ForeignKey(to=AddressPolicyObject, on_delete=PROTECT)
+    service = models.ForeignKey(to=ServicePolicyObject, on_delete=PROTECT)
+    user = models.ForeignKey(to=UserPolicyObject, on_delete=PROTECT)
     zone = models.ForeignKey(to=Zone, on_delete=models.CASCADE)
 
     class Meta:
         """Meta class."""
 
         ordering = ["description"]
-        verbose_name_plural = "Sources or Destinations"
+        verbose_name_plural = "Sources"
 
     def get_absolute_url(self):
         """Return detail view URL."""
-        return reverse("plugins:nautobot_plugin_firewall_model:sourcedestination", args=[self.pk])
+        return reverse("plugins:nautobot_plugin_firewall_model:source", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""
@@ -342,15 +467,41 @@ class SourceDestination(BaseModel, ChangeLoggedModel):
 
 
 @extras_features("custom_validators", "relationships", "graphql")
-class Term(BaseModel, ChangeLoggedModel):
-    """Term model."""
+class Destination(BaseModel, ChangeLoggedModel):
+    """Destination model."""
+
+    description = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+    address = models.ForeignKey(to=AddressPolicyObject, on_delete=PROTECT)
+    service = models.ForeignKey(to=ServicePolicyObject, on_delete=PROTECT)
+    zone = models.ForeignKey(to=Zone, on_delete=models.CASCADE)
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["description"]
+        verbose_name_plural = "Destinations"
+
+    def get_absolute_url(self):
+        """Return detail view URL."""
+        return reverse("plugins:nautobot_plugin_firewall_model:destination", args=[self.pk])
+
+    def __str__(self):
+        """Stringify instance."""
+        # TODO: Need to determine better __str__
+        return self.description
+
+
+@extras_features("custom_validators", "relationships", "graphql")
+class PolicyRule(BaseModel, ChangeLoggedModel):
+    """PolicyRule model."""
 
     tags = TaggableManager(through=TaggedItem)
     index = models.IntegerField()
-    source = models.ForeignKey(to=SourceDestination, on_delete=models.CASCADE, related_name="%(class)s_source")
-    destination = models.ForeignKey(
-        to=SourceDestination, on_delete=models.CASCADE, related_name="%(class)s_destination"
-    )
+    source = models.ForeignKey(to=Source, on_delete=models.PROTECT)
+    destination = models.ForeignKey(to=Destination, on_delete=models.PROTECT)
     action = models.CharField(choices=choices.ACTION_CHOICES, max_length=20)
     log = models.BooleanField(default=False)
 
@@ -358,11 +509,11 @@ class Term(BaseModel, ChangeLoggedModel):
         """Meta class."""
 
         ordering = ["index"]
-        verbose_name_plural = "Terms"
+        verbose_name_plural = "Policy Rules"
 
     def get_absolute_url(self):
         """Return detail view URL."""
-        return reverse("plugins:nautobot_plugin_firewall_model:term", args=[self.pk])
+        return reverse("plugins:nautobot_plugin_firewall_model:policyrule", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""
@@ -378,7 +529,7 @@ class Policy(BaseModel, ChangeLoggedModel):
         blank=True,
     )
     name = models.CharField(max_length=50, unique=True)
-    terms = models.ManyToManyField(to=Term)
+    policy_rules = models.ManyToManyField(to=PolicyRule)
 
     class Meta:
         """Meta class."""

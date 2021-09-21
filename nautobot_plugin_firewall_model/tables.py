@@ -6,46 +6,6 @@ from nautobot.utilities.tables import BaseTable, ButtonsColumn, ToggleColumn
 from nautobot_plugin_firewall_model import models
 
 
-class FQDNTable(BaseTable):
-    # pylint: disable=R0903
-    """Table for list view."""
-
-    pk = ToggleColumn()
-    name = tables.Column(linkify=True)
-    actions = ButtonsColumn(models.FQDN, buttons=("edit", "delete"))
-
-    class Meta(BaseTable.Meta):
-        """Meta attributes."""
-
-        model = models.FQDN
-        fields = (
-            "pk",
-            "name",
-            "description",
-        )
-
-
-class ProtocolTable(BaseTable):
-    # pylint: disable=R0903
-    """Table for list view."""
-
-    pk = ToggleColumn()
-    name = tables.Column(linkify=True)
-    actions = ButtonsColumn(models.Protocol, buttons=("edit", "delete"))
-
-    class Meta(BaseTable.Meta):
-        """Meta attributes."""
-
-        model = models.Protocol
-        fields = (
-            "pk",
-            "name",
-            "port",
-            "tcp_udp",
-            "description",
-        )
-
-
 class IPRangeTable(BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
@@ -66,6 +26,197 @@ class IPRangeTable(BaseTable):
             "vrf",
             "size",
             "description",
+        )
+
+
+class FQDNTable(BaseTable):
+    # pylint: disable=R0903
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.Column(linkify=True)
+    actions = ButtonsColumn(models.FQDN, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.FQDN
+        fields = (
+            "pk",
+            "name",
+            "description",
+        )
+
+
+class AddressObjectTable(BaseTable):
+    # pylint: disable=R0903
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.Column(linkify=True)
+    actions = ButtonsColumn(models.AddressObject, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.AddressObject
+        fields = ("pk", "name", "description", "ip_address", "ip_range", "prefix", "fqdn")
+
+
+class AddressObjectGroupTable(BaseTable):
+    # pylint: disable=R0903
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.Column(linkify=True)
+    actions = ButtonsColumn(models.AddressObjectGroup, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.AddressObjectGroup
+        fields = (
+            "pk",
+            "name",
+            "description",
+            "address_objects",
+        )
+
+
+class AddressPolicyObjectTable(BaseTable):
+    # pylint: disable=R0903
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.Column(linkify=True)
+    actions = ButtonsColumn(models.AddressPolicyObject, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.AddressPolicyObject
+        fields = ("pk", "name", "description", "address_objects", "address_object_groups")
+
+
+class ServiceObjectTable(BaseTable):
+    # pylint: disable=R0903
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.Column(linkify=True)
+    actions = ButtonsColumn(models.ServiceObject, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.ServiceObject
+        fields = (
+            "pk",
+            "name",
+            "port",
+            "ip_protocol",
+            "description",
+        )
+
+
+class ServiceObjectGroupTable(BaseTable):
+    # pylint: disable=R0903
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.Column(linkify=True)
+    actions = ButtonsColumn(models.ServiceObjectGroup, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.ServiceObjectGroup
+        fields = (
+            "pk",
+            "name",
+            "description",
+            "service_objects",
+        )
+
+
+class ServicePolicyObjectTable(BaseTable):
+    # pylint: disable=R0903
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.Column(linkify=True)
+    actions = ButtonsColumn(models.ServicePolicyObject, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.ServicePolicyObject
+        fields = (
+            "pk",
+            "name",
+            "description",
+            "service_objects",
+            "service_object_groups",
+        )
+
+
+class UserObjectTable(BaseTable):
+    # pylint: disable=R0903
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    username = tables.Column(linkify=True)
+    actions = ButtonsColumn(models.UserObject, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.UserObject
+        fields = (
+            "pk",
+            "username",
+            "name",
+        )
+
+
+class UserObjectGroupTable(BaseTable):
+    # pylint: disable=R0903
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.Column(linkify=True)
+    actions = ButtonsColumn(models.UserObjectGroup, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.UserObjectGroup
+        fields = (
+            "pk",
+            "name",
+            "description",
+            "user_objects",
+        )
+
+
+class UserPolicyObjectTable(BaseTable):
+    # pylint: disable=R0903
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.Column(linkify=True)
+    actions = ButtonsColumn(models.UserPolicyObject, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.UserPolicyObject
+        fields = (
+            "pk",
+            "name",
+            "description",
+            "user_objects",
+            "user_object_groups",
         )
 
 
@@ -90,99 +241,18 @@ class ZoneTable(BaseTable):
         )
 
 
-class AddressGroupTable(BaseTable):
-    # pylint: disable=R0903
-    """Table for list view."""
-
-    pk = ToggleColumn()
-    name = tables.Column(linkify=True)
-    actions = ButtonsColumn(models.AddressGroup, buttons=("edit", "delete"))
-
-    class Meta(BaseTable.Meta):
-        """Meta attributes."""
-
-        model = models.AddressGroup
-        fields = (
-            "pk",
-            "name",
-            "description",
-            "ip_addresses",
-            "ip_ranges",
-            "prefixes",
-        )
-
-
-class ServiceGroupTable(BaseTable):
-    # pylint: disable=R0903
-    """Table for list view."""
-
-    pk = ToggleColumn()
-    name = tables.Column(linkify=True)
-    actions = ButtonsColumn(models.ServiceGroup, buttons=("edit", "delete"))
-
-    class Meta(BaseTable.Meta):
-        """Meta attributes."""
-
-        model = models.ServiceGroup
-        fields = (
-            "pk",
-            "name",
-            "description",
-            "protocols",
-        )
-
-
-class UserTable(BaseTable):
-    # pylint: disable=R0903
-    """Table for list view."""
-
-    pk = ToggleColumn()
-    username = tables.Column(linkify=True)
-    actions = ButtonsColumn(models.User, buttons=("edit", "delete"))
-
-    class Meta(BaseTable.Meta):
-        """Meta attributes."""
-
-        model = models.User
-        fields = (
-            "pk",
-            "username",
-            "name",
-        )
-
-
-class UserGroupTable(BaseTable):
-    # pylint: disable=R0903
-    """Table for list view."""
-
-    pk = ToggleColumn()
-    name = tables.Column(linkify=True)
-    actions = ButtonsColumn(models.UserGroup, buttons=("edit", "delete"))
-
-    class Meta(BaseTable.Meta):
-        """Meta attributes."""
-
-        model = models.UserGroup
-        fields = (
-            "pk",
-            "name",
-            "description",
-            "users",
-        )
-
-
-class SourceDestinationTable(BaseTable):
+class SourceTable(BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
     pk = ToggleColumn()
     display = tables.Column(linkify=True)
-    actions = ButtonsColumn(models.SourceDestination, buttons=("edit", "delete"))
+    actions = ButtonsColumn(models.Source, buttons=("edit", "delete"))
 
     class Meta(BaseTable.Meta):
         """Meta attributes."""
 
-        model = models.SourceDestination
+        model = models.Source
         fields = (
             "pk",
             "display",
@@ -194,20 +264,42 @@ class SourceDestinationTable(BaseTable):
         )
 
 
-class TermTable(BaseTable):
+class DestinationTable(BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
     pk = ToggleColumn()
     display = tables.Column(linkify=True)
-    actions = ButtonsColumn(models.Term, buttons=("edit", "delete"))
+    actions = ButtonsColumn(models.Destination, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.Destination
+        fields = (
+            "pk",
+            "display",
+            "description",
+            "address",
+            "service",
+            "zone",
+        )
+
+
+class PolicyRuleTable(BaseTable):
+    # pylint: disable=R0903
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    display = tables.Column(linkify=True)
+    actions = ButtonsColumn(models.PolicyRule, buttons=("edit", "delete"))
     source = tables.LinkColumn()
     destination = tables.LinkColumn()
 
     class Meta(BaseTable.Meta):
         """Meta attributes."""
 
-        model = models.Term
+        model = models.PolicyRule
         fields = (
             "pk",
             "display",
@@ -235,5 +327,5 @@ class PolicyTable(BaseTable):
             "pk",
             "name",
             "description",
-            "terms",
+            "policy_rule",
         )

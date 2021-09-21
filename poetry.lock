@@ -1019,6 +1019,14 @@ python-versions = "*"
 importlib-resources = {version = "*", markers = "python_version < \"3.7\""}
 
 [[package]]
+name = "netutils"
+version = "0.2.2"
+description = "Common helper functions useful in network automation."
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[[package]]
 name = "nltk"
 version = "3.6.2"
 description = "Natural Language Toolkit"
@@ -1645,7 +1653,7 @@ nautobot = ["nautobot"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "caf6f907b84c270fcd07050550ff1d63421a99a96385fb42a02f91660c2d3b7c"
+content-hash = "39ceb47284ec3c20d69957998f54ec7a54bde38cb2e15da4ace6e3a192bcedbe"
 
 [metadata.files]
 amqp = [
@@ -2127,6 +2135,10 @@ nautobot = [
 netaddr = [
     {file = "netaddr-0.8.0-py2.py3-none-any.whl", hash = "sha256:9666d0232c32d2656e5e5f8d735f58fd6c7457ce52fc21c98d45f2af78f990ac"},
     {file = "netaddr-0.8.0.tar.gz", hash = "sha256:d6cc57c7a07b1d9d2e917aa8b36ae8ce61c35ba3fcd1b83ca31c5a0ee2b5a243"},
+]
+netutils = [
+    {file = "netutils-0.2.2-py3-none-any.whl", hash = "sha256:a0335a8d7e5210877cdc9017d2984a0abef23529b8f0147915f0ea5147b6a2c3"},
+    {file = "netutils-0.2.2.tar.gz", hash = "sha256:b848ed9536e13931761ec641346f5330e18f78a91d880253cf86d860a084555b"},
 ]
 nltk = [
     {file = "nltk-3.6.2-py3-none-any.whl", hash = "sha256:240e23ab1ab159ef9940777d30c7c72d7e76d91877099218a7585370c11f6b9e"},

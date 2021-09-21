@@ -20,6 +20,7 @@ packages = [
 # Used for local development
 nautobot = { version = "*", optional = true }
 python = "^3.6"
+netutils = "^0.2.2"
 
 [tool.poetry.dev-dependencies]
 bandit = "*"

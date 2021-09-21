@@ -1,14 +1,10 @@
 """Set of choices to use in firewall models."""
 
 from django.db.models import Q
+from netutils.protocol_mapper import PROTO_NAME_TO_NUM
 
-TCP_UDP_CHOICES = (
-    (
-        "TCP",
-        "tcp",
-    ),
-    ("UDP", "udp"),
-)
+
+IP_PROTOCOL_CHOICES = ((i, i) for i in PROTO_NAME_TO_NUM.keys())
 
 ADDRESS_ASSIGNMENT_MODELS = Q(
     Q(app_label="ipam", model="ipaddress")

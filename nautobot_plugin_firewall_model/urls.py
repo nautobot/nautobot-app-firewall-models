@@ -5,16 +5,23 @@ from nautobot.extras.views import ObjectChangeLogView
 
 from nautobot_plugin_firewall_model import models
 from nautobot_plugin_firewall_model.views import (
+    destination,
     fqdn,
-    protocol,
     iprange,
+    service_object,
     zone,
-    address_group,
-    service_group,
-    user,
-    user_group,
-    source_destination,
-    term,
+    address_object,
+    address_object_group,
+    address_policy_object,
+    service_object,
+    service_object_group,
+    service_policy_object,
+    user_object,
+    user_object_group,
+    user_policy_object,
+    source,
+    destination,
+    policy_rule,
     policy,
 )
 
@@ -34,21 +41,6 @@ urlpatterns = [
         name="fqdn_changelog",
         kwargs={"model": models.FQDN},
     ),
-    # Protocol URLs
-    path("protocol/", protocol.ProtocolListView.as_view(), name="protocol_list"),
-    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("protocol/add/", protocol.ProtocolCreateView.as_view(), name="protocol_add"),
-    path("protocol/delete/", protocol.ProtocolBulkDeleteView.as_view(), name="protocol_bulk_delete"),
-    path("protocol/edit/", protocol.ProtocolBulkEditView.as_view(), name="protocol_bulk_edit"),
-    path("protocol/<uuid:pk>/", protocol.ProtocolView.as_view(), name="protocol"),
-    path("protocol/<uuid:pk>/delete/", protocol.ProtocolDeleteView.as_view(), name="protocol_delete"),
-    path("protocol/<uuid:pk>/edit/", protocol.ProtocolEditView.as_view(), name="protocol_edit"),
-    path(
-        "protocol/<uuid:pk>/changelog/",
-        ObjectChangeLogView.as_view(),
-        name="protocol_changelog",
-        kwargs={"model": models.Protocol},
-    ),
     # IPRange URLs
     path("ip-range/", iprange.IPRangeListView.as_view(), name="iprange_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
@@ -63,6 +55,299 @@ urlpatterns = [
         ObjectChangeLogView.as_view(),
         name="iprange_changelog",
         kwargs={"model": models.IPRange},
+    ),
+    # AddressObject URLs
+    path("address-object/", address_object.AddressObjectListView.as_view(), name="addressobject_list"),
+    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
+    path("address-object/add/", address_object.AddressObjectCreateView.as_view(), name="addressobject_add"),
+    path(
+        "address-object/delete/", address_object.AddressObjectBulkDeleteView.as_view(), name="addressobject_bulk_delete"
+    ),
+    path("address-object/edit/", address_object.AddressObjectBulkEditView.as_view(), name="addressobject_bulk_edit"),
+    path("address-object/<uuid:pk>/", address_object.AddressObjectView.as_view(), name="addressobject"),
+    path(
+        "address-object/<uuid:pk>/delete/",
+        address_object.AddressObjectDeleteView.as_view(),
+        name="addressobject_delete",
+    ),
+    path("address-object/<uuid:pk>/edit/", address_object.AddressObjectEditView.as_view(), name="addressobject_edit"),
+    path(
+        "address-object/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="addressobject_changelog",
+        kwargs={"model": models.AddressObject},
+    ),
+    # AddressObjectGroup URLs
+    path(
+        "address-object-group/",
+        address_object_group.AddressObjectGroupListView.as_view(),
+        name="addressobjectgroup_list",
+    ),
+    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
+    path(
+        "address-object-group/add/",
+        address_object_group.AddressObjectGroupCreateView.as_view(),
+        name="addressobjectgroup_add",
+    ),
+    path(
+        "address-object-group/delete/",
+        address_object_group.AddressObjectGroupBulkDeleteView.as_view(),
+        name="addressobjectgroup_bulk_delete",
+    ),
+    path(
+        "address-object-group/edit/",
+        address_object_group.AddressObjectGroupBulkEditView.as_view(),
+        name="addressobjectgroup_bulk_edit",
+    ),
+    path(
+        "address-object-group/<uuid:pk>/",
+        address_object_group.AddressObjectGroupView.as_view(),
+        name="addressobjectgroup",
+    ),
+    path(
+        "address-object-group/<uuid:pk>/delete/",
+        address_object_group.AddressObjectGroupDeleteView.as_view(),
+        name="addressobjectgroup_delete",
+    ),
+    path(
+        "address-object-group/<uuid:pk>/edit/",
+        address_object_group.AddressObjectGroupEditView.as_view(),
+        name="addressobjectgroup_edit",
+    ),
+    path(
+        "address-group/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="addressobjectgroup_changelog",
+        kwargs={"model": models.AddressObjectGroup},
+    ),
+    # AddressPolicyObject URLs
+    path(
+        "address-policy-object/",
+        address_policy_object.AddressPolicyObjectListView.as_view(),
+        name="addresspolicyobject_list",
+    ),
+    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
+    path(
+        "address-policy-object/add/",
+        address_policy_object.AddressPolicyObjectCreateView.as_view(),
+        name="addresspolicyobject_add",
+    ),
+    path(
+        "address-policy-object/delete/",
+        address_policy_object.AddressPolicyObjectBulkDeleteView.as_view(),
+        name="addresspolicyobject_bulk_delete",
+    ),
+    path(
+        "address-policy-object/edit/",
+        address_policy_object.AddressPolicyObjectBulkEditView.as_view(),
+        name="addresspolicyobject_bulk_edit",
+    ),
+    path(
+        "address-policy-object/<uuid:pk>/",
+        address_policy_object.AddressPolicyObjectView.as_view(),
+        name="addresspolicyobject",
+    ),
+    path(
+        "address-policy-object/<uuid:pk>/delete/",
+        address_policy_object.AddressPolicyObjectDeleteView.as_view(),
+        name="addresspolicyobject_delete",
+    ),
+    path(
+        "address-policy-object/<uuid:pk>/edit/",
+        address_policy_object.AddressPolicyObjectEditView.as_view(),
+        name="addresspolicyobject_edit",
+    ),
+    path(
+        "address-policy-object/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="addresspolicyobject_changelog",
+        kwargs={"model": models.AddressPolicyObject},
+    ),
+    # ServiceObject URLs
+    path("service-object/", service_object.ServiceObjectListView.as_view(), name="serviceobject_list"),
+    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
+    path("service-object/add/", service_object.ServiceObjectCreateView.as_view(), name="serviceobject_add"),
+    path(
+        "service-object/delete/", service_object.ServiceObjectBulkDeleteView.as_view(), name="serviceobject_bulk_delete"
+    ),
+    path("service-object/edit/", service_object.ServiceObjectBulkEditView.as_view(), name="serviceobject_bulk_edit"),
+    path("service-object/<uuid:pk>/", service_object.ServiceObjectView.as_view(), name="serviceobject"),
+    path(
+        "service-object/<uuid:pk>/delete/",
+        service_object.ServiceObjectDeleteView.as_view(),
+        name="serviceobject_delete",
+    ),
+    path("service-object/<uuid:pk>/edit/", service_object.ServiceObjectEditView.as_view(), name="serviceobject_edit"),
+    path(
+        "service-object/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="serviceobject_changelog",
+        kwargs={"model": models.ServiceObject},
+    ),
+    # ServiceObjectGroup URLs
+    path(
+        "service-object-group/",
+        service_object_group.ServiceObjectGroupListView.as_view(),
+        name="serviceobjectgroup_list",
+    ),
+    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
+    path(
+        "service-object-group/add/",
+        service_object_group.ServiceObjectGroupCreateView.as_view(),
+        name="serviceobjectgroup_add",
+    ),
+    path(
+        "service-object-group/delete/",
+        service_object_group.ServiceObjectGroupBulkDeleteView.as_view(),
+        name="serviceobjectgroup_bulk_delete",
+    ),
+    path(
+        "service-object-group/edit/",
+        service_object_group.ServiceObjectGroupBulkEditView.as_view(),
+        name="serviceobjectgroup_bulk_edit",
+    ),
+    path(
+        "service-object-group/<uuid:pk>/",
+        service_object_group.ServiceObjectGroupView.as_view(),
+        name="serviceobjectgroup",
+    ),
+    path(
+        "service-object-group/<uuid:pk>/delete/",
+        service_object_group.ServiceObjectGroupDeleteView.as_view(),
+        name="serviceobjectgroup_delete",
+    ),
+    path(
+        "service-object-group/<uuid:pk>/edit/",
+        service_object_group.ServiceObjectGroupEditView.as_view(),
+        name="serviceobjectgroup_edit",
+    ),
+    path(
+        "service-object-group/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="serviceobjectgroup_changelog",
+        kwargs={"model": models.ServiceObjectGroup},
+    ),
+    # ServicePolicyObject URLs
+    path(
+        "service-policy-object/",
+        service_policy_object.ServicePolicyObjectListView.as_view(),
+        name="servicepolicyobject_list",
+    ),
+    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
+    path(
+        "service-policy-object/add/",
+        service_policy_object.ServicePolicyObjectCreateView.as_view(),
+        name="servicepolicyobject_add",
+    ),
+    path(
+        "service-policy-object/delete/",
+        service_policy_object.ServicePolicyObjectBulkDeleteView.as_view(),
+        name="servicepolicyobject_bulk_delete",
+    ),
+    path(
+        "service-policy-object/edit/",
+        service_policy_object.ServicePolicyObjectBulkEditView.as_view(),
+        name="servicepolicyobject_bulk_edit",
+    ),
+    path(
+        "service-policy-object/<uuid:pk>/",
+        service_policy_object.ServicePolicyObjectView.as_view(),
+        name="servicepolicyobject",
+    ),
+    path(
+        "service-policy-object/<uuid:pk>/delete/",
+        service_policy_object.ServicePolicyObjectDeleteView.as_view(),
+        name="servicepolicyobject_delete",
+    ),
+    path(
+        "service-policy-object/<uuid:pk>/edit/",
+        service_policy_object.ServicePolicyObjectEditView.as_view(),
+        name="servicepolicyobject_edit",
+    ),
+    path(
+        "service-policy-object/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="servicepolicyobject_changelog",
+        kwargs={"model": models.ServicePolicyObject},
+    ),
+    # UserObject URLs
+    path("user-object/", user_object.UserObjectListView.as_view(), name="userobject_list"),
+    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
+    path("user-object/add/", user_object.UserObjectCreateView.as_view(), name="userobject_add"),
+    path("user-object/delete/", user_object.UserObjectBulkDeleteView.as_view(), name="userobject_bulk_delete"),
+    path("user-object/edit/", user_object.UserObjectBulkEditView.as_view(), name="userobject_bulk_edit"),
+    path("user-object/<uuid:pk>/", user_object.UserObjectView.as_view(), name="userobject"),
+    path("user-object/<uuid:pk>/delete/", user_object.UserObjectDeleteView.as_view(), name="userobject_delete"),
+    path("user-object/<uuid:pk>/edit/", user_object.UserObjectEditView.as_view(), name="userobject_edit"),
+    path(
+        "user-object/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="userobject_changelog",
+        kwargs={"model": models.UserObject},
+    ),
+    # UserObjectGroup URLs
+    path("user-object-group/", user_object_group.UserObjectGroupListView.as_view(), name="userobjectgroup_list"),
+    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
+    path("user-object-group/add/", user_object_group.UserObjectGroupCreateView.as_view(), name="userobjectgroup_add"),
+    path(
+        "user-object-group/delete/",
+        user_object_group.UserObjectGroupBulkDeleteView.as_view(),
+        name="userobjectgroup_bulk_delete",
+    ),
+    path(
+        "user-object-group/edit/",
+        user_object_group.UserObjectGroupBulkEditView.as_view(),
+        name="userobjectgroup_bulk_edit",
+    ),
+    path("user-object-group/<uuid:pk>/", user_object_group.UserObjectGroupView.as_view(), name="userobjectgroup"),
+    path(
+        "user-object-group/<uuid:pk>/delete/",
+        user_object_group.UserObjectGroupDeleteView.as_view(),
+        name="userobjectgroup_delete",
+    ),
+    path(
+        "user-object-group/<uuid:pk>/edit/",
+        user_object_group.UserObjectGroupEditView.as_view(),
+        name="userobjectgroup_edit",
+    ),
+    path(
+        "user-object-group/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="userobjectgroup_changelog",
+        kwargs={"model": models.UserObjectGroup},
+    ),
+    # UserPolicyObject URLs
+    path("user-policy-object/", user_policy_object.UserPolicyObjectListView.as_view(), name="userpolicyobject_list"),
+    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
+    path(
+        "user-policy-object/add/", user_policy_object.UserPolicyObjectCreateView.as_view(), name="userpolicyobject_add"
+    ),
+    path(
+        "user-policy-object/delete/",
+        user_policy_object.UserPolicyObjectBulkDeleteView.as_view(),
+        name="userpolicyobject_bulk_delete",
+    ),
+    path(
+        "user-policy-object/edit/",
+        user_policy_object.UserPolicyObjectBulkEditView.as_view(),
+        name="userpolicyobject_bulk_edit",
+    ),
+    path("user-policy-object/<uuid:pk>/", user_policy_object.UserPolicyObjectView.as_view(), name="userpolicyobject"),
+    path(
+        "user-policy-object/<uuid:pk>/delete/",
+        user_policy_object.UserPolicyObjectDeleteView.as_view(),
+        name="userpolicyobject_delete",
+    ),
+    path(
+        "user-policy-object/<uuid:pk>/edit/",
+        user_policy_object.UserPolicyObjectEditView.as_view(),
+        name="userpolicyobject_edit",
+    ),
+    path(
+        "user-policy-object/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="userpolicyobject_changelog",
+        kwargs={"model": models.UserPolicyObject},
     ),
     # Zone URLs
     path("zone/", zone.ZoneListView.as_view(), name="zone_list"),
@@ -79,115 +364,90 @@ urlpatterns = [
         name="zone_changelog",
         kwargs={"model": models.Zone},
     ),
-    # AddressGroup URLs
-    path("address-group/", address_group.AddressGroupListView.as_view(), name="addressgroup_list"),
-    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("address-group/add/", address_group.AddressGroupCreateView.as_view(), name="addressgroup_add"),
-    path("address-group/delete/", address_group.AddressGroupBulkDeleteView.as_view(), name="addressgroup_bulk_delete"),
-    path("address-group/edit/", address_group.AddressGroupBulkEditView.as_view(), name="addressgroup_bulk_edit"),
-    path("address-group/<uuid:pk>/", address_group.AddressGroupView.as_view(), name="addressgroup"),
-    path("address-group/<uuid:pk>/delete/", address_group.AddressGroupDeleteView.as_view(), name="addressgroup_delete"),
-    path("address-group/<uuid:pk>/edit/", address_group.AddressGroupEditView.as_view(), name="addressgroup_edit"),
-    path(
-        "address-group/<uuid:pk>/changelog/",
-        ObjectChangeLogView.as_view(),
-        name="addressgroup_changelog",
-        kwargs={"model": models.AddressGroup},
-    ),
-    # ServiceGroup URLs
-    path("service-group/", service_group.ServiceGroupListView.as_view(), name="servicegroup_list"),
-    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("service-group/add/", service_group.ServiceGroupCreateView.as_view(), name="servicegroup_add"),
-    path("service-group/delete/", service_group.ServiceGroupBulkDeleteView.as_view(), name="servicegroup_bulk_delete"),
-    path("service-group/edit/", service_group.ServiceGroupBulkEditView.as_view(), name="servicegroup_bulk_edit"),
-    path("service-group/<uuid:pk>/", service_group.ServiceGroupView.as_view(), name="servicegroup"),
-    path("service-group/<uuid:pk>/delete/", service_group.ServiceGroupDeleteView.as_view(), name="servicegroup_delete"),
-    path("service-group/<uuid:pk>/edit/", service_group.ServiceGroupEditView.as_view(), name="servicegroup_edit"),
-    path(
-        "service-group/<uuid:pk>/changelog/",
-        ObjectChangeLogView.as_view(),
-        name="servicegroup_changelog",
-        kwargs={"model": models.ServiceGroup},
-    ),
-    # User URLs
-    path("user/", user.UserListView.as_view(), name="user_list"),
-    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("user/add/", user.UserCreateView.as_view(), name="user_add"),
-    path("user/delete/", user.UserBulkDeleteView.as_view(), name="user_bulk_delete"),
-    path("user/edit/", user.UserBulkEditView.as_view(), name="user_bulk_edit"),
-    path("user/<uuid:pk>/", user.UserView.as_view(), name="user"),
-    path("user/<uuid:pk>/delete/", user.UserDeleteView.as_view(), name="user_delete"),
-    path("user/<uuid:pk>/edit/", user.UserEditView.as_view(), name="user_edit"),
-    path(
-        "user/<uuid:pk>/changelog/",
-        ObjectChangeLogView.as_view(),
-        name="user_changelog",
-        kwargs={"model": models.User},
-    ),
-    # UserGroup URLs
-    path("user-group/", user_group.UserGroupListView.as_view(), name="usergroup_list"),
-    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("user-group/add/", user_group.UserGroupCreateView.as_view(), name="usergroup_add"),
-    path("user-group/delete/", user_group.UserGroupBulkDeleteView.as_view(), name="usergroup_bulk_delete"),
-    path("user-group/edit/", user_group.UserGroupBulkEditView.as_view(), name="usergroup_bulk_edit"),
-    path("user-group/<uuid:pk>/", user_group.UserGroupView.as_view(), name="usergroup"),
-    path("user-group/<uuid:pk>/delete/", user_group.UserGroupDeleteView.as_view(), name="usergroup_delete"),
-    path("user-group/<uuid:pk>/edit/", user_group.UserGroupEditView.as_view(), name="usergroup_edit"),
-    path(
-        "user-group/<uuid:pk>/changelog/",
-        ObjectChangeLogView.as_view(),
-        name="usergroup_changelog",
-        kwargs={"model": models.UserGroup},
-    ),
-    # SourceDestination URLs
-    path("source-destination/", source_destination.SourceDestinationListView.as_view(), name="sourcedestination_list"),
+    # Source URLs
+    path("source/", source.SourceListView.as_view(), name="source_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
     path(
-        "source-destination/add/",
-        source_destination.SourceDestinationCreateView.as_view(),
-        name="sourcedestination_add",
+        "source/add/",
+        source.SourceCreateView.as_view(),
+        name="source_add",
     ),
     path(
-        "source-destination/delete/",
-        source_destination.SourceDestinationBulkDeleteView.as_view(),
-        name="sourcedestination_bulk_delete",
+        "source/delete/",
+        source.SourceBulkDeleteView.as_view(),
+        name="source_bulk_delete",
     ),
     path(
-        "source-destination/edit/",
-        source_destination.SourceDestinationBulkEditView.as_view(),
-        name="sourcedestination_bulk_edit",
+        "source/edit/",
+        source.SourceBulkEditView.as_view(),
+        name="source_bulk_edit",
     ),
-    path("source-destination/<uuid:pk>/", source_destination.SourceDestinationView.as_view(), name="sourcedestination"),
+    path("source/<uuid:pk>/", source.SourceView.as_view(), name="source"),
     path(
-        "source-destination/<uuid:pk>/delete/",
-        source_destination.SourceDestinationDeleteView.as_view(),
-        name="sourcedestination_delete",
-    ),
-    path(
-        "source-destination/<uuid:pk>/edit/",
-        source_destination.SourceDestinationEditView.as_view(),
-        name="sourcedestination_edit",
+        "source/<uuid:pk>/delete/",
+        source.SourceDeleteView.as_view(),
+        name="source_delete",
     ),
     path(
-        "source-destination/<uuid:pk>/changelog/",
+        "source/<uuid:pk>/edit/",
+        source.SourceEditView.as_view(),
+        name="source_edit",
+    ),
+    path(
+        "source/<uuid:pk>/changelog/",
         ObjectChangeLogView.as_view(),
-        name="sourcedestination_changelog",
-        kwargs={"model": models.SourceDestination},
+        name="source_changelog",
+        kwargs={"model": models.Source},
     ),
-    # Term URLs
-    path("term/", term.TermListView.as_view(), name="term_list"),
+    # Destination URLs
+    path("destination/", destination.DestinationListView.as_view(), name="destination_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("term/add/", term.TermCreateView.as_view(), name="term_add"),
-    path("term/delete/", term.TermBulkDeleteView.as_view(), name="term_bulk_delete"),
-    path("term/edit/", term.TermBulkEditView.as_view(), name="term_bulk_edit"),
-    path("term/<uuid:pk>/", term.TermView.as_view(), name="term"),
-    path("term/<uuid:pk>/delete/", term.TermDeleteView.as_view(), name="term_delete"),
-    path("term/<uuid:pk>/edit/", term.TermEditView.as_view(), name="term_edit"),
     path(
-        "term/<uuid:pk>/changelog/",
+        "destination/add/",
+        destination.DestinationCreateView.as_view(),
+        name="destination_add",
+    ),
+    path(
+        "destination/delete/",
+        destination.DestinationBulkDeleteView.as_view(),
+        name="destination_bulk_delete",
+    ),
+    path(
+        "destination/edit/",
+        destination.DestinationBulkEditView.as_view(),
+        name="destination_bulk_edit",
+    ),
+    path("destination/<uuid:pk>/", destination.DestinationView.as_view(), name="destination"),
+    path(
+        "destination/<uuid:pk>/delete/",
+        destination.DestinationDeleteView.as_view(),
+        name="destination_delete",
+    ),
+    path(
+        "destination/<uuid:pk>/edit/",
+        destination.DestinationEditView.as_view(),
+        name="destination_edit",
+    ),
+    path(
+        "destination/<uuid:pk>/changelog/",
         ObjectChangeLogView.as_view(),
-        name="term_changelog",
-        kwargs={"model": models.Term},
+        name="destination_changelog",
+        kwargs={"model": models.Destination},
+    ),
+    # PolicyRule URLs
+    path("policy-rule/", policy_rule.PolicyRuleListView.as_view(), name="policyrule_list"),
+    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
+    path("policy-rule/add/", policy_rule.PolicyRuleCreateView.as_view(), name="policyrule_add"),
+    path("policy-rule/delete/", policy_rule.PolicyRuleBulkDeleteView.as_view(), name="policyrule_bulk_delete"),
+    path("policy-rule/edit/", policy_rule.PolicyRuleBulkEditView.as_view(), name="policyrule_bulk_edit"),
+    path("policy-rule/<uuid:pk>/", policy_rule.PolicyRuleView.as_view(), name="term"),
+    path("policy-rule/<uuid:pk>/delete/", policy_rule.PolicyRuleDeleteView.as_view(), name="policyrule_delete"),
+    path("policy-rule/<uuid:pk>/edit/", policy_rule.PolicyRuleEditView.as_view(), name="policyrule_edit"),
+    path(
+        "policy-rule/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="policyrule_changelog",
+        kwargs={"model": models.PolicyRule},
     ),
     # Policy URLs
     path("policy/", policy.PolicyListView.as_view(), name="policy_list"),
