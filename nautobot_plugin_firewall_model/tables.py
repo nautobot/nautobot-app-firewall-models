@@ -300,11 +300,7 @@ class PolicyRuleTable(BaseTable):
     """Table for list view."""
 
     pk = ToggleColumn()
-    display = tables.LinkColumn(
-        "plugins:nautobot_plugin_firewall_model:policyrule",
-        text=lambda record: str(record),  # pylint: disable=W0108
-        args=[A("pk")],
-    )
+    name = tables.LinkColumn()
     actions = ButtonsColumn(models.PolicyRule, buttons=("edit", "delete"))
     source = tables.LinkColumn()
     destination = tables.LinkColumn()
@@ -315,7 +311,7 @@ class PolicyRuleTable(BaseTable):
         model = models.PolicyRule
         fields = (
             "pk",
-            "display",
+            "name",
             "index",
             "action",
             "log",
@@ -340,5 +336,5 @@ class PolicyTable(BaseTable):
             "pk",
             "name",
             "description",
-            "policy_rule",
+            "policy_rules",
         )

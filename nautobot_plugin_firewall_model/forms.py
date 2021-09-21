@@ -687,7 +687,7 @@ class PolicyRuleFilterForm(BootstrapMixin, forms.ModelForm):
         label="Search",
         help_text="Search within Name or Description.",
     )
-    display = forms.CharField(required=False, label="Display")
+    name = forms.CharField(required=False, label="name")
 
     class Meta:
         """Meta attributes."""
@@ -696,7 +696,7 @@ class PolicyRuleFilterForm(BootstrapMixin, forms.ModelForm):
         # Define the fields above for ordering and widget purposes
         fields = [
             "q",
-            "display",
+            "name",
             "index",
             "action",
             "log",
@@ -708,11 +708,14 @@ class PolicyRuleFilterForm(BootstrapMixin, forms.ModelForm):
 class PolicyRuleForm(BootstrapMixin, forms.ModelForm):
     """PolicyRule creation/edit form."""
 
+    name = forms.CharField(required=False, label="Name")
+
     class Meta:
         """Meta attributes."""
 
         model = models.PolicyRule
         fields = [
+            "name",
             "index",
             "action",
             "log",

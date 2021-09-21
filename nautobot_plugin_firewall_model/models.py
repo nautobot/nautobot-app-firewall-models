@@ -494,6 +494,7 @@ class Destination(BaseModel, ChangeLoggedModel):
 class PolicyRule(BaseModel, ChangeLoggedModel):
     """PolicyRule model."""
 
+    name = models.CharField(max_length=50, blank=True, null=True)
     tags = TaggableManager(through=TaggedItem)
     index = models.IntegerField()
     source = models.ForeignKey(to=Source, on_delete=models.PROTECT)
@@ -513,6 +514,8 @@ class PolicyRule(BaseModel, ChangeLoggedModel):
 
     def __str__(self):
         """Stringify instance."""
+        if self.name:
+            return self.name
         return f"{self.index} - {self.source} - {self.destination} - {self.action}"
 
 
