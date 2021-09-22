@@ -3,7 +3,7 @@
 from nautobot.core.api.serializers import ValidatedModelSerializer
 from rest_framework import serializers
 
-from nautobot_plugin_firewall_model import models, choices
+from nautobot_plugin_firewall_model import models
 
 
 class IPRangeSerializer(ValidatedModelSerializer):
@@ -61,8 +61,6 @@ class AddressPolicyObjectSerializer(ValidatedModelSerializer):
 
 class ServiceObjectSerializer(ValidatedModelSerializer):
     """ServiceObject Serializer."""
-
-    ip_protocol = serializers.ChoiceField(choices=choices.IP_PROTOCOL_CHOICES, required=False)
 
     class Meta:
         """Meta attributes."""

@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
-from django.db.models.deletion import PROTECT
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from nautobot.core.models import BaseModel
@@ -33,7 +32,7 @@ class IPRange(BaseModel, ChangeLoggedModel):
         help_text="IPv4 or IPv6 host address",
     )
     vrf = models.ForeignKey(
-        to="ipam.VRF", on_delete=models.PROTECT, related_name="ip_ranges", blank=True, null=True, verbose_name="VRF"
+        to="ipam.VRF", on_delete=models.CASCADE, related_name="ip_ranges", blank=True, null=True, verbose_name="VRF"
     )
     description = models.CharField(
         max_length=200,
@@ -62,13 +61,13 @@ class IPRange(BaseModel, ChangeLoggedModel):
     def save(self, *args, **kwargs):
         """Overloads to inject size attr."""
         # Record the range's size (number of IP addresses)
+        self.clean()
         self.size = int(IPAddress(self.end_address) - IPAddress(self.start_address)) + 1
-
         super().save(*args, **kwargs)
 
     def clean(self, *args, **kwargs):
         """Overloads to validate attr for form verification."""
-        if not hasattr(self, "start_address") or not hasattr(self, "end_address"):
+        if not getattr(self, "start_address") or not getattr(self, "end_address"):
             raise ValidationError("Must have `start_address` and `end_address`.")
         if IPAddress(self.start_address) > IPAddress(self.end_address):
             raise ValidationError("`end_address` must be >= than `start_address`.")
@@ -110,10 +109,10 @@ class AddressObject(BaseModel, ChangeLoggedModel):
         blank=True,
     )
     name = models.CharField(max_length=100, unique=True)
-    fqdn = models.ForeignKey(to=FQDN, on_delete=models.PROTECT, null=True)
-    ip_range = models.ForeignKey(to=IPRange, on_delete=models.PROTECT, null=True)
-    ip_address = models.ForeignKey(to="ipam.IPAddress", on_delete=models.PROTECT, null=True)
-    prefix = models.ForeignKey(to="ipam.Prefix", on_delete=models.PROTECT, null=True)
+    fqdn = models.ForeignKey(to=FQDN, on_delete=models.CASCADE, null=True, blank=True)
+    ip_range = models.ForeignKey(to=IPRange, on_delete=models.CASCADE, null=True, blank=True)
+    ip_address = models.ForeignKey(to="ipam.IPAddress", on_delete=models.CASCADE, null=True, blank=True)
+    prefix = models.ForeignKey(to="ipam.Prefix", on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         """Meta class."""
@@ -128,6 +127,11 @@ class AddressObject(BaseModel, ChangeLoggedModel):
     def __str__(self):
         """Stringify instance."""
         return self.name
+
+    def save(self, *args, **kwargs):
+        """Overloads to enforce clear."""
+        self.clean()
+        super().save(*args, **kwargs)
 
     def clean(self, *args, **kwargs):
         """Overloads to validate attr for form verification."""
@@ -441,10 +445,10 @@ class Source(BaseModel, ChangeLoggedModel):
         max_length=200,
         blank=True,
     )
-    address = models.ForeignKey(to=AddressPolicyObject, on_delete=PROTECT)
-    service = models.ForeignKey(to=ServicePolicyObject, on_delete=PROTECT)
-    user = models.ForeignKey(to=UserPolicyObject, on_delete=PROTECT)
-    zone = models.ForeignKey(to=Zone, on_delete=models.CASCADE)
+    address = models.ForeignKey(to=AddressPolicyObject, on_delete=models.CASCADE)
+    service = models.ForeignKey(to=ServicePolicyObject, on_delete=models.CASCADE)
+    user = models.ForeignKey(to=UserPolicyObject, on_delete=models.CASCADE, null=True, blank=True)
+    zone = models.ForeignKey(to=Zone, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         """Meta class."""
@@ -471,9 +475,9 @@ class Destination(BaseModel, ChangeLoggedModel):
         max_length=200,
         blank=True,
     )
-    address = models.ForeignKey(to=AddressPolicyObject, on_delete=PROTECT)
-    service = models.ForeignKey(to=ServicePolicyObject, on_delete=PROTECT)
-    zone = models.ForeignKey(to=Zone, on_delete=models.CASCADE)
+    address = models.ForeignKey(to=AddressPolicyObject, on_delete=models.CASCADE)
+    service = models.ForeignKey(to=ServicePolicyObject, on_delete=models.CASCADE)
+    zone = models.ForeignKey(to=Zone, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         """Meta class."""
@@ -497,8 +501,8 @@ class PolicyRule(BaseModel, ChangeLoggedModel):
     name = models.CharField(max_length=50, blank=True, null=True)
     tags = TaggableManager(through=TaggedItem)
     index = models.IntegerField()
-    source = models.ForeignKey(to=Source, on_delete=models.PROTECT)
-    destination = models.ForeignKey(to=Destination, on_delete=models.PROTECT)
+    source = models.ForeignKey(to=Source, on_delete=models.CASCADE)
+    destination = models.ForeignKey(to=Destination, on_delete=models.CASCADE)
     action = models.CharField(choices=choices.ACTION_CHOICES, max_length=20)
     log = models.BooleanField(default=False)
 

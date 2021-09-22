@@ -37,6 +37,20 @@ class TestModels(TestCase):
         self.assertEqual(iprange.vrf, self.vrf)
         self.assertEqual(iprange.size, 5)
 
+    def test_iprange_missing_required_attr(self):
+        """Test missing start_address."""
+        with self.assertRaises(ValidationError):
+            IPRange.objects.create(
+                end_address="10.0.0.5", description="Development", vrf=self.vrf
+            )
+
+    def test_iprange_invalid_range(self):
+        """Test missing start_address."""
+        with self.assertRaises(ValidationError):
+            IPRange.objects.create(
+                start_address="10.0.0.15", end_address="10.0.0.5", description="Development", vrf=self.vrf
+            )
+
     def test_create_zone_only_required(self):
         """Create Zone with only required fields, and validate null description and __str__."""
         zone = Zone.objects.create(name="trust")
@@ -56,27 +70,13 @@ class TestModels(TestCase):
         self.assertEqual(zone.interfaces.count(), 0)
         self.assertEqual(zone.vrfs.first(), self.vrf)
 
-    # def test_create_address_group_only_required(self):
-    #     """Create AddressGroup with only required fields, and validate null description and __str__."""
-    #     addr_grp = AddressGroup.objects.create(name="Development")
+    def test_address_object_too_many_objects(self):
+        """Tests to make sure only one address can be on an address object."""
+        fqdn = FQDN.objects.create(name="test.local")
+        iprange = IPRange.objects.create(start_address="10.0.0.1", end_address="10.0.0.5")
 
-    #     self.assertEqual(addr_grp.description, "")
-    #     self.assertEqual(addr_grp.name, "Development")
-    #     self.assertEqual(addr_grp.ip_addresses.count(), 0)
-    #     self.assertEqual(addr_grp.prefixes.count(), 0)
-    #     self.assertEqual(addr_grp.ip_ranges.count(), 0)
-
-    # def test_create_address_group_ip_range_fields_success(self):
-    #     """Create AddressGroup with ip_ranges & description fields."""
-    #     ip_range = IPRange.objects.create(start_address="10.0.0.1", end_address="10.0.0.10")
-    #     addr_grp = AddressGroup.objects.create(name="Development", description="development hosts")
-    #     addr_grp.ip_ranges.add(ip_range)
-
-    #     self.assertEqual(addr_grp.description, "development hosts")
-    #     self.assertEqual(addr_grp.name, "Development")
-    #     self.assertEqual(addr_grp.ip_addresses.count(), 0)
-    #     self.assertEqual(addr_grp.prefixes.count(), 0)
-    #     self.assertEqual(addr_grp.ip_ranges.first(), ip_range)
+        with self.assertRaises(ValidationError):
+            AddressObject.objects.create(name="failure", fqdn=fqdn, ip_range=iprange)
 
     def test_create_protocol_only_required(self):
         """Creates a protocol with only required fields."""

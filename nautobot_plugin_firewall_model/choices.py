@@ -5,4 +5,4 @@ from netutils.protocol_mapper import PROTO_NAME_TO_NUM
 
 IP_PROTOCOL_CHOICES = ((i, i) for i in PROTO_NAME_TO_NUM.keys())  # pylint: disable=consider-iterating-dictionary
 
-ACTION_CHOICES = (("Allow", "allow"), ("Deny", "deny"), ("Drop (silent)", "drop"))
+ACTION_CHOICES = (("Allow", "allow"), ("Deny", "deny"), ("Drop", "drop"))

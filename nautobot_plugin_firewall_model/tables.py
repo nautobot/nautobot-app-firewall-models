@@ -12,7 +12,7 @@ class IPRangeTable(BaseTable):
     """Table for list view."""
 
     pk = ToggleColumn()
-    name = tables.Column(linkify=True)
+    start_address = tables.Column(linkify=True)
     vrf = tables.LinkColumn()
     actions = ButtonsColumn(models.IPRange, buttons=("edit", "delete"))
 

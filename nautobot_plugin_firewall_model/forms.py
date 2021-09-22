@@ -3,7 +3,12 @@
 from django import forms
 from nautobot.dcim.models import Interface
 from nautobot.ipam.models import VRF, Prefix, IPAddress
-from nautobot.utilities.forms import BootstrapMixin, BulkEditForm, DynamicModelChoiceField
+from nautobot.utilities.forms import (
+    BootstrapMixin,
+    BulkEditForm,
+    DynamicModelChoiceField,
+    DynamicModelMultipleChoiceField,
+)
 
 from nautobot_plugin_firewall_model import models, fields, choices
 
@@ -208,9 +213,6 @@ class AddressObjectGroupBulkEditForm(BootstrapMixin, BulkEditForm):
         queryset=models.AddressObjectGroup.objects.all(), widget=forms.MultipleHiddenInput
     )
     description = forms.CharField(required=False)
-    address_objects = forms.ModelMultipleChoiceField(
-        queryset=models.AddressObject.objects.all(), label="Address Objects"
-    )
 
     class Meta:
         """Meta attributes."""
@@ -255,12 +257,6 @@ class AddressPolicyObjectBulkEditForm(BootstrapMixin, BulkEditForm):
         queryset=models.AddressPolicyObject.objects.all(), widget=forms.MultipleHiddenInput
     )
     description = forms.CharField(required=False)
-    address_objects = forms.ModelMultipleChoiceField(
-        queryset=models.AddressObject.objects.all(), label="Address Objects"
-    )
-    address_object_groups = forms.ModelMultipleChoiceField(
-        queryset=models.AddressObjectGroup.objects.all(), label="Address Group Objects"
-    )
 
     class Meta:
         """Meta attributes."""
@@ -564,8 +560,8 @@ class ZoneBulkEditForm(BootstrapMixin, BulkEditForm):
 
     pk = forms.ModelMultipleChoiceField(queryset=models.Zone.objects.all(), widget=forms.MultipleHiddenInput)
     description = forms.CharField(required=False)
-    vrfs = forms.ModelMultipleChoiceField(queryset=VRF.objects.all(), label="VRF")
-    interfaces = forms.ModelMultipleChoiceField(queryset=Interface.objects.all(), label="Interface")
+    vrfs = DynamicModelMultipleChoiceField(queryset=VRF.objects.all(), required=False, label="VRF")
+    interfaces = DynamicModelMultipleChoiceField(queryset=Interface.objects.all(), required=False, label="Interface")
 
     class Meta:
         """Meta attributes."""
@@ -728,10 +724,17 @@ class PolicyRuleBulkEditForm(BootstrapMixin, BulkEditForm):
     """PolicyRule bulk edit form."""
 
     pk = forms.ModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), widget=forms.MultipleHiddenInput)
-    action = forms.ChoiceField(choices=choices.ACTION_CHOICES)
-    log = forms.BooleanField()
-    source = forms.ModelChoiceField(queryset=models.Source.objects.all(), label="Source")
-    destination = forms.ModelChoiceField(queryset=models.Destination.objects.all(), label="Destination")
+    action = forms.ChoiceField(choices=choices.ACTION_CHOICES, required=False)
+    log = forms.BooleanField(required=False)
+    source = forms.ModelChoiceField(queryset=models.Source.objects.all(), label="Source", required=False)
+    destination = forms.ModelChoiceField(queryset=models.Destination.objects.all(), label="Destination", required=False)
+
+    class Meta:
+        """Meta attributes."""
+
+        nullable_fields = [
+            "description",
+        ]
 
 
 class PolicyFilterForm(BootstrapMixin, forms.ModelForm):
