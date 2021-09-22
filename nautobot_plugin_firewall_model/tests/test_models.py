@@ -40,9 +40,7 @@ class TestModels(TestCase):
     def test_iprange_missing_required_attr(self):
         """Test missing start_address."""
         with self.assertRaises(ValidationError):
-            IPRange.objects.create(
-                end_address="10.0.0.5", description="Development", vrf=self.vrf
-            )
+            IPRange.objects.create(end_address="10.0.0.5", description="Development", vrf=self.vrf)
 
     def test_iprange_invalid_range(self):
         """Test missing start_address."""
