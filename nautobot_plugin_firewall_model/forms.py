@@ -717,6 +717,7 @@ class PolicyRuleForm(BootstrapMixin, forms.ModelForm):
             "log",
             "source",
             "destination",
+            "tags"
         ]
 
 
@@ -734,6 +735,7 @@ class PolicyRuleBulkEditForm(BootstrapMixin, BulkEditForm):
 
         nullable_fields = [
             "description",
+            "tags"
         ]
 
 

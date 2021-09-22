@@ -2,6 +2,9 @@
 
 A plugin for [Nautobot](https://github.com/nautobot/nautobot).
 
+## Summary
+
+Set of Nautobot models for managing vendor agnostic layer 4 firewall policies.
 ## Installation
 
 The plugin is available as a Python package in pypi and can be installed with pip
@@ -23,23 +26,127 @@ Once installed, the plugin needs to be enabled in your `nautobot_config.py`
 ```python
 # In your nautobot_config.py
 PLUGINS = ["nautobot_plugin_firewall_model"]
-
-# PLUGINS_CONFIG = {
-#   "nautobot_plugin_firewall_model": {
-#     ADD YOUR SETTINGS HERE
-#   }
-# }
 ```
-
-The plugin behavior can be controlled with the following list of settings
-
-- TODO
 
 ## Usage
 
-### API
+### Models
+<p align="center">
+<img src="./docs/images/datamodel.png" class="center">
+</p>
 
-TODO
+### Rest API
+The plugin includes API endpoints to manage its related objects, complete info in the Swagger section.
+
+#### Address
+* FQDN: `/api/plugins/nautobot-plugin-firewall-model/fqdn/`
+* IP Range: `/api/plugins/nautobot-plugin-firewall-model/ip-range/`
+* Address Object: `/api/plugins/nautobot-plugin-firewall-model/address-object/`
+* Address Object Group: `/api/plugins/nautobot-plugin-firewall-model/address-object-group/`
+* Address Policy Object: `/api/plugins/nautobot-plugin-firewall-model/address-policy-object/`
+
+#### Service
+* Service Object: `/api/plugins/nautobot-plugin-firewall-model/service-object/`
+* Service Object Group: `/api/plugins/nautobot-plugin-firewall-model/service-object-group/`
+* Service Policy Object: `/api/plugins/nautobot-plugin-firewall-model/service-policy-object/`
+
+#### User
+* User Object: `/api/plugins/nautobot-plugin-firewall-model/user-object/`
+* User Object Group: `/api/plugins/nautobot-plugin-firewall-model/user-object-group/`
+* User Policy Object: `/api/plugins/nautobot-plugin-firewall-model/user-policy-object/`
+
+#### Zone
+* Zone: `/api/plugins/nautobot-plugin-firewall-model/zone/`
+
+#### Policy
+* Source: `/api/plugins/nautobot-plugin-firewall-model/source/`
+* Destination: `/api/plugins/nautobot-plugin-firewall-model/destination/`
+* Policy Rule: `/api/plugins/nautobot-plugin-firewall-model/policy-rule/`
+* Policy: `/api/plugins/nautobot-plugin-firewall-model/policy/`
+
+### GraphQL API
+All objects are available for GraphQL queries.
+
+#### Sample GraphQL Query
+
+```
+query {
+  policies {
+    name
+    description
+    policy_rules {
+      index
+      tags {
+        name
+      }
+      action
+      log
+      source {
+        description
+        zone {
+          name
+        }
+				user {
+          user_objects {
+            username
+          }
+          user_object_groups {
+            user_objects {
+              username
+            }
+          }
+        }
+        address {
+          address_objects {
+            name
+          }
+          address_object_groups {
+            address_objects {
+              name
+            }
+          }
+        }
+        service {
+          service_objects {
+            name
+          }
+          service_object_groups {
+            service_objects {
+              name
+            }
+          }
+        }
+      }
+      destination {
+        description
+        zone {
+          name
+        }
+        address {
+          address_objects {
+            name
+          }
+          address_object_groups {
+            address_objects {
+              name
+            }
+          }
+        }
+        service {
+          service_objects {
+            name
+          }
+          service_object_groups {
+            service_objects {
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
 
 ## Contributing
 
@@ -179,4 +286,15 @@ Sign up [here](http://slack.networktocode.com/)
 
 ## Screenshots
 
-TODO
+<p align="center">
+<img src="./docs/images/navigation.png" class="center">
+<img src="./docs/images/policylist.png" class="center">
+<img src="./docs/images/policy.png" class="center">
+<img src="./docs/images/policyrulelist.png" class="center">
+<img src="./docs/images/policyrule.png" class="center">
+<img src="./docs/images/destination.png" class="center">
+<img src="./docs/images/serviceobjectlist.png" class="center">
+<img src="./docs/images/addresspolicyobjectlist.png" class="center">
+<img src="./docs/images/addressobjectgrouplist.png" class="center">
+<img src="./docs/images/addressobjectlist.png" class="center">
+</p>
