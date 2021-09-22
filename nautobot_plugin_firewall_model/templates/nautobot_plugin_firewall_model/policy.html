@@ -71,7 +71,7 @@
                 </tr>
                 <tr>
                     <td>Policy Rules</td>
-                    <td>{% for i in object.policy_rules.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a> {% endfor %}</td>
+                    <td>{% for i in object.policy_rules.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}</td>
                 </tr>
             </table>
         </div>

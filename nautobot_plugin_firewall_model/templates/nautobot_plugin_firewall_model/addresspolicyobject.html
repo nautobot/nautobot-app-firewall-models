@@ -71,11 +71,11 @@
                 </tr>
                 <tr>
                     <td>Address Objects</td>
-                    <td>{% for i in object.address_objects.all %}<a href="{{ i.address.get_absolute_url }}">{{ i.address|placeholder }}</a> {% endfor %}</td>
+                    <td>{% for i in object.address_objects.all %}<a href="{{ i.address.get_absolute_url }}">{{ i.address|placeholder }}</a><br/>{% endfor %}</td>
                 </tr>
                 <tr>
                     <td>Address Object Groups</td>
-                    <td>{% for i in object.address_object_groups.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a> {% endfor %}</td>
+                    <td>{% for i in object.address_object_groups.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}</td>
                 </tr>
             </table>
         </div>

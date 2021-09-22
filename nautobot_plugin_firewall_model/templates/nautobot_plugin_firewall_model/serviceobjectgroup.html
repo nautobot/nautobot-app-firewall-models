@@ -71,7 +71,7 @@
                 </tr>
                 <tr>
                     <td>Service Objects</td>
-                    <td>{% for i in object.service_objects.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a> {% endfor %}</td>
+                    <td>{% for i in object.service_objects.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}</td>
                 </tr>
             </table>
         </div>

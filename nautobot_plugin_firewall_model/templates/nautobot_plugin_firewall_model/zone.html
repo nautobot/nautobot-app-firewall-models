@@ -71,11 +71,11 @@
                 </tr>
                 <tr>
                     <td>VRFs</td>
-                    <td>{% for i in object.vrfs.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a> {% endfor %}</td>
+                    <td>{% for i in object.vrfs.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}</td>
                 </tr>
                 <tr>
                     <td>Interfaces</td>
-                    <td>{% for i in object.interfaces.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a> {% endfor %}</td>
+                    <td>{% for i in object.interfaces.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}</td>
                 </tr>
             </table>
         </div>

@@ -1,215 +1,218 @@
 """Menu items."""
 
-from nautobot.extras.plugins import PluginMenuButton, PluginMenuItem
-from nautobot.utilities.choices import ButtonColorChoices
+from nautobot.core.apps import NavMenuAddButton, NavMenuGroup, NavMenuItem, NavMenuTab
 
 menu_items = (
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:fqdn_list",
-        link_text="FQDNs",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:fqdn_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_fqdn"],
+    NavMenuTab(
+        name="Firewall",
+        # weight=150,
+        groups=[
+            NavMenuGroup(
+                name="Address",
+                weight=100,
+                items=[
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:fqdn_list",
+                        name="FQDNs",
+                        permissions=["nautobot_plugin_firewall_model.view_fqdn"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:fqdn_add",
+                                permissions=["nautobot_plugin_firewall_model.add_fqdn"],
+                            ),
+                        ],
+                    ),
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:iprange_list",
+                        name="IP Ranges",
+                        permissions=["nautobot_plugin_firewall_model.view_iprange"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:iprange_add",
+                                permissions=["nautobot_plugin_firewall_model.add_iprange"],
+                            ),
+                        ],
+                    ),
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:addressobject_list",
+                        name="Address Objects",
+                        permissions=["nautobot_plugin_firewall_model.view_addressobject"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:addressobject_add",
+                                permissions=["nautobot_plugin_firewall_model.add_addressobject"],
+                            ),
+                        ],
+                    ),
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:addressobjectgroup_list",
+                        name="Address Object Groups",
+                        permissions=["nautobot_plugin_firewall_model.view_addressobjectgroup"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:addressobjectgroup_add",
+                                permissions=["nautobot_plugin_firewall_model.add_addressobjectgroup"],
+                            ),
+                        ],
+                    ),
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:addresspolicyobject_list",
+                        name="Address Policy Objects",
+                        permissions=["nautobot_plugin_firewall_model.view_addresspolicyobject"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:addresspolicyobject_add",
+                                permissions=["nautobot_plugin_firewall_model.add_addresspolicyobject"],
+                            ),
+                        ],
+                    ),
+                ],
             ),
-        ),
-    ),
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:iprange_list",
-        link_text="IP Ranges",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:iprange_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_iprange"],
+            NavMenuGroup(
+                name="Service",
+                weight=200,
+                items=[
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:serviceobject_list",
+                        name="Service Objects",
+                        permissions=["nautobot_plugin_firewall_model.view_serviceobject"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:serviceobject_add",
+                                permissions=["nautobot_plugin_firewall_model.add_serviceobject"],
+                            ),
+                        ],
+                    ),
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:serviceobjectgroup_list",
+                        name="Service Object Groups",
+                        permissions=["nautobot_plugin_firewall_model.view_serviceobjectgroup"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:serviceobjectgroup_add",
+                                permissions=["nautobot_plugin_firewall_model.add_serviceobjectgroup"],
+                            ),
+                        ],
+                    ),
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:servicepolicyobject_list",
+                        name="Service Policy Objects",
+                        permissions=["nautobot_plugin_firewall_model.view_servicepolicyobject"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:servicepolicyobject_add",
+                                permissions=["nautobot_plugin_firewall_model.add_servicepolicyobject"],
+                            ),
+                        ],
+                    ),
+                ],
             ),
-        ),
-    ),
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:addressobject_list",
-        link_text="Address Objects",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:addressobject_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_addressobject"],
+            NavMenuGroup(
+                name="User",
+                weight=200,
+                items=[
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:userobject_list",
+                        name="User Objects",
+                        permissions=["nautobot_plugin_firewall_model.view_userobject"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:userobject_add",
+                                permissions=["nautobot_plugin_firewall_model.add_userobject"],
+                            ),
+                        ],
+                    ),
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:userobjectgroup_list",
+                        name="User Object Groups",
+                        permissions=["nautobot_plugin_firewall_model.view_userobjectgroup"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:userobjectgroup_add",
+                                permissions=["nautobot_plugin_firewall_model.add_userobjectgroup"],
+                            ),
+                        ],
+                    ),
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:userpolicyobject_list",
+                        name="User Policy Objects",
+                        permissions=["nautobot_plugin_firewall_model.view_userpolicyobject"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:userpolicyobject_add",
+                                permissions=["nautobot_plugin_firewall_model.add_userpolicyobject"],
+                            ),
+                        ],
+                    ),
+                ],
             ),
-        ),
-    ),
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:addressobjectgroup_list",
-        link_text="Address Object Groups",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:addressobjectgroup_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_addressobjectgroup"],
+            NavMenuGroup(
+                name="Zone",
+                weight=200,
+                items=[
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:zone_list",
+                        name="Zones",
+                        permissions=["nautobot_plugin_firewall_model.view_zone"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:zone_add",
+                                permissions=["nautobot_plugin_firewall_model.add_zone"],
+                            ),
+                        ],
+                    ),
+                ],
             ),
-        ),
-    ),
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:addresspolicyobject_list",
-        link_text="Address Policy Objects",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:addresspolicyobject_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_addresspolicyobject"],
+            NavMenuGroup(
+                name="Policy",
+                weight=200,
+                items=[
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:source_list",
+                        name="Sources",
+                        permissions=["nautobot_plugin_firewall_model.view_source"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:source_add",
+                                permissions=["nautobot_plugin_firewall_model.add_source"],
+                            ),
+                        ],
+                    ),
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:destination_list",
+                        name="Destinations",
+                        permissions=["nautobot_plugin_firewall_model.view_destination"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:destination_add",
+                                permissions=["nautobot_plugin_firewall_model.add_destination"],
+                            ),
+                        ],
+                    ),
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:policyrule_list",
+                        name="Policy Rules",
+                        permissions=["nautobot_plugin_firewall_model.view_policyrule"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:policyrule_add",
+                                permissions=["nautobot_plugin_firewall_model.add_policyrule"],
+                            ),
+                        ],
+                    ),
+                    NavMenuItem(
+                        link="plugins:nautobot_plugin_firewall_model:policy_list",
+                        name="Policies",
+                        permissions=["nautobot_plugin_firewall_model.view_policy"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_plugin_firewall_model:policy_add",
+                                permissions=["nautobot_plugin_firewall_model.add_policy"],
+                            ),
+                        ],
+                    ),
+                ],
             ),
-        ),
-    ),
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:serviceobject_list",
-        link_text="Service Objects",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:serviceobject_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_serviceobject"],
-            ),
-        ),
-    ),
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:serviceobjectgroup_list",
-        link_text="Service Object Groups",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:serviceobjectgroup_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_serviceobjectgroup"],
-            ),
-        ),
-    ),
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:servicepolicyobject_list",
-        link_text="Service Policy Objects",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:servicepolicyobject_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_servicepolicyobject"],
-            ),
-        ),
-    ),
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:userobject_list",
-        link_text="User Objects",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:userobject_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_userobject"],
-            ),
-        ),
-    ),
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:userobjectgroup_list",
-        link_text="User Object Groups",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:userobjectgroup_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_usergroup"],
-            ),
-        ),
-    ),
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:userpolicyobject_list",
-        link_text="User Policy Objects",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:userpolicyobject_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_userpolicyobject"],
-            ),
-        ),
-    ),
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:zone_list",
-        link_text="Zones",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:zone_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_zone"],
-            ),
-        ),
-    ),
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:source_list",
-        link_text="Sources",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:source_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_source"],
-            ),
-        ),
-    ),
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:destination_list",
-        link_text="Destinations",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:destination_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_destination"],
-            ),
-        ),
-    ),
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:policyrule_list",
-        link_text="Policy Rules",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:policyrule_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_policyrule"],
-            ),
-        ),
-    ),
-    PluginMenuItem(
-        link="plugins:nautobot_plugin_firewall_model:policy_list",
-        link_text="Policies",
-        buttons=(
-            PluginMenuButton(
-                link="plugins:nautobot_plugin_firewall_model:policy_add",
-                title="Add",
-                icon_class="mdi mdi-plus-thick",
-                color=ButtonColorChoices.GREEN,
-                permissions=["nautobot_plugin_firewall_model.add_policy"],
-            ),
-        ),
+        ],
     ),
 )
