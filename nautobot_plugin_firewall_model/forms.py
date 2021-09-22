@@ -710,15 +710,7 @@ class PolicyRuleForm(BootstrapMixin, forms.ModelForm):
         """Meta attributes."""
 
         model = models.PolicyRule
-        fields = [
-            "name",
-            "index",
-            "action",
-            "log",
-            "source",
-            "destination",
-            "tags"
-        ]
+        fields = ["name", "index", "action", "log", "source", "destination", "tags"]
 
 
 class PolicyRuleBulkEditForm(BootstrapMixin, BulkEditForm):
@@ -733,10 +725,7 @@ class PolicyRuleBulkEditForm(BootstrapMixin, BulkEditForm):
     class Meta:
         """Meta attributes."""
 
-        nullable_fields = [
-            "description",
-            "tags"
-        ]
+        nullable_fields = ["description", "tags"]
 
 
 class PolicyFilterForm(BootstrapMixin, forms.ModelForm):
