@@ -1,7 +1,7 @@
 ---
 dev_addr: "127.0.0.1:8001"
 edit_uri: "edit/main/nautobot-plugin-firewall-model/docs"
-site_name: "NautobotPluginFirewallModel Documentation"
+site_name: "NautobotFirewallModels Documentation"
 site_url: "https://nautobot-plugin-firewall-model.readthedocs.io/"
 repo_url: "https://github.com/networktocode-llc/nautobot-plugin-firewall-model"
 python:

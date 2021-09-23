@@ -1,5 +1,5 @@
 ---
-nautobot_plugin_firewall_model:
+nautobot_firewall_models:
   project_name: "nautobot-plugin-firewall-model"
   nautobot_ver: "1.1.0"
   local: false

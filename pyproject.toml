@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "nautobot-plugin-firewall-model"
+name = "nautobot-firewall-models"
 version = "0.1.0"
-description = "Nautobot plugin to model firweall objects."
+description = "Nautobot plugin to model firewall objects."
 authors = ["Network to Code, LLC <info@networktocode.com>"]
 license = "Apache-2.0"
 readme = "README.md"
@@ -13,7 +13,7 @@ include = [
     "README.md",
 ]
 packages = [
-    { include = "nautobot_plugin_firewall_model" },
+    { include = "nautobot_firewall_models" },
 ]
 
 [tool.poetry.dependencies]

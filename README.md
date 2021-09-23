@@ -1,70 +1,148 @@
 # Nautobot Plugin Firewall Model
 
 A plugin for [Nautobot](https://github.com/nautobot/nautobot).
-
-## Summary
-
-Set of Nautobot models for managing vendor agnostic layer 4 firewall policies.
 ## Installation
 
 The plugin is available as a Python package in pypi and can be installed with pip
 
 ```shell
-pip install nautobot-plugin-firewall-model
+pip install nautobot-firewall-models
 ```
 
 > The plugin is compatible with Nautobot 1.1.0 and higher
 
-To ensure Nautobot Plugin Firewall Model is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `nautobot-plugin-firewall-model` package:
+To ensure Nautobot Plugin Firewall Model is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `nautobot-firewall-models` package:
 
 ```no-highlight
-# echo nautobot-plugin-firewall-model >> local_requirements.txt
+# echo nautobot-firewall-models >> local_requirements.txt
 ```
 
 Once installed, the plugin needs to be enabled in your `nautobot_config.py`
 
 ```python
 # In your nautobot_config.py
-PLUGINS = ["nautobot_plugin_firewall_model"]
+PLUGINS = ["nautobot_firewall_models"]
 ```
 
 ## Usage
+
+## Screenshots
+
+<p align="center">
+<img src="./docs/images/navigation.png" class="center">
+<img src="./docs/images/policylist.png" class="center">
+<img src="./docs/images/policy.png" class="center">
+<img src="./docs/images/policyrulelist.png" class="center">
+<img src="./docs/images/policyrule.png" class="center">
+<img src="./docs/images/destination.png" class="center">
+<img src="./docs/images/serviceobjectlist.png" class="center">
+<img src="./docs/images/addresspolicyobjectlist.png" class="center">
+<img src="./docs/images/addressobjectgrouplist.png" class="center">
+<img src="./docs/images/addressobjectlist.png" class="center">
+</p>
 
 ### Models
 <p align="center">
 <img src="./docs/images/datamodel.png" class="center">
 </p>
 
-### Rest API
-The plugin includes API endpoints to manage its related objects, complete info in the Swagger section.
 
 #### Address
-* FQDN: `/api/plugins/nautobot-plugin-firewall-model/fqdn/`
-* IP Range: `/api/plugins/nautobot-plugin-firewall-model/ip-range/`
-* Address Object: `/api/plugins/nautobot-plugin-firewall-model/address-object/`
-* Address Object Group: `/api/plugins/nautobot-plugin-firewall-model/address-object-group/`
-* Address Policy Object: `/api/plugins/nautobot-plugin-firewall-model/address-policy-object/`
+* FQDN:
+  * Endpoint: `/api/plugins/firewall/fqdn/`
+  * Fully qualified domain names
+  * Not tied to an IP Address in Nautobot
+* IP Range: 
+  * Endpoint: `/api/plugins/firewall/ip-range/`
+  * Range of IP Addresses `10.0.0.1-10.0.0.10`
+  * Must be unique with `start_address`, `end_address`, & `vrf`
+  * `vrf` is an optional attribute
+* Address Object: 
+  * Endpoint: `/api/plugins/firewall/address-object/`
+  * Defines all possible addresses as a common object
+  * `address` attribute will return the related object
+  * Can be one of the following
+    * `ipam.IPAddress`
+    * `ipam.Prefix`
+    * `FQDN`
+    * `IPRange`
+* Address Object Group:
+  * Endpoint: `/api/plugins/firewall/address-object-group/`
+  * Holds `ManyToMany` relationships to `AddressObject`
+* Address Policy Object:
+  * Endpoint: `/api/plugins/firewall/address-policy-object/`
+  * Holds `ManyToMany` relationships to `AddressObject` & `AddressObjectGroup`
+  * Allows for a single or group `AddressObject` & `AddressObjectGroup` to be mapped to policy
+  * Does NOT require a nested object to be set. (Example. `any` to signify any address)
+  * Used for `Source` & `Destination`
 
 #### Service
-* Service Object: `/api/plugins/nautobot-plugin-firewall-model/service-object/`
-* Service Object Group: `/api/plugins/nautobot-plugin-firewall-model/service-object-group/`
-* Service Policy Object: `/api/plugins/nautobot-plugin-firewall-model/service-policy-object/`
+* Service Object:
+  * Endpoint: `/api/plugins/firewall/service-object/`
+  * Defines Port/Name/IP Protocol as an common object
+* Service Object Group:
+  * Endpoint: `/api/plugins/firewall/service-object-group/`
+  * Holds `ManyToMany` relationships to `ServiceObject`
+* Service Policy Object:
+  * Endpoint: `/api/plugins/firewall/service-policy-object/`
+  * Holds `ManyToMany` relationships to `ServiceObject` & `ServiceObjectGroup`
+  * Allows for a single or group `ServiceObject` & `ServiceObjectGroup` to be mapped to policy
+  * Does NOT require a nested object to be set. (Example. `any` to signify any service)
+  * Used for `Source` & `Destination`
 
 #### User
-* User Object: `/api/plugins/nautobot-plugin-firewall-model/user-object/`
-* User Object Group: `/api/plugins/nautobot-plugin-firewall-model/user-object-group/`
-* User Policy Object: `/api/plugins/nautobot-plugin-firewall-model/user-policy-object/`
+* User Object:
+  * Endpoint: `/api/plugins/firewall/user-object/`
+  * Defines users as objects for policies.
+  * `NOT` related to Nautobot User objects.
+* User Object Group:
+  * Endpoint: `/api/plugins/firewall/user-object-group/`
+  * Holds `ManyToMany` relationships to `UserObject`
+* User Policy Object:
+  * Endpoint: `/api/plugins/firewall/user-policy-object/`
+  * Holds `ManyToMany` relationships to `UserObject` & `UserObjectGroup`
+  * Allows for a single or group `UserObject` & `UserObjectGroup` to be mapped to policy
+  * Does NOT require a nested object to be set. (Example. `any` to signify any user)
+  * Only sed for `Source`
+  * Feature may not be supported in all L4 firewalls.
 
 #### Zone
-* Zone: `/api/plugins/nautobot-plugin-firewall-model/zone/`
+* Zone:
+  * Endpoint: `/api/plugins/firewall/zone/`
+  * Simple model to define firewall zones.
 
 #### Policy
-* Source: `/api/plugins/nautobot-plugin-firewall-model/source/`
-* Destination: `/api/plugins/nautobot-plugin-firewall-model/destination/`
-* Policy Rule: `/api/plugins/nautobot-plugin-firewall-model/policy-rule/`
-* Policy: `/api/plugins/nautobot-plugin-firewall-model/policy/`
+* Source:
+  * Endpoint: `/api/plugins/firewall/source/`
+  * Builds a source definition that includes the following attrs.
+    * `AddressPolicyObject` (Required)
+    * `ServicePolicyObject` (Required)
+    * `UserPolicyObject` (Optional)
+    * `Zone` (Optional)
+    * Description (Optional)
+* Destination:
+  * Endpoint: `/api/plugins/firewall/destination/`
+  * Builds a destination definition that includes the following attrs.
+    * `AddressPolicyObject` (Required)
+    * `ServicePolicyObject` (Required)
+    * `Zone` (Optional)
+    * Description (Optional)
+* Policy Rule:
+  * Endpoint: `/api/plugins/firewall/policy-rule/`
+  * Builds an individual firewall policy rule/term with the following attrs.
+    * Name (Optional)
+    * Description (Optional)
+    * Index (Required)
+    * Action (Required)
+    * Log (Required)
+    * `Source` (Required)
+    * `Destination` (Required)
+* Policy:
+  * Endpoint: `/api/plugins/firewall/policy/`
+  * Final product of individual firewall policy rules/terms combined into a complete firewall policy.
 
-### GraphQL API
+### Rest API
+The plugin includes API endpoints to manage its related objects, complete info in the Swagger section.### GraphQL API
 All objects are available for GraphQL queries.
 
 #### Sample GraphQL Query
@@ -170,13 +248,13 @@ Below is a quick start guide if you're already familiar with the development env
 The [PyInvoke](http://www.pyinvoke.org/) library is used to provide some helper commands based on the environment.  There are a few configuration parameters which can be passed to PyInvoke to override the default configuration:
 
 * `nautobot_ver`: the version of Nautobot to use as a base for any built docker containers (default: 1.1.0)
-* `project_name`: the default docker compose project name (default: nautobot_plugin_firewall_model)
+* `project_name`: the default docker compose project name (default: nautobot_firewall_models)
 * `python_ver`: the version of Python to use as a base for any built docker containers (default: 3.6)
 * `local`: a boolean flag indicating if invoke tasks should be run on the host or inside the docker containers (default: False, commands will be run in docker containers)
 * `compose_dir`: the full path to a directory containing the project compose files
 * `compose_files`: a list of compose files applied in order (see [Multiple Compose files](https://docs.docker.com/compose/extends/#multiple-compose-files) for more information)
 
-Using **PyInvoke** these configuration options can be overridden using [several methods](http://docs.pyinvoke.org/en/stable/concepts/configuration.html).  Perhaps the simplest is simply setting an environment variable `INVOKE_NAUTOBOT_PLUGIN_FIREWALL_MODEL_VARIABLE_NAME` where `VARIABLE_NAME` is the variable you are trying to override.  The only exception is `compose_files`, because it is a list it must be overridden in a yaml file.  There is an example `invoke.yml` (`invoke.example.yml`) in this directory which can be used as a starting point.
+Using **PyInvoke** these configuration options can be overridden using [several methods](http://docs.pyinvoke.org/en/stable/concepts/configuration.html).  Perhaps the simplest is simply setting an environment variable `INVOKE_NAUTOBOT_FIREWALL_MODEL_VARIABLE_NAME` where `VARIABLE_NAME` is the variable you are trying to override.  The only exception is `compose_files`, because it is a list it must be overridden in a yaml file.  There is an example `invoke.yml` (`invoke.example.yml`) in this directory which can be used as a starting point.
 
 #### Local Poetry Development Environment
 
@@ -186,7 +264,7 @@ Using **PyInvoke** these configuration options can be overridden using [several 
 
 ```yaml
 ---
-nautobot_plugin_firewall_model:
+nautobot_firewall_models:
   local: true
   compose_files:
     - "docker-compose.requirements.yml"
@@ -241,7 +319,7 @@ To either stop or destroy the development environment use the following options.
 
 The project is coming with a CLI helper based on [invoke](http://www.pyinvoke.org/) to help setup the development environment. The commands are listed below in 3 categories `dev environment`, `utility` and `testing`.
 
-Each command can be executed with `invoke <command>`. Environment variables `INVOKE_NAUTOBOT_PLUGIN_FIREWALL_MODEL_PYTHON_VER` and `INVOKE_NAUTOBOT_PLUGIN_FIREWALL_MODEL_NAUTOBOT_VER` may be specified to override the default versions. Each command also has its own help `invoke <command> --help`
+Each command can be executed with `invoke <command>`. Environment variables `INVOKE_NAUTOBOT_FIREWALL_MODEL_PYTHON_VER` and `INVOKE_NAUTOBOT_FIREWALL_MODEL_NAUTOBOT_VER` may be specified to override the default versions. Each command also has its own help `invoke <command> --help`
 
 #### Docker dev environment
 
@@ -283,18 +361,3 @@ Project documentation is generated by [mkdocs](https://www.mkdocs.org/) from the
 
 For any questions or comments, please check the [FAQ](FAQ.md) first and feel free to swing by the [Network to Code slack channel](https://networktocode.slack.com/) (channel #networktocode).
 Sign up [here](http://slack.networktocode.com/)
-
-## Screenshots
-
-<p align="center">
-<img src="./docs/images/navigation.png" class="center">
-<img src="./docs/images/policylist.png" class="center">
-<img src="./docs/images/policy.png" class="center">
-<img src="./docs/images/policyrulelist.png" class="center">
-<img src="./docs/images/policyrule.png" class="center">
-<img src="./docs/images/destination.png" class="center">
-<img src="./docs/images/serviceobjectlist.png" class="center">
-<img src="./docs/images/addresspolicyobjectlist.png" class="center">
-<img src="./docs/images/addressobjectgrouplist.png" class="center">
-<img src="./docs/images/addressobjectlist.png" class="center">
-</p>
