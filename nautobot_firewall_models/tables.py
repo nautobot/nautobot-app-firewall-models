@@ -42,11 +42,7 @@ class FQDNTable(BaseTable):
         """Meta attributes."""
 
         model = models.FQDN
-        fields = (
-            "pk",
-            "name",
-            "description",
-        )
+        fields = ("pk", "name", "description", "ip_addresses")
 
 
 class AddressObjectTable(BaseTable):

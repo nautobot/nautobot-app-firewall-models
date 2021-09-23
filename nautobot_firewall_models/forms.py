@@ -76,11 +76,7 @@ class FQDNFilterForm(BootstrapMixin, forms.ModelForm):
 
         model = models.FQDN
         # Define the fields above for ordering and widget purposes
-        fields = [
-            "q",
-            "name",
-            "description",
-        ]
+        fields = ["q", "name", "description", "ip_addresses"]
 
 
 class FQDNForm(BootstrapMixin, forms.ModelForm):
@@ -90,10 +86,7 @@ class FQDNForm(BootstrapMixin, forms.ModelForm):
         """Meta attributes."""
 
         model = models.FQDN
-        fields = [
-            "name",
-            "description",
-        ]
+        fields = ["name", "description", "ip_addresses"]
 
 
 class FQDNBulkEditForm(BootstrapMixin, BulkEditForm):
@@ -101,13 +94,12 @@ class FQDNBulkEditForm(BootstrapMixin, BulkEditForm):
 
     pk = forms.ModelMultipleChoiceField(queryset=models.FQDN.objects.all(), widget=forms.MultipleHiddenInput)
     description = forms.CharField(required=False)
+    ip_addresses = DynamicModelMultipleChoiceField(queryset=IPAddress.objects.all(), required=False)
 
     class Meta:
         """Meta attributes."""
 
-        nullable_fields = [
-            "description",
-        ]
+        nullable_fields = ["description", "ip_addresses"]
 
 
 class AddressObjectFilterForm(BootstrapMixin, forms.ModelForm):

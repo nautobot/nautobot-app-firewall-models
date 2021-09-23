@@ -68,7 +68,10 @@
                 <tr>
                     <td>Description</td>
                     <td>{{ object.description|placeholder }}</td>
+                </tr>
                 <tr>
+                    <td>IP Addresses</td>
+                    <td>{% for i in object.ip_addresses.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}</td>
                 </tr>
             </table>
         </div>

@@ -103,7 +103,7 @@ PLUGINS = ["nautobot_firewall_models"]
   * Holds `ManyToMany` relationships to `UserObject` & `UserObjectGroup`
   * Allows for a single or group `UserObject` & `UserObjectGroup` to be mapped to policy
   * Does NOT require a nested object to be set. (Example. `any` to signify any user)
-  * Only sed for `Source`
+  * Only used for `Source`
   * Feature may not be supported in all L4 firewalls.
 
 #### Zone
