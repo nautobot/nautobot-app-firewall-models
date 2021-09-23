@@ -51,7 +51,7 @@ PLUGINS = ["nautobot_firewall_models"]
 * FQDN:
   * Endpoint: `/api/plugins/firewall/fqdn/`
   * Fully qualified domain names
-  * Not tied to an IP Address in Nautobot
+  * Can be tied to IP Addresses in Nautobot in a `ManyToMany` relationship
 * IP Range: 
   * Endpoint: `/api/plugins/firewall/ip-range/`
   * Range of IP Addresses `10.0.0.1-10.0.0.10`

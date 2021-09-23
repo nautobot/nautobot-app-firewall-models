@@ -84,6 +84,7 @@ class FQDN(BaseModel, ChangeLoggedModel):
         blank=True,
     )
     name = models.CharField(max_length=100, unique=True)
+    ip_addresses = models.ManyToManyField(to="ipam.IPAddress", blank=True)
 
     class Meta:
         """Meta class."""
