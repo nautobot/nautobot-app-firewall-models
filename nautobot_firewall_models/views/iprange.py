@@ -9,7 +9,7 @@ class IPRangeListView(generic.ObjectListView):
     """List view."""
 
     queryset = models.IPRange.objects.all()
-    filterset = filters.IPRangeFilter
+    filterset = filters.IPRangeFilterSet
     filterset_form = forms.IPRangeFilterForm
     table = tables.IPRangeTable
     action_buttons = ("add",)
@@ -21,25 +21,15 @@ class IPRangeView(generic.ObjectView):
     queryset = models.IPRange.objects.all()
 
 
-class IPRangeCreateView(generic.ObjectEditView):
-    """Create view."""
-
-    model = models.IPRange
-    queryset = models.IPRange.objects.all()
-    model_form = forms.IPRangeForm
-
-
 class IPRangeDeleteView(generic.ObjectDeleteView):
     """Delete view."""
 
-    model = models.IPRange
     queryset = models.IPRange.objects.all()
 
 
 class IPRangeEditView(generic.ObjectEditView):
     """Edit view."""
 
-    model = models.IPRange
     queryset = models.IPRange.objects.all()
     model_form = forms.IPRangeForm
 
@@ -55,6 +45,6 @@ class IPRangeBulkEditView(generic.BulkEditView):
     """View for editing one or more IPRange records."""
 
     queryset = models.IPRange.objects.all()
-    filterset = filters.IPRangeFilter
+    filterset = filters.IPRangeFilterSet
     table = tables.IPRangeTable
     form = forms.IPRangeBulkEditForm

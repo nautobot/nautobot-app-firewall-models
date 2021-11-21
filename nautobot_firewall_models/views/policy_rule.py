@@ -9,7 +9,7 @@ class PolicyRuleListView(generic.ObjectListView):
     """List view."""
 
     queryset = models.PolicyRule.objects.all()
-    filterset = filters.PolicyRuleFilter
+    filterset = filters.PolicyRuleFilterSet
     filterset_form = forms.PolicyRuleFilterForm
     table = tables.PolicyRuleTable
     action_buttons = ("add",)
@@ -21,25 +21,15 @@ class PolicyRuleView(generic.ObjectView):
     queryset = models.PolicyRule.objects.all()
 
 
-class PolicyRuleCreateView(generic.ObjectEditView):
-    """Create view."""
-
-    model = models.PolicyRule
-    queryset = models.PolicyRule.objects.all()
-    model_form = forms.PolicyRuleForm
-
-
 class PolicyRuleDeleteView(generic.ObjectDeleteView):
     """Delete view."""
 
-    model = models.PolicyRule
     queryset = models.PolicyRule.objects.all()
 
 
 class PolicyRuleEditView(generic.ObjectEditView):
     """Edit view."""
 
-    model = models.PolicyRule
     queryset = models.PolicyRule.objects.all()
     model_form = forms.PolicyRuleForm
 
@@ -55,6 +45,6 @@ class PolicyRuleBulkEditView(generic.BulkEditView):
     """View for editing one or more PolicyRule records."""
 
     queryset = models.PolicyRule.objects.all()
-    filterset = filters.PolicyRuleFilter
+    filterset = filters.PolicyRuleFilterSet
     table = tables.PolicyRuleTable
     form = forms.PolicyRuleBulkEditForm

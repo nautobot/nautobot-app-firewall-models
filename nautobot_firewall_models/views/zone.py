@@ -9,7 +9,7 @@ class ZoneListView(generic.ObjectListView):
     """List view."""
 
     queryset = models.Zone.objects.all()
-    filterset = filters.ZoneFilter
+    filterset = filters.ZoneFilterSet
     filterset_form = forms.ZoneFilterForm
     table = tables.ZoneTable
     action_buttons = ("add",)
@@ -21,25 +21,15 @@ class ZoneView(generic.ObjectView):
     queryset = models.Zone.objects.all()
 
 
-class ZoneCreateView(generic.ObjectEditView):
-    """Create view."""
-
-    model = models.Zone
-    queryset = models.Zone.objects.all()
-    model_form = forms.ZoneForm
-
-
 class ZoneDeleteView(generic.ObjectDeleteView):
     """Delete view."""
 
-    model = models.Zone
     queryset = models.Zone.objects.all()
 
 
 class ZoneEditView(generic.ObjectEditView):
     """Edit view."""
 
-    model = models.Zone
     queryset = models.Zone.objects.all()
     model_form = forms.ZoneForm
 
@@ -55,6 +45,6 @@ class ZoneBulkEditView(generic.BulkEditView):
     """View for editing one or more Zone records."""
 
     queryset = models.Zone.objects.all()
-    filterset = filters.ZoneFilter
+    filterset = filters.ZoneFilterSet
     table = tables.ZoneTable
     form = forms.ZoneBulkEditForm

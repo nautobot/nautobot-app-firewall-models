@@ -9,7 +9,7 @@ class AddressObjectListView(generic.ObjectListView):
     """List view."""
 
     queryset = models.AddressObject.objects.all()
-    filterset = filters.AddressObjectFilter
+    filterset = filters.AddressObjectFilterSet
     filterset_form = forms.AddressObjectFilterForm
     table = tables.AddressObjectTable
     action_buttons = ("add",)
@@ -21,25 +21,15 @@ class AddressObjectView(generic.ObjectView):
     queryset = models.AddressObject.objects.all()
 
 
-class AddressObjectCreateView(generic.ObjectEditView):
-    """Create view."""
-
-    model = models.AddressObject
-    queryset = models.AddressObject.objects.all()
-    model_form = forms.AddressObjectForm
-
-
 class AddressObjectDeleteView(generic.ObjectDeleteView):
     """Delete view."""
 
-    model = models.AddressObject
     queryset = models.AddressObject.objects.all()
 
 
 class AddressObjectEditView(generic.ObjectEditView):
     """Edit view."""
 
-    model = models.AddressObject
     queryset = models.AddressObject.objects.all()
     model_form = forms.AddressObjectForm
 
@@ -55,6 +45,6 @@ class AddressObjectBulkEditView(generic.BulkEditView):
     """View for editing one or more AddressObject records."""
 
     queryset = models.AddressObject.objects.all()
-    filterset = filters.AddressObjectFilter
+    filterset = filters.AddressObjectFilterSet
     table = tables.AddressObjectTable
     form = forms.AddressObjectBulkEditForm

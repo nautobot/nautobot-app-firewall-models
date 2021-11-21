@@ -6,7 +6,7 @@ from nautobot.utilities.filters import BaseFilterSet, TagFilter
 from nautobot_firewall_models import models
 
 
-class IPRangeFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class IPRangeFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for IPRange."""
 
     class Meta:
@@ -18,7 +18,7 @@ class IPRangeFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         fields = ["id", "vrf", "size", "description"]
 
 
-class FQDNFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class FQDNFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for FQDN."""
 
     class Meta:
@@ -29,7 +29,7 @@ class FQDNFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         fields = ["id", "name", "description"]
 
 
-class AddressObjectFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class AddressObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for AddressObject."""
 
     class Meta:
@@ -40,7 +40,7 @@ class AddressObjectFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         fields = ["id", "name", "ip_address", "prefix", "ip_range", "fqdn", "description"]
 
 
-class AddressObjectGroupFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class AddressObjectGroupFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for AddressObjectGroup."""
 
     class Meta:
@@ -51,7 +51,7 @@ class AddressObjectGroupFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         fields = ["id", "name", "address_objects", "description"]
 
 
-class AddressPolicyObjectFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class AddressPolicyObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for AddressPolicyObject."""
 
     class Meta:
@@ -62,7 +62,7 @@ class AddressPolicyObjectFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         fields = ["id", "name", "address_objects", "address_object_groups", "description"]
 
 
-class ServiceObjectFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class ServiceObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for ServiceObject."""
 
     class Meta:
@@ -73,7 +73,7 @@ class ServiceObjectFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         fields = ["id", "name", "slug", "ip_protocol", "port", "description"]
 
 
-class ServiceObjectGroupFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class ServiceObjectGroupFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for ServiceObjectGroup."""
 
     class Meta:
@@ -84,7 +84,7 @@ class ServiceObjectGroupFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         fields = ["id", "name", "service_objects", "description"]
 
 
-class ServicePolicyObjectFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class ServicePolicyObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for ServicePolicyObject."""
 
     class Meta:
@@ -95,7 +95,7 @@ class ServicePolicyObjectFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         fields = ["id", "name", "service_objects", "service_object_groups", "description"]
 
 
-class UserObjectFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class UserObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for UserObject."""
 
     class Meta:
@@ -105,7 +105,7 @@ class UserObjectFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         fields = ["id", "name", "username"]
 
 
-class UserObjectGroupFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class UserObjectGroupFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for UserObjectGroup."""
 
     class Meta:
@@ -115,7 +115,7 @@ class UserObjectGroupFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         fields = ["id", "name", "user_objects", "description"]
 
 
-class UserPolicyObjectFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class UserPolicyObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for UserPolicyObject."""
 
     class Meta:
@@ -126,7 +126,7 @@ class UserPolicyObjectFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         fields = ["id", "name", "user_objects", "user_object_groups", "description"]
 
 
-class ZoneFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class ZoneFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for Zone."""
 
     class Meta:
@@ -137,7 +137,7 @@ class ZoneFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         fields = ["id", "name", "vrfs", "interfaces", "description"]
 
 
-class SourceFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class SourceFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for Source."""
 
     class Meta:
@@ -154,7 +154,7 @@ class SourceFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         ]
 
 
-class DestinationFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class DestinationFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for Destination."""
 
     class Meta:
@@ -170,7 +170,7 @@ class DestinationFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         ]
 
 
-class PolicyRuleFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class PolicyRuleFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for PolicyRule."""
 
     tag = TagFilter()
@@ -182,7 +182,7 @@ class PolicyRuleFilter(BaseFilterSet, CreatedUpdatedFilterSet):
         fields = ["id", "index", "source", "destination", "action", "log"]
 
 
-class PolicyFilter(BaseFilterSet, CreatedUpdatedFilterSet):
+class PolicyFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
     """Filter for Policy."""
 
     class Meta:

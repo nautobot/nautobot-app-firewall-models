@@ -9,7 +9,7 @@ class ServiceObjectGroupListView(generic.ObjectListView):
     """List view."""
 
     queryset = models.ServiceObjectGroup.objects.all()
-    filterset = filters.ServiceObjectGroupFilter
+    filterset = filters.ServiceObjectGroupFilterSet
     filterset_form = forms.ServiceObjectGroupFilterForm
     table = tables.ServiceObjectGroupTable
     action_buttons = ("add",)
@@ -21,25 +21,15 @@ class ServiceObjectGroupView(generic.ObjectView):
     queryset = models.ServiceObjectGroup.objects.all()
 
 
-class ServiceObjectGroupCreateView(generic.ObjectEditView):
-    """Create view."""
-
-    model = models.ServiceObjectGroup
-    queryset = models.ServiceObjectGroup.objects.all()
-    model_form = forms.ServiceObjectGroupForm
-
-
 class ServiceObjectGroupDeleteView(generic.ObjectDeleteView):
     """Delete view."""
 
-    model = models.ServiceObjectGroup
     queryset = models.ServiceObjectGroup.objects.all()
 
 
 class ServiceObjectGroupEditView(generic.ObjectEditView):
     """Edit view."""
 
-    model = models.ServiceObjectGroup
     queryset = models.ServiceObjectGroup.objects.all()
     model_form = forms.ServiceObjectGroupForm
 
@@ -55,6 +45,6 @@ class ServiceObjectGroupBulkEditView(generic.BulkEditView):
     """View for editing one or more ServiceObjectGroup records."""
 
     queryset = models.ServiceObjectGroup.objects.all()
-    filterset = filters.ServiceObjectGroupFilter
+    filterset = filters.ServiceObjectGroupFilterSet
     table = tables.ServiceObjectGroupTable
     form = forms.ServiceObjectGroupBulkEditForm

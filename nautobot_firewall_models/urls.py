@@ -27,7 +27,7 @@ urlpatterns = [
     # FQDN URLs
     path("fqdn/", fqdn.FQDNListView.as_view(), name="fqdn_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("fqdn/add/", fqdn.FQDNCreateView.as_view(), name="fqdn_add"),
+    path("fqdn/add/", fqdn.FQDNEditView.as_view(), name="fqdn_add"),
     path("fqdn/delete/", fqdn.FQDNBulkDeleteView.as_view(), name="fqdn_bulk_delete"),
     path("fqdn/edit/", fqdn.FQDNBulkEditView.as_view(), name="fqdn_bulk_edit"),
     path("fqdn/<uuid:pk>/", fqdn.FQDNView.as_view(), name="fqdn"),
@@ -42,7 +42,7 @@ urlpatterns = [
     # IPRange URLs
     path("ip-range/", iprange.IPRangeListView.as_view(), name="iprange_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("ip-range/add/", iprange.IPRangeCreateView.as_view(), name="iprange_add"),
+    path("ip-range/add/", iprange.IPRangeEditView.as_view(), name="iprange_add"),
     path("ip-range/delete/", iprange.IPRangeBulkDeleteView.as_view(), name="iprange_bulk_delete"),
     path("ip-range/edit/", iprange.IPRangeBulkEditView.as_view(), name="iprange_bulk_edit"),
     path("ip-range/<uuid:pk>/", iprange.IPRangeView.as_view(), name="iprange"),
@@ -57,7 +57,7 @@ urlpatterns = [
     # AddressObject URLs
     path("address-object/", address_object.AddressObjectListView.as_view(), name="addressobject_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("address-object/add/", address_object.AddressObjectCreateView.as_view(), name="addressobject_add"),
+    path("address-object/add/", address_object.AddressObjectEditView.as_view(), name="addressobject_add"),
     path(
         "address-object/delete/", address_object.AddressObjectBulkDeleteView.as_view(), name="addressobject_bulk_delete"
     ),
@@ -84,7 +84,7 @@ urlpatterns = [
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
     path(
         "address-object-group/add/",
-        address_object_group.AddressObjectGroupCreateView.as_view(),
+        address_object_group.AddressObjectGroupEditView.as_view(),
         name="addressobjectgroup_add",
     ),
     path(
@@ -127,7 +127,7 @@ urlpatterns = [
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
     path(
         "address-policy-object/add/",
-        address_policy_object.AddressPolicyObjectCreateView.as_view(),
+        address_policy_object.AddressPolicyObjectEditView.as_view(),
         name="addresspolicyobject_add",
     ),
     path(
@@ -164,7 +164,7 @@ urlpatterns = [
     # ServiceObject URLs
     path("service-object/", service_object.ServiceObjectListView.as_view(), name="serviceobject_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("service-object/add/", service_object.ServiceObjectCreateView.as_view(), name="serviceobject_add"),
+    path("service-object/add/", service_object.ServiceObjectEditView.as_view(), name="serviceobject_add"),
     path(
         "service-object/delete/", service_object.ServiceObjectBulkDeleteView.as_view(), name="serviceobject_bulk_delete"
     ),
@@ -191,7 +191,7 @@ urlpatterns = [
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
     path(
         "service-object-group/add/",
-        service_object_group.ServiceObjectGroupCreateView.as_view(),
+        service_object_group.ServiceObjectGroupEditView.as_view(),
         name="serviceobjectgroup_add",
     ),
     path(
@@ -234,7 +234,7 @@ urlpatterns = [
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
     path(
         "service-policy-object/add/",
-        service_policy_object.ServicePolicyObjectCreateView.as_view(),
+        service_policy_object.ServicePolicyObjectEditView.as_view(),
         name="servicepolicyobject_add",
     ),
     path(
@@ -271,7 +271,7 @@ urlpatterns = [
     # UserObject URLs
     path("user-object/", user_object.UserObjectListView.as_view(), name="userobject_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("user-object/add/", user_object.UserObjectCreateView.as_view(), name="userobject_add"),
+    path("user-object/add/", user_object.UserObjectEditView.as_view(), name="userobject_add"),
     path("user-object/delete/", user_object.UserObjectBulkDeleteView.as_view(), name="userobject_bulk_delete"),
     path("user-object/edit/", user_object.UserObjectBulkEditView.as_view(), name="userobject_bulk_edit"),
     path("user-object/<uuid:pk>/", user_object.UserObjectView.as_view(), name="userobject"),
@@ -286,7 +286,7 @@ urlpatterns = [
     # UserObjectGroup URLs
     path("user-object-group/", user_object_group.UserObjectGroupListView.as_view(), name="userobjectgroup_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("user-object-group/add/", user_object_group.UserObjectGroupCreateView.as_view(), name="userobjectgroup_add"),
+    path("user-object-group/add/", user_object_group.UserObjectGroupEditView.as_view(), name="userobjectgroup_add"),
     path(
         "user-object-group/delete/",
         user_object_group.UserObjectGroupBulkDeleteView.as_view(),
@@ -317,9 +317,7 @@ urlpatterns = [
     # UserPolicyObject URLs
     path("user-policy-object/", user_policy_object.UserPolicyObjectListView.as_view(), name="userpolicyobject_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path(
-        "user-policy-object/add/", user_policy_object.UserPolicyObjectCreateView.as_view(), name="userpolicyobject_add"
-    ),
+    path("user-policy-object/add/", user_policy_object.UserPolicyObjectEditView.as_view(), name="userpolicyobject_add"),
     path(
         "user-policy-object/delete/",
         user_policy_object.UserPolicyObjectBulkDeleteView.as_view(),
@@ -350,7 +348,7 @@ urlpatterns = [
     # Zone URLs
     path("zone/", zone.ZoneListView.as_view(), name="zone_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("zone/add/", zone.ZoneCreateView.as_view(), name="zone_add"),
+    path("zone/add/", zone.ZoneEditView.as_view(), name="zone_add"),
     path("zone/delete/", zone.ZoneBulkDeleteView.as_view(), name="zone_bulk_delete"),
     path("zone/edit/", zone.ZoneBulkEditView.as_view(), name="zone_bulk_edit"),
     path("zone/<uuid:pk>/", zone.ZoneView.as_view(), name="zone"),
@@ -367,7 +365,7 @@ urlpatterns = [
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
     path(
         "source/add/",
-        source.SourceCreateView.as_view(),
+        source.SourceEditView.as_view(),
         name="source_add",
     ),
     path(
@@ -402,7 +400,7 @@ urlpatterns = [
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
     path(
         "destination/add/",
-        destination.DestinationCreateView.as_view(),
+        destination.DestinationEditView.as_view(),
         name="destination_add",
     ),
     path(
@@ -435,7 +433,7 @@ urlpatterns = [
     # PolicyRule URLs
     path("policy-rule/", policy_rule.PolicyRuleListView.as_view(), name="policyrule_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("policy-rule/add/", policy_rule.PolicyRuleCreateView.as_view(), name="policyrule_add"),
+    path("policy-rule/add/", policy_rule.PolicyRuleEditView.as_view(), name="policyrule_add"),
     path("policy-rule/delete/", policy_rule.PolicyRuleBulkDeleteView.as_view(), name="policyrule_bulk_delete"),
     path("policy-rule/edit/", policy_rule.PolicyRuleBulkEditView.as_view(), name="policyrule_bulk_edit"),
     path("policy-rule/<uuid:pk>/", policy_rule.PolicyRuleView.as_view(), name="policyrule"),
@@ -450,7 +448,7 @@ urlpatterns = [
     # Policy URLs
     path("policy/", policy.PolicyListView.as_view(), name="policy_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("policy/add/", policy.PolicyCreateView.as_view(), name="policy_add"),
+    path("policy/add/", policy.PolicyEditView.as_view(), name="policy_add"),
     path("policy/delete/", policy.PolicyBulkDeleteView.as_view(), name="policy_bulk_delete"),
     path("policy/edit/", policy.PolicyBulkEditView.as_view(), name="policy_bulk_edit"),
     path("policy/<uuid:pk>/", policy.PolicyView.as_view(), name="policy"),
