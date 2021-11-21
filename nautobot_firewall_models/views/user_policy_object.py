@@ -9,7 +9,7 @@ class UserPolicyObjectListView(generic.ObjectListView):
     """List view."""
 
     queryset = models.UserPolicyObject.objects.all()
-    filterset = filters.UserPolicyObjectFilter
+    filterset = filters.UserPolicyObjectFilterSet
     filterset_form = forms.UserPolicyObjectFilterForm
     table = tables.UserPolicyObjectTable
     action_buttons = ("add",)
@@ -21,25 +21,15 @@ class UserPolicyObjectView(generic.ObjectView):
     queryset = models.UserPolicyObject.objects.all()
 
 
-class UserPolicyObjectCreateView(generic.ObjectEditView):
-    """Create view."""
-
-    model = models.UserPolicyObject
-    queryset = models.UserPolicyObject.objects.all()
-    model_form = forms.UserPolicyObjectForm
-
-
 class UserPolicyObjectDeleteView(generic.ObjectDeleteView):
     """Delete view."""
 
-    model = models.UserPolicyObject
     queryset = models.UserPolicyObject.objects.all()
 
 
 class UserPolicyObjectEditView(generic.ObjectEditView):
     """Edit view."""
 
-    model = models.UserPolicyObject
     queryset = models.UserPolicyObject.objects.all()
     model_form = forms.UserPolicyObjectForm
 
@@ -55,6 +45,6 @@ class UserPolicyObjectBulkEditView(generic.BulkEditView):
     """View for editing one or more UserPolicyObject records."""
 
     queryset = models.UserPolicyObject.objects.all()
-    filterset = filters.UserPolicyObjectFilter
+    filterset = filters.UserPolicyObjectFilterSet
     table = tables.UserPolicyObjectTable
     form = forms.UserPolicyObjectBulkEditForm

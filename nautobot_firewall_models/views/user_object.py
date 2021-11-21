@@ -9,7 +9,7 @@ class UserObjectListView(generic.ObjectListView):
     """List view."""
 
     queryset = models.UserObject.objects.all()
-    filterset = filters.UserObjectFilter
+    filterset = filters.UserObjectFilterSet
     filterset_form = forms.UserObjectFilterForm
     table = tables.UserObjectTable
     action_buttons = ("add",)
@@ -21,25 +21,15 @@ class UserObjectView(generic.ObjectView):
     queryset = models.UserObject.objects.all()
 
 
-class UserObjectCreateView(generic.ObjectEditView):
-    """Create view."""
-
-    model = models.UserObject
-    queryset = models.UserObject.objects.all()
-    model_form = forms.UserObjectForm
-
-
 class UserObjectDeleteView(generic.ObjectDeleteView):
     """Delete view."""
 
-    model = models.UserObject
     queryset = models.UserObject.objects.all()
 
 
 class UserObjectEditView(generic.ObjectEditView):
     """Edit view."""
 
-    model = models.UserObject
     queryset = models.UserObject.objects.all()
     model_form = forms.UserObjectForm
 
@@ -55,6 +45,6 @@ class UserObjectBulkEditView(generic.BulkEditView):
     """View for editing one or more UserObject records."""
 
     queryset = models.UserObject.objects.all()
-    filterset = filters.UserObjectFilter
+    filterset = filters.UserObjectFilterSet
     table = tables.UserObjectTable
     form = forms.UserObjectBulkEditForm

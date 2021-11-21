@@ -9,7 +9,7 @@ class SourceListView(generic.ObjectListView):
     """List view."""
 
     queryset = models.Source.objects.all()
-    filterset = filters.SourceFilter
+    filterset = filters.SourceFilterSet
     filterset_form = forms.SourceFilterForm
     table = tables.SourceTable
     action_buttons = ("add",)
@@ -21,18 +21,9 @@ class SourceView(generic.ObjectView):
     queryset = models.Source.objects.all()
 
 
-class SourceCreateView(generic.ObjectEditView):
-    """Create view."""
-
-    model = models.Source
-    queryset = models.Source.objects.all()
-    model_form = forms.SourceForm
-
-
 class SourceDeleteView(generic.ObjectDeleteView):
     """Delete view."""
 
-    model = models.Source
     queryset = models.Source.objects.all()
 
 
@@ -55,6 +46,6 @@ class SourceBulkEditView(generic.BulkEditView):
     """View for editing one or more Source records."""
 
     queryset = models.Source.objects.all()
-    filterset = filters.SourceFilter
+    filterset = filters.SourceFilterSet
     table = tables.SourceTable
     form = forms.SourceBulkEditForm

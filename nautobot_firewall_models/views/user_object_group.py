@@ -9,7 +9,7 @@ class UserObjectGroupListView(generic.ObjectListView):
     """List view."""
 
     queryset = models.UserObjectGroup.objects.all()
-    filterset = filters.UserObjectGroupFilter
+    filterset = filters.UserObjectGroupFilterSet
     filterset_form = forms.UserObjectGroupFilterForm
     table = tables.UserObjectGroupTable
     action_buttons = ("add",)
@@ -21,25 +21,15 @@ class UserObjectGroupView(generic.ObjectView):
     queryset = models.UserObjectGroup.objects.all()
 
 
-class UserObjectGroupCreateView(generic.ObjectEditView):
-    """Create view."""
-
-    model = models.UserObjectGroup
-    queryset = models.UserObjectGroup.objects.all()
-    model_form = forms.UserObjectGroupForm
-
-
 class UserObjectGroupDeleteView(generic.ObjectDeleteView):
     """Delete view."""
 
-    model = models.UserObjectGroup
     queryset = models.UserObjectGroup.objects.all()
 
 
 class UserObjectGroupEditView(generic.ObjectEditView):
     """Edit view."""
 
-    model = models.UserObjectGroup
     queryset = models.UserObjectGroup.objects.all()
     model_form = forms.UserObjectGroupForm
 
@@ -55,6 +45,6 @@ class UserObjectGroupBulkEditView(generic.BulkEditView):
     """View for editing one or more UserObjectGroup records."""
 
     queryset = models.UserObjectGroup.objects.all()
-    filterset = filters.UserObjectGroupFilter
+    filterset = filters.UserObjectGroupFilterSet
     table = tables.UserObjectGroupTable
     form = forms.UserObjectGroupBulkEditForm

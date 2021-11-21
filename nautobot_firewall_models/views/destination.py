@@ -9,7 +9,7 @@ class DestinationListView(generic.ObjectListView):
     """List view."""
 
     queryset = models.Destination.objects.all()
-    filterset = filters.DestinationFilter
+    filterset = filters.DestinationFilterSet
     filterset_form = forms.DestinationFilterForm
     table = tables.DestinationTable
     action_buttons = ("add",)
@@ -21,25 +21,15 @@ class DestinationView(generic.ObjectView):
     queryset = models.Destination.objects.all()
 
 
-class DestinationCreateView(generic.ObjectEditView):
-    """Create view."""
-
-    model = models.Destination
-    queryset = models.Destination.objects.all()
-    model_form = forms.DestinationForm
-
-
 class DestinationDeleteView(generic.ObjectDeleteView):
     """Delete view."""
 
-    model = models.Destination
     queryset = models.Destination.objects.all()
 
 
 class DestinationEditView(generic.ObjectEditView):
     """Edit view."""
 
-    model = models.Destination
     queryset = models.Destination.objects.all()
     model_form = forms.DestinationForm
 
@@ -55,6 +45,6 @@ class DestinationBulkEditView(generic.BulkEditView):
     """View for editing one or more Destination records."""
 
     queryset = models.Destination.objects.all()
-    filterset = filters.DestinationFilter
+    filterset = filters.DestinationFilterSet
     table = tables.DestinationTable
     form = forms.DestinationBulkEditForm
