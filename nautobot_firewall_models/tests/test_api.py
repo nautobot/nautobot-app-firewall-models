@@ -1,26 +1,28 @@
 """Unit tests for API views."""
 # flake8: noqa: F403,405
+from nautobot.extras.models.statuses import Status
 from nautobot.utilities.testing import APIViewTestCases
 from nautobot.ipam.models import Prefix
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
-from .fixtures import create_env
+from .fixtures import create_env, create_ip_range, create_fqdn
 
 
 class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
     # pylint: disable=R0901
     """Test the IPRange viewsets."""
     model = IPRange
-    create_data = [
-        {"start_address": "10.0.0.1", "end_address": "10.0.0.3"},
-        {"start_address": "10.0.0.4", "end_address": "10.0.0.10"},
-    ]
     bulk_update_data = {"description": "test update description"}
 
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        status = Status.objects.get(slug="active").id
+        cls.create_data = [
+            {"start_address": "10.0.0.1", "end_address": "10.0.0.3", "status": status},
+            {"start_address": "10.0.0.4", "end_address": "10.0.0.10", "status": status},
+        ]
+        create_ip_range()
 
     def test_list_objects_brief(self):
         pass
@@ -31,15 +33,16 @@ class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the Protocol viewsets."""
     model = FQDN
     bulk_update_data = {"description": "test update description"}
-    create_data = [
-        {"name": "test.local"},
-        {"name": "sub.test.local"},
-    ]
 
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        status = Status.objects.get(slug="active").id
+        cls.create_data = [
+            {"name": "test.local", "status": status},
+            {"name": "sub.test.local", "status": status},
+        ]
+        create_fqdn()
 
     def test_list_objects_brief(self):
         pass
@@ -57,10 +60,11 @@ class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
         create_env()
         ip_range = IPRange.objects.first()
         prefix = Prefix.objects.first()
+        status = Status.objects.get(slug="active").id
 
         cls.create_data = [
-            {"name": "obj1", "ip_range": ip_range.id},
-            {"name": "obj2", "prefix": prefix.id},
+            {"name": "obj1", "ip_range": ip_range.id, "status": status},
+            {"name": "obj2", "prefix": prefix.id, "status": status},
         ]
 
     def test_list_objects_brief(self):
@@ -78,9 +82,10 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         addr_obj = AddressObject.objects.first()
+        status = Status.objects.get(slug="active").id
         cls.create_data = [
-            {"name": "test1", "address_objects": [addr_obj.id]},
-            {"name": "test2", "address_objects": [addr_obj.id]},
+            {"name": "test1", "address_objects": [addr_obj.id], "status": status},
+            {"name": "test2", "address_objects": [addr_obj.id], "status": status},
         ]
 
     def test_list_objects_brief(self):
@@ -97,12 +102,18 @@ class AddressPolicyObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
+        status = Status.objects.get(slug="active").id
         addr_obj = AddressObject.objects.first()
         addr_grp = AddressObjectGroup.objects.first()
         cls.create_data = [
-            {"name": "test1", "address_objects": [addr_obj.id]},
-            {"name": "test2", "address_object_groups": [addr_grp.id]},
-            {"name": "test3", "address_objects": [addr_obj.id], "address_object_groups": [addr_grp.id]},
+            {"name": "test1", "address_objects": [addr_obj.id], "status": status},
+            {"name": "test2", "address_object_groups": [addr_grp.id], "status": status},
+            {
+                "name": "test3",
+                "address_objects": [addr_obj.id],
+                "address_object_groups": [addr_grp.id],
+                "status": status,
+            },
         ]
 
     def test_list_objects_brief(self):
@@ -114,15 +125,16 @@ class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the ServiceObject viewsets."""
     model = ServiceObject
     bulk_update_data = {"description": "test update description"}
-    create_data = [
-        {"name": "HTTP", "port": 80},
-        {"name": "HTTP", "port": 8080},
-    ]
     choices_fields = ["ip_protocol"]
 
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
+        status = Status.objects.get(slug="active").id
+        cls.create_data = [
+            {"name": "HTTP", "port": 80, "status": status},
+            {"name": "HTTP", "port": 8080, "status": status},
+        ]
         create_env()
 
     def test_list_objects_brief(self):
@@ -140,9 +152,10 @@ class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         svc_obj = ServiceObject.objects.first()
+        status = Status.objects.get(slug="active").id
         cls.create_data = [
-            {"name": "test1", "service_objects": [svc_obj.id]},
-            {"name": "test2", "service_objects": [svc_obj.id]},
+            {"name": "test1", "service_objects": [svc_obj.id], "status": status},
+            {"name": "test2", "service_objects": [svc_obj.id], "status": status},
         ]
 
     def test_list_objects_brief(self):
@@ -159,12 +172,13 @@ class ServicePolicyObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
+        status = Status.objects.get(slug="active").id
         svc_obj = ServiceObject.objects.first()
         svc_grp = ServiceObjectGroup.objects.first()
         cls.create_data = [
-            {"name": "test1", "service_objects": [svc_obj.id]},
-            {"name": "test2", "service_object_groups": [svc_grp.id]},
-            {"name": "test3", "service_objects": [svc_obj.id], "service_object_groups": [svc_grp.id]},
+            {"name": "test1", "service_objects": [svc_obj.id], "status": status},
+            {"name": "test2", "service_object_groups": [svc_grp.id], "status": status},
+            {"name": "test3", "service_objects": [svc_obj.id], "service_object_groups": [svc_grp.id], "status": status},
         ]
 
     def test_list_objects_brief(self):
@@ -176,14 +190,15 @@ class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the User viewsets."""
     model = UserObject
     bulk_update_data = {"name": "User Name 123"}
-    create_data = [
-        {"username": "test1", "name": "Foo"},
-        {"username": "test2", "name": "Bar"},
-    ]
 
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
+        status = Status.objects.get(slug="active").id
+        cls.create_data = [
+            {"username": "test1", "name": "Foo", "status": status},
+            {"username": "test2", "name": "Bar", "status": status},
+        ]
         create_env()
 
     def test_list_objects_brief(self):
@@ -201,9 +216,10 @@ class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         user = UserObject.objects.first()
+        status = Status.objects.get(slug="active").id
         cls.create_data = [
-            {"name": "test1", "user_objects": [user.id]},
-            {"name": "test2", "user_objects": [user.id]},
+            {"name": "test1", "user_objects": [user.id], "status": status},
+            {"name": "test2", "user_objects": [user.id], "status": status},
         ]
 
     def test_list_objects_brief(self):
@@ -220,12 +236,13 @@ class UserPolicyObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
+        status = Status.objects.get(slug="active").id
         usr_obj = UserObject.objects.first()
         usr_grp = UserObjectGroup.objects.first()
         cls.create_data = [
-            {"name": "test1", "user_objects": [usr_obj.id]},
-            {"name": "test2", "user_object_groups": [usr_grp.id]},
-            {"name": "test3", "user_objects": [usr_obj.id], "user_object_groups": [usr_grp.id]},
+            {"name": "test1", "user_objects": [usr_obj.id], "status": status},
+            {"name": "test2", "user_object_groups": [usr_grp.id], "status": status},
+            {"name": "test3", "user_objects": [usr_obj.id], "user_object_groups": [usr_grp.id], "status": status},
         ]
 
     def test_list_objects_brief(self):
@@ -236,15 +253,16 @@ class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
     # pylint: disable=R0901
     """Test the Zone viewsets."""
     model = Zone
-    create_data = [
-        {"name": "trust"},
-        {"name": "untrust"},
-    ]
     bulk_update_data = {"description": "test update description"}
 
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
+        status = Status.objects.get(slug="active").id
+        cls.create_data = [
+            {"name": "trust", "status": status},
+            {"name": "untrust", "status": status},
+        ]
         create_env()
 
     def test_list_objects_brief(self):
@@ -265,9 +283,10 @@ class SourceAPIViewTest(APIViewTestCases.APIViewTestCase):
         usr = UserPolicyObject.objects.first()
         addr = AddressPolicyObject.objects.first()
         zone = Zone.objects.first()
+        status = Status.objects.get(slug="active").id
         cls.create_data = [
-            {"address": addr.id, "service": svc.id, "user": usr.id, "zone": zone.id},
-            {"address": addr.id, "service": svc.id},
+            {"address": addr.id, "service": svc.id, "user": usr.id, "zone": zone.id, "status": status},
+            {"address": addr.id, "service": svc.id, "status": status},
         ]
 
     def test_list_objects_brief(self):
@@ -287,9 +306,10 @@ class DestinationAPIViewTest(APIViewTestCases.APIViewTestCase):
         svc = ServicePolicyObject.objects.first()
         addr = AddressPolicyObject.objects.first()
         zone = Zone.objects.first()
+        status = Status.objects.get(slug="active").id
         cls.create_data = [
-            {"address": addr.id, "service": svc.id, "zone": zone.id},
-            {"address": addr.id, "service": svc.id},
+            {"address": addr.id, "service": svc.id, "zone": zone.id, "status": status},
+            {"address": addr.id, "service": svc.id, "status": status},
         ]
 
     def test_list_objects_brief(self):
@@ -309,9 +329,18 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
         create_env()
         src = Source.objects.first()
         dest = Destination.objects.first()
+        status = Status.objects.get(slug="active").id
         cls.create_data = [
-            {"source": src.id, "destination": dest.id, "action": "Deny", "log": True, "index": 4, "name": "test rule"},
-            {"source": src.id, "destination": dest.id, "action": "Deny", "log": False, "index": 5},
+            {
+                "source": src.id,
+                "destination": dest.id,
+                "action": "Deny",
+                "log": True,
+                "index": 4,
+                "name": "test rule",
+                "status": status,
+            },
+            {"source": src.id, "destination": dest.id, "action": "Deny", "log": False, "index": 5, "status": status},
         ]
 
     def test_list_objects_brief(self):
@@ -329,9 +358,10 @@ class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         pol_rule = PolicyRule.objects.first()
+        status = Status.objects.get(slug="active").id
         cls.create_data = [
-            {"name": "test 1", "policy_rules": [pol_rule.id]},
-            {"name": "test 2", "policy_rules": [pol_rule.id], "description": "Test desc"},
+            {"name": "test 1", "policy_rules": [pol_rule.id], "status": status},
+            {"name": "test 2", "policy_rules": [pol_rule.id], "description": "Test desc", "status": status},
         ]
 
     def test_list_objects_brief(self):

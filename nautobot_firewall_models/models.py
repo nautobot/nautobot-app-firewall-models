@@ -7,6 +7,7 @@ from django.db.models.constraints import UniqueConstraint
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from nautobot.core.models.generics import PrimaryModel
+from nautobot.extras.models import StatusModel
 from nautobot.extras.models.tags import TaggedItem
 from nautobot.extras.utils import extras_features
 from nautobot.ipam.fields import VarbinaryIPField
@@ -26,7 +27,7 @@ from nautobot_firewall_models import choices
     "statuses",
     "webhooks",
 )
-class IPRange(PrimaryModel):
+class IPRange(PrimaryModel, StatusModel):
     """IPRange model to track ranges of IPs in firewall rules."""
 
     start_address = VarbinaryIPField(
@@ -93,7 +94,7 @@ class IPRange(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class FQDN(PrimaryModel):
+class FQDN(PrimaryModel, StatusModel):
     """FQDN model."""
 
     description = models.CharField(
@@ -128,7 +129,7 @@ class FQDN(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class AddressObject(PrimaryModel):
+class AddressObject(PrimaryModel, StatusModel):
     """FQDN model."""
 
     description = models.CharField(
@@ -190,7 +191,7 @@ class AddressObject(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class AddressObjectGroup(PrimaryModel):
+class AddressObjectGroup(PrimaryModel, StatusModel):
     """AddressObjectGroup model."""
 
     description = models.CharField(
@@ -228,7 +229,7 @@ class AddressObjectGroup(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class AddressPolicyObject(PrimaryModel):
+class AddressPolicyObject(PrimaryModel, StatusModel):
     """AddressPolicyObject model."""
 
     description = models.CharField(
@@ -270,7 +271,7 @@ class AddressPolicyObject(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class UserObject(PrimaryModel):
+class UserObject(PrimaryModel, StatusModel):
     """UserObject model."""
 
     username = models.CharField(
@@ -304,7 +305,7 @@ class UserObject(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class UserObjectGroup(PrimaryModel):
+class UserObjectGroup(PrimaryModel, StatusModel):
     """UserObjectGroup model."""
 
     description = models.CharField(
@@ -342,7 +343,7 @@ class UserObjectGroup(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class UserPolicyObject(PrimaryModel):
+class UserPolicyObject(PrimaryModel, StatusModel):
     """UserPolicyObject model."""
 
     description = models.CharField(
@@ -384,7 +385,7 @@ class UserPolicyObject(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class Zone(PrimaryModel):
+class Zone(PrimaryModel, StatusModel):
     """Zone model."""
 
     description = models.CharField(
@@ -426,7 +427,7 @@ class Zone(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class ServiceObject(PrimaryModel):
+class ServiceObject(PrimaryModel, StatusModel):
     """ServiceObject model."""
 
     description = models.CharField(
@@ -475,7 +476,7 @@ class ServiceObject(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class ServiceObjectGroup(PrimaryModel):
+class ServiceObjectGroup(PrimaryModel, StatusModel):
     """ServiceGroup model."""
 
     description = models.CharField(
@@ -513,7 +514,7 @@ class ServiceObjectGroup(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class ServicePolicyObject(PrimaryModel):
+class ServicePolicyObject(PrimaryModel, StatusModel):
     """ServicePolicyObject model."""
 
     description = models.CharField(
@@ -555,7 +556,7 @@ class ServicePolicyObject(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class Source(PrimaryModel):
+class Source(PrimaryModel, StatusModel):
     """Source model."""
 
     description = models.CharField(
@@ -594,7 +595,7 @@ class Source(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class Destination(PrimaryModel):
+class Destination(PrimaryModel, StatusModel):
     """Destination model."""
 
     description = models.CharField(
@@ -630,7 +631,7 @@ class Destination(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class PolicyRule(PrimaryModel):
+class PolicyRule(PrimaryModel, StatusModel):
     """PolicyRule model."""
 
     name = models.CharField(max_length=50, blank=True, null=True)
@@ -668,7 +669,7 @@ class PolicyRule(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class Policy(PrimaryModel):
+class Policy(PrimaryModel, StatusModel):
     """Policy model."""
 
     description = models.CharField(

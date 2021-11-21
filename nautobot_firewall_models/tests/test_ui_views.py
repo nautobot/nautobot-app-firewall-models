@@ -1,23 +1,24 @@
 """Unit tests for views."""
 # flake8: noqa: F403,405
-
+from nautobot.extras.models.statuses import Status
 from nautobot.utilities.testing import ViewTestCases
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
-from .fixtures import create_env
+from .fixtures import create_env, create_fqdn, create_ip_range
 
 
-class IPRangeViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class IPRangeUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the IPRange viewsets."""
     model = IPRange
-    form_data = {"start_address": "10.0.0.1", "end_address": "10.0.0.3"}
     bulk_edit_data = {"description": "test update description"}
 
     @classmethod
     def setUpTestData(cls):
         """Create test data for UI calls."""
-        create_env()
+        status = Status.objects.get(slug="active").id
+        cls.form_data = {"start_address": "10.0.0.1", "end_address": "10.0.0.3", "status": status}
+        create_ip_range()
 
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
@@ -29,17 +30,18 @@ class IPRangeViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         pass
 
 
-class FQDNAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class FQDNUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the Protocol viewsets."""
     model = FQDN
     bulk_edit_data = {"description": "test update description"}
-    form_data = {"name": "test.local"}
 
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        status = Status.objects.get(slug="active").id
+        cls.form_data = {"name": "test.local", "status": status}
+        create_fqdn()
 
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
@@ -51,7 +53,7 @@ class FQDNAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         pass
 
 
-class AddressObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class AddressObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the AddressObject viewsets."""
     model = AddressObject
@@ -62,8 +64,9 @@ class AddressObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         """Create test data for API calls."""
         create_env()
         ip_range = IPRange.objects.first()
+        status = Status.objects.get(slug="active").id
 
-        cls.form_data = {"name": "obj1", "ip_range": ip_range.id}
+        cls.form_data = {"name": "obj1", "ip_range": ip_range.id, "status": status}
 
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
@@ -75,7 +78,7 @@ class AddressObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         pass
 
 
-class AddressObjectGroupAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the AddressObjectGroup viewsets."""
     model = AddressObjectGroup
@@ -85,8 +88,9 @@ class AddressObjectGroupAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
+        status = Status.objects.get(slug="active").id
         addr_obj = AddressObject.objects.first()
-        cls.form_data = {"name": "test1", "address_objects": [addr_obj.id]}
+        cls.form_data = {"name": "test1", "address_objects": [addr_obj.id], "status": status}
 
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
@@ -98,7 +102,7 @@ class AddressObjectGroupAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         pass
 
 
-class AddressPolicyObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class AddressPolicyObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the AddressPolicyObject viewsets."""
     model = AddressPolicyObject
@@ -108,9 +112,15 @@ class AddressPolicyObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
+        status = Status.objects.get(slug="active").id
         addr_obj = AddressObject.objects.first()
         addr_grp = AddressObjectGroup.objects.first()
-        cls.form_data = {"name": "test1", "address_objects": [addr_obj.id], "address_object_groups": [addr_grp.id]}
+        cls.form_data = {
+            "name": "test1",
+            "address_objects": [addr_obj.id],
+            "address_object_groups": [addr_grp.id],
+            "status": status,
+        }
 
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
@@ -122,16 +132,17 @@ class AddressPolicyObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         pass
 
 
-class ServiceObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the ServiceObject viewsets."""
     model = ServiceObject
     bulk_edit_data = {"description": "test update description"}
-    form_data = {"name": "HTTP", "port": 80}
 
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
+        status = Status.objects.get(slug="active").id
+        cls.form_data = {"name": "HTTP", "port": 80, "status": status}
         create_env()
 
     def test_bulk_import_objects_with_constrained_permission(self):
@@ -155,7 +166,7 @@ class ServiceObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         self.assertEqual(str(svc), f"{svc.slug}:{svc.port}")
 
 
-class ServiceGroupAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the ServiceGroup viewsets."""
     model = ServiceObjectGroup
@@ -166,7 +177,8 @@ class ServiceGroupAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         """Create test data for API calls."""
         create_env()
         svc_obj = ServiceObject.objects.first()
-        cls.form_data = {"name": "test1", "service_objects": [svc_obj.id]}
+        status = Status.objects.get(slug="active").id
+        cls.form_data = {"name": "test1", "service_objects": [svc_obj.id], "status": status}
 
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
@@ -178,7 +190,7 @@ class ServiceGroupAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         pass
 
 
-class ServicePolicyObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class ServicePolicyObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the ServicePolicyObject viewsets."""
     model = ServicePolicyObject
@@ -190,7 +202,13 @@ class ServicePolicyObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         create_env()
         svc_obj = ServiceObject.objects.first()
         svc_grp = ServiceObjectGroup.objects.first()
-        cls.form_data = {"name": "test3", "service_objects": [svc_obj.id], "service_object_groups": [svc_grp.id]}
+        status = Status.objects.get(slug="active").id
+        cls.form_data = {
+            "name": "test3",
+            "service_objects": [svc_obj.id],
+            "service_object_groups": [svc_grp.id],
+            "status": status,
+        }
 
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
@@ -202,16 +220,17 @@ class ServicePolicyObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         pass
 
 
-class UserObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class UserObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the User viewsets."""
     model = UserObject
     bulk_edit_data = {"name": "User Name 123"}
-    form_data = {"username": "test1", "name": "Foo"}
 
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
+        status = Status.objects.get(slug="active").id
+        cls.form_data = {"username": "test1", "name": "Foo", "status": status}
         create_env()
 
     def test_bulk_import_objects_with_constrained_permission(self):
@@ -224,7 +243,7 @@ class UserObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         pass
 
 
-class UserObjectGroupAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class UserObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the UserGroup viewsets."""
     model = UserObjectGroup
@@ -235,7 +254,8 @@ class UserObjectGroupAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         """Create test data for API calls."""
         create_env()
         user = UserObject.objects.first()
-        cls.form_data = {"name": "test1", "user_objects": [user.id]}
+        status = Status.objects.get(slug="active").id
+        cls.form_data = {"name": "test1", "user_objects": [user.id], "status": status}
 
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
@@ -247,7 +267,7 @@ class UserObjectGroupAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         pass
 
 
-class UserPolicyObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class UserPolicyObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the UserPolicyObject viewsets."""
     model = UserPolicyObject
@@ -259,7 +279,13 @@ class UserPolicyObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         create_env()
         usr_obj = UserObject.objects.first()
         usr_grp = UserObjectGroup.objects.first()
-        cls.form_data = {"name": "test3", "user_objects": [usr_obj.id], "user_object_groups": [usr_grp.id]}
+        status = Status.objects.get(slug="active").id
+        cls.form_data = {
+            "name": "test3",
+            "user_objects": [usr_obj.id],
+            "user_object_groups": [usr_grp.id],
+            "status": status,
+        }
 
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
@@ -271,16 +297,17 @@ class UserPolicyObjectAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         pass
 
 
-class ZoneAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the Zone viewsets."""
     model = Zone
-    form_data = {"name": "trust"}
     bulk_edit_data = {"description": "test update description"}
 
     @classmethod
     def setUpTestData(cls):
         """Create test data for UI calls."""
+        status = Status.objects.get(slug="active").id
+        cls.form_data = {"name": "trust", "status": status}
         create_env()
 
     def test_bulk_import_objects_with_constrained_permission(self):
@@ -293,7 +320,7 @@ class ZoneAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         pass
 
 
-class SourceAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class SourceUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the Source viewsets."""
     model = Source
@@ -307,7 +334,8 @@ class SourceAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         svc = ServicePolicyObject.objects.first()
         addr = AddressPolicyObject.objects.first()
         zone = Zone.objects.first()
-        cls.form_data = {"address": addr.id, "service": svc.id, "user": usr.id, "zone": zone.id}
+        status = Status.objects.get(slug="active").id
+        cls.form_data = {"address": addr.id, "service": svc.id, "user": usr.id, "zone": zone.id, "status": status}
 
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
@@ -329,7 +357,7 @@ class SourceAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         self.assertEqual(str(src), f"{src.address} - {src.service} - {src.zone}")
 
 
-class DestinationAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class DestinationUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the Destination viewsets."""
     model = Destination
@@ -342,7 +370,8 @@ class DestinationAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         svc = ServicePolicyObject.objects.first()
         addr = AddressPolicyObject.objects.first()
         zone = Zone.objects.first()
-        cls.form_data = {"address": addr.id, "service": svc.id, "zone": zone.id}
+        status = Status.objects.get(slug="active").id
+        cls.form_data = {"address": addr.id, "service": svc.id, "zone": zone.id, "status": status}
 
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
@@ -354,7 +383,7 @@ class DestinationAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         pass
 
 
-class PolicyRuleAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the PolicyRule viewsets."""
     model = PolicyRule
@@ -366,6 +395,7 @@ class PolicyRuleAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         create_env()
         src = Source.objects.first()
         dest = Destination.objects.first()
+        status = Status.objects.get(slug="active").id
         cls.form_data = {
             "source": src.id,
             "destination": dest.id,
@@ -373,6 +403,7 @@ class PolicyRuleAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             "log": True,
             "index": 4,
             "name": "test rule",
+            "status": status,
         }
 
     def test_bulk_import_objects_with_constrained_permission(self):
@@ -397,7 +428,7 @@ class PolicyRuleAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         )
 
 
-class PolicyAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the Policy viewsets."""
     model = Policy
@@ -408,7 +439,13 @@ class PolicyAPIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         """Create test data for API calls."""
         create_env()
         pol_rule = PolicyRule.objects.first()
-        cls.form_data = {"name": "test 2", "policy_rules": [pol_rule.id], "description": "Test desc"}
+        status = Status.objects.get(slug="active").id
+        cls.form_data = {
+            "name": "test 2",
+            "policy_rules": [pol_rule.id],
+            "description": "Test desc",
+            "status": status,
+        }
 
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
