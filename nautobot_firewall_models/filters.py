@@ -15,7 +15,7 @@ class IPRangeFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
         model = models.IPRange
 
         # fields = ["id", "start_address", "end_address", "vrf", "size", "description"]
-        fields = ["id", "vrf", "size", "description"]
+        fields = ["id", "vrf", "size", "description", "status"]
 
 
 class FQDNFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
@@ -26,7 +26,7 @@ class FQDNFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
 
         model = models.FQDN
 
-        fields = ["id", "name", "description"]
+        fields = ["id", "name", "description", "status"]
 
 
 class AddressObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
@@ -37,7 +37,7 @@ class AddressObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
 
         model = models.AddressObject
 
-        fields = ["id", "name", "ip_address", "prefix", "ip_range", "fqdn", "description"]
+        fields = ["id", "name", "ip_address", "prefix", "ip_range", "fqdn", "description", "status"]
 
 
 class AddressObjectGroupFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
@@ -48,7 +48,7 @@ class AddressObjectGroupFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
 
         model = models.AddressObjectGroup
 
-        fields = ["id", "name", "address_objects", "description"]
+        fields = ["id", "name", "address_objects", "description", "status"]
 
 
 class AddressPolicyObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
@@ -59,7 +59,7 @@ class AddressPolicyObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
 
         model = models.AddressPolicyObject
 
-        fields = ["id", "name", "address_objects", "address_object_groups", "description"]
+        fields = ["id", "name", "address_objects", "address_object_groups", "description", "status"]
 
 
 class ServiceObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
@@ -70,7 +70,7 @@ class ServiceObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
 
         model = models.ServiceObject
 
-        fields = ["id", "name", "slug", "ip_protocol", "port", "description"]
+        fields = ["id", "name", "slug", "ip_protocol", "port", "description", "status"]
 
 
 class ServiceObjectGroupFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
@@ -81,7 +81,7 @@ class ServiceObjectGroupFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
 
         model = models.ServiceObjectGroup
 
-        fields = ["id", "name", "service_objects", "description"]
+        fields = ["id", "name", "service_objects", "description", "status"]
 
 
 class ServicePolicyObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
@@ -92,7 +92,7 @@ class ServicePolicyObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
 
         model = models.ServicePolicyObject
 
-        fields = ["id", "name", "service_objects", "service_object_groups", "description"]
+        fields = ["id", "name", "service_objects", "service_object_groups", "description", "status"]
 
 
 class UserObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
@@ -102,7 +102,7 @@ class UserObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
         """Meta attributes for filter."""
 
         model = models.UserObject
-        fields = ["id", "name", "username"]
+        fields = ["id", "name", "username", "status"]
 
 
 class UserObjectGroupFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
@@ -112,7 +112,7 @@ class UserObjectGroupFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
         """Meta attributes for filter."""
 
         model = models.UserObjectGroup
-        fields = ["id", "name", "user_objects", "description"]
+        fields = ["id", "name", "user_objects", "description", "status"]
 
 
 class UserPolicyObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
@@ -123,7 +123,7 @@ class UserPolicyObjectFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
 
         model = models.UserPolicyObject
 
-        fields = ["id", "name", "user_objects", "user_object_groups", "description"]
+        fields = ["id", "name", "user_objects", "user_object_groups", "description", "status"]
 
 
 class ZoneFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
@@ -134,7 +134,7 @@ class ZoneFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
 
         model = models.Zone
 
-        fields = ["id", "name", "vrfs", "interfaces", "description"]
+        fields = ["id", "name", "vrfs", "interfaces", "description", "status"]
 
 
 class SourceFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
@@ -144,14 +144,7 @@ class SourceFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
         """Meta attributes for filter."""
 
         model = models.Source
-        fields = [
-            "id",
-            "address",
-            "user",
-            "service",
-            "zone",
-            "description",
-        ]
+        fields = ["id", "address", "user", "service", "zone", "description", "status"]
 
 
 class DestinationFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
@@ -161,13 +154,7 @@ class DestinationFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
         """Meta attributes for filter."""
 
         model = models.Destination
-        fields = [
-            "id",
-            "address",
-            "service",
-            "zone",
-            "description",
-        ]
+        fields = ["id", "address", "service", "zone", "description", "status"]
 
 
 class PolicyRuleFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
@@ -179,7 +166,7 @@ class PolicyRuleFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
         """Meta attributes for filter."""
 
         model = models.PolicyRule
-        fields = ["id", "index", "source", "destination", "action", "log"]
+        fields = ["id", "index", "source", "destination", "action", "log", "status"]
 
 
 class PolicyFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
@@ -189,4 +176,4 @@ class PolicyFilterSet(BaseFilterSet, CreatedUpdatedFilterSet):
         """Meta attributes for filter."""
 
         model = models.Policy
-        fields = ["id", "name", "description", "policy_rules"]
+        fields = ["id", "name", "description", "policy_rules", "status"]
