@@ -102,20 +102,12 @@ class ZoneViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
     filterset_class = filters.ZoneFilterSet
 
 
-class SourceViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
-    """Source viewset."""
+class SourceDestinationViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
+    """SourceDestination viewset."""
 
-    queryset = models.Source.objects.all()
-    serializer_class = serializers.SourceSerializer
-    filterset_class = filters.SourceFilterSet
-
-
-class DestinationViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
-    """Destination viewset."""
-
-    queryset = models.Destination.objects.all()
-    serializer_class = serializers.DestinationSerializer
-    filterset_class = filters.DestinationFilterSet
+    queryset = models.SourceDestination.objects.all()
+    serializer_class = serializers.SourceDestinationSerializer
+    filterset_class = filters.SourceDestinationFilterSet
 
 
 class PolicyRuleViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors

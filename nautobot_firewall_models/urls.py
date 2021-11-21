@@ -17,8 +17,7 @@ from nautobot_firewall_models.views import (
     user_object,
     user_object_group,
     user_policy_object,
-    source,
-    destination,
+    source_destination,
     policy_rule,
     policy,
 )
@@ -361,74 +360,39 @@ urlpatterns = [
         kwargs={"model": models.Zone},
     ),
     # Source URLs
-    path("source/", source.SourceListView.as_view(), name="source_list"),
+    path("source-destination/", source_destination.SourceDestinationListView.as_view(), name="sourcedestination_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
     path(
-        "source/add/",
-        source.SourceEditView.as_view(),
-        name="source_add",
+        "source-destination/add/",
+        source_destination.SourceDestinationEditView.as_view(),
+        name="sourcedestination_add",
     ),
     path(
-        "source/delete/",
-        source.SourceBulkDeleteView.as_view(),
-        name="source_bulk_delete",
+        "source-destination/delete/",
+        source_destination.SourceDestinationBulkDeleteView.as_view(),
+        name="sourcedestination_bulk_delete",
     ),
     path(
-        "source/edit/",
-        source.SourceBulkEditView.as_view(),
-        name="source_bulk_edit",
+        "source-destination/edit/",
+        source_destination.SourceDestinationBulkEditView.as_view(),
+        name="sourcedestination_bulk_edit",
     ),
-    path("source/<uuid:pk>/", source.SourceView.as_view(), name="source"),
+    path("source-destination/<uuid:pk>/", source_destination.SourceDestinationView.as_view(), name="source"),
     path(
-        "source/<uuid:pk>/delete/",
-        source.SourceDeleteView.as_view(),
-        name="source_delete",
-    ),
-    path(
-        "source/<uuid:pk>/edit/",
-        source.SourceEditView.as_view(),
-        name="source_edit",
+        "source-destination/<uuid:pk>/delete/",
+        source_destination.SourceDestinationDeleteView.as_view(),
+        name="sourcedestination_delete",
     ),
     path(
-        "source/<uuid:pk>/changelog/",
+        "source-destination/<uuid:pk>/edit/",
+        source_destination.SourceDestinationEditView.as_view(),
+        name="sourcedestination_edit",
+    ),
+    path(
+        "source-destination/<uuid:pk>/changelog/",
         ObjectChangeLogView.as_view(),
-        name="source_changelog",
-        kwargs={"model": models.Source},
-    ),
-    # Destination URLs
-    path("destination/", destination.DestinationListView.as_view(), name="destination_list"),
-    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path(
-        "destination/add/",
-        destination.DestinationEditView.as_view(),
-        name="destination_add",
-    ),
-    path(
-        "destination/delete/",
-        destination.DestinationBulkDeleteView.as_view(),
-        name="destination_bulk_delete",
-    ),
-    path(
-        "destination/edit/",
-        destination.DestinationBulkEditView.as_view(),
-        name="destination_bulk_edit",
-    ),
-    path("destination/<uuid:pk>/", destination.DestinationView.as_view(), name="destination"),
-    path(
-        "destination/<uuid:pk>/delete/",
-        destination.DestinationDeleteView.as_view(),
-        name="destination_delete",
-    ),
-    path(
-        "destination/<uuid:pk>/edit/",
-        destination.DestinationEditView.as_view(),
-        name="destination_edit",
-    ),
-    path(
-        "destination/<uuid:pk>/changelog/",
-        ObjectChangeLogView.as_view(),
-        name="destination_changelog",
-        kwargs={"model": models.Destination},
+        name="sourcedestination_changelog",
+        kwargs={"model": models.SourceDestination},
     ),
     # PolicyRule URLs
     path("policy-rule/", policy_rule.PolicyRuleListView.as_view(), name="policyrule_list"),

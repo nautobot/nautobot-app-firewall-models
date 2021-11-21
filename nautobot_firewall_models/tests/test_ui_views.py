@@ -320,10 +320,10 @@ class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         pass
 
 
-class SourceUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+class SourceDestinationUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the Source viewsets."""
-    model = Source
+    model = SourceDestination
     bulk_edit_data = {"description": "test update description"}
 
     @classmethod
@@ -348,39 +348,13 @@ class SourceUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     def test_source_str(self):
         """Testing proper str."""
-        src = Source.objects.first()
+        src = SourceDestination.objects.first()
 
         self.assertEqual(str(src), f"{src.address} - {src.service} - {src.user} - {src.zone}")
 
         src.user = None
 
         self.assertEqual(str(src), f"{src.address} - {src.service} - {src.zone}")
-
-
-class DestinationUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
-    # pylint: disable=R0901
-    """Test the Destination viewsets."""
-    model = Destination
-    bulk_edit_data = {"description": "test update description"}
-
-    @classmethod
-    def setUpTestData(cls):
-        """Create test data for API calls."""
-        create_env()
-        svc = ServicePolicyObject.objects.first()
-        addr = AddressPolicyObject.objects.first()
-        zone = Zone.objects.first()
-        status = Status.objects.get(slug="active").id
-        cls.form_data = {"address": addr.id, "service": svc.id, "zone": zone.id, "status": status}
-
-    def test_bulk_import_objects_with_constrained_permission(self):
-        pass
-
-    def test_bulk_import_objects_with_permission(self):
-        pass
-
-    def test_bulk_import_objects_without_permission(self):
-        pass
 
 
 class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
@@ -393,8 +367,8 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
-        src = Source.objects.first()
-        dest = Destination.objects.first()
+        src = SourceDestination.objects.first()
+        dest = SourceDestination.objects.last()
         status = Status.objects.get(slug="active").id
         cls.form_data = {
             "source": src.id,

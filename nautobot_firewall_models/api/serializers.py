@@ -129,23 +129,13 @@ class ZoneSerializer(ValidatedModelSerializer):
         fields = "__all__"
 
 
-class SourceSerializer(ValidatedModelSerializer):
-    """Source Serializer."""
+class SourceDestinationSerializer(ValidatedModelSerializer):
+    """SourceDestination Serializer."""
 
     class Meta:
         """Meta attributes."""
 
-        model = models.Source
-        fields = "__all__"
-
-
-class DestinationSerializer(ValidatedModelSerializer):
-    """Destination Serializer."""
-
-    class Meta:
-        """Meta attributes."""
-
-        model = models.Destination
+        model = models.SourceDestination
         fields = "__all__"
 
 

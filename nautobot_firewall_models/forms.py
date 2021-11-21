@@ -470,10 +470,10 @@ class ZoneBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
         nullable_fields = ["description", "vrfs", "interfaces"]
 
 
-class SourceFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
+class SourceDestinationFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
     """Filter form to filter searches."""
 
-    model = models.Source
+    model = models.SourceDestination
     q = forms.CharField(
         required=False,
         label="Search",
@@ -482,60 +482,28 @@ class SourceFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterF
     display = forms.CharField(required=False, label="Display")
 
 
-class SourceForm(BootstrapMixin, forms.ModelForm):
-    """Source creation/edit form."""
+class SourceDestinationForm(BootstrapMixin, forms.ModelForm):
+    """SourceDestination creation/edit form."""
 
     class Meta:
         """Meta attributes."""
 
-        model = models.Source
+        model = models.SourceDestination
         fields = ["description", "address", "service", "user", "zone", "status"]
 
 
-class SourceBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
-    """Source bulk edit form."""
+class SourceDestinationBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
+    """SourceDestination bulk edit form."""
 
-    pk = DynamicModelMultipleChoiceField(queryset=models.Source.objects.all(), widget=forms.MultipleHiddenInput)
+    pk = DynamicModelMultipleChoiceField(
+        queryset=models.SourceDestination.objects.all(), widget=forms.MultipleHiddenInput
+    )
     description = forms.CharField(required=False)
 
     class Meta:
         """Meta attributes."""
 
         nullable_fields = ["description", "user", "zone"]
-
-
-class DestinationFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
-    """Filter form to filter searches."""
-
-    model = models.Destination
-    q = forms.CharField(
-        required=False,
-        label="Search",
-        help_text="Search within Name or Description.",
-    )
-    display = forms.CharField(required=False, label="Display")
-
-
-class DestinationForm(BootstrapMixin, forms.ModelForm):
-    """Destination creation/edit form."""
-
-    class Meta:
-        """Meta attributes."""
-
-        model = models.Destination
-        fields = ["description", "address", "service", "zone", "status"]
-
-
-class DestinationBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
-    """Destination bulk edit form."""
-
-    pk = DynamicModelMultipleChoiceField(queryset=models.Destination.objects.all(), widget=forms.MultipleHiddenInput)
-    description = forms.CharField(required=False)
-
-    class Meta:
-        """Meta attributes."""
-
-        nullable_fields = ["description", "zone"]
 
 
 class PolicyRuleFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
@@ -570,9 +538,9 @@ class PolicyRuleBulkEditForm(BootstrapMixin, AddRemoveTagsForm, StatusBulkEditFo
     pk = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), widget=forms.MultipleHiddenInput)
     action = forms.ChoiceField(choices=choices.ACTION_CHOICES, required=False)
     log = forms.BooleanField(required=False)
-    source = DynamicModelChoiceField(queryset=models.Source.objects.all(), label="Source", required=False)
+    source = DynamicModelChoiceField(queryset=models.SourceDestination.objects.all(), label="Source", required=False)
     destination = DynamicModelChoiceField(
-        queryset=models.Destination.objects.all(), label="Destination", required=False
+        queryset=models.SourceDestination.objects.all(), label="Destination", required=False
     )
 
     class Meta:

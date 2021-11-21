@@ -269,10 +269,10 @@ class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
         pass
 
 
-class SourceAPIViewTest(APIViewTestCases.APIViewTestCase):
+class SourceDestinationAPIViewTest(APIViewTestCases.APIViewTestCase):
     # pylint: disable=R0901
     """Test the Source viewsets."""
-    model = Source
+    model = SourceDestination
     bulk_update_data = {"description": "test update description"}
 
     @classmethod
@@ -293,29 +293,6 @@ class SourceAPIViewTest(APIViewTestCases.APIViewTestCase):
         pass
 
 
-class DestinationAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
-    """Test the Destination viewsets."""
-    model = Destination
-    bulk_update_data = {"description": "test update description"}
-
-    @classmethod
-    def setUpTestData(cls):
-        """Create test data for API calls."""
-        create_env()
-        svc = ServicePolicyObject.objects.first()
-        addr = AddressPolicyObject.objects.first()
-        zone = Zone.objects.first()
-        status = Status.objects.get(slug="active").id
-        cls.create_data = [
-            {"address": addr.id, "service": svc.id, "zone": zone.id, "status": status},
-            {"address": addr.id, "service": svc.id, "status": status},
-        ]
-
-    def test_list_objects_brief(self):
-        pass
-
-
 class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     # pylint: disable=R0901
     """Test the PolicyRule viewsets."""
@@ -327,19 +304,11 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
-        src = Source.objects.first()
-        dest = Destination.objects.first()
+        src = SourceDestination.objects.first()
+        dest = SourceDestination.objects.last()
         status = Status.objects.get(slug="active").id
         cls.create_data = [
-            {
-                "source": src.id,
-                "destination": dest.id,
-                "action": "Deny",
-                "log": True,
-                "index": 4,
-                "name": "test rule",
-                "status": status,
-            },
+            {"source": src.id, "destination": dest.id, "action": "Deny", "log": True, "index": 4, "status": status},
             {"source": src.id, "destination": dest.id, "action": "Deny", "log": False, "index": 5, "status": status},
         ]
 
