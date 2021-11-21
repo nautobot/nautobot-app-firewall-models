@@ -168,24 +168,13 @@ menu_items = (
                 weight=200,
                 items=[
                     NavMenuItem(
-                        link="plugins:nautobot_firewall_models:source_list",
-                        name="Sources",
-                        permissions=["nautobot_firewall_models.view_source"],
+                        link="plugins:nautobot_firewall_models:sourcedestination_list",
+                        name="Sources & Destinations",
+                        permissions=["nautobot_firewall_models.view_sourcedestination"],
                         buttons=[
                             NavMenuAddButton(
-                                link="plugins:nautobot_firewall_models:source_add",
-                                permissions=["nautobot_firewall_models.add_source"],
-                            ),
-                        ],
-                    ),
-                    NavMenuItem(
-                        link="plugins:nautobot_firewall_models:destination_list",
-                        name="Destinations",
-                        permissions=["nautobot_firewall_models.view_destination"],
-                        buttons=[
-                            NavMenuAddButton(
-                                link="plugins:nautobot_firewall_models:destination_add",
-                                permissions=["nautobot_firewall_models.add_destination"],
+                                link="plugins:nautobot_firewall_models:sourcedestination_add",
+                                permissions=["nautobot_firewall_models.add_sourcedestination"],
                             ),
                         ],
                     ),

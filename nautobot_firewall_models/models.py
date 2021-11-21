@@ -556,7 +556,7 @@ class ServicePolicyObject(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class Source(PrimaryModel, StatusModel):
+class SourceDestination(PrimaryModel, StatusModel):
     """Source model."""
 
     description = models.CharField(
@@ -595,50 +595,14 @@ class Source(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class Destination(PrimaryModel, StatusModel):
-    """Destination model."""
-
-    description = models.CharField(
-        max_length=200,
-        blank=True,
-    )
-    address = models.ForeignKey(to=AddressPolicyObject, on_delete=models.CASCADE)
-    service = models.ForeignKey(to=ServicePolicyObject, on_delete=models.CASCADE)
-    zone = models.ForeignKey(to=Zone, on_delete=models.CASCADE, null=True, blank=True)
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["description"]
-        verbose_name_plural = "Destinations"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:destination", args=[self.pk])
-
-    def __str__(self):
-        """Stringify instance."""
-        return f"{self.address} - {self.service} - {self.zone}"
-
-
-@extras_features(
-    "custom_fields",
-    "custom_links",
-    "custom_validators",
-    "export_templates",
-    "graphql",
-    "relationships",
-    "statuses",
-    "webhooks",
-)
 class PolicyRule(PrimaryModel, StatusModel):
     """PolicyRule model."""
 
     name = models.CharField(max_length=50, blank=True, null=True)
     tags = TaggableManager(through=TaggedItem)
     index = models.IntegerField()
-    source = models.ForeignKey(to=Source, on_delete=models.CASCADE)
-    destination = models.ForeignKey(to=Destination, on_delete=models.CASCADE)
+    source = models.ForeignKey(to=SourceDestination, on_delete=models.CASCADE, related_name="source")
+    destination = models.ForeignKey(to=SourceDestination, on_delete=models.CASCADE, related_name="destination")
     action = models.CharField(choices=choices.ACTION_CHOICES, max_length=20)
     log = models.BooleanField(default=False)
 
