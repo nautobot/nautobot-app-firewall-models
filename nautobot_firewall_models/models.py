@@ -6,8 +6,7 @@ from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from nautobot.core.models import BaseModel
-from nautobot.extras.models.change_logging import ChangeLoggedModel
+from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.models.tags import TaggedItem
 from nautobot.extras.utils import extras_features
 from nautobot.ipam.fields import VarbinaryIPField
@@ -17,8 +16,17 @@ from taggit.managers import TaggableManager
 from nautobot_firewall_models import choices
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class IPRange(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class IPRange(PrimaryModel):
     """IPRange model to track ranges of IPs in firewall rules."""
 
     start_address = VarbinaryIPField(
@@ -75,8 +83,17 @@ class IPRange(BaseModel, ChangeLoggedModel):
         super().clean(*args, **kwargs)
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class FQDN(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class FQDN(PrimaryModel):
     """FQDN model."""
 
     description = models.CharField(
@@ -101,8 +118,17 @@ class FQDN(BaseModel, ChangeLoggedModel):
         return self.name
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class AddressObject(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class AddressObject(PrimaryModel):
     """FQDN model."""
 
     description = models.CharField(
@@ -154,8 +180,17 @@ class AddressObject(BaseModel, ChangeLoggedModel):
                 return getattr(self, i)
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class AddressObjectGroup(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class AddressObjectGroup(PrimaryModel):
     """AddressObjectGroup model."""
 
     description = models.CharField(
@@ -183,8 +218,17 @@ class AddressObjectGroup(BaseModel, ChangeLoggedModel):
         return self.name
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class AddressPolicyObject(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class AddressPolicyObject(PrimaryModel):
     """AddressPolicyObject model."""
 
     description = models.CharField(
@@ -216,8 +260,17 @@ class AddressPolicyObject(BaseModel, ChangeLoggedModel):
         return self.name
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class UserObject(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class UserObject(PrimaryModel):
     """UserObject model."""
 
     username = models.CharField(
@@ -241,8 +294,17 @@ class UserObject(BaseModel, ChangeLoggedModel):
         return self.username
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class UserObjectGroup(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class UserObjectGroup(PrimaryModel):
     """UserObjectGroup model."""
 
     description = models.CharField(
@@ -270,8 +332,17 @@ class UserObjectGroup(BaseModel, ChangeLoggedModel):
         return self.name
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class UserPolicyObject(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class UserPolicyObject(PrimaryModel):
     """UserPolicyObject model."""
 
     description = models.CharField(
@@ -303,8 +374,17 @@ class UserPolicyObject(BaseModel, ChangeLoggedModel):
         return self.name
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class Zone(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class Zone(PrimaryModel):
     """Zone model."""
 
     description = models.CharField(
@@ -336,8 +416,17 @@ class Zone(BaseModel, ChangeLoggedModel):
         return self.name
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class ServiceObject(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class ServiceObject(PrimaryModel):
     """ServiceObject model."""
 
     description = models.CharField(
@@ -376,8 +465,17 @@ class ServiceObject(BaseModel, ChangeLoggedModel):
         super().save(*args, **kwargs)
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class ServiceObjectGroup(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class ServiceObjectGroup(PrimaryModel):
     """ServiceGroup model."""
 
     description = models.CharField(
@@ -405,8 +503,17 @@ class ServiceObjectGroup(BaseModel, ChangeLoggedModel):
         return self.name
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class ServicePolicyObject(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class ServicePolicyObject(PrimaryModel):
     """ServicePolicyObject model."""
 
     description = models.CharField(
@@ -438,8 +545,17 @@ class ServicePolicyObject(BaseModel, ChangeLoggedModel):
         return self.name
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class Source(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class Source(PrimaryModel):
     """Source model."""
 
     description = models.CharField(
@@ -468,8 +584,17 @@ class Source(BaseModel, ChangeLoggedModel):
         return f"{self.address} - {self.service} - {self.zone}"
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class Destination(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class Destination(PrimaryModel):
     """Destination model."""
 
     description = models.CharField(
@@ -495,8 +620,17 @@ class Destination(BaseModel, ChangeLoggedModel):
         return f"{self.address} - {self.service} - {self.zone}"
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class PolicyRule(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class PolicyRule(PrimaryModel):
     """PolicyRule model."""
 
     name = models.CharField(max_length=50, blank=True, null=True)
@@ -524,8 +658,17 @@ class PolicyRule(BaseModel, ChangeLoggedModel):
         return f"{self.index} - {self.source} - {self.destination} - {self.action}"
 
 
-@extras_features("custom_validators", "relationships", "graphql")
-class Policy(BaseModel, ChangeLoggedModel):
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class Policy(PrimaryModel):
     """Policy model."""
 
     description = models.CharField(

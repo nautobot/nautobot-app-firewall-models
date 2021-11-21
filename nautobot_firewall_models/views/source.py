@@ -30,7 +30,6 @@ class SourceDeleteView(generic.ObjectDeleteView):
 class SourceEditView(generic.ObjectEditView):
     """Edit view."""
 
-    model = models.Source
     queryset = models.Source.objects.all()
     model_form = forms.SourceForm
 
