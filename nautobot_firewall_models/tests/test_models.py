@@ -1,4 +1,4 @@
-"""Test VIPPartition model."""
+"""Test Firewall models."""
 # flake8: noqa: F403,405
 from django.test import TestCase
 

@@ -1,7 +1,7 @@
 """Forms for the Firewall plugin."""
 
 from django import forms
-from nautobot.dcim.models import Interface
+from nautobot.dcim.models import Interface, Device
 from nautobot.extras.forms import (
     AddRemoveTagsForm,
     StatusFilterFormMixin,
@@ -37,6 +37,8 @@ class IPRangeFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilter
 
 class IPRangeForm(BootstrapMixin, fields.IPRangeFieldMixin, forms.ModelForm):
     """IPRange creation/edit form."""
+
+    vrf = DynamicModelChoiceField(queryset=VRF.objects.all(), label="VRF", required=False)
 
     class Meta:
         """Meta attributes."""
@@ -74,6 +76,8 @@ class FQDNFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterFor
 
 class FQDNForm(BootstrapMixin, forms.ModelForm):
     """FQDN creation/edit form."""
+
+    ip_addresses = DynamicModelMultipleChoiceField(queryset=IPAddress.objects.all(), required=False)
 
     class Meta:
         """Meta attributes."""
@@ -373,6 +377,8 @@ class UserObjectGroupFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFie
 class UserObjectGroupForm(BootstrapMixin, forms.ModelForm):
     """UserObjectGroup creation/edit form."""
 
+    user_objects = DynamicModelMultipleChoiceField(queryset=models.UserObject.objects.all())
+
     class Meta:
         """Meta attributes."""
 
@@ -449,6 +455,8 @@ class ZoneFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterFor
 class ZoneForm(BootstrapMixin, forms.ModelForm):
     """Zone creation/edit form."""
 
+    vrfs = DynamicModelMultipleChoiceField(queryset=VRF.objects.all(), required=False, label="VRF")
+
     class Meta:
         """Meta attributes."""
 
@@ -524,6 +532,8 @@ class PolicyRuleForm(BootstrapMixin, forms.ModelForm):
 
     name = forms.CharField(required=False, label="Name")
     tags = DynamicModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)
+    source = DynamicModelChoiceField(queryset=models.SourceDestination.objects.all(), label="Source")
+    destination = DynamicModelChoiceField(queryset=models.SourceDestination.objects.all(), label="Destination")
 
     class Meta:
         """Meta attributes."""
@@ -559,16 +569,20 @@ class PolicyFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterF
         help_text="Search within Name or Description.",
     )
     name = forms.CharField(required=False, label="Name")
+    devices = DynamicModelChoiceField(queryset=Device.objects.all(), required=False)
 
 
 class PolicyForm(BootstrapMixin, forms.ModelForm):
     """Policy creation/edit form."""
 
+    devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
+    policy_rules = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all())
+
     class Meta:
         """Meta attributes."""
 
         model = models.Policy
-        fields = ["name", "description", "policy_rules", "status"]
+        fields = ["name", "description", "policy_rules", "status", "devices"]
 
 
 class PolicyBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
@@ -576,6 +590,8 @@ class PolicyBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
 
     pk = DynamicModelMultipleChoiceField(queryset=models.Policy.objects.all(), widget=forms.MultipleHiddenInput)
     description = forms.CharField(required=False)
+    devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
+    policy_rules = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), required=False)
 
     class Meta:
         """Meta attributes."""
