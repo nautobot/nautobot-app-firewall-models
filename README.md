@@ -1,6 +1,4 @@
 # Nautobot Plugin Firewall Model
-
-A plugin for [Nautobot](https://github.com/nautobot/nautobot).
 ## Installation
 
 The plugin is available as a Python package in pypi and can be installed with pip
@@ -25,6 +23,13 @@ PLUGINS = ["nautobot_firewall_models"]
 ```
 
 ## Usage
+A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to model layer 4 firewall policies and/or extended access control lists. 
+
+### Assigning Policies
+Policies have a `devices` attribute that is a many to many relationship to the `nautobot.dcim.models.Device` object, doing so allows for the same policy to be associated with multiple `Device` objects. *IF* you would like to associate a `Policy` to another object type, custom relationships cans be used to extend how you associate the policy. Concepts of clustering and high availability are currently not in scope of this plugin.
+
+### Service Object
+The `Service` object within the plugin is not the same as `nautobot.ipam.models.Service`, the IPAM representation of the object is meant to define services running on a single `Device` or `VirtualMachine` object *NOT* a representation of port/protocol that may or may not have a device or IP associated to it.
 
 ## Screenshots
 
@@ -112,21 +117,15 @@ PLUGINS = ["nautobot_firewall_models"]
   * Simple model to define firewall zones.
 
 #### Policy
-* Source:
-  * Endpoint: `/api/plugins/firewall/source/`
+* Source/Destination:
+  * Endpoint: `/api/plugins/firewall/source-destination/`
   * Builds a source definition that includes the following attrs.
     * `AddressPolicyObject` (Required)
     * `ServicePolicyObject` (Required)
     * `UserPolicyObject` (Optional)
     * `Zone` (Optional)
     * Description (Optional)
-* Destination:
-  * Endpoint: `/api/plugins/firewall/destination/`
-  * Builds a destination definition that includes the following attrs.
-    * `AddressPolicyObject` (Required)
-    * `ServicePolicyObject` (Required)
-    * `Zone` (Optional)
-    * Description (Optional)
+    * `Status` (Required)
 * Policy Rule:
   * Endpoint: `/api/plugins/firewall/policy-rule/`
   * Builds an individual firewall policy rule/term with the following attrs.
@@ -135,11 +134,17 @@ PLUGINS = ["nautobot_firewall_models"]
     * Index (Required)
     * Action (Required)
     * Log (Required)
-    * `Source` (Required)
-    * `Destination` (Required)
+    * Source `SourceDestination` (Required)
+    * Destination `SourceDestination` (Required)
+    * `Status` (Required)
 * Policy:
   * Endpoint: `/api/plugins/firewall/policy/`
   * Final product of individual firewall policy rules/terms combined into a complete firewall policy.
+    * Name (Required)
+    * Description (Optional)
+    * `PolicyRules` (Required)
+    * `Devices` (Required)
+    * `Status` (Required)
 
 ### Rest API
 The plugin includes API endpoints to manage its related objects, complete info in the Swagger section.### GraphQL API
