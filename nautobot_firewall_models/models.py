@@ -642,6 +642,7 @@ class Policy(PrimaryModel, StatusModel):
     )
     name = models.CharField(max_length=50, unique=True)
     policy_rules = models.ManyToManyField(to=PolicyRule)
+    devices = models.ManyToManyField(to="dcim.Device", blank=True)
 
     class Meta:
         """Meta class."""

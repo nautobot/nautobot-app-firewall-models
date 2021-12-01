@@ -8,7 +8,6 @@ import nautobot.ipam.fields
 import taggit.managers
 import uuid
 from django.contrib.contenttypes.models import ContentType
-from django.db.utils import ProgrammingError
 
 
 def create_status(apps, schedma_editor):

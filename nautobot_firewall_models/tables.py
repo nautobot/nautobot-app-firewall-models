@@ -236,4 +236,4 @@ class PolicyTable(BaseTable):
         """Meta attributes."""
 
         model = models.Policy
-        fields = ("pk", "name", "description", "policy_rules", "status")
+        fields = ("pk", "name", "description", "policy_rules", "devices", "status")

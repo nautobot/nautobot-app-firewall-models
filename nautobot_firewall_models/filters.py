@@ -1,4 +1,4 @@
-"""Filtering for VIP Tracker."""
+"""Filtering for Firewall Model Plugin."""
 
 from nautobot.extras.filters import CreatedUpdatedFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet
 from nautobot.utilities.filters import BaseFilterSet, TagFilter
@@ -184,4 +184,4 @@ class PolicyFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModel
         """Meta attributes for filter."""
 
         model = models.Policy
-        fields = ["id", "name", "description", "policy_rules"]
+        fields = ["id", "name", "description", "policy_rules", "devices"]
