@@ -1,6 +1,7 @@
 """API views for firewall models."""
 
 from nautobot.core.api.views import ModelViewSet
+from nautobot.ipam.api.views import RoleViewSet as NBRoleViewset
 
 from nautobot_firewall_models import filters, models
 from nautobot_firewall_models.api import serializers
@@ -124,3 +125,11 @@ class PolicyViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
     queryset = models.Policy.objects.all()
     serializer_class = serializers.PolicySerializer
     filterset_class = filters.PolicyFilterSet
+
+
+class RoleViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
+    """Role viewset."""
+
+    queryset = models.Role.objects.all()
+    serializer_class = serializers.RoleSerializer
+    filterset_class = filters.RoleFilterSet

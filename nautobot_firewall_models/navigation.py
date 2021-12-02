@@ -8,6 +8,23 @@ menu_items = (
         # weight=150,
         groups=[
             NavMenuGroup(
+                name="Role",
+                weight=50,
+                items=[
+                    NavMenuItem(
+                        link="plugins:nautobot_firewall_models:role_list",
+                        name="Roles",
+                        permissions=["nautobot_firewall_models.view_role"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_firewall_models:role_add",
+                                permissions=["nautobot_firewall_models.add_role"],
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+            NavMenuGroup(
                 name="Address",
                 weight=100,
                 items=[

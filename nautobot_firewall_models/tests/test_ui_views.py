@@ -4,7 +4,7 @@ from nautobot.extras.models.statuses import Status
 from nautobot.utilities.testing import ViewTestCases
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
-from .fixtures import create_env, create_fqdn, create_ip_range
+from .fixtures import create_env, create_fqdn, create_ip_range, create_role
 
 
 class IPRangeUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
@@ -420,6 +420,28 @@ class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             "description": "Test desc",
             "status": status,
         }
+
+    def test_bulk_import_objects_with_constrained_permission(self):
+        pass
+
+    def test_bulk_import_objects_with_permission(self):
+        pass
+
+    def test_bulk_import_objects_without_permission(self):
+        pass
+
+
+class RoleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+    # pylint: disable=R0901
+    """Test the Policy viewsets."""
+    model = Role
+    bulk_edit_data = {"description": "test update description"}
+    form_data = {"name": "test 2", "slug": "test-2", "weight": 1000}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        create_role()
 
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
