@@ -7,6 +7,9 @@ from nautobot.extras.forms import (
     StatusFilterFormMixin,
     StatusBulkEditFormMixin,
     CustomFieldFilterForm,
+    CustomFieldModelCSVForm,
+    CustomFieldModelForm,
+    RelationshipModelForm,
 )
 from nautobot.extras.models import Tag
 from nautobot.ipam.models import VRF, Prefix, IPAddress
@@ -16,6 +19,7 @@ from nautobot.utilities.forms import (
     DynamicModelChoiceField,
     DynamicModelMultipleChoiceField,
     TagFilterField,
+    SlugField,
 )
 
 from nautobot_firewall_models import models, fields, choices
@@ -592,6 +596,34 @@ class PolicyBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
     description = forms.CharField(required=False)
     devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
     policy_rules = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), required=False)
+
+    class Meta:
+        """Meta attributes."""
+
+        nullable_fields = [
+            "description",
+        ]
+
+
+class RoleForm(BootstrapMixin, CustomFieldModelForm, RelationshipModelForm):
+    slug = SlugField()
+
+    class Meta:
+        model = models.Role
+        fields = [
+            "name",
+            "slug",
+            "weight",
+            "description",
+        ]
+
+
+class RoleBulkEditForm(BootstrapMixin, AddRemoveTagsForm, StatusBulkEditFormMixin, BulkEditForm):
+    """Role bulk edit form."""
+
+    pk = DynamicModelMultipleChoiceField(queryset=models.Role.objects.all(), widget=forms.MultipleHiddenInput)
+    description = forms.CharField(required=False)
+    weight = forms.IntegerField(required=False)
 
     class Meta:
         """Meta attributes."""

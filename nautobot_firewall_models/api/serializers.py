@@ -157,3 +157,13 @@ class PolicySerializer(ValidatedModelSerializer):
 
         model = models.Policy
         fields = "__all__"
+
+
+class RoleSerializer(ValidatedModelSerializer):
+    """Role Serializer."""
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.Role
+        fields = "__all__"

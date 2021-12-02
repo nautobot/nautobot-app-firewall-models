@@ -20,6 +20,7 @@ from nautobot_firewall_models.views import (
     source_destination,
     policy_rule,
     policy,
+    role,
 )
 
 urlpatterns = [
@@ -423,5 +424,19 @@ urlpatterns = [
         ObjectChangeLogView.as_view(),
         name="policy_changelog",
         kwargs={"model": models.Policy},
+    ),
+    # Roles
+    path("role/", role.RoleListView.as_view(), name="role_list"),
+    path("role/add/", role.RoleEditView.as_view(), name="role_add"),
+    path("role/delete/", role.RoleBulkDeleteView.as_view(), name="role_bulk_delete"),
+    path("role/edit/", role.RoleBulkEditView.as_view(), name="role_bulk_edit"),
+    path("role/<uuid:pk>/", role.RoleView.as_view(), name="role"),
+    path("role/<uuid:pk>/edit/", role.RoleEditView.as_view(), name="role_edit"),
+    path("role/<uuid:pk>/delete/", role.RoleDeleteView.as_view(), name="role_delete"),
+    path(
+        "roles/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="role_changelog",
+        kwargs={"model": models.Role},
     ),
 ]
