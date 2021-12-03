@@ -7,7 +7,6 @@ from nautobot.extras.forms import (
     StatusFilterFormMixin,
     StatusBulkEditFormMixin,
     CustomFieldFilterForm,
-    CustomFieldModelCSVForm,
     CustomFieldModelForm,
     RelationshipModelForm,
 )
@@ -606,9 +605,13 @@ class PolicyBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
 
 
 class RoleForm(BootstrapMixin, CustomFieldModelForm, RelationshipModelForm):
+    """Role create/edit form."""
+
     slug = SlugField()
 
     class Meta:
+        """Meta attributes."""
+
         model = models.Role
         fields = [
             "name",

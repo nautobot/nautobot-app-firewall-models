@@ -7,9 +7,6 @@ from nautobot.ipam.models import Prefix
 from nautobot_firewall_models import models
 from .fixtures import create_env, create_ip_range, create_fqdn, create_role
 
-from django.contrib.contenttypes.models import ContentType
-from nautobot.users.models import ObjectPermission
-
 
 class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
     # pylint: disable=R0901

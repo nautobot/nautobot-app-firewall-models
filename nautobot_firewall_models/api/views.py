@@ -1,7 +1,6 @@
 """API views for firewall models."""
 
 from nautobot.core.api.views import ModelViewSet
-from nautobot.ipam.api.views import RoleViewSet as NBRoleViewset
 
 from nautobot_firewall_models import filters, models
 from nautobot_firewall_models.api import serializers
