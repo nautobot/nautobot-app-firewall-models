@@ -59,10 +59,21 @@
 
 {% block content %}
 <div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>Policy Rule Expanded</strong>
+            </div>
+            <table class="table table-hover panel-body">
+                {% include 'nautobot_firewall_models/policyrule_tablehead.html'%}
+                {% include 'nautobot_firewall_models/policyrule_tablerow.html' with rule=object parent_policy=False %}
+            </table>
+        </div>
+    </div>
     <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <strong>Policy Rule</strong>
+                <strong>Policy Rule Brief</strong>
             </div>
             <table class="table table-hover panel-body attr-table">
                 <tr>
@@ -84,6 +95,14 @@
                 <tr>
                     <td>Log</td>
                     <td>{{ object.log|placeholder }}</td>
+                </tr>
+                <tr>
+                    <td>Role</td>
+                    <td>{% if object.role %}<a href="{{ object.role.get_absolute_url }}">{{ object.role }}</a><br/>{% else %}{{ None|placeholder }} {% endif %}</td>
+                </tr>
+                <tr>
+                    <td>Status</td>
+                    <td><span class="label" style="color: {{ object.status.color|fgcolor }}; background-color: #{{ object.status.color }}">{{ object.get_status_display }}</span></td>
                 </tr>
             </table>
         </div>

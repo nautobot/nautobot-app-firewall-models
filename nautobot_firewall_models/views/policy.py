@@ -21,6 +21,13 @@ class PolicyView(generic.ObjectView):
     queryset = models.Policy.objects.all()
 
 
+class PolicyExpandedRulesView(generic.ObjectView):
+    """Expanded Rules view."""
+
+    queryset = models.Policy.objects.all()
+    template_name = "nautobot_firewall_models/policy_expanded_rules.html"
+
+
 class PolicyDeleteView(generic.ObjectDeleteView):
     """Delete view."""
 
