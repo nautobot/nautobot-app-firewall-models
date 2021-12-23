@@ -2,13 +2,14 @@
 
 import django_tables2 as tables
 from django_tables2.utils import A
+from nautobot.extras.tables import StatusTableMixin
 from nautobot.ipam.tables import RoleTable as NBRoleTable
 from nautobot.utilities.tables import BaseTable, ButtonsColumn, ToggleColumn
 
 from nautobot_firewall_models import models
 
 
-class IPRangeTable(BaseTable):
+class IPRangeTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
@@ -25,7 +26,7 @@ class IPRangeTable(BaseTable):
         fields = ("pk", "start_address", "end_address", "vrf", "size", "description", "status", "role")
 
 
-class FQDNTable(BaseTable):
+class FQDNTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
@@ -41,7 +42,7 @@ class FQDNTable(BaseTable):
         fields = ("pk", "name", "description", "ip_addresses", "status", "role")
 
 
-class AddressObjectTable(BaseTable):
+class AddressObjectTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
@@ -57,7 +58,7 @@ class AddressObjectTable(BaseTable):
         fields = ("pk", "name", "description", "ip_address", "ip_range", "prefix", "fqdn", "status", "role")
 
 
-class AddressObjectGroupTable(BaseTable):
+class AddressObjectGroupTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
@@ -73,7 +74,7 @@ class AddressObjectGroupTable(BaseTable):
         fields = ("pk", "name", "description", "address_objects", "status", "role")
 
 
-class AddressPolicyObjectTable(BaseTable):
+class AddressPolicyObjectTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
@@ -89,7 +90,7 @@ class AddressPolicyObjectTable(BaseTable):
         fields = ("pk", "name", "description", "address_objects", "address_object_groups", "status", "role")
 
 
-class ServiceObjectTable(BaseTable):
+class ServiceObjectTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
@@ -105,7 +106,7 @@ class ServiceObjectTable(BaseTable):
         fields = ("pk", "name", "port", "ip_protocol", "description", "status", "role")
 
 
-class ServiceObjectGroupTable(BaseTable):
+class ServiceObjectGroupTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
@@ -121,7 +122,7 @@ class ServiceObjectGroupTable(BaseTable):
         fields = ("pk", "name", "description", "service_objects", "status", "role")
 
 
-class ServicePolicyObjectTable(BaseTable):
+class ServicePolicyObjectTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
@@ -137,7 +138,7 @@ class ServicePolicyObjectTable(BaseTable):
         fields = ("pk", "name", "description", "service_objects", "service_object_groups", "status", "role")
 
 
-class UserObjectTable(BaseTable):
+class UserObjectTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
@@ -153,7 +154,7 @@ class UserObjectTable(BaseTable):
         fields = ("pk", "username", "name", "status", "role")
 
 
-class UserObjectGroupTable(BaseTable):
+class UserObjectGroupTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
@@ -169,7 +170,7 @@ class UserObjectGroupTable(BaseTable):
         fields = ("pk", "name", "description", "user_objects", "status", "role")
 
 
-class UserPolicyObjectTable(BaseTable):
+class UserPolicyObjectTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
@@ -185,7 +186,7 @@ class UserPolicyObjectTable(BaseTable):
         fields = ("pk", "name", "description", "user_objects", "user_object_groups", "status", "role")
 
 
-class ZoneTable(BaseTable):
+class ZoneTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
@@ -201,7 +202,7 @@ class ZoneTable(BaseTable):
         fields = ("pk", "name", "vrfs", "interfaces", "description", "status", "role")
 
 
-class SourceDestinationTable(BaseTable):
+class SourceDestinationTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
@@ -221,7 +222,7 @@ class SourceDestinationTable(BaseTable):
         fields = ("pk", "display", "description", "address", "service", "user", "zone", "status", "role")
 
 
-class PolicyRuleTable(BaseTable):
+class PolicyRuleTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
@@ -239,7 +240,7 @@ class PolicyRuleTable(BaseTable):
         fields = ("pk", "name", "index", "action", "log", "source", "destination", "status", "role")
 
 
-class PolicyTable(BaseTable):
+class PolicyTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 

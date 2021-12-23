@@ -49,6 +49,9 @@
         <li role="presentation"{% if not active_tab %} class="active"{% endif %}>
             <a href="{{ object.get_absolute_url }}">Policy</a>
         </li>
+        <li role="presentation"{% if active_tab == 'policyrules' %} class="active"{% endif %}>
+            <a href="{% url 'plugins:nautobot_firewall_models:policy_policyrules' pk=object.id %}">Policy Rules</a>
+        </li>
         {% if perms.extras.view_objectchange %}
             <li role="presentation"{% if active_tab == 'changelog' %} class="active"{% endif %}>
                 <a href="{% url 'plugins:nautobot_firewall_models:policy_changelog' pk=object.id %}">Change Log</a>
@@ -72,6 +75,14 @@
                 <tr>
                     <td>Policy Rules</td>
                     <td>{% for i in object.policy_rules.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}</td>
+                </tr>
+                <tr>
+                    <td>Devices</td>
+                    <td>{% for i in object.devices.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}</td>
+                </tr>
+                <tr>
+                    <td>Role</td>
+                    <td>{% if object.role %}<a href="{{ object.role.get_absolute_url }}">{{ object.role }}</a>{% else %}{{ None|placeholder }}{% endif %}</td>
                 </tr>
             </table>
         </div>
