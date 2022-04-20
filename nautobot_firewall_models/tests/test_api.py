@@ -5,7 +5,7 @@ from nautobot.utilities.testing import APIViewTestCases
 from nautobot.ipam.models import Prefix
 
 from nautobot_firewall_models import models
-from .fixtures import create_env, create_ip_range, create_fqdn, create_role
+from .fixtures import create_env, create_ip_range, create_fqdn
 
 
 class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -332,25 +332,6 @@ class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"name": "test 1", "policy_rules": [pol_rule.id], "status": status},
             {"name": "test 2", "policy_rules": [pol_rule.id], "description": "Test desc", "status": status},
         ]
-
-    def test_list_objects_brief(self):
-        pass
-
-
-class RoleAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
-    """Test the Policy viewsets."""
-    model = models.Role
-    bulk_update_data = {"description": "test update description"}
-    create_data = [
-        {"name": "test 1", "slug": "test-1"},
-        {"name": "test 2", "slug": "test-2"},
-    ]
-
-    @classmethod
-    def setUpTestData(cls):
-        """Create test data for API calls."""
-        create_role()
 
     def test_list_objects_brief(self):
         pass

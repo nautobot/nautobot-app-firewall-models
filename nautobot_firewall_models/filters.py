@@ -1,19 +1,9 @@
 """Filtering for Firewall Model Plugin."""
 
 from nautobot.extras.filters import CreatedUpdatedFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet
-from nautobot.ipam.filters import RoleFilterSet as NBRoleFilterSet
 from nautobot.utilities.filters import BaseFilterSet, TagFilter
 
 from nautobot_firewall_models import models
-
-
-class RoleFilterSet(NBRoleFilterSet):
-    """Filter for Role."""
-
-    class Meta(NBRoleFilterSet.Meta):
-        """Meta attributes for filter."""
-
-        model = models.Role
 
 
 class IPRangeFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
@@ -25,7 +15,7 @@ class IPRangeFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldMode
         model = models.IPRange
 
         # fields = ["id", "start_address", "end_address", "vrf", "size", "description"]
-        fields = ["id", "vrf", "size", "description", "role"]
+        fields = ["id", "vrf", "size", "description"]
 
 
 class FQDNFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
@@ -36,7 +26,7 @@ class FQDNFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFi
 
         model = models.FQDN
 
-        fields = ["id", "name", "description", "role"]
+        fields = ["id", "name", "description"]
 
 
 class AddressObjectFilterSet(
@@ -49,7 +39,7 @@ class AddressObjectFilterSet(
 
         model = models.AddressObject
 
-        fields = ["id", "name", "ip_address", "prefix", "ip_range", "fqdn", "description", "role"]
+        fields = ["id", "name", "ip_address", "prefix", "ip_range", "fqdn", "description"]
 
 
 class AddressObjectGroupFilterSet(
@@ -62,7 +52,7 @@ class AddressObjectGroupFilterSet(
 
         model = models.AddressObjectGroup
 
-        fields = ["id", "name", "address_objects", "description", "role"]
+        fields = ["id", "name", "address_objects", "description"]
 
 
 class AddressPolicyObjectFilterSet(
@@ -75,7 +65,7 @@ class AddressPolicyObjectFilterSet(
 
         model = models.AddressPolicyObject
 
-        fields = ["id", "name", "address_objects", "address_object_groups", "description", "role"]
+        fields = ["id", "name", "address_objects", "address_object_groups", "description"]
 
 
 class ServiceObjectFilterSet(
@@ -88,7 +78,7 @@ class ServiceObjectFilterSet(
 
         model = models.ServiceObject
 
-        fields = ["id", "name", "slug", "ip_protocol", "port", "description", "role"]
+        fields = ["id", "name", "slug", "ip_protocol", "port", "description"]
 
 
 class ServiceObjectGroupFilterSet(
@@ -101,7 +91,7 @@ class ServiceObjectGroupFilterSet(
 
         model = models.ServiceObjectGroup
 
-        fields = ["id", "name", "service_objects", "description", "role"]
+        fields = ["id", "name", "service_objects", "description"]
 
 
 class ServicePolicyObjectFilterSet(
@@ -114,7 +104,7 @@ class ServicePolicyObjectFilterSet(
 
         model = models.ServicePolicyObject
 
-        fields = ["id", "name", "service_objects", "service_object_groups", "description", "role"]
+        fields = ["id", "name", "service_objects", "service_object_groups", "description"]
 
 
 class UserObjectFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
@@ -124,7 +114,7 @@ class UserObjectFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldM
         """Meta attributes for filter."""
 
         model = models.UserObject
-        fields = ["id", "name", "username", "role"]
+        fields = ["id", "name", "username"]
 
 
 class UserObjectGroupFilterSet(
@@ -136,7 +126,7 @@ class UserObjectGroupFilterSet(
         """Meta attributes for filter."""
 
         model = models.UserObjectGroup
-        fields = ["id", "name", "user_objects", "description", "role"]
+        fields = ["id", "name", "user_objects", "description"]
 
 
 class UserPolicyObjectFilterSet(
@@ -149,7 +139,7 @@ class UserPolicyObjectFilterSet(
 
         model = models.UserPolicyObject
 
-        fields = ["id", "name", "user_objects", "user_object_groups", "description", "role"]
+        fields = ["id", "name", "user_objects", "user_object_groups", "description"]
 
 
 class ZoneFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
@@ -160,7 +150,7 @@ class ZoneFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFi
 
         model = models.Zone
 
-        fields = ["id", "name", "vrfs", "interfaces", "description", "role"]
+        fields = ["id", "name", "vrfs", "interfaces", "description"]
 
 
 class SourceDestinationFilterSet(
@@ -184,7 +174,7 @@ class PolicyRuleFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldM
         """Meta attributes for filter."""
 
         model = models.PolicyRule
-        fields = ["id", "index", "source", "destination", "action", "log", "role"]
+        fields = ["id", "index", "source", "destination", "action", "log"]
 
 
 class PolicyFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
@@ -194,4 +184,4 @@ class PolicyFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModel
         """Meta attributes for filter."""
 
         model = models.Policy
-        fields = ["id", "name", "description", "policy_rules", "devices", "role"]
+        fields = ["id", "name", "description", "policy_rules", "devices"]
