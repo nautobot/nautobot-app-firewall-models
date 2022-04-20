@@ -80,10 +80,6 @@
                     <td>Devices</td>
                     <td>{% for i in object.devices.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}</td>
                 </tr>
-                <tr>
-                    <td>Role</td>
-                    <td>{% if object.role %}<a href="{{ object.role.get_absolute_url }}">{{ object.role }}</a>{% else %}{{ None|placeholder }}{% endif %}</td>
-                </tr>
             </table>
         </div>
         {% include 'inc/custom_fields_panel.html' %}

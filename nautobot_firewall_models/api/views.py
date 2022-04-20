@@ -124,11 +124,3 @@ class PolicyViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
     queryset = models.Policy.objects.all()
     serializer_class = serializers.PolicySerializer
     filterset_class = filters.PolicyFilterSet
-
-
-class RoleViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
-    """Role viewset."""
-
-    queryset = models.Role.objects.all()
-    serializer_class = serializers.RoleSerializer
-    filterset_class = filters.RoleFilterSet

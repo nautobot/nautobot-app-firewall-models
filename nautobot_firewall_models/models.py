@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from nautobot.core.models.generics import OrganizationalModel, PrimaryModel
+from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.models import StatusModel
 from nautobot.extras.models.tags import TaggedItem
 from nautobot.extras.utils import extras_features
@@ -15,41 +15,6 @@ from netaddr import IPAddress
 from taggit.managers import TaggableManager
 
 from nautobot_firewall_models import choices
-
-
-@extras_features(
-    "custom_fields",
-    "custom_validators",
-    "graphql",
-    "relationships",
-)
-class Role(OrganizationalModel):
-    """A Role represents the functional role of objects inside the Firewall model plugin.
-
-    This Model is a copy of `nautobot.ipam.models.Role`, it is meant to be deprecated once
-    `nautobot.extras.models.Role` is implemented
-    """
-
-    name = models.CharField(max_length=100, unique=True)
-    slug = models.SlugField(max_length=100, unique=True)
-    weight = models.PositiveSmallIntegerField(default=1000)
-    description = models.CharField(
-        max_length=200,
-        blank=True,
-    )
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["weight", "name"]
-
-    def __str__(self):
-        """Stringify instance."""
-        return self.name
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:role", args=[self.pk])
 
 
 @extras_features(
@@ -83,7 +48,6 @@ class IPRange(PrimaryModel, StatusModel):
         blank=True,
     )
     size = models.PositiveIntegerField(editable=False)
-    role = models.ForeignKey(to=Role, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         """Meta class."""
@@ -139,7 +103,6 @@ class FQDN(PrimaryModel, StatusModel):
     )
     name = models.CharField(max_length=100, unique=True)
     ip_addresses = models.ManyToManyField(to="ipam.IPAddress", blank=True)
-    role = models.ForeignKey(to=Role, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         """Meta class."""
@@ -178,7 +141,6 @@ class AddressObject(PrimaryModel, StatusModel):
     ip_range = models.ForeignKey(to=IPRange, on_delete=models.CASCADE, null=True, blank=True)
     ip_address = models.ForeignKey(to="ipam.IPAddress", on_delete=models.CASCADE, null=True, blank=True)
     prefix = models.ForeignKey(to="ipam.Prefix", on_delete=models.CASCADE, null=True, blank=True)
-    role = models.ForeignKey(to=Role, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         """Meta class."""
@@ -241,7 +203,6 @@ class AddressObjectGroup(PrimaryModel, StatusModel):
         to=AddressObject,
         blank=True,
     )
-    role = models.ForeignKey(to=Role, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         """Meta class."""
@@ -284,7 +245,6 @@ class AddressPolicyObject(PrimaryModel, StatusModel):
         to=AddressObjectGroup,
         blank=True,
     )
-    role = models.ForeignKey(to=Role, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         """Meta class."""
@@ -318,7 +278,6 @@ class UserObject(PrimaryModel, StatusModel):
         max_length=50,
         unique=True,
     )
-    role = models.ForeignKey(to=Role, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=50, blank=True)
 
     class Meta:
@@ -358,7 +317,6 @@ class UserObjectGroup(PrimaryModel, StatusModel):
         to=UserObject,
         blank=True,
     )
-    role = models.ForeignKey(to=Role, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         """Meta class."""
@@ -401,7 +359,6 @@ class UserPolicyObject(PrimaryModel, StatusModel):
         to=UserObjectGroup,
         blank=True,
     )
-    role = models.ForeignKey(to=Role, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         """Meta class."""
@@ -444,7 +401,6 @@ class Zone(PrimaryModel, StatusModel):
         to="dcim.Interface",
         blank=True,
     )
-    role = models.ForeignKey(to=Role, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         """Meta class."""
@@ -482,7 +438,6 @@ class ServiceObject(PrimaryModel, StatusModel):
     slug = models.SlugField(max_length=50, editable=False)
     port = models.IntegerField()
     ip_protocol = models.CharField(choices=choices.IP_PROTOCOL_CHOICES, null=True, blank=True, max_length=20)
-    role = models.ForeignKey(to=Role, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         """Meta class."""
@@ -533,7 +488,6 @@ class ServiceObjectGroup(PrimaryModel, StatusModel):
         to=ServiceObject,
         blank=True,
     )
-    role = models.ForeignKey(to=Role, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         """Meta class."""
@@ -576,7 +530,6 @@ class ServicePolicyObject(PrimaryModel, StatusModel):
         to=ServiceObjectGroup,
         blank=True,
     )
-    role = models.ForeignKey(to=Role, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         """Meta class."""
@@ -614,7 +567,6 @@ class SourceDestination(PrimaryModel, StatusModel):
     service = models.ForeignKey(to=ServicePolicyObject, on_delete=models.CASCADE)
     user = models.ForeignKey(to=UserPolicyObject, on_delete=models.CASCADE, null=True, blank=True)
     zone = models.ForeignKey(to=Zone, on_delete=models.CASCADE, null=True, blank=True)
-    role = models.ForeignKey(to=Role, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         """Meta class."""
@@ -653,7 +605,6 @@ class PolicyRule(PrimaryModel, StatusModel):
     destination = models.ForeignKey(to=SourceDestination, on_delete=models.CASCADE, related_name="destination")
     action = models.CharField(choices=choices.ACTION_CHOICES, max_length=20)
     log = models.BooleanField(default=False)
-    role = models.ForeignKey(to=Role, blank=True, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         """Meta class."""
@@ -689,7 +640,6 @@ class Policy(PrimaryModel, StatusModel):
         max_length=200,
         blank=True,
     )
-    role = models.ForeignKey(to=Role, blank=True, null=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=50, unique=True)
     policy_rules = models.ManyToManyField(to=PolicyRule)
     devices = models.ManyToManyField(to="dcim.Device", blank=True)

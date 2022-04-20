@@ -21,6 +21,5 @@ router.register("zone", views.ZoneViewSet)
 router.register("source-destination", views.SourceDestinationViewSet)
 router.register("policy-rule", views.PolicyRuleViewSet)
 router.register("policy", views.PolicyViewSet)
-router.register("role", views.RoleViewSet)
 
 urlpatterns = router.urls

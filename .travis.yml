@@ -19,7 +19,9 @@ services:
 # Tests
 # --------------------------------------------------------------------------
 before_script:
-  - "pip install invoke docker-compose"
+  - "pip install invoke"
+  - "curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose"
+  - "chmod +x /usr/local/bin/docker-compose"
   - "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py > /tmp/get-poetry.py"
   - "python /tmp/get-poetry.py -y --version 1.1.6"
   - "source $HOME/.poetry/env"
