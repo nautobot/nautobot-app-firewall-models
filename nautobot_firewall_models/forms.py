@@ -227,11 +227,16 @@ class ServiceObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomField
     )
     name = forms.CharField(required=False, label="Name")
     port = forms.IntegerField(required=False)
-    ip_protocol = forms.ChoiceField(choices=choices.IP_PROTOCOL_CHOICES)
+    ip_protocol = forms.ChoiceField(choices=choices.IP_PROTOCOL_CHOICES, required=False)
 
 
 class ServiceObjectForm(BootstrapMixin, forms.ModelForm):
     """ServiceObject creation/edit form."""
+
+    port = forms.CharField(
+        help_text="Must be a single integer representation of port OR single port range without spaces (i.e. 80 or 8080-8088)",
+        required=False,
+    )
 
     class Meta:
         """Meta attributes."""
@@ -245,11 +250,15 @@ class ServiceObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEdi
 
     pk = DynamicModelMultipleChoiceField(queryset=models.ServiceObject.objects.all(), widget=forms.MultipleHiddenInput)
     description = forms.CharField(required=False)
+    port = forms.CharField(
+        help_text="Must be a single integer representation of port OR single port range without spaces (i.e. 80 or 8080-8088)",
+        required=False,
+    )
 
     class Meta:
         """Meta attributes."""
 
-        nullable_fields = ["description", "port", "ip_protocol"]
+        nullable_fields = ["description", "port"]
 
 
 class ServiceObjectGroupFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
@@ -497,7 +506,7 @@ class SourceDestinationForm(BootstrapMixin, forms.ModelForm):
         """Meta attributes."""
 
         model = models.SourceDestination
-        fields = ["description", "address", "service", "user", "zone", "status"]
+        fields = ["description", "address", "user", "zone", "status"]
 
 
 class SourceDestinationBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
@@ -533,13 +542,14 @@ class PolicyRuleForm(BootstrapMixin, forms.ModelForm):
     name = forms.CharField(required=False, label="Name")
     tags = DynamicModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)
     source = DynamicModelChoiceField(queryset=models.SourceDestination.objects.all(), label="Source")
+    service = DynamicModelChoiceField(queryset=models.ServicePolicyObject.objects.all(), label="Service")
     destination = DynamicModelChoiceField(queryset=models.SourceDestination.objects.all(), label="Destination")
 
     class Meta:
         """Meta attributes."""
 
         model = models.PolicyRule
-        fields = ["name", "index", "action", "log", "source", "destination", "tags", "status"]
+        fields = ["name", "index", "action", "log", "source", "service", "destination", "tags", "status"]
 
 
 class PolicyRuleBulkEditForm(BootstrapMixin, AddRemoveTagsForm, StatusBulkEditFormMixin, BulkEditForm):

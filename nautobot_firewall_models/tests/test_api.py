@@ -132,8 +132,8 @@ class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         status = Status.objects.get(slug="active").id
         cls.create_data = [
-            {"name": "HTTP", "port": 80, "status": status},
-            {"name": "HTTP", "port": 8080, "status": status},
+            {"name": "HTTP", "port": "80", "status": status, "ip_protocol": "TCP"},
+            {"name": "HTTP", "port": "8080-8088", "status": status, "ip_protocol": "TCP"},
         ]
         create_env()
 
@@ -279,14 +279,13 @@ class SourceDestinationAPIViewTest(APIViewTestCases.APIViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
-        svc = models.ServicePolicyObject.objects.first()
         usr = models.UserPolicyObject.objects.first()
         addr = models.AddressPolicyObject.objects.first()
         zone = models.Zone.objects.first()
         status = Status.objects.get(slug="active").id
         cls.create_data = [
-            {"address": addr.id, "service": svc.id, "user": usr.id, "zone": zone.id, "status": status},
-            {"address": addr.id, "service": svc.id, "status": status},
+            {"address": addr.id, "user": usr.id, "zone": zone.id, "status": status},
+            {"address": addr.id, "status": status},
         ]
 
     def test_list_objects_brief(self):
@@ -306,10 +305,27 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
         create_env()
         src = models.SourceDestination.objects.first()
         dest = models.SourceDestination.objects.last()
+        svc = models.ServicePolicyObject.objects.first()
         status = Status.objects.get(slug="active").id
         cls.create_data = [
-            {"source": src.id, "destination": dest.id, "action": "Deny", "log": True, "index": 4, "status": status},
-            {"source": src.id, "destination": dest.id, "action": "Deny", "log": False, "index": 5, "status": status},
+            {
+                "source": src.id,
+                "destination": dest.id,
+                "service": svc.id,
+                "action": "Deny",
+                "log": True,
+                "index": 4,
+                "status": status,
+            },
+            {
+                "source": src.id,
+                "destination": dest.id,
+                "service": svc.id,
+                "action": "Deny",
+                "log": False,
+                "index": 5,
+                "status": status,
+            },
         ]
 
     def test_list_objects_brief(self):
