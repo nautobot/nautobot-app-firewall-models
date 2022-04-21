@@ -586,7 +586,7 @@ class PolicyForm(BootstrapMixin, forms.ModelForm):
     """Policy creation/edit form."""
 
     devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
-    policy_rules = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all())
+    policy_rules = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), required=False)
 
     class Meta:
         """Meta attributes."""
