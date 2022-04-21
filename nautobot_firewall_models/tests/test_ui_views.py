@@ -142,7 +142,7 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         status = Status.objects.get(slug="active").id
-        cls.form_data = {"name": "HTTP", "port": 80, "status": status}
+        cls.form_data = {"name": "HTTP", "port": "80", "status": status, "ip_protocol": "TCP"}
         create_env()
 
     def test_bulk_import_objects_with_constrained_permission(self):
@@ -160,10 +160,6 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         svc.ip_protocol = "TCP"
 
         self.assertEqual(str(svc), f"{svc.slug}:{svc.port}:TCP")
-
-        svc.ip_protocol = None
-
-        self.assertEqual(str(svc), f"{svc.slug}:{svc.port}")
 
 
 class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
@@ -350,11 +346,11 @@ class SourceDestinationUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         """Testing proper str."""
         src = SourceDestination.objects.first()
 
-        self.assertEqual(str(src), f"{src.address} - {src.service} - {src.user} - {src.zone}")
+        self.assertEqual(str(src), f"{src.address} - {src.user} - {src.zone}")
 
         src.user = None
 
-        self.assertEqual(str(src), f"{src.address} - {src.service} - {src.zone}")
+        self.assertEqual(str(src), f"{src.address} - {src.zone}")
 
 
 class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
@@ -370,11 +366,13 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         src = SourceDestination.objects.first()
         dest = SourceDestination.objects.last()
         status = Status.objects.get(slug="active").id
+        svc = ServicePolicyObject.objects.first()
         cls.form_data = {
             "source": src.id,
             "destination": dest.id,
             "action": "Deny",
             "log": True,
+            "service": svc.id,
             "index": 4,
             "name": "test rule",
             "status": status,

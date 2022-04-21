@@ -205,7 +205,7 @@ class SourceDestinationTable(StatusTableMixin, BaseTable):
         """Meta attributes."""
 
         model = models.SourceDestination
-        fields = ("pk", "display", "description", "address", "service", "user", "zone", "status")
+        fields = ("pk", "display", "description", "address", "user", "zone", "status")
 
 
 class PolicyRuleTable(StatusTableMixin, BaseTable):
@@ -216,13 +216,14 @@ class PolicyRuleTable(StatusTableMixin, BaseTable):
     name = tables.LinkColumn()
     actions = ButtonsColumn(models.PolicyRule, buttons=("edit", "delete"))
     source = tables.LinkColumn()
+    service = tables.LinkColumn()
     destination = tables.LinkColumn()
 
     class Meta(BaseTable.Meta):
         """Meta attributes."""
 
         model = models.PolicyRule
-        fields = ("pk", "name", "index", "action", "log", "source", "destination", "status")
+        fields = ("pk", "name", "index", "action", "log", "source", "service", "destination", "status")
 
 
 class PolicyTable(StatusTableMixin, BaseTable):

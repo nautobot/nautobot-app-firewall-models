@@ -162,7 +162,7 @@ class SourceDestinationFilterSet(
         """Meta attributes for filter."""
 
         model = models.SourceDestination
-        fields = ["id", "address", "user", "service", "zone", "description"]
+        fields = ["id", "address", "user", "zone", "description"]
 
 
 class PolicyRuleFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
@@ -174,7 +174,7 @@ class PolicyRuleFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldM
         """Meta attributes for filter."""
 
         model = models.PolicyRule
-        fields = ["id", "index", "source", "destination", "action", "log"]
+        fields = ["id", "index", "source", "service", "destination", "action", "log"]
 
 
 class PolicyFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):

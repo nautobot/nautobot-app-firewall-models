@@ -14,7 +14,7 @@ from nautobot.ipam.fields import VarbinaryIPField
 from netaddr import IPAddress
 from taggit.managers import TaggableManager
 
-from nautobot_firewall_models import choices
+from nautobot_firewall_models import choices, validators
 
 
 @extras_features(
@@ -436,18 +436,15 @@ class ServiceObject(PrimaryModel, StatusModel):
     )
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50, editable=False)
-    port = models.IntegerField()
-    ip_protocol = models.CharField(choices=choices.IP_PROTOCOL_CHOICES, null=True, blank=True, max_length=20)
+    port = models.CharField(null=True, blank=True, validators=[validators.validate_port], max_length=20)
+    ip_protocol = models.CharField(choices=choices.IP_PROTOCOL_CHOICES, max_length=20)
 
     class Meta:
         """Meta class."""
 
         ordering = ["name"]
         verbose_name_plural = "Service Objects"
-        constraints = [
-            UniqueConstraint(fields=["slug", "port", "ip_protocol"], name="unique_with_ip_protocol"),
-            UniqueConstraint(fields=["slug", "port"], condition=Q(ip_protocol=None), name="unique_without_ip_protocol"),
-        ]
+        unique_together = ["slug", "port", "ip_protocol"]
 
     def get_absolute_url(self):
         """Return detail view URL."""
@@ -462,7 +459,7 @@ class ServiceObject(PrimaryModel, StatusModel):
     def save(self, *args, **kwargs):
         """Overloads to enforce use of slugify."""
         self.slug = slugify(self.name)
-
+        self.full_clean()
         super().save(*args, **kwargs)
 
 
@@ -564,7 +561,6 @@ class SourceDestination(PrimaryModel, StatusModel):
         blank=True,
     )
     address = models.ForeignKey(to=AddressPolicyObject, on_delete=models.CASCADE)
-    service = models.ForeignKey(to=ServicePolicyObject, on_delete=models.CASCADE)
     user = models.ForeignKey(to=UserPolicyObject, on_delete=models.CASCADE, null=True, blank=True)
     zone = models.ForeignKey(to=Zone, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -581,8 +577,8 @@ class SourceDestination(PrimaryModel, StatusModel):
     def __str__(self):
         """Stringify instance."""
         if self.user:
-            return f"{self.address} - {self.service} - {self.user} - {self.zone}"
-        return f"{self.address} - {self.service} - {self.zone}"
+            return f"{self.address} - {self.user} - {self.zone}"
+        return f"{self.address} - {self.zone}"
 
 
 @extras_features(
@@ -602,6 +598,7 @@ class PolicyRule(PrimaryModel, StatusModel):
     tags = TaggableManager(through=TaggedItem)
     index = models.IntegerField()
     source = models.ForeignKey(to=SourceDestination, on_delete=models.CASCADE, related_name="source")
+    service = models.ForeignKey(to=ServicePolicyObject, on_delete=models.CASCADE, null=True)
     destination = models.ForeignKey(to=SourceDestination, on_delete=models.CASCADE, related_name="destination")
     action = models.CharField(choices=choices.ACTION_CHOICES, max_length=20)
     log = models.BooleanField(default=False)

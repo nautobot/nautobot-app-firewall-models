@@ -52,9 +52,9 @@ def create_env():
     addr_pol3 = AddressPolicyObject.objects.create(name="policy3", status=status)
     addr_pol3.address_objects.set([addr_obj1, addr_obj2])
     addr_pol3.address_object_groups.set([addr_grp2])
-    svc_obj1 = ServiceObject.objects.create(name="PGSQL", port=5432, ip_protocol="TCP", status=status)
-    svc_obj2 = ServiceObject.objects.create(name="SSH", port=22, status=status)
-    svc_obj3 = ServiceObject.objects.create(name="TELNET", port=23, status=status)
+    svc_obj1 = ServiceObject.objects.create(name="PGSQL", port="5432", ip_protocol="TCP", status=status)
+    svc_obj2 = ServiceObject.objects.create(name="SSH", port="22", ip_protocol="TCP", status=status)
+    svc_obj3 = ServiceObject.objects.create(name="TELNET", port="22-23", ip_protocol="TCP", status=status)
     svc_grp1 = ServiceObjectGroup.objects.create(name="group1", status=status)
     svc_grp1.service_objects.set([svc_obj1])
     svc_grp2 = ServiceObjectGroup.objects.create(name="group2", status=status)
@@ -89,23 +89,42 @@ def create_env():
     Zone.objects.create(name="LAN", status=status)
     Zone.objects.create(name="DMZ", status=status)
     src1 = SourceDestination.objects.create(
-        description="test desc", address=addr_pol1, service=svc_pol1, user=usr_pol1, zone=zone, status=status
+        description="test desc", address=addr_pol1, user=usr_pol1, zone=zone, status=status
     )
-    src2 = SourceDestination.objects.create(address=addr_pol1, service=svc_pol1, user=usr_pol1, status=status)
-    src3 = SourceDestination.objects.create(address=addr_pol1, service=svc_pol1, zone=zone, status=status)
-    dest1 = SourceDestination.objects.create(
-        description="test desc", address=addr_pol2, service=svc_pol2, zone=zone, status=status
-    )
-    dest2 = SourceDestination.objects.create(address=addr_pol2, service=svc_pol2, status=status)
-    dest3 = SourceDestination.objects.create(address=addr_pol3, service=svc_pol3, zone=zone, status=status)
+    src2 = SourceDestination.objects.create(address=addr_pol1, user=usr_pol1, status=status)
+    src3 = SourceDestination.objects.create(address=addr_pol1, zone=zone, status=status)
+    dest1 = SourceDestination.objects.create(description="test desc", address=addr_pol2, zone=zone, status=status)
+    dest2 = SourceDestination.objects.create(address=addr_pol2, status=status)
+    dest3 = SourceDestination.objects.create(address=addr_pol3, zone=zone, status=status)
     pol_rule1 = PolicyRule.objects.create(
-        source=src1, destination=dest1, action="Deny", log=True, index=1, name="Policy Rule 1", status=status
+        source=src1,
+        service=svc_pol1,
+        destination=dest1,
+        action="Deny",
+        log=True,
+        index=1,
+        name="Policy Rule 1",
+        status=status,
     )
     pol_rule2 = PolicyRule.objects.create(
-        source=src2, destination=dest2, action="Allow", log=True, index=2, name="Policy Rule 2", status=status
+        source=src2,
+        service=svc_pol2,
+        destination=dest2,
+        action="Allow",
+        log=True,
+        index=2,
+        name="Policy Rule 2",
+        status=status,
     )
     pol_rule3 = PolicyRule.objects.create(
-        source=src3, destination=dest3, action="Drop", log=True, index=3, name="Policy Rule 3", status=status
+        source=src3,
+        service=svc_pol3,
+        destination=dest3,
+        action="Drop",
+        log=True,
+        index=3,
+        name="Policy Rule 3",
+        status=status,
     )
     pol1 = Policy.objects.create(name="Policy 1", status=status)
     pol1.policy_rules.set([pol_rule1])

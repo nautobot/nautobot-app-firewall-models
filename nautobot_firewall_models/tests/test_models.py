@@ -1,8 +1,9 @@
 """Test Firewall models."""
 # flake8: noqa: F403,405
 from django.test import TestCase
-
 from nautobot.ipam.models import VRF
+from nautobot.extras.models import Status
+
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
 
@@ -78,29 +79,37 @@ class TestModels(TestCase):
 
     def test_create_protocol_only_required(self):
         """Creates a protocol with only required fields."""
-        protocol = ServiceObject.objects.create(name="HTTPS", port=443)
+        protocol = ServiceObject.objects.create(
+            name="HTTPS", port="443", ip_protocol="TCP", status=Status.objects.get(name="Active")
+        )
 
         self.assertEqual(protocol.description, "")
         self.assertEqual(protocol.name, "HTTPS")
         self.assertEqual(protocol.slug, "https")
-        self.assertEqual(protocol.port, 443)
-        self.assertEqual(str(protocol), "https:443")
+        self.assertEqual(protocol.port, "443")
+        self.assertEqual(str(protocol), "https:443:TCP")
 
     def test_create_protocol_all_fields(self):
         """Creates a protocol with all fields."""
         protocol = ServiceObject.objects.create(
-            name="HTTPS", port=443, ip_protocol="TCP", description="Encrypted HTTP traffic"
+            name="HTTPS",
+            port="443",
+            ip_protocol="TCP",
+            status=Status.objects.get(name="Active"),
+            description="Encrypted HTTP traffic",
         )
 
         self.assertEqual(protocol.description, "Encrypted HTTP traffic")
         self.assertEqual(protocol.name, "HTTPS")
         self.assertEqual(protocol.slug, "https")
-        self.assertEqual(protocol.port, 443)
+        self.assertEqual(protocol.port, "443")
         self.assertEqual(str(protocol), "https:443:TCP")
 
     def test_create_service_group_only_required(self):
         """Creates a service group with only required fields."""
-        protocol = ServiceObject.objects.create(name="HTTPS", port=443)
+        protocol = ServiceObject.objects.create(
+            name="HTTPS", port="443", ip_protocol="TCP", status=Status.objects.get(name="Active")
+        )
         serv_grp = ServiceObjectGroup.objects.create(name="Web")
         serv_grp.service_objects.add(protocol)
 
@@ -111,7 +120,9 @@ class TestModels(TestCase):
 
     def test_create_service_group_all_fields(self):
         """Creates a service group with all fields."""
-        protocol = ServiceObject.objects.create(name="HTTPS", port=443)
+        protocol = ServiceObject.objects.create(
+            name="HTTPS", port="443", ip_protocol="TCP", status=Status.objects.get(name="Active")
+        )
         serv_grp = ServiceObjectGroup.objects.create(name="Web", description="Web protocols")
         serv_grp.service_objects.add(protocol)
 
@@ -171,3 +182,44 @@ class TestModels(TestCase):
 
         self.assertEqual(fqdn.description, "test domain")
         self.assertEqual(fqdn.name, "test.local")
+
+
+class TestServiceObject(TestCase):
+    """I hate writing docs strings easter egg."""
+
+    def test_service_port(self):
+        """Test single port."""
+        svc = ServiceObject.objects.create(
+            name="HTTP", port="80", ip_protocol="TCP", status=Status.objects.get(name="Active")
+        )
+
+        self.assertEqual(svc.port, "80")
+
+    def test_service_port_range(self):
+        """Test port range."""
+        svc = ServiceObject.objects.create(
+            name="HTTP", port="8080-8088", ip_protocol="TCP", status=Status.objects.get(name="Active")
+        )
+
+        self.assertEqual(svc.port, "8080-8088")
+
+    def test_service_port_empty(self):
+        """Test port empty string."""
+        svc = ServiceObject.objects.create(
+            name="HTTP", port="", ip_protocol="TCP", status=Status.objects.get(name="Active")
+        )
+
+        self.assertEqual(svc.port, "")
+
+    def test_service_port_null(self):
+        """Test port null."""
+        svc = ServiceObject.objects.create(name="HTTP", ip_protocol="TCP", status=Status.objects.get(name="Active"))
+
+        self.assertEqual(svc.port, None)
+
+    def test_service_port_range_invalid(self):
+        """Test port range."""
+        with self.assertRaises(ValidationError):
+            ServiceObject.objects.create(
+                name="HTTP", port="8080-8088-999", ip_protocol="TCP", status=Status.objects.get(name="Active")
+            )
