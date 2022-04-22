@@ -1,0 +1,22 @@
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>Firewall Policies</strong></div>
+    {% if not policies %}
+    <div class="panel-body">
+        <span class="text-muted">None</span>
+    </div>
+    {% else %}
+    <table class="table table-hover panel-body">
+        <tbody>
+            {% for policy in policies %}
+                <tr>
+                    <td>
+                        <a href="{{ policy.get_absolute_url }}">{{ policy }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}

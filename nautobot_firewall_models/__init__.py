@@ -21,7 +21,7 @@ class NautobotFirewallModelsConfig(PluginConfig):
     description = "Nautobot plugin to model firewall objects.."
     base_url = "firewall"
     required_settings = []
-    min_version = "1.1.0"
+    min_version = "1.3.0"
     max_version = "1.9999"
     default_settings = {}
     caching_config = {}

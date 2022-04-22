@@ -1,13 +1,14 @@
 """Models for the Firewall plugin."""
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from nautobot.core.models.generics import PrimaryModel
-from nautobot.extras.models import StatusModel
+from nautobot.core.models.generics import PrimaryModel, BaseModel
+from nautobot.extras.models import StatusField, Status
 from nautobot.extras.models.tags import TaggedItem
 from nautobot.extras.utils import extras_features
 from nautobot.ipam.fields import VarbinaryIPField
@@ -15,6 +16,12 @@ from netaddr import IPAddress
 from taggit.managers import TaggableManager
 
 from nautobot_firewall_models import choices, validators
+
+
+def get_default_status():
+    """Returns a default status value basedo n plugin config."""
+    status_name = settings.PLUGINS_CONFIG.get("nautobot_firewall_models", {}).get("status_name", "Active")
+    return Status.objects.get(name=status_name)
 
 
 @extras_features(
@@ -27,7 +34,8 @@ from nautobot_firewall_models import choices, validators
     "statuses",
     "webhooks",
 )
-class IPRange(PrimaryModel, StatusModel):
+class IPRange(PrimaryModel):
+    # pylint: disable=R0901
     """IPRange model to track ranges of IPs in firewall rules."""
 
     start_address = VarbinaryIPField(
@@ -48,6 +56,11 @@ class IPRange(PrimaryModel, StatusModel):
         blank=True,
     )
     size = models.PositiveIntegerField(editable=False)
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
+    )
 
     class Meta:
         """Meta class."""
@@ -94,7 +107,8 @@ class IPRange(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class FQDN(PrimaryModel, StatusModel):
+class FQDN(PrimaryModel):
+    # pylint: disable=R0901
     """FQDN model."""
 
     description = models.CharField(
@@ -102,7 +116,12 @@ class FQDN(PrimaryModel, StatusModel):
         blank=True,
     )
     name = models.CharField(max_length=100, unique=True)
-    ip_addresses = models.ManyToManyField(to="ipam.IPAddress", blank=True)
+    ip_addresses = models.ManyToManyField(to="ipam.IPAddress", blank=True, related_name="fqdns")
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
+    )
 
     class Meta:
         """Meta class."""
@@ -129,7 +148,8 @@ class FQDN(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class AddressObject(PrimaryModel, StatusModel):
+class AddressObject(PrimaryModel):
+    # pylint: disable=R0901
     """FQDN model."""
 
     description = models.CharField(
@@ -141,6 +161,11 @@ class AddressObject(PrimaryModel, StatusModel):
     ip_range = models.ForeignKey(to=IPRange, on_delete=models.CASCADE, null=True, blank=True)
     ip_address = models.ForeignKey(to="ipam.IPAddress", on_delete=models.CASCADE, null=True, blank=True)
     prefix = models.ForeignKey(to="ipam.Prefix", on_delete=models.CASCADE, null=True, blank=True)
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
+    )
 
     class Meta:
         """Meta class."""
@@ -191,7 +216,8 @@ class AddressObject(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class AddressObjectGroup(PrimaryModel, StatusModel):
+class AddressObjectGroup(PrimaryModel):
+    # pylint: disable=R0901
     """AddressObjectGroup model."""
 
     description = models.CharField(
@@ -199,9 +225,11 @@ class AddressObjectGroup(PrimaryModel, StatusModel):
         blank=True,
     )
     name = models.CharField(max_length=50, unique=True)
-    address_objects = models.ManyToManyField(
-        to=AddressObject,
-        blank=True,
+    address_objects = models.ManyToManyField(to=AddressObject, blank=True, related_name="address_object_groups")
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
     )
 
     class Meta:
@@ -229,7 +257,8 @@ class AddressObjectGroup(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class AddressPolicyObject(PrimaryModel, StatusModel):
+class AddressPolicyObject(PrimaryModel):
+    # pylint: disable=R0901
     """AddressPolicyObject model."""
 
     description = models.CharField(
@@ -237,13 +266,14 @@ class AddressPolicyObject(PrimaryModel, StatusModel):
         blank=True,
     )
     name = models.CharField(max_length=50, unique=True)
-    address_objects = models.ManyToManyField(
-        to=AddressObject,
-        blank=True,
-    )
+    address_objects = models.ManyToManyField(to=AddressObject, blank=True, related_name="address_policy_objects")
     address_object_groups = models.ManyToManyField(
-        to=AddressObjectGroup,
-        blank=True,
+        to=AddressObjectGroup, blank=True, related_name="address_policy_objects"
+    )
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
     )
 
     class Meta:
@@ -271,7 +301,8 @@ class AddressPolicyObject(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class UserObject(PrimaryModel, StatusModel):
+class UserObject(PrimaryModel):
+    # pylint: disable=R0901
     """UserObject model."""
 
     username = models.CharField(
@@ -279,6 +310,11 @@ class UserObject(PrimaryModel, StatusModel):
         unique=True,
     )
     name = models.CharField(max_length=50, blank=True)
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
+    )
 
     class Meta:
         """Meta class."""
@@ -305,7 +341,8 @@ class UserObject(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class UserObjectGroup(PrimaryModel, StatusModel):
+class UserObjectGroup(PrimaryModel):
+    # pylint: disable=R0901
     """UserObjectGroup model."""
 
     description = models.CharField(
@@ -313,9 +350,11 @@ class UserObjectGroup(PrimaryModel, StatusModel):
         blank=True,
     )
     name = models.CharField(max_length=50, unique=True)
-    user_objects = models.ManyToManyField(
-        to=UserObject,
-        blank=True,
+    user_objects = models.ManyToManyField(to=UserObject, blank=True, related_name="user_object_groups")
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
     )
 
     class Meta:
@@ -343,7 +382,8 @@ class UserObjectGroup(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class UserPolicyObject(PrimaryModel, StatusModel):
+class UserPolicyObject(PrimaryModel):
+    # pylint: disable=R0901
     """UserPolicyObject model."""
 
     description = models.CharField(
@@ -351,13 +391,12 @@ class UserPolicyObject(PrimaryModel, StatusModel):
         blank=True,
     )
     name = models.CharField(max_length=50, unique=True)
-    user_objects = models.ManyToManyField(
-        to=UserObject,
-        blank=True,
-    )
-    user_object_groups = models.ManyToManyField(
-        to=UserObjectGroup,
-        blank=True,
+    user_objects = models.ManyToManyField(to=UserObject, blank=True, related_name="user_policy_objects")
+    user_object_groups = models.ManyToManyField(to=UserObjectGroup, blank=True, related_name="user_policy_objects")
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
     )
 
     class Meta:
@@ -385,7 +424,8 @@ class UserPolicyObject(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class Zone(PrimaryModel, StatusModel):
+class Zone(PrimaryModel):
+    # pylint: disable=R0901
     """Zone model."""
 
     description = models.CharField(
@@ -393,13 +433,12 @@ class Zone(PrimaryModel, StatusModel):
         blank=True,
     )
     name = models.CharField(max_length=50, unique=True)
-    vrfs = models.ManyToManyField(
-        to="ipam.VRF",
-        blank=True,
-    )
-    interfaces = models.ManyToManyField(
-        to="dcim.Interface",
-        blank=True,
+    vrfs = models.ManyToManyField(to="ipam.VRF", blank=True, related_name="zones")
+    interfaces = models.ManyToManyField(to="dcim.Interface", blank=True, related_name="zones")
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
     )
 
     class Meta:
@@ -427,7 +466,8 @@ class Zone(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class ServiceObject(PrimaryModel, StatusModel):
+class ServiceObject(PrimaryModel):
+    # pylint: disable=R0901
     """ServiceObject model."""
 
     description = models.CharField(
@@ -438,6 +478,11 @@ class ServiceObject(PrimaryModel, StatusModel):
     slug = models.SlugField(max_length=50, editable=False)
     port = models.CharField(null=True, blank=True, validators=[validators.validate_port], max_length=20)
     ip_protocol = models.CharField(choices=choices.IP_PROTOCOL_CHOICES, max_length=20)
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
+    )
 
     class Meta:
         """Meta class."""
@@ -473,7 +518,8 @@ class ServiceObject(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class ServiceObjectGroup(PrimaryModel, StatusModel):
+class ServiceObjectGroup(PrimaryModel):
+    # pylint: disable=R0901
     """ServiceGroup model."""
 
     description = models.CharField(
@@ -481,9 +527,11 @@ class ServiceObjectGroup(PrimaryModel, StatusModel):
         blank=True,
     )
     name = models.CharField(max_length=50, unique=True)
-    service_objects = models.ManyToManyField(
-        to=ServiceObject,
-        blank=True,
+    service_objects = models.ManyToManyField(to=ServiceObject, blank=True, related_name="service_object_groups")
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
     )
 
     class Meta:
@@ -511,7 +559,8 @@ class ServiceObjectGroup(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class ServicePolicyObject(PrimaryModel, StatusModel):
+class ServicePolicyObject(PrimaryModel):
+    # pylint: disable=R0901
     """ServicePolicyObject model."""
 
     description = models.CharField(
@@ -522,10 +571,17 @@ class ServicePolicyObject(PrimaryModel, StatusModel):
     service_objects = models.ManyToManyField(
         to=ServiceObject,
         blank=True,
+        related_name="service_policy_objects",
     )
     service_object_groups = models.ManyToManyField(
         to=ServiceObjectGroup,
         blank=True,
+        related_name="service_policy_objects",
+    )
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
     )
 
     class Meta:
@@ -543,6 +599,28 @@ class ServicePolicyObject(PrimaryModel, StatusModel):
         return self.name
 
 
+class SourceDestination(PrimaryModel):
+    # pylint: disable=R0901
+    """Source model."""
+
+    description = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+    address = models.ForeignKey(to=AddressPolicyObject, on_delete=models.CASCADE)
+    zone = models.ForeignKey(to=Zone, on_delete=models.CASCADE, null=True, blank=True)
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
+    )
+
+    class Meta:
+        """Meta class."""
+
+        abstract = True
+
+
 @extras_features(
     "custom_fields",
     "custom_links",
@@ -553,16 +631,11 @@ class ServicePolicyObject(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class SourceDestination(PrimaryModel, StatusModel):
+class Source(SourceDestination):
+    # pylint: disable=R0901
     """Source model."""
 
-    description = models.CharField(
-        max_length=200,
-        blank=True,
-    )
-    address = models.ForeignKey(to=AddressPolicyObject, on_delete=models.CASCADE)
     user = models.ForeignKey(to=UserPolicyObject, on_delete=models.CASCADE, null=True, blank=True)
-    zone = models.ForeignKey(to=Zone, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         """Meta class."""
@@ -591,33 +664,23 @@ class SourceDestination(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class PolicyRule(PrimaryModel, StatusModel):
-    """PolicyRule model."""
-
-    name = models.CharField(max_length=50, blank=True, null=True)
-    tags = TaggableManager(through=TaggedItem)
-    index = models.IntegerField()
-    source = models.ForeignKey(to=SourceDestination, on_delete=models.CASCADE, related_name="source")
-    service = models.ForeignKey(to=ServicePolicyObject, on_delete=models.CASCADE, null=True)
-    destination = models.ForeignKey(to=SourceDestination, on_delete=models.CASCADE, related_name="destination")
-    action = models.CharField(choices=choices.ACTION_CHOICES, max_length=20)
-    log = models.BooleanField(default=False)
+class Destination(SourceDestination):
+    # pylint: disable=R0901
+    """Destination model."""
 
     class Meta:
         """Meta class."""
 
-        ordering = ["index"]
-        verbose_name_plural = "Policy Rules"
+        ordering = ["description"]
+        verbose_name_plural = "Destinations"
 
     def get_absolute_url(self):
         """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:policyrule", args=[self.pk])
+        return reverse("plugins:nautobot_firewall_models:destination", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""
-        if self.name:
-            return self.name
-        return f"{self.index} - {self.source} - {self.destination} - {self.action}"
+        return f"{self.address} - {self.zone}"
 
 
 @extras_features(
@@ -630,7 +693,53 @@ class PolicyRule(PrimaryModel, StatusModel):
     "statuses",
     "webhooks",
 )
-class Policy(PrimaryModel, StatusModel):
+class PolicyRule(PrimaryModel):
+    # pylint: disable=R0901
+    """PolicyRule model."""
+
+    name = models.CharField(max_length=50, blank=True, null=True)
+    tags = TaggableManager(through=TaggedItem)
+    source = models.ForeignKey(to=Source, on_delete=models.CASCADE, related_name="policy_rules")
+    service = models.ForeignKey(
+        to=ServicePolicyObject, on_delete=models.CASCADE, null=True, related_name="policy_rules"
+    )
+    destination = models.ForeignKey(to=Destination, on_delete=models.CASCADE, related_name="policy_rules")
+    action = models.CharField(choices=choices.ACTION_CHOICES, max_length=20)
+    log = models.BooleanField(default=False)
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
+    )
+
+    class Meta:
+        """Meta class."""
+
+        verbose_name_plural = "Policy Rules"
+
+    def get_absolute_url(self):
+        """Return detail view URL."""
+        return reverse("plugins:nautobot_firewall_models:policyrule", args=[self.pk])
+
+    def __str__(self):
+        """Stringify instance."""
+        if self.name:
+            return self.name
+        return f"{self.source} - {self.destination} - {self.action}"
+
+
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class Policy(PrimaryModel):
+    # pylint: disable=R0901
     """Policy model."""
 
     description = models.CharField(
@@ -638,8 +747,13 @@ class Policy(PrimaryModel, StatusModel):
         blank=True,
     )
     name = models.CharField(max_length=50, unique=True)
-    policy_rules = models.ManyToManyField(to=PolicyRule)
-    devices = models.ManyToManyField(to="dcim.Device", blank=True)
+    policy_rules = models.ManyToManyField(to=PolicyRule, through="PolicyRuleM2M", related_name="policies")
+    devices = models.ManyToManyField(to="dcim.Device", related_name="firewall_policies")
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
+    )
 
     class Meta:
         """Meta class."""
@@ -654,3 +768,21 @@ class Policy(PrimaryModel, StatusModel):
     def __str__(self):
         """Stringify instance."""
         return self.name
+
+
+class PolicyRuleM2M(BaseModel):
+    # pylint: disable=R0901
+    """Through model to add index to the the Policy & PolicyRule relationship."""
+
+    policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
+    rule = models.ForeignKey(PolicyRule, on_delete=models.CASCADE)
+    index = models.PositiveSmallIntegerField(null=True)
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["index"]
+        constraints = [
+            UniqueConstraint(fields=["policy", "rule", "index"], name="unique_with_index"),
+            UniqueConstraint(fields=["policy", "rule"], name="unique_without_index", condition=Q(index=None)),
+        ]

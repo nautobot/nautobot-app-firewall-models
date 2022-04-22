@@ -1,5 +1,6 @@
 """Unit tests for API views."""
 # flake8: noqa: F403,405
+from unittest import skip
 from nautobot.extras.models.statuses import Status
 from nautobot.utilities.testing import APIViewTestCases
 from nautobot.ipam.models import Prefix
@@ -24,6 +25,7 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
         ]
         create_ip_range()
 
+    @skip("Not implemented")
     def test_list_objects_brief(self):
         pass
 
@@ -44,6 +46,7 @@ class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
         ]
         create_fqdn()
 
+    @skip("Not implemented")
     def test_list_objects_brief(self):
         pass
 
@@ -67,6 +70,7 @@ class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"name": "obj2", "prefix": prefix.id, "status": status},
         ]
 
+    @skip("Not implemented")
     def test_list_objects_brief(self):
         pass
 
@@ -88,6 +92,7 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"name": "test2", "address_objects": [addr_obj.id], "status": status},
         ]
 
+    @skip("Not implemented")
     def test_list_objects_brief(self):
         pass
 
@@ -116,6 +121,7 @@ class AddressPolicyObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
             },
         ]
 
+    @skip("Not implemented")
     def test_list_objects_brief(self):
         pass
 
@@ -137,6 +143,7 @@ class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
         ]
         create_env()
 
+    @skip("Not implemented")
     def test_list_objects_brief(self):
         pass
 
@@ -158,6 +165,7 @@ class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"name": "test2", "service_objects": [svc_obj.id], "status": status},
         ]
 
+    @skip("Not implemented")
     def test_list_objects_brief(self):
         pass
 
@@ -181,6 +189,7 @@ class ServicePolicyObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"name": "test3", "service_objects": [svc_obj.id], "service_object_groups": [svc_grp.id], "status": status},
         ]
 
+    @skip("Not implemented")
     def test_list_objects_brief(self):
         pass
 
@@ -201,6 +210,7 @@ class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
         ]
         create_env()
 
+    @skip("Not implemented")
     def test_list_objects_brief(self):
         pass
 
@@ -222,6 +232,7 @@ class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"name": "test2", "user_objects": [user.id], "status": status},
         ]
 
+    @skip("Not implemented")
     def test_list_objects_brief(self):
         pass
 
@@ -245,6 +256,7 @@ class UserPolicyObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"name": "test3", "user_objects": [usr_obj.id], "user_object_groups": [usr_grp.id], "status": status},
         ]
 
+    @skip("Not implemented")
     def test_list_objects_brief(self):
         pass
 
@@ -265,14 +277,15 @@ class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
         ]
         create_env()
 
+    @skip("Not implemented")
     def test_list_objects_brief(self):
         pass
 
 
-class SourceDestinationAPIViewTest(APIViewTestCases.APIViewTestCase):
+class SourceAPIViewTest(APIViewTestCases.APIViewTestCase):
     # pylint: disable=R0901
     """Test the Source viewsets."""
-    model = models.SourceDestination
+    model = models.Source
     bulk_update_data = {"description": "test update description"}
 
     @classmethod
@@ -288,6 +301,30 @@ class SourceDestinationAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"address": addr.id, "status": status},
         ]
 
+    @skip("Not implemented")
+    def test_list_objects_brief(self):
+        pass
+
+
+class DestinationAPIViewTest(APIViewTestCases.APIViewTestCase):
+    # pylint: disable=R0901
+    """Test the Source viewsets."""
+    model = models.Destination
+    bulk_update_data = {"description": "test update description"}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        create_env()
+        addr = models.AddressPolicyObject.objects.first()
+        zone = models.Zone.objects.first()
+        status = Status.objects.get(slug="active").id
+        cls.create_data = [
+            {"address": addr.id, "zone": zone.id, "status": status},
+            {"address": addr.id, "status": status},
+        ]
+
+    @skip("Not implemented")
     def test_list_objects_brief(self):
         pass
 
@@ -303,8 +340,8 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
-        src = models.SourceDestination.objects.first()
-        dest = models.SourceDestination.objects.last()
+        src = models.Source.objects.first()
+        dest = models.Destination.objects.last()
         svc = models.ServicePolicyObject.objects.first()
         status = Status.objects.get(slug="active").id
         cls.create_data = [
@@ -314,7 +351,6 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
                 "service": svc.id,
                 "action": "Deny",
                 "log": True,
-                "index": 4,
                 "status": status,
             },
             {
@@ -323,7 +359,6 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
                 "service": svc.id,
                 "action": "Deny",
                 "log": False,
-                "index": 5,
                 "status": status,
             },
         ]
@@ -345,9 +380,22 @@ class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
         pol_rule = models.PolicyRule.objects.first()
         status = Status.objects.get(slug="active").id
         cls.create_data = [
-            {"name": "test 1", "policy_rules": [pol_rule.id], "status": status},
-            {"name": "test 2", "policy_rules": [pol_rule.id], "description": "Test desc", "status": status},
+            {"name": "test 1", "policy_rules": [{"rule": pol_rule.id}], "status": status},
+            {"name": "test 2", "policy_rules": [{"rule": pol_rule.id}], "description": "Test desc", "status": status},
         ]
 
+    @skip("Not implemented")
     def test_list_objects_brief(self):
         pass
+
+    def test_create_object(self):
+        self.validation_excluded_fields = ["policy_rules"]
+        return super().test_create_object()
+
+    def test_update_object(self):
+        self.validation_excluded_fields = ["policy_rules"]
+        return super().test_update_object()
+
+    def test_bulk_create_objects(self):
+        self.validation_excluded_fields = ["policy_rules"]
+        return super().test_bulk_create_objects()

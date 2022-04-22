@@ -1,6 +1,5 @@
 {% load helpers %}
 <tr>
-    <td>{% if parent_policy %}<a href="{{ rule.get_absolute_url }}">{{ rule.index }}</a><br/>{% else %}{{ rule.index }}{% endif %}</td>
     <td>{% if rule.source.address.address_object_groups.all %}{% for i in rule.source.address.address_object_groups.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
     <td>{% if rule.source.address.address_objects.all %}{% for i in rule.source.address.address_objects.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
     <td>{% if rule.source.user.user_object_groups.all %}{% for i in rule.source.user.user_object_groups.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
@@ -8,8 +7,6 @@
     <td>{% if rule.source.zone %}<a href="{{ rule.source.zone.get_absolute_url }}">{{ rule.source.zone|placeholder }}</a><br/>{% else %}{{ None|placeholder }}{% endif %}</td>
     <td>{% if rule.destination.address.address_object_groups.all %}{% for i in rule.destination.address.address_object_groups.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
     <td>{% if rule.destination.address.address_objects.all %}{% for i in rule.destination.address.address_objects.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-    <td>{% if rule.destination.user.user_object_groups.all %}{% for i in rule.destination.user.user_object_groups.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-    <td>{% if rule.destination.user.user_objects.all %}{% for i in rule.destination.user.user_objects.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
     <td>{% if rule.destination.zone %}<a href="{{ rule.destination.zone.get_absolute_url }}">{{ rule.destination.zone|placeholder }}</a><br/>{% else %}{{ None|placeholder }}{% endif %}</td>
     <td>{% if rule.service.service_object_groups.all %}{% for i in rule.service.service_object_groups.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
     <td>{% if rule.service.service_objects.all %}{% for i in rule.service.service_objects.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
