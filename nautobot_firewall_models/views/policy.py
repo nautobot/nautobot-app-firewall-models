@@ -24,7 +24,18 @@ class PolicyView(generic.ObjectView):
 class PolicyExpandedRulesView(generic.ObjectView):
     """Expanded Rules view."""
 
-    queryset = models.Policy.objects.all()
+    queryset = models.Policy.objects.all().prefetch_related(
+        "policyrulem2m_set__rule__service__service_objects",
+        "policyrulem2m_set__rule__service__service_object_groups",
+        "policyrulem2m_set__rule__source__address__address_objects",
+        "policyrulem2m_set__rule__source__address__address_object_groups__address_objects",
+        "policyrulem2m_set__rule__source__user__user_objects",
+        "policyrulem2m_set__rule__source__user__user_object_groups__user_objects",
+        "policyrulem2m_set__rule__source__zone",
+        "policyrulem2m_set__rule__destination__zone",
+        "policyrulem2m_set__rule__destination__address__address_objects",
+        "policyrulem2m_set__rule__destination__address__address_object_groups__address_objects",
+    )
     template_name = "nautobot_firewall_models/policy_expanded_rules.html"
 
 

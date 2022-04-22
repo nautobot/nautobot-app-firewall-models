@@ -1,5 +1,6 @@
 """Unit tests for views."""
 # flake8: noqa: F403,405
+from unittest import skip
 from nautobot.extras.models.statuses import Status
 from nautobot.utilities.testing import ViewTestCases
 
@@ -20,13 +21,20 @@ class IPRangeUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         cls.form_data = {"start_address": "10.0.0.1", "end_address": "10.0.0.3", "status": status}
         create_ip_range()
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
         pass
 
 
@@ -43,13 +51,20 @@ class FQDNUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         cls.form_data = {"name": "test.local", "status": status}
         create_fqdn()
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
         pass
 
 
@@ -68,13 +83,20 @@ class AddressObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
         cls.form_data = {"name": "obj1", "ip_range": ip_range.id, "status": status}
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
         pass
 
 
@@ -92,13 +114,20 @@ class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         addr_obj = AddressObject.objects.first()
         cls.form_data = {"name": "test1", "address_objects": [addr_obj.id], "status": status}
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
         pass
 
 
@@ -122,13 +151,20 @@ class AddressPolicyObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             "status": status,
         }
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
         pass
 
 
@@ -145,13 +181,20 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         cls.form_data = {"name": "HTTP", "port": "80", "status": status, "ip_protocol": "TCP"}
         create_env()
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
         pass
 
     def test_service_object_str(self):
@@ -176,13 +219,20 @@ class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         status = Status.objects.get(slug="active").id
         cls.form_data = {"name": "test1", "service_objects": [svc_obj.id], "status": status}
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
         pass
 
 
@@ -206,13 +256,20 @@ class ServicePolicyObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             "status": status,
         }
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
         pass
 
 
@@ -229,13 +286,20 @@ class UserObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         cls.form_data = {"username": "test1", "name": "Foo", "status": status}
         create_env()
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
         pass
 
 
@@ -253,13 +317,20 @@ class UserObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         status = Status.objects.get(slug="active").id
         cls.form_data = {"name": "test1", "user_objects": [user.id], "status": status}
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
         pass
 
 
@@ -283,13 +354,20 @@ class UserPolicyObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             "status": status,
         }
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
         pass
 
 
@@ -306,20 +384,27 @@ class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         cls.form_data = {"name": "trust", "status": status}
         create_env()
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
+        pass
 
-class SourceDestinationUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+
+class SourceUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the Source viewsets."""
-    model = SourceDestination
+    model = Source
     bulk_edit_data = {"description": "test update description"}
 
     @classmethod
@@ -327,30 +412,68 @@ class SourceDestinationUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         """Create test data for API calls."""
         create_env()
         usr = UserPolicyObject.objects.first()
-        svc = ServicePolicyObject.objects.first()
         addr = AddressPolicyObject.objects.first()
         zone = Zone.objects.first()
         status = Status.objects.get(slug="active").id
-        cls.form_data = {"address": addr.id, "service": svc.id, "user": usr.id, "zone": zone.id, "status": status}
+        cls.form_data = {"address": addr.id, "user": usr.id, "zone": zone.id, "status": status}
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
         pass
 
     def test_source_str(self):
         """Testing proper str."""
-        src = SourceDestination.objects.first()
+        src = Source.objects.first()
 
         self.assertEqual(str(src), f"{src.address} - {src.user} - {src.zone}")
 
         src.user = None
 
         self.assertEqual(str(src), f"{src.address} - {src.zone}")
+
+
+class DestinationUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+    # pylint: disable=R0901
+    """Test the Destination viewsets."""
+    model = Destination
+    bulk_edit_data = {"description": "test update description"}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        create_env()
+        addr = AddressPolicyObject.objects.first()
+        zone = Zone.objects.first()
+        status = Status.objects.get(slug="active").id
+        cls.form_data = {"address": addr.id, "zone": zone.id, "status": status}
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_constrained_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
+        pass
 
 
 class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
@@ -363,8 +486,8 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
-        src = SourceDestination.objects.first()
-        dest = SourceDestination.objects.last()
+        src = Source.objects.first()
+        dest = Destination.objects.last()
         status = Status.objects.get(slug="active").id
         svc = ServicePolicyObject.objects.first()
         cls.form_data = {
@@ -373,18 +496,24 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             "action": "Deny",
             "log": True,
             "service": svc.id,
-            "index": 4,
             "name": "test rule",
             "status": status,
         }
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
         pass
 
     def test_policy_str(self):
@@ -395,9 +524,7 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
         pol_rule.name = None
 
-        self.assertEqual(
-            str(pol_rule), f"{pol_rule.index} - {pol_rule.source} - {pol_rule.destination} - {pol_rule.action}"
-        )
+        self.assertEqual(str(pol_rule), f"{pol_rule.source} - {pol_rule.destination} - {pol_rule.action}")
 
 
 class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
@@ -419,11 +546,18 @@ class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             "status": status,
         }
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_constrained_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_with_permission(self):
         pass
 
+    @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_has_advanced_tab(self):
         pass

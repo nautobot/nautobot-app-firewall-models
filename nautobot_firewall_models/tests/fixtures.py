@@ -88,21 +88,18 @@ def create_env():
     zone.vrfs.set([vrf])
     Zone.objects.create(name="LAN", status=status)
     Zone.objects.create(name="DMZ", status=status)
-    src1 = SourceDestination.objects.create(
-        description="test desc", address=addr_pol1, user=usr_pol1, zone=zone, status=status
-    )
-    src2 = SourceDestination.objects.create(address=addr_pol1, user=usr_pol1, status=status)
-    src3 = SourceDestination.objects.create(address=addr_pol1, zone=zone, status=status)
-    dest1 = SourceDestination.objects.create(description="test desc", address=addr_pol2, zone=zone, status=status)
-    dest2 = SourceDestination.objects.create(address=addr_pol2, status=status)
-    dest3 = SourceDestination.objects.create(address=addr_pol3, zone=zone, status=status)
+    src1 = Source.objects.create(description="test desc", address=addr_pol1, user=usr_pol1, zone=zone, status=status)
+    src2 = Source.objects.create(address=addr_pol1, user=usr_pol1, status=status)
+    src3 = Source.objects.create(address=addr_pol1, zone=zone, status=status)
+    dest1 = Destination.objects.create(description="test desc", address=addr_pol2, zone=zone, status=status)
+    dest2 = Destination.objects.create(address=addr_pol2, status=status)
+    dest3 = Destination.objects.create(address=addr_pol3, zone=zone, status=status)
     pol_rule1 = PolicyRule.objects.create(
         source=src1,
         service=svc_pol1,
         destination=dest1,
         action="Deny",
         log=True,
-        index=1,
         name="Policy Rule 1",
         status=status,
     )
@@ -112,7 +109,6 @@ def create_env():
         destination=dest2,
         action="Allow",
         log=True,
-        index=2,
         name="Policy Rule 2",
         status=status,
     )
@@ -122,7 +118,6 @@ def create_env():
         destination=dest3,
         action="Drop",
         log=True,
-        index=3,
         name="Policy Rule 3",
         status=status,
     )

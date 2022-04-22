@@ -189,7 +189,7 @@ class ZoneTable(StatusTableMixin, BaseTable):
         fields = ("pk", "name", "vrfs", "interfaces", "description", "status")
 
 
-class SourceDestinationTable(StatusTableMixin, BaseTable):
+class SourceTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
 
@@ -199,13 +199,32 @@ class SourceDestinationTable(StatusTableMixin, BaseTable):
         text=lambda record: str(record),  # pylint: disable=W0108
         args=[A("pk")],
     )
-    actions = ButtonsColumn(models.SourceDestination, buttons=("edit", "delete"))
+    actions = ButtonsColumn(models.Source, buttons=("edit", "delete"))
 
     class Meta(BaseTable.Meta):
         """Meta attributes."""
 
-        model = models.SourceDestination
+        model = models.Source
         fields = ("pk", "display", "description", "address", "user", "zone", "status")
+
+
+class DestinationTable(StatusTableMixin, BaseTable):
+    # pylint: disable=R0903
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    display = tables.LinkColumn(
+        "plugins:nautobot_firewall_models:destination",
+        text=lambda record: str(record),  # pylint: disable=W0108
+        args=[A("pk")],
+    )
+    actions = ButtonsColumn(models.Destination, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.Destination
+        fields = ("pk", "display", "description", "address", "zone", "status")
 
 
 class PolicyRuleTable(StatusTableMixin, BaseTable):

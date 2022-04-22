@@ -153,15 +153,25 @@ class ZoneFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFi
         fields = ["id", "name", "vrfs", "interfaces", "description"]
 
 
-class SourceDestinationFilterSet(
+class DestinationFilterSet(
     BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet
 ):
-    """Filter for SourceDestination."""
+    """Filter for Destination."""
 
     class Meta:
         """Meta attributes for filter."""
 
-        model = models.SourceDestination
+        model = models.Destination
+        fields = ["id", "address", "zone", "description"]
+
+
+class SourceFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
+    """Filter for Source."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.Source
         fields = ["id", "address", "user", "zone", "description"]
 
 
@@ -174,7 +184,7 @@ class PolicyRuleFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldM
         """Meta attributes for filter."""
 
         model = models.PolicyRule
-        fields = ["id", "index", "source", "service", "destination", "action", "log"]
+        fields = ["id", "source", "service", "destination", "action", "log"]
 
 
 class PolicyFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
