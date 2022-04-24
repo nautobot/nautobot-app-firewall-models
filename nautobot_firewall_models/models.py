@@ -127,6 +127,7 @@ class FQDN(PrimaryModel):
         """Meta class."""
 
         ordering = ["name"]
+        verbose_name = "FQDN"
         verbose_name_plural = "FQDNs"
 
     def get_absolute_url(self):
@@ -748,7 +749,10 @@ class Policy(PrimaryModel):
     )
     name = models.CharField(max_length=50, unique=True)
     policy_rules = models.ManyToManyField(to=PolicyRule, through="PolicyRuleM2M", related_name="policies")
-    devices = models.ManyToManyField(to="dcim.Device", related_name="firewall_policies")
+    devices = models.ManyToManyField(to="dcim.Device", through="PolicyDeviceM2M", related_name="firewall_policies")
+    dynamic_groups = models.ManyToManyField(
+        to="extras.DynamicGroup", through="PolicyDynamicGroupM2M", related_name="firewall_policies"
+    )
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
@@ -786,3 +790,33 @@ class PolicyRuleM2M(BaseModel):
             UniqueConstraint(fields=["policy", "rule", "index"], name="unique_with_index"),
             UniqueConstraint(fields=["policy", "rule"], name="unique_without_index", condition=Q(index=None)),
         ]
+
+
+class PolicyDeviceM2M(BaseModel):
+    # pylint: disable=R0901
+    """Through model to add index to the the Policy & Device relationship."""
+
+    policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
+    device = models.ForeignKey("dcim.Device", on_delete=models.CASCADE)
+    weight = models.PositiveSmallIntegerField(default=100)
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["weight"]
+        unique_together = ["policy", "device"]
+
+
+class PolicyDynamicGroupM2M(BaseModel):
+    # pylint: disable=R0901
+    """Through model to add index to the the Policy & DynamicGroup relationship."""
+
+    policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
+    dynamic_group = models.ForeignKey("extras.DynamicGroup", on_delete=models.CASCADE)
+    weight = models.PositiveSmallIntegerField(default=100)
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["weight"]
+        unique_together = ["policy", "dynamic_group"]

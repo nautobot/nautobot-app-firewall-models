@@ -1,5 +1,8 @@
 """Create basic objects for use in test class setup."""
 # flake8: noqa: F403,405
+from django.contrib.contenttypes.models import ContentType
+from nautobot.dcim.models import Device, DeviceRole, DeviceType, Manufacturer, Site
+from nautobot.extras.models import DynamicGroup
 from nautobot.extras.models.statuses import Status
 from nautobot.ipam.models import Prefix, VRF
 from nautobot.ipam.models import IPAddress as IPAddr
@@ -124,6 +127,29 @@ def create_env():
     pol1 = Policy.objects.create(name="Policy 1", status=status)
     pol1.policy_rules.set([pol_rule1])
     pol2 = Policy.objects.create(name="Policy 2", status=status)
-    pol2.policy_rules.set([pol_rule1, pol_rule2])
+    PolicyRuleM2M.objects.create(policy=pol2, rule=pol_rule1, index=10)
+    PolicyRuleM2M.objects.create(policy=pol2, rule=pol_rule2, index=20)
     pol3 = Policy.objects.create(name="Policy 3", status=status)
-    pol3.policy_rules.set([pol_rule1, pol_rule2, pol_rule3])
+    PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule1, index=10)
+    PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule2, index=20)
+    PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule3)
+    site1 = Site.objects.create(name="DFW", slug="dfw")
+    site2 = Site.objects.create(name="HOU", slug="hou")
+    manufacturer = Manufacturer.objects.create(name="Juniper", slug="juniper")
+    dev_type = DeviceType.objects.create(manufacturer=manufacturer, model="SRX300", slug="srx300")
+    dev_role = DeviceRole.objects.create(name="WAN", slug="wan")
+    dev1 = Device.objects.create(
+        name="DFW-WAN00", device_role=dev_role, device_type=dev_type, site=site1, status=status
+    )
+    dev2 = Device.objects.create(
+        name="HOU-WAN00", device_role=dev_role, device_type=dev_type, site=site2, status=status
+    )
+    dynamic_group = DynamicGroup.objects.create(
+        name="North Texas", slug="north-texas", content_type=ContentType.objects.get_for_model(Device)
+    )
+    dynamic_group.filter = {"site": ["dfw"]}
+    dynamic_group.save()
+    PolicyDeviceM2M.objects.create(policy=pol1, device=dev1, weight=150)
+    PolicyDeviceM2M.objects.create(policy=pol2, device=dev1, weight=200)
+    PolicyDeviceM2M.objects.create(policy=pol1, device=dev2)
+    PolicyDynamicGroupM2M.objects.create(policy=pol3, dynamic_group=dynamic_group, weight=1000)
