@@ -212,7 +212,6 @@ class PolicySerializer(TaggedObjectSerializer, ValidatedModelSerializer):
     # pylint: disable=R0901
     """Policy Serializer."""
 
-    devices = NestedDeviceSerializer(many=True, required=False)
     policy_rules = PolicyRuleM2MNestedSerializer(many=True, required=False, source="policyrulem2m_set")
     devices = PolicyDeivceM2MNestedSerializer(many=True, required=False, source="policydevicem2m_set")
     dynamic_groups = PolicyDynamicGroupM2MNestedSerializer(
