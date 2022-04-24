@@ -178,7 +178,7 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         status = Status.objects.get(slug="active").id
-        cls.form_data = {"name": "HTTP", "port": "80", "status": status, "ip_protocol": "TCP"}
+        cls.form_data = {"name": "HTTP", "port": "8088", "status": status, "ip_protocol": "TCP"}
         create_env()
 
     @skip("Not implemented")

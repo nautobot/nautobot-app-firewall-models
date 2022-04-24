@@ -80,20 +80,20 @@ class TestModels(TestCase):
     def test_create_protocol_only_required(self):
         """Creates a protocol with only required fields."""
         protocol = ServiceObject.objects.create(
-            name="HTTPS", port="443", ip_protocol="TCP", status=Status.objects.get(name="Active")
+            name="HTTPS", port="8443", ip_protocol="TCP", status=Status.objects.get(name="Active")
         )
 
         self.assertEqual(protocol.description, "")
         self.assertEqual(protocol.name, "HTTPS")
         self.assertEqual(protocol.slug, "https")
-        self.assertEqual(protocol.port, "443")
-        self.assertEqual(str(protocol), "https:443:TCP")
+        self.assertEqual(protocol.port, "8443")
+        self.assertEqual(str(protocol), "https:8443:TCP")
 
     def test_create_protocol_all_fields(self):
         """Creates a protocol with all fields."""
         protocol = ServiceObject.objects.create(
             name="HTTPS",
-            port="443",
+            port="8443",
             ip_protocol="TCP",
             status=Status.objects.get(name="Active"),
             description="Encrypted HTTP traffic",
@@ -102,13 +102,13 @@ class TestModels(TestCase):
         self.assertEqual(protocol.description, "Encrypted HTTP traffic")
         self.assertEqual(protocol.name, "HTTPS")
         self.assertEqual(protocol.slug, "https")
-        self.assertEqual(protocol.port, "443")
-        self.assertEqual(str(protocol), "https:443:TCP")
+        self.assertEqual(protocol.port, "8443")
+        self.assertEqual(str(protocol), "https:8443:TCP")
 
     def test_create_service_group_only_required(self):
         """Creates a service group with only required fields."""
         protocol = ServiceObject.objects.create(
-            name="HTTPS", port="443", ip_protocol="TCP", status=Status.objects.get(name="Active")
+            name="HTTPS", port="8443", ip_protocol="TCP", status=Status.objects.get(name="Active")
         )
         serv_grp = ServiceObjectGroup.objects.create(name="Web")
         serv_grp.service_objects.add(protocol)
@@ -121,7 +121,7 @@ class TestModels(TestCase):
     def test_create_service_group_all_fields(self):
         """Creates a service group with all fields."""
         protocol = ServiceObject.objects.create(
-            name="HTTPS", port="443", ip_protocol="TCP", status=Status.objects.get(name="Active")
+            name="HTTPS", port="8443", ip_protocol="TCP", status=Status.objects.get(name="Active")
         )
         serv_grp = ServiceObjectGroup.objects.create(name="Web", description="Web protocols")
         serv_grp.service_objects.add(protocol)
@@ -190,10 +190,10 @@ class TestServiceObject(TestCase):
     def test_service_port(self):
         """Test single port."""
         svc = ServiceObject.objects.create(
-            name="HTTP", port="80", ip_protocol="TCP", status=Status.objects.get(name="Active")
+            name="HTTP", port="8088", ip_protocol="TCP", status=Status.objects.get(name="Active")
         )
 
-        self.assertEqual(svc.port, "80")
+        self.assertEqual(svc.port, "8088")
 
     def test_service_port_range(self):
         """Test port range."""

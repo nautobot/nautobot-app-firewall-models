@@ -1,7 +1,6 @@
 """API serializers for firewall models."""
 
 from nautobot.core.api import ValidatedModelSerializer
-from nautobot.dcim.api.serializers import NestedDeviceSerializer
 from nautobot.dcim.models import Device
 from nautobot.extras.api.serializers import TaggedObjectSerializer
 from nautobot.extras.models import DynamicGroup

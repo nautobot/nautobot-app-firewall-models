@@ -5,6 +5,7 @@ import django.db.models.deletion
 import nautobot.extras.models.statuses
 import nautobot_firewall_models.models
 from django.contrib.contenttypes.models import ContentType
+import yaml
 
 
 def create_status(apps, schedma_editor):
@@ -18,6 +19,24 @@ def create_status(apps, schedma_editor):
             status.content_types.add(ct)
 
 
+def create_default_objects(apps, schema_editor):
+    """Initial subset of commonly used objects."""
+    nautobot_firewall_models.models.AddressPolicyObject.objects.create(
+        name="ANY", description="Used to signify ANY AddressObject."
+    )
+    nautobot_firewall_models.models.UserPolicyObject.objects.create(
+        name="ANY", description="Used to signify ANY UserObject."
+    )
+    nautobot_firewall_models.models.ServicePolicyObject.objects.create(
+        name="ANY", description="Used to signify ANY ServiceObject."
+    )
+    with open("nautobot_firewall_models/migrations/services.yml", "r") as f:
+        services = yaml.safe_load(f)
+
+    for i in services:
+        nautobot_firewall_models.models.ServiceObject.objects.create(**i)
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -27,6 +46,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(code=create_status),
+        migrations.RunPython(code=create_default_objects),
         migrations.AlterField(
             model_name="addressobject",
             name="status",

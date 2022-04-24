@@ -138,7 +138,7 @@ class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         status = Status.objects.get(slug="active").id
         cls.create_data = [
-            {"name": "HTTP", "port": "80", "status": status, "ip_protocol": "TCP"},
+            {"name": "HTTP", "port": "8088", "status": status, "ip_protocol": "TCP"},
             {"name": "HTTP", "port": "8080-8088", "status": status, "ip_protocol": "TCP"},
         ]
         create_env()
