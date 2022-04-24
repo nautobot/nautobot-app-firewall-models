@@ -49,11 +49,11 @@
         <li role="presentation">
             <a href="{{ object.get_absolute_url }}">Policy</a>
         </li>
-        <li role="presentation" class="active">
+        <li role="presentation">
             <a href="{% url 'plugins:nautobot_firewall_models:policy_policyrules' pk=object.id %}">Policy Rules</a>
         </li>
         {% if perms.nautobot_firewall_models.edit_policy %}
-            <li role="presentation">
+            <li role="presentation" class="active">
                 <a href="{% url 'plugins:nautobot_firewall_models:policy_policyrules_assign_index' pk=object.id %}">Edit Policy Rule Indexes</a>
             </li>
         {% endif %}
@@ -70,14 +70,18 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <strong>Policy Rule Expanded</strong>
+                <strong>Assign Policy Rule Index</strong>
             </div>
-            <table class="table table-hover panel-body">
-                {% include 'nautobot_firewall_models/inc/policyrule_tablehead.html' with parent_policy=True %}
-                {% for m2m in object.policyrulem2m_set.all %}
-                {% include 'nautobot_firewall_models/inc/policy_rules_tablerow.html' with m2m=m2m parent_policy=True %}
-                {% endfor %}
-            </table>
+            <form action="" method="post" enctype="multipart/form-data" class="form form-horizontal">
+                {% csrf_token %}
+                <table class="table table-hover panel-body">
+                    {% include 'nautobot_firewall_models/inc/policyrule_tablehead.html' with parent_policy=True %}
+                    {% for m2m in object.policyrulem2m_set.all %}
+                    {% include 'nautobot_firewall_models/inc/policy_rules_tablerow_edit.html' with m2m=m2m parent_policy=True %}
+                    {% endfor %}
+                </table>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
     </div>
 </div>

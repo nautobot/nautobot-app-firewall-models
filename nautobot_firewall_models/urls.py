@@ -456,6 +456,11 @@ urlpatterns = [
     path("policy/<uuid:pk>/edit/", policy.PolicyEditView.as_view(), name="policy_edit"),
     path("policy/<uuid:pk>/policy-rules/", policy.PolicyExpandedRulesView.as_view(), name="policy_policyrules"),
     path(
+        "policy/<uuid:pk>/policy-rules/index-edit/",
+        policy.PolicyExpandedRulesIndexEditView.as_view(),
+        name="policy_policyrules_assign_index",
+    ),
+    path(
         "policy/<uuid:pk>/changelog/",
         ObjectChangeLogView.as_view(),
         name="policy_changelog",

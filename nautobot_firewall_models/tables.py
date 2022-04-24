@@ -252,9 +252,11 @@ class PolicyTable(StatusTableMixin, BaseTable):
     pk = ToggleColumn()
     name = tables.Column(linkify=True)
     actions = ButtonsColumn(models.Policy, buttons=("edit", "delete"))
+    devices = tables.ManyToManyColumn(linkify_item=True)
+    dynamic_groups = tables.ManyToManyColumn(linkify_item=True)
 
     class Meta(BaseTable.Meta):
         """Meta attributes."""
 
         model = models.Policy
-        fields = ("pk", "name", "description", "policy_rules", "devices", "status")
+        fields = ("pk", "name", "description", "policy_rules", "devices", "dynamic_groups", "status")
