@@ -4,7 +4,6 @@ from django.db import migrations
 import django.db.models.deletion
 import nautobot.extras.models.statuses
 import nautobot_firewall_models.models
-import yaml
 
 
 class Migration(migrations.Migration):
