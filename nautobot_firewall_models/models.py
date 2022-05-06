@@ -258,50 +258,6 @@ class AddressObjectGroup(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class AddressPolicyObject(PrimaryModel):
-    # pylint: disable=R0901
-    """AddressPolicyObject model."""
-
-    description = models.CharField(
-        max_length=200,
-        blank=True,
-    )
-    name = models.CharField(max_length=50, unique=True)
-    address_objects = models.ManyToManyField(to=AddressObject, blank=True, related_name="address_policy_objects")
-    address_object_groups = models.ManyToManyField(
-        to=AddressObjectGroup, blank=True, related_name="address_policy_objects"
-    )
-    status = StatusField(
-        on_delete=models.PROTECT,
-        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
-        default=get_default_status,
-    )
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["name"]
-        verbose_name_plural = "Address Policy Objects"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:addresspolicyobject", args=[self.pk])
-
-    def __str__(self):
-        """Stringify instance."""
-        return self.name
-
-
-@extras_features(
-    "custom_fields",
-    "custom_links",
-    "custom_validators",
-    "export_templates",
-    "graphql",
-    "relationships",
-    "statuses",
-    "webhooks",
-)
 class UserObject(PrimaryModel):
     # pylint: disable=R0901
     """UserObject model."""
@@ -367,48 +323,6 @@ class UserObjectGroup(PrimaryModel):
     def get_absolute_url(self):
         """Return detail view URL."""
         return reverse("plugins:nautobot_firewall_models:userobjectgroup", args=[self.pk])
-
-    def __str__(self):
-        """Stringify instance."""
-        return self.name
-
-
-@extras_features(
-    "custom_fields",
-    "custom_links",
-    "custom_validators",
-    "export_templates",
-    "graphql",
-    "relationships",
-    "statuses",
-    "webhooks",
-)
-class UserPolicyObject(PrimaryModel):
-    # pylint: disable=R0901
-    """UserPolicyObject model."""
-
-    description = models.CharField(
-        max_length=200,
-        blank=True,
-    )
-    name = models.CharField(max_length=50, unique=True)
-    user_objects = models.ManyToManyField(to=UserObject, blank=True, related_name="user_policy_objects")
-    user_object_groups = models.ManyToManyField(to=UserObjectGroup, blank=True, related_name="user_policy_objects")
-    status = StatusField(
-        on_delete=models.PROTECT,
-        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
-        default=get_default_status,
-    )
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["name"]
-        verbose_name_plural = "User Policy Objects"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:userpolicyobject", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""
@@ -560,151 +474,24 @@ class ServiceObjectGroup(PrimaryModel):
     "statuses",
     "webhooks",
 )
-class ServicePolicyObject(PrimaryModel):
-    # pylint: disable=R0901
-    """ServicePolicyObject model."""
-
-    description = models.CharField(
-        max_length=200,
-        blank=True,
-    )
-    name = models.CharField(max_length=50, unique=True)
-    service_objects = models.ManyToManyField(
-        to=ServiceObject,
-        blank=True,
-        related_name="service_policy_objects",
-    )
-    service_object_groups = models.ManyToManyField(
-        to=ServiceObjectGroup,
-        blank=True,
-        related_name="service_policy_objects",
-    )
-    status = StatusField(
-        on_delete=models.PROTECT,
-        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
-        default=get_default_status,
-    )
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["name"]
-        verbose_name_plural = "Service Policy Objects"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:servicepolicyobject", args=[self.pk])
-
-    def __str__(self):
-        """Stringify instance."""
-        return self.name
-
-
-class SourceDestination(PrimaryModel):
-    # pylint: disable=R0901
-    """Source model."""
-
-    description = models.CharField(
-        max_length=200,
-        blank=True,
-    )
-    address = models.ForeignKey(to=AddressPolicyObject, on_delete=models.CASCADE)
-    zone = models.ForeignKey(to=Zone, on_delete=models.CASCADE, null=True, blank=True)
-    status = StatusField(
-        on_delete=models.PROTECT,
-        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
-        default=get_default_status,
-    )
-
-    class Meta:
-        """Meta class."""
-
-        abstract = True
-
-
-@extras_features(
-    "custom_fields",
-    "custom_links",
-    "custom_validators",
-    "export_templates",
-    "graphql",
-    "relationships",
-    "statuses",
-    "webhooks",
-)
-class Source(SourceDestination):
-    # pylint: disable=R0901
-    """Source model."""
-
-    user = models.ForeignKey(to=UserPolicyObject, on_delete=models.CASCADE, null=True, blank=True)
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["description"]
-        verbose_name_plural = "Sources"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:source", args=[self.pk])
-
-    def __str__(self):
-        """Stringify instance."""
-        if self.user:
-            return f"{self.address} - {self.user} - {self.zone}"
-        return f"{self.address} - {self.zone}"
-
-
-@extras_features(
-    "custom_fields",
-    "custom_links",
-    "custom_validators",
-    "export_templates",
-    "graphql",
-    "relationships",
-    "statuses",
-    "webhooks",
-)
-class Destination(SourceDestination):
-    # pylint: disable=R0901
-    """Destination model."""
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["description"]
-        verbose_name_plural = "Destinations"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:destination", args=[self.pk])
-
-    def __str__(self):
-        """Stringify instance."""
-        return f"{self.address} - {self.zone}"
-
-
-@extras_features(
-    "custom_fields",
-    "custom_links",
-    "custom_validators",
-    "export_templates",
-    "graphql",
-    "relationships",
-    "statuses",
-    "webhooks",
-)
 class PolicyRule(PrimaryModel):
     # pylint: disable=R0901
     """PolicyRule model."""
 
-    name = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=50)
     tags = TaggableManager(through=TaggedItem)
-    source = models.ForeignKey(to=Source, on_delete=models.CASCADE, related_name="policy_rules")
-    service = models.ForeignKey(
-        to=ServicePolicyObject, on_delete=models.CASCADE, null=True, related_name="policy_rules"
+    source_user = models.ManyToManyField(to=UserObject, related_name="policy_rules")
+    source_user_group = models.ManyToManyField(to=UserObjectGroup, related_name="policy_rules")
+    source_address = models.ManyToManyField(to=AddressObject, related_name="source_policy_rules")
+    source_address_group = models.ManyToManyField(to=AddressObjectGroup, related_name="source_policy_rules")
+    source_zone = models.ForeignKey(to=Zone, null=True, on_delete=models.SET_NULL, related_name="source_policy_rules")
+    destination_address = models.ManyToManyField(to=AddressObject, related_name="destination_policy_rules")
+    destination_address_group = models.ManyToManyField(to=AddressObjectGroup, related_name="destination_policy_rules")
+    destination_zone = models.ForeignKey(
+        to=Zone, on_delete=models.SET_NULL, null=True, related_name="destination_policy_rules"
     )
-    destination = models.ForeignKey(to=Destination, on_delete=models.CASCADE, related_name="policy_rules")
+    service = models.ManyToManyField(to=ServiceObject, related_name="policy_rules")
+    service_group = models.ManyToManyField(to=ServiceObjectGroup, related_name="policy_rules")
     action = models.CharField(choices=choices.ACTION_CHOICES, max_length=20)
     log = models.BooleanField(default=False)
     status = StatusField(
@@ -712,6 +499,7 @@ class PolicyRule(PrimaryModel):
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
         default=get_default_status,
     )
+    request_id = models.CharField(max_length=50, null=True, blank=True)
 
     class Meta:
         """Meta class."""
@@ -724,9 +512,27 @@ class PolicyRule(PrimaryModel):
 
     def __str__(self):
         """Stringify instance."""
-        if self.name:
-            return self.name
-        return f"{self.source} - {self.destination} - {self.action}"
+        if self.request_id:
+            return f"{self.name} - {self.request_id}"
+        return self.name
+
+    # def save(self, *args, **kwargs):
+    #     """Overloads to enforce clear."""
+    #     # self.clean()
+    #     super().save(*args, **kwargs)
+
+    # def clean(self, *args, **kwargs):
+    #     """Overloads to validate attr for form verification."""
+    #     if self.action == "Remark":
+    #         if self.source or self.destination or self.service:
+    #             raise ValidationError(
+    #                 "Invalid PolicyRule, action cannot be set to `Remark` and have source destination or service set."
+    #             )
+    #         if not self.name:
+    #             raise ValidationError("If action is set to `Remark` a name must be set.")
+    #         return
+    #     if not self.source or not self.destination:
+    #         raise ValidationError("Invalid PolicyRule, source and destination must be set.")
 
 
 @extras_features(

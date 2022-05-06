@@ -56,17 +56,6 @@ class AddressObjectGroupSerializer(TaggedObjectSerializer, ValidatedModelSeriali
         fields = "__all__"
 
 
-class AddressPolicyObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
-    """AddressPolicyObject Serializer."""
-
-    class Meta:
-        """Meta attributes."""
-
-        model = models.AddressPolicyObject
-        fields = "__all__"
-
-
 class ServiceObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
     # pylint: disable=R0901
     """ServiceObject Serializer."""
@@ -86,17 +75,6 @@ class ServiceObjectGroupSerializer(TaggedObjectSerializer, ValidatedModelSeriali
         """Meta attributes."""
 
         model = models.ServiceObjectGroup
-        fields = "__all__"
-
-
-class ServicePolicyObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
-    """ServicePolicyObject Serializer."""
-
-    class Meta:
-        """Meta attributes."""
-
-        model = models.ServicePolicyObject
         fields = "__all__"
 
 
@@ -122,17 +100,6 @@ class UserObjectGroupSerializer(TaggedObjectSerializer, ValidatedModelSerializer
         fields = "__all__"
 
 
-class UserPolicyObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
-    """UserPolicyObject Serializer."""
-
-    class Meta:
-        """Meta attributes."""
-
-        model = models.UserPolicyObject
-        fields = "__all__"
-
-
 class ZoneSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
     # pylint: disable=R0901
     """Zone Serializer."""
@@ -141,28 +108,6 @@ class ZoneSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
         """Meta attributes."""
 
         model = models.Zone
-        fields = "__all__"
-
-
-class SourceSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
-    """Source Serializer."""
-
-    class Meta:
-        """Meta attributes."""
-
-        model = models.Source
-        fields = "__all__"
-
-
-class DestinationSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
-    """Destination Serializer."""
-
-    class Meta:
-        """Meta attributes."""
-
-        model = models.Destination
         fields = "__all__"
 
 

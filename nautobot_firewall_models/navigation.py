@@ -55,17 +55,6 @@ menu_items = (
                             ),
                         ],
                     ),
-                    NavMenuItem(
-                        link="plugins:nautobot_firewall_models:addresspolicyobject_list",
-                        name="Address Policy Objects",
-                        permissions=["nautobot_firewall_models.view_addresspolicyobject"],
-                        buttons=[
-                            NavMenuAddButton(
-                                link="plugins:nautobot_firewall_models:addresspolicyobject_add",
-                                permissions=["nautobot_firewall_models.add_addresspolicyobject"],
-                            ),
-                        ],
-                    ),
                 ],
             ),
             NavMenuGroup(
@@ -91,17 +80,6 @@ menu_items = (
                             NavMenuAddButton(
                                 link="plugins:nautobot_firewall_models:serviceobjectgroup_add",
                                 permissions=["nautobot_firewall_models.add_serviceobjectgroup"],
-                            ),
-                        ],
-                    ),
-                    NavMenuItem(
-                        link="plugins:nautobot_firewall_models:servicepolicyobject_list",
-                        name="Service Policy Objects",
-                        permissions=["nautobot_firewall_models.view_servicepolicyobject"],
-                        buttons=[
-                            NavMenuAddButton(
-                                link="plugins:nautobot_firewall_models:servicepolicyobject_add",
-                                permissions=["nautobot_firewall_models.add_servicepolicyobject"],
                             ),
                         ],
                     ),
@@ -133,17 +111,6 @@ menu_items = (
                             ),
                         ],
                     ),
-                    NavMenuItem(
-                        link="plugins:nautobot_firewall_models:userpolicyobject_list",
-                        name="User Policy Objects",
-                        permissions=["nautobot_firewall_models.view_userpolicyobject"],
-                        buttons=[
-                            NavMenuAddButton(
-                                link="plugins:nautobot_firewall_models:userpolicyobject_add",
-                                permissions=["nautobot_firewall_models.add_userpolicyobject"],
-                            ),
-                        ],
-                    ),
                 ],
             ),
             NavMenuGroup(
@@ -167,28 +134,6 @@ menu_items = (
                 name="Policy",
                 weight=200,
                 items=[
-                    NavMenuItem(
-                        link="plugins:nautobot_firewall_models:source_list",
-                        name="Sources",
-                        permissions=["nautobot_firewall_models.view_source"],
-                        buttons=[
-                            NavMenuAddButton(
-                                link="plugins:nautobot_firewall_models:source_add",
-                                permissions=["nautobot_firewall_models.add_source"],
-                            ),
-                        ],
-                    ),
-                    NavMenuItem(
-                        link="plugins:nautobot_firewall_models:destination_list",
-                        name="Destinations",
-                        permissions=["nautobot_firewall_models.view_destination"],
-                        buttons=[
-                            NavMenuAddButton(
-                                link="plugins:nautobot_firewall_models:destination_add",
-                                permissions=["nautobot_firewall_models.add_destination"],
-                            ),
-                        ],
-                    ),
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:policyrule_list",
                         name="Policy Rules",
