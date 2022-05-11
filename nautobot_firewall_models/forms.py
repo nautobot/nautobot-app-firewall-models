@@ -16,6 +16,7 @@ from nautobot.utilities.forms import (
     DynamicModelChoiceField,
     DynamicModelMultipleChoiceField,
     TagFilterField,
+    add_blank_choice,
 )
 
 from nautobot_firewall_models import models, fields, choices
@@ -278,6 +279,15 @@ class UserObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFil
 class UserObjectForm(BootstrapMixin, forms.ModelForm):
     """UserObject creation/edit form."""
 
+    username = forms.CharField(
+        help_text="Signifies the username in identify provider (i.e. john.smith)", label="Username"
+    )
+    name = forms.CharField(
+        help_text="Signifies the name of the user, commonly first & last name (i.e. John Smith)",
+        label="Name",
+        required=False,
+    )
+
     class Meta:
         """Meta attributes."""
 
@@ -457,7 +467,7 @@ class PolicyRuleBulkEditForm(BootstrapMixin, AddRemoveTagsForm, StatusBulkEditFo
     """PolicyRule bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), widget=forms.MultipleHiddenInput)
-    action = forms.ChoiceField(choices=choices.ACTION_CHOICES, required=False)
+    action = forms.ChoiceField(choices=add_blank_choice(choices.ACTION_CHOICES), required=False)
     log = forms.BooleanField(required=False)
 
     class Meta:

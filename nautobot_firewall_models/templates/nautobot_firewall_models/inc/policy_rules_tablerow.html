@@ -4,24 +4,16 @@
     {% if m2m.rule.action == "remark" %}
         <td colspan="10" style="text-align: center;"><strong>{{ m2m.rule }}</strong></td>
     {% else %}
-    {% if m2m.rule.source.address.name == "ANY" %}
-        <td colspan="2" style="text-align: center;"><strong>ANY</strong></td>
-    {% else %}
-        <td>{% if m2m.rule.source.address.address_object_groups.all %}{% for i in m2m.rule.source.address.address_object_groups.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-        <td>{% if m2m.rule.source.address.address_objects.all %}{% for i in m2m.rule.source.address.address_objects.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-    {% endif %}
-        <td>{% if m2m.rule.source.user.user_object_groups.all %}{% for i in m2m.rule.source.user.user_object_groups.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-        <td>{% if m2m.rule.source.user.user_objects.all %}{% for i in m2m.rule.source.user.user_objects.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-        <td>{% if m2m.rule.source.zone %}<a href="{{ m2m.rule.source.zone.get_absolute_url }}">{{ m2m.rule.source.zone|placeholder }}</a><br/>{% else %}{{ None|placeholder }}{% endif %}</td>
-    {% if m2m.rule.destination.address.name == "ANY" %}
-        <td colspan="2" style="text-align: center;"><strong>ANY</strong></td>
-    {% else %}
-        <td>{% if m2m.rule.destination.address.address_object_groups.all %}{% for i in m2m.rule.destination.address.address_object_groups.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-        <td>{% if m2m.rule.destination.address.address_objects.all %}{% for i in m2m.rule.destination.address.address_objects.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-    {% endif %}
-        <td>{% if m2m.rule.destination.zone %}<a href="{{ m2m.rule.destination.zone.get_absolute_url }}">{{ m2m.rule.destination.zone|placeholder }}</a><br/>{% else %}{{ None|placeholder }}{% endif %}</td>
-        <td>{% if m2m.rule.service.service_object_groups.all %}{% for i in m2m.rule.service.service_object_groups.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-        <td>{% if m2m.rule.service.service_objects.all %}{% for i in m2m.rule.service.service_objects.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
+        <td>{% if m2m.rule.source_address_group.all %}{% for i in m2m.rule.source_address_group.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
+        <td>{% if m2m.rule.source_address.all %}{% for i in m2m.rule.source_address.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
+        <td>{% if m2m.rule.source_user_group.all %}{% for i in m2m.rule.source_user_group.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
+        <td>{% if m2m.rule.source_user.all %}{% for i in m2m.rule.source_user.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
+        <td>{% if m2m.rule.source_zone %}<a href="{{ m2m.rule.source_zone.get_absolute_url }}">{{ m2m.rule.source_zone|placeholder }}</a><br/>{% else %}{{ None|placeholder }}{% endif %}</td>
+        <td>{% if m2m.rule.destination_address_group.all %}{% for i in m2m.rule.destination_address_group.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
+        <td>{% if m2m.rule.destination_address.all %}{% for i in m2m.rule.destination_address.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
+        <td>{% if m2m.rule.destination_zone %}<a href="{{ m2m.rule.destination_zone.get_absolute_url }}">{{ m2m.rule.destination_zone|placeholder }}</a><br/>{% else %}{{ None|placeholder }}{% endif %}</td>
+        <td>{% if m2m.rule.service_group.all %}{% for i in m2m.rule.service_group.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
+        <td>{% if m2m.rule.service.all %}{% for i in m2m.rule.service.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
     {% endif %}
     <td>{{ m2m.rule.action|placeholder }}</td>
     <td>{% if m2m.rule.log %}<span class="text-success"><i class="mdi mdi-check-bold"></i></span>{% else %}<span class="text-danger"><i class="mdi mdi-close-thick"></i></span>{% endif %}</td>

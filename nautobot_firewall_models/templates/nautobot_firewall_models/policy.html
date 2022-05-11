@@ -78,12 +78,12 @@
                     <td>{{ object.description|placeholder }}</td>
                 </tr>
                 <tr>
-                    <td>Policy Rules</td>
-                    <td>{% for i in object.policy_rules.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}</td>
+                    <td>Devices</td>
+                    <td>{% for i in object.devices.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% empty %}{{ None|placeholder }}{% endfor %}</td>
                 </tr>
                 <tr>
-                    <td>Devices</td>
-                    <td>{% for i in object.devices.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}</td>
+                    <td>Dynamic Groups</td>
+                    <td>{% for i in object.dynamic_groups.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% empty %}{{ None|placeholder }}{% endfor %}</td>
                 </tr>
             </table>
         </div>

@@ -1,6 +1,6 @@
 """API serializers for firewall models."""
 
-from nautobot.core.api import ValidatedModelSerializer
+from nautobot.core.api import ValidatedModelSerializer, SerializedPKRelatedField
 from nautobot.dcim.models import Device
 from nautobot.extras.api.serializers import TaggedObjectSerializer
 from nautobot.extras.models import DynamicGroup
@@ -114,6 +114,54 @@ class ZoneSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
 class PolicyRuleSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
     # pylint: disable=R0901
     """PolicyRule Serializer."""
+    source_user = SerializedPKRelatedField(
+        queryset=models.UserObject.objects.all(),
+        serializer=UserObjectSerializer,
+        required=False,
+        many=True,
+    )
+    source_user_group = SerializedPKRelatedField(
+        queryset=models.UserObjectGroup.objects.all(),
+        serializer=UserObjectGroupSerializer,
+        required=False,
+        many=True,
+    )
+    source_address = SerializedPKRelatedField(
+        queryset=models.AddressObject.objects.all(),
+        serializer=AddressObjectSerializer,
+        required=False,
+        many=True,
+    )
+    source_address_group = SerializedPKRelatedField(
+        queryset=models.AddressObjectGroup.objects.all(),
+        serializer=AddressObjectGroupSerializer,
+        required=False,
+        many=True,
+    )
+    destination_address = SerializedPKRelatedField(
+        queryset=models.AddressObject.objects.all(),
+        serializer=AddressObjectSerializer,
+        required=False,
+        many=True,
+    )
+    destination_address_group = SerializedPKRelatedField(
+        queryset=models.AddressObjectGroup.objects.all(),
+        serializer=AddressObjectGroupSerializer,
+        required=False,
+        many=True,
+    )
+    service = SerializedPKRelatedField(
+        queryset=models.ServiceObject.objects.all(),
+        serializer=ServiceObjectSerializer,
+        required=False,
+        many=True,
+    )
+    service_group = SerializedPKRelatedField(
+        queryset=models.ServiceObject.objects.all(),
+        serializer=ServiceObjectGroupSerializer,
+        required=False,
+        many=True,
+    )
 
     class Meta:
         """Meta attributes."""

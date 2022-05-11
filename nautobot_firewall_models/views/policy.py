@@ -26,16 +26,16 @@ class PolicyExpandedRulesView(generic.ObjectView):
     """Expanded Rules view."""
 
     queryset = models.Policy.objects.all().prefetch_related(
-        "policyrulem2m_set__rule__service__service_objects",
-        "policyrulem2m_set__rule__service__service_object_groups",
-        "policyrulem2m_set__rule__source__address__address_objects",
-        "policyrulem2m_set__rule__source__address__address_object_groups__address_objects",
-        "policyrulem2m_set__rule__source__user__user_objects",
-        "policyrulem2m_set__rule__source__user__user_object_groups__user_objects",
-        "policyrulem2m_set__rule__source__zone",
-        "policyrulem2m_set__rule__destination__zone",
-        "policyrulem2m_set__rule__destination__address__address_objects",
-        "policyrulem2m_set__rule__destination__address__address_object_groups__address_objects",
+        "policyrulem2m_set__rule__service",
+        "policyrulem2m_set__rule__service_group",
+        "policyrulem2m_set__rule__source_address",
+        "policyrulem2m_set__rule__source_address_group",
+        "policyrulem2m_set__rule__source_user",
+        "policyrulem2m_set__rule__source_user_group",
+        "policyrulem2m_set__rule__source_zone",
+        "policyrulem2m_set__rule__destination_zone",
+        "policyrulem2m_set__rule__destination_address",
+        "policyrulem2m_set__rule__destination_address_group",
     )
     template_name = "nautobot_firewall_models/policy_expanded_rules.html"
 
@@ -44,16 +44,16 @@ class PolicyExpandedRulesIndexEditView(generic.ObjectView):
     """Expanded Rules view."""
 
     queryset = models.Policy.objects.all().prefetch_related(
-        "policyrulem2m_set__rule__service__service_objects",
-        "policyrulem2m_set__rule__service__service_object_groups",
-        "policyrulem2m_set__rule__source__address__address_objects",
-        "policyrulem2m_set__rule__source__address__address_object_groups__address_objects",
-        "policyrulem2m_set__rule__source__user__user_objects",
-        "policyrulem2m_set__rule__source__user__user_object_groups__user_objects",
-        "policyrulem2m_set__rule__source__zone",
-        "policyrulem2m_set__rule__destination__zone",
-        "policyrulem2m_set__rule__destination__address__address_objects",
-        "policyrulem2m_set__rule__destination__address__address_object_groups__address_objects",
+        "policyrulem2m_set__rule__service",
+        "policyrulem2m_set__rule__service_group",
+        "policyrulem2m_set__rule__source_address",
+        "policyrulem2m_set__rule__source_address_group",
+        "policyrulem2m_set__rule__source_user",
+        "policyrulem2m_set__rule__source_user_group",
+        "policyrulem2m_set__rule__source_zone",
+        "policyrulem2m_set__rule__destination_zone",
+        "policyrulem2m_set__rule__destination_address",
+        "policyrulem2m_set__rule__destination_address_group",
     )
     template_name = "nautobot_firewall_models/assign_policy_rule_index.html"
 
@@ -64,7 +64,8 @@ class PolicyExpandedRulesIndexEditView(generic.ObjectView):
         form_data.pop("csrfmiddlewaretoken", None)
         for rule, index in form_data.items():
             m2m = models.PolicyRuleM2M.objects.get(rule=rule, policy=pk)
-            m2m.index = index[0]
+            pol_index = index[0] if index[0] != "" else None
+            m2m.index = pol_index
             m2m.validated_save()
         return redirect(reverse("plugins:nautobot_firewall_models:policy_policyrules", kwargs={"pk": pk}))
 

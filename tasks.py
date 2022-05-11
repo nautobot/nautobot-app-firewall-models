@@ -374,3 +374,11 @@ def tests(context, failfast=False):
     unittest(context, failfast=failfast)
     print("All tests have passed!")
     unittest_coverage(context)
+
+
+@task
+def testdata(context):
+    """Report on code test coverage as measured by 'invoke unittest'."""
+    command = "nautobot-server create_test_firewall_data"
+
+    run_command(context, command)

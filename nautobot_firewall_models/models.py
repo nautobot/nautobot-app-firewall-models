@@ -412,9 +412,7 @@ class ServiceObject(PrimaryModel):
 
     def __str__(self):
         """Stringify instance."""
-        if self.ip_protocol:
-            return f"{self.slug}:{self.port}:{self.ip_protocol}"
-        return f"{self.slug}:{self.port}"
+        return self.name
 
     def save(self, *args, **kwargs):
         """Overloads to enforce use of slugify."""
@@ -484,11 +482,13 @@ class PolicyRule(PrimaryModel):
     source_user_group = models.ManyToManyField(to=UserObjectGroup, related_name="policy_rules")
     source_address = models.ManyToManyField(to=AddressObject, related_name="source_policy_rules")
     source_address_group = models.ManyToManyField(to=AddressObjectGroup, related_name="source_policy_rules")
-    source_zone = models.ForeignKey(to=Zone, null=True, on_delete=models.SET_NULL, related_name="source_policy_rules")
+    source_zone = models.ForeignKey(
+        to=Zone, null=True, blank=True, on_delete=models.SET_NULL, related_name="source_policy_rules"
+    )
     destination_address = models.ManyToManyField(to=AddressObject, related_name="destination_policy_rules")
     destination_address_group = models.ManyToManyField(to=AddressObjectGroup, related_name="destination_policy_rules")
     destination_zone = models.ForeignKey(
-        to=Zone, on_delete=models.SET_NULL, null=True, related_name="destination_policy_rules"
+        to=Zone, on_delete=models.SET_NULL, null=True, blank=True, related_name="destination_policy_rules"
     )
     service = models.ManyToManyField(to=ServiceObject, related_name="policy_rules")
     service_group = models.ManyToManyField(to=ServiceObjectGroup, related_name="policy_rules")
@@ -504,6 +504,7 @@ class PolicyRule(PrimaryModel):
     class Meta:
         """Meta class."""
 
+        ordering = ["name"]
         verbose_name_plural = "Policy Rules"
 
     def get_absolute_url(self):
@@ -515,24 +516,6 @@ class PolicyRule(PrimaryModel):
         if self.request_id:
             return f"{self.name} - {self.request_id}"
         return self.name
-
-    # def save(self, *args, **kwargs):
-    #     """Overloads to enforce clear."""
-    #     # self.clean()
-    #     super().save(*args, **kwargs)
-
-    # def clean(self, *args, **kwargs):
-    #     """Overloads to validate attr for form verification."""
-    #     if self.action == "Remark":
-    #         if self.source or self.destination or self.service:
-    #             raise ValidationError(
-    #                 "Invalid PolicyRule, action cannot be set to `Remark` and have source destination or service set."
-    #             )
-    #         if not self.name:
-    #             raise ValidationError("If action is set to `Remark` a name must be set.")
-    #         return
-    #     if not self.source or not self.destination:
-    #         raise ValidationError("Invalid PolicyRule, source and destination must be set.")
 
 
 @extras_features(
@@ -586,7 +569,7 @@ class PolicyRuleM2M(BaseModel):
 
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
     rule = models.ForeignKey(PolicyRule, on_delete=models.CASCADE)
-    index = models.PositiveSmallIntegerField(null=True)
+    index = models.PositiveSmallIntegerField(null=True, blank=True)
 
     class Meta:
         """Meta class."""

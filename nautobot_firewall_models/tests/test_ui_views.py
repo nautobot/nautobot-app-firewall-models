@@ -165,7 +165,7 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         svc = ServiceObject.objects.first()
         svc.ip_protocol = "TCP"
 
-        self.assertEqual(str(svc), f"{svc.slug}:{svc.port}:TCP")
+        self.assertEqual(str(svc), svc.name)
 
 
 class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
@@ -294,7 +294,7 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
     """Test the PolicyRule viewsets."""
     model = PolicyRule
-    bulk_edit_data = {"log": False}
+    bulk_edit_data = {"log": True}
 
     @classmethod
     def setUpTestData(cls):
@@ -307,12 +307,12 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         svc = ServiceObject.objects.first()
         cls.form_data = {
             # pylint: disable=R0801
-            "source_user": src_usr.id,
-            "source_address": src_addr.id,
-            "destination_address": dest_addr.id,
-            "action": "Deny",
+            "source_user": [src_usr.id],
+            "source_address": [src_addr.id],
+            "destination_address": [dest_addr.id],
+            "action": "deny",
             "log": True,
-            "service": svc.id,
+            "service": [svc.id],
             "name": "test rule",
             "status": status,
         }
@@ -332,16 +332,6 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @skip("Not implemented")
     def test_has_advanced_tab(self):
         pass
-
-    def test_policy_str(self):
-        """Checks conditional on __str__."""
-        pol_rule = PolicyRule.objects.first()
-
-        self.assertEqual(str(pol_rule), pol_rule.name)
-
-        pol_rule.name = None
-
-        self.assertEqual(str(pol_rule), f"{pol_rule.source} - {pol_rule.destination} - {pol_rule.action}")
 
 
 class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):

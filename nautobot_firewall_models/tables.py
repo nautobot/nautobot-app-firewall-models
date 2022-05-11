@@ -151,9 +151,6 @@ class PolicyRuleTable(StatusTableMixin, BaseTable):
     pk = ToggleColumn()
     name = tables.LinkColumn()
     actions = ButtonsColumn(models.PolicyRule, buttons=("edit", "delete"))
-    source = tables.LinkColumn()
-    service = tables.LinkColumn()
-    destination = tables.LinkColumn()
 
     class Meta(BaseTable.Meta):
         """Meta attributes."""
