@@ -55,19 +55,6 @@ class AddressObjectGroupFilterSet(
         fields = ["id", "name", "address_objects", "description"]
 
 
-class AddressPolicyObjectFilterSet(
-    BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet
-):
-    """Filter for AddressPolicyObject."""
-
-    class Meta:
-        """Meta attributes for filter."""
-
-        model = models.AddressPolicyObject
-
-        fields = ["id", "name", "address_objects", "address_object_groups", "description"]
-
-
 class ServiceObjectFilterSet(
     BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet
 ):
@@ -94,19 +81,6 @@ class ServiceObjectGroupFilterSet(
         fields = ["id", "name", "service_objects", "description"]
 
 
-class ServicePolicyObjectFilterSet(
-    BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet
-):
-    """Filter for ServicePolicyObject."""
-
-    class Meta:
-        """Meta attributes for filter."""
-
-        model = models.ServicePolicyObject
-
-        fields = ["id", "name", "service_objects", "service_object_groups", "description"]
-
-
 class UserObjectFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
     """Filter for UserObject."""
 
@@ -129,19 +103,6 @@ class UserObjectGroupFilterSet(
         fields = ["id", "name", "user_objects", "description"]
 
 
-class UserPolicyObjectFilterSet(
-    BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet
-):
-    """Filter for UserPolicyObject."""
-
-    class Meta:
-        """Meta attributes for filter."""
-
-        model = models.UserPolicyObject
-
-        fields = ["id", "name", "user_objects", "user_object_groups", "description"]
-
-
 class ZoneFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
     """Filter for Zone."""
 
@@ -153,28 +114,7 @@ class ZoneFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFi
         fields = ["id", "name", "vrfs", "interfaces", "description"]
 
 
-class DestinationFilterSet(
-    BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet
-):
-    """Filter for Destination."""
-
-    class Meta:
-        """Meta attributes for filter."""
-
-        model = models.Destination
-        fields = ["id", "address", "zone", "description"]
-
-
-class SourceFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
-    """Filter for Source."""
-
-    class Meta:
-        """Meta attributes for filter."""
-
-        model = models.Source
-        fields = ["id", "address", "user", "zone", "description"]
-
-
+# TODO: Refactor
 class PolicyRuleFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
     """Filter for PolicyRule."""
 
@@ -184,7 +124,7 @@ class PolicyRuleFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldM
         """Meta attributes for filter."""
 
         model = models.PolicyRule
-        fields = ["id", "source", "service", "destination", "action", "log"]
+        fields = ["id", "action", "log"]
 
 
 class PolicyFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):

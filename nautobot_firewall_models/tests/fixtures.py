@@ -42,88 +42,94 @@ def create_env():
     addr_obj2 = AddressObject.objects.create(name="voice", ip_address=ip_address, status=status)
     addr_obj3 = AddressObject.objects.create(name="storage", prefix=prefix, status=status)
     addr_obj4 = AddressObject.objects.create(name="server", fqdn=fqdn, status=status)
-    addr_grp1 = AddressObjectGroup.objects.create(name="group1", status=status)
+    addr_grp1 = AddressObjectGroup.objects.create(name="addr group1", status=status)
     addr_grp1.address_objects.set([addr_obj1, addr_obj2])
-    addr_grp2 = AddressObjectGroup.objects.create(name="group2", status=status)
+    addr_grp2 = AddressObjectGroup.objects.create(name="addr group2", status=status)
     addr_grp2.address_objects.set([addr_obj3, addr_obj4])
-    addr_grp3 = AddressObjectGroup.objects.create(name="group3", status=status)
+    addr_grp3 = AddressObjectGroup.objects.create(name="addr group3", status=status)
     addr_grp3.address_objects.set([addr_obj1, addr_obj2, addr_obj3, addr_obj4])
-    addr_pol1 = AddressPolicyObject.objects.create(name="policy1", status=status)
-    addr_pol1.address_objects.set([addr_obj1, addr_obj2])
-    addr_pol2 = AddressPolicyObject.objects.create(name="policy2", status=status)
-    addr_pol2.address_object_groups.set([addr_grp2])
-    addr_pol3 = AddressPolicyObject.objects.create(name="policy3", status=status)
-    addr_pol3.address_objects.set([addr_obj1, addr_obj2])
-    addr_pol3.address_object_groups.set([addr_grp2])
-    svc_obj1, _ = ServiceObject.objects.get_or_create(name="PGSQL", port="5432", ip_protocol="TCP", status=status)
-    svc_obj2, _ = ServiceObject.objects.get_or_create(name="SSH", port="22", ip_protocol="TCP", status=status)
-    svc_obj3, _ = ServiceObject.objects.get_or_create(name="FTP", port="20-21", ip_protocol="TCP", status=status)
-    svc_grp1 = ServiceObjectGroup.objects.create(name="group1", status=status)
+
+    svc_obj1, _ = ServiceObject.objects.get_or_create(
+        name="PGSQL", port="5432", slug="pgsql", ip_protocol="TCP", status=status
+    )
+    svc_obj2, _ = ServiceObject.objects.get_or_create(
+        name="SSH", port="22", slug="ssh", ip_protocol="TCP", status=status
+    )
+    svc_obj3, _ = ServiceObject.objects.get_or_create(
+        name="FTP", port="20-21", slug="ftp", ip_protocol="TCP", status=status
+    )
+    svc_grp1 = ServiceObjectGroup.objects.create(name="svc group1", status=status)
     svc_grp1.service_objects.set([svc_obj1])
-    svc_grp2 = ServiceObjectGroup.objects.create(name="group2", status=status)
+    svc_grp2 = ServiceObjectGroup.objects.create(name="svc group2", status=status)
     svc_grp2.service_objects.set([svc_obj2, svc_obj3])
-    svc_grp3 = ServiceObjectGroup.objects.create(name="group3", status=status)
+    svc_grp3 = ServiceObjectGroup.objects.create(name="svc group3", status=status)
     svc_grp3.service_objects.set([svc_obj1, svc_obj2, svc_obj3])
-    svc_pol1 = ServicePolicyObject.objects.create(name="policy1", status=status)
-    svc_pol1.service_objects.set([svc_obj1, svc_obj2])
-    svc_pol2 = ServicePolicyObject.objects.create(name="policy2", status=status)
-    svc_pol2.service_object_groups.set([svc_grp2])
-    svc_pol3 = ServicePolicyObject.objects.create(name="policy3", status=status)
-    svc_pol3.service_objects.set([svc_obj1, svc_obj2])
-    svc_pol3.service_object_groups.set([svc_grp2])
     usr_obj1 = UserObject.objects.create(username="user1", name="User 1", status=status)
     usr_obj2 = UserObject.objects.create(username="user2", name="User 2", status=status)
     usr_obj3 = UserObject.objects.create(username="user3", name="User 3", status=status)
-    usr_grp1 = UserObjectGroup.objects.create(name="group1", status=status)
+    usr_grp1 = UserObjectGroup.objects.create(name="usr group1", status=status)
     usr_grp1.user_objects.set([usr_obj1])
-    usr_grp2 = UserObjectGroup.objects.create(name="group2", status=status)
+    usr_grp2 = UserObjectGroup.objects.create(name="usr group2", status=status)
     usr_grp2.user_objects.set([usr_obj1, usr_obj2])
-    usr_grp3 = UserObjectGroup.objects.create(name="group3", status=status)
+    usr_grp3 = UserObjectGroup.objects.create(name="usr group3", status=status)
     usr_grp3.user_objects.set([usr_obj1, usr_obj2, usr_obj3])
-    usr_pol1 = UserPolicyObject.objects.create(name="policy1", status=status)
-    usr_pol1.user_objects.set([usr_obj1, usr_obj2])
-    usr_pol2 = UserPolicyObject.objects.create(name="policy2", status=status)
-    usr_pol2.user_object_groups.set([usr_grp3])
-    usr_pol3 = UserPolicyObject.objects.create(name="policy3", status=status)
-    usr_pol3.user_objects.set([usr_obj3])
-    usr_pol3.user_object_groups.set([usr_grp2])
-    zone = Zone.objects.create(name="WAN", status=status)
-    zone.vrfs.set([vrf])
-    Zone.objects.create(name="LAN", status=status)
+
+    zone1 = Zone.objects.create(name="WAN", status=status)
+    zone1.vrfs.set([vrf])
+    zone2 = Zone.objects.create(name="LAN", status=status)
     Zone.objects.create(name="DMZ", status=status)
-    src1 = Source.objects.create(description="test desc", address=addr_pol1, user=usr_pol1, zone=zone, status=status)
-    src2 = Source.objects.create(address=addr_pol1, user=usr_pol1, status=status)
-    src3 = Source.objects.create(address=addr_pol1, zone=zone, status=status)
-    dest1 = Destination.objects.create(description="test desc", address=addr_pol2, zone=zone, status=status)
-    dest2 = Destination.objects.create(address=addr_pol2, status=status)
-    dest3 = Destination.objects.create(address=addr_pol3, zone=zone, status=status)
+
     pol_rule1 = PolicyRule.objects.create(
-        source=src1,
-        service=svc_pol1,
-        destination=dest1,
-        action="Deny",
-        log=True,
-        name="Policy Rule 1",
-        status=status,
+        action="deny", log=True, name="Policy Rule 1", status=status, request_id="req1"
     )
+    pol_rule1.source_user.set([usr_obj1])
+    pol_rule1.source_user_group.set([usr_grp1])
+    pol_rule1.source_address.set([addr_obj1])
+    pol_rule1.source_address_group.set([addr_grp1])
+    pol_rule1.destination_address.set([addr_obj4])
+    pol_rule1.destination_address_group.set([addr_grp3])
+    pol_rule1.service.set([svc_obj1])
+    pol_rule1.service_group.set([svc_grp1])
     pol_rule2 = PolicyRule.objects.create(
-        source=src2,
-        service=svc_pol2,
-        destination=dest2,
-        action="Allow",
+        source_zone=zone1,
+        destination_zone=zone2,
+        action="allow",
         log=True,
         name="Policy Rule 2",
         status=status,
+        request_id="req2",
     )
+    pol_rule2.source_user.set([usr_obj1, usr_obj2])
+    pol_rule2.source_user_group.set([usr_grp1, usr_grp2])
+    pol_rule2.source_address.set([addr_obj1, addr_obj2])
+    pol_rule2.source_address_group.set([addr_grp1, addr_grp2])
+    pol_rule2.destination_address.set([addr_obj4])
+    pol_rule2.destination_address_group.set([addr_grp3])
+    pol_rule2.service.set([svc_obj1, svc_obj2])
+    pol_rule2.service_group.set([svc_grp1, svc_grp2])
     pol_rule3 = PolicyRule.objects.create(
-        source=src3,
-        service=svc_pol3,
-        destination=dest3,
-        action="Drop",
+        source_zone=zone1,
+        destination_zone=zone2,
+        action="drop",
         log=True,
         name="Policy Rule 3",
         status=status,
+        request_id="req3",
     )
+    pol_rule3.source_user.set([usr_obj1, usr_obj2, usr_obj3])
+    pol_rule3.source_user_group.set([usr_grp1, usr_grp2, usr_grp3])
+    pol_rule3.source_address.set([addr_obj1, addr_obj2, addr_obj3])
+    pol_rule3.source_address_group.set([addr_grp1, addr_grp2])
+    pol_rule3.destination_address.set([addr_obj4])
+    pol_rule3.destination_address_group.set([addr_grp3])
+    pol_rule3.service.set([svc_obj1, svc_obj2, svc_obj3])
+    pol_rule3.service_group.set([svc_grp1, svc_grp2, svc_grp3])
+    pol_rule4 = PolicyRule.objects.create(name="END OF ACCESS LIST", action="remark", log=False, request_id="req4")
+    pol_rule5 = PolicyRule.objects.create(name="DENY ALL", action="deny", log=False, request_id="req5")
+    pol_rule5.service_group.set([ServiceObjectGroup.objects.get(name="ANY")])
+    pol_rule5.source_address_group.set([AddressObjectGroup.objects.get(name="ANY")])
+    pol_rule5.destination_address_group.set([AddressObjectGroup.objects.get(name="ANY")])
+    pol_rule5.source_user_group.set([UserObjectGroup.objects.get(name="ANY")])
     pol1 = Policy.objects.create(name="Policy 1", status=status)
     pol1.policy_rules.set([pol_rule1])
     pol2 = Policy.objects.create(name="Policy 2", status=status)
@@ -132,7 +138,9 @@ def create_env():
     pol3 = Policy.objects.create(name="Policy 3", status=status)
     PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule1, index=10)
     PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule2, index=20)
-    PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule3)
+    PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule3, index=30)
+    PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule4, index=99)
+    PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule5, index=100)
     site1 = Site.objects.create(name="DFW", slug="dfw")
     site2 = Site.objects.create(name="HOU", slug="hou")
     manufacturer = Manufacturer.objects.create(name="Juniper", slug="juniper")

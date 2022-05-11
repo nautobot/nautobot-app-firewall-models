@@ -1,7 +1,6 @@
 """Tables for Firewall models."""
 
 import django_tables2 as tables
-from django_tables2.utils import A
 from nautobot.extras.tables import StatusTableMixin
 from nautobot.utilities.tables import BaseTable, ButtonsColumn, ToggleColumn
 
@@ -69,21 +68,6 @@ class AddressObjectGroupTable(StatusTableMixin, BaseTable):
         fields = ("pk", "name", "description", "address_objects", "status")
 
 
-class AddressPolicyObjectTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
-    """Table for list view."""
-
-    pk = ToggleColumn()
-    name = tables.Column(linkify=True)
-    actions = ButtonsColumn(models.AddressPolicyObject, buttons=("edit", "delete"))
-
-    class Meta(BaseTable.Meta):
-        """Meta attributes."""
-
-        model = models.AddressPolicyObject
-        fields = ("pk", "name", "description", "address_objects", "address_object_groups", "status")
-
-
 class ServiceObjectTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
@@ -112,21 +96,6 @@ class ServiceObjectGroupTable(StatusTableMixin, BaseTable):
 
         model = models.ServiceObjectGroup
         fields = ("pk", "name", "description", "service_objects", "status")
-
-
-class ServicePolicyObjectTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
-    """Table for list view."""
-
-    pk = ToggleColumn()
-    name = tables.Column(linkify=True)
-    actions = ButtonsColumn(models.ServicePolicyObject, buttons=("edit", "delete"))
-
-    class Meta(BaseTable.Meta):
-        """Meta attributes."""
-
-        model = models.ServicePolicyObject
-        fields = ("pk", "name", "description", "service_objects", "service_object_groups", "status")
 
 
 class UserObjectTable(StatusTableMixin, BaseTable):
@@ -159,21 +128,6 @@ class UserObjectGroupTable(StatusTableMixin, BaseTable):
         fields = ("pk", "name", "description", "user_objects", "status")
 
 
-class UserPolicyObjectTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
-    """Table for list view."""
-
-    pk = ToggleColumn()
-    name = tables.Column(linkify=True)
-    actions = ButtonsColumn(models.UserPolicyObject, buttons=("edit", "delete"))
-
-    class Meta(BaseTable.Meta):
-        """Meta attributes."""
-
-        model = models.UserPolicyObject
-        fields = ("pk", "name", "description", "user_objects", "user_object_groups", "status")
-
-
 class ZoneTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
@@ -189,44 +143,7 @@ class ZoneTable(StatusTableMixin, BaseTable):
         fields = ("pk", "name", "vrfs", "interfaces", "description", "status")
 
 
-class SourceTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
-    """Table for list view."""
-
-    pk = ToggleColumn()
-    display = tables.LinkColumn(
-        "plugins:nautobot_firewall_models:source",
-        text=lambda record: str(record),  # pylint: disable=W0108
-        args=[A("pk")],
-    )
-    actions = ButtonsColumn(models.Source, buttons=("edit", "delete"))
-
-    class Meta(BaseTable.Meta):
-        """Meta attributes."""
-
-        model = models.Source
-        fields = ("pk", "display", "description", "address", "user", "zone", "status")
-
-
-class DestinationTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
-    """Table for list view."""
-
-    pk = ToggleColumn()
-    display = tables.LinkColumn(
-        "plugins:nautobot_firewall_models:destination",
-        text=lambda record: str(record),  # pylint: disable=W0108
-        args=[A("pk")],
-    )
-    actions = ButtonsColumn(models.Destination, buttons=("edit", "delete"))
-
-    class Meta(BaseTable.Meta):
-        """Meta attributes."""
-
-        model = models.Destination
-        fields = ("pk", "display", "description", "address", "zone", "status")
-
-
+# TODO: refactor
 class PolicyRuleTable(StatusTableMixin, BaseTable):
     # pylint: disable=R0903
     """Table for list view."""
@@ -234,15 +151,29 @@ class PolicyRuleTable(StatusTableMixin, BaseTable):
     pk = ToggleColumn()
     name = tables.LinkColumn()
     actions = ButtonsColumn(models.PolicyRule, buttons=("edit", "delete"))
-    source = tables.LinkColumn()
-    service = tables.LinkColumn()
-    destination = tables.LinkColumn()
 
     class Meta(BaseTable.Meta):
         """Meta attributes."""
 
         model = models.PolicyRule
-        fields = ("pk", "name", "index", "action", "log", "source", "service", "destination", "status")
+        fields = (
+            # pylint: disable=R0801
+            "pk",
+            "name",
+            "source_user",
+            "source_user_group",
+            "source_address",
+            "source_address_group",
+            "source_zone",
+            "destination_address",
+            "destination_address_group",
+            "destination_zone",
+            "service",
+            "service_group",
+            "action",
+            "log",
+            "status",
+        )
 
 
 class PolicyTable(StatusTableMixin, BaseTable):

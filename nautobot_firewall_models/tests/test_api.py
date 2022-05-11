@@ -97,35 +97,6 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         pass
 
 
-class AddressPolicyObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
-    """Test the AddressPolicyObject viewsets."""
-    model = models.AddressPolicyObject
-    bulk_update_data = {"description": "test update description"}
-
-    @classmethod
-    def setUpTestData(cls):
-        """Create test data for API calls."""
-        create_env()
-        status = Status.objects.get(slug="active").id
-        addr_obj = models.AddressObject.objects.first()
-        addr_grp = models.AddressObjectGroup.objects.first()
-        cls.create_data = [
-            {"name": "test1", "address_objects": [addr_obj.id], "status": status},
-            {"name": "test2", "address_object_groups": [addr_grp.id], "status": status},
-            {
-                "name": "test3",
-                "address_objects": [addr_obj.id],
-                "address_object_groups": [addr_grp.id],
-                "status": status,
-            },
-        ]
-
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-
 class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     # pylint: disable=R0901
     """Test the ServiceObject viewsets."""
@@ -163,30 +134,6 @@ class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         cls.create_data = [
             {"name": "test1", "service_objects": [svc_obj.id], "status": status},
             {"name": "test2", "service_objects": [svc_obj.id], "status": status},
-        ]
-
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-
-class ServicePolicyObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
-    """Test the ServicePolicyObject viewsets."""
-    model = models.ServicePolicyObject
-    bulk_update_data = {"description": "test update description"}
-
-    @classmethod
-    def setUpTestData(cls):
-        """Create test data for API calls."""
-        create_env()
-        status = Status.objects.get(slug="active").id
-        svc_obj = models.ServiceObject.objects.first()
-        svc_grp = models.ServiceObjectGroup.objects.first()
-        cls.create_data = [
-            {"name": "test1", "service_objects": [svc_obj.id], "status": status},
-            {"name": "test2", "service_object_groups": [svc_grp.id], "status": status},
-            {"name": "test3", "service_objects": [svc_obj.id], "service_object_groups": [svc_grp.id], "status": status},
         ]
 
     @skip("Not implemented")
@@ -237,30 +184,6 @@ class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         pass
 
 
-class UserPolicyObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
-    """Test the UserPolicyObject viewsets."""
-    model = models.UserPolicyObject
-    bulk_update_data = {"description": "test update description"}
-
-    @classmethod
-    def setUpTestData(cls):
-        """Create test data for API calls."""
-        create_env()
-        status = Status.objects.get(slug="active").id
-        usr_obj = models.UserObject.objects.first()
-        usr_grp = models.UserObjectGroup.objects.first()
-        cls.create_data = [
-            {"name": "test1", "user_objects": [usr_obj.id], "status": status},
-            {"name": "test2", "user_object_groups": [usr_grp.id], "status": status},
-            {"name": "test3", "user_objects": [usr_obj.id], "user_object_groups": [usr_grp.id], "status": status},
-        ]
-
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-
 class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
     # pylint: disable=R0901
     """Test the Zone viewsets."""
@@ -282,53 +205,6 @@ class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
         pass
 
 
-class SourceAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
-    """Test the Source viewsets."""
-    model = models.Source
-    bulk_update_data = {"description": "test update description"}
-
-    @classmethod
-    def setUpTestData(cls):
-        """Create test data for API calls."""
-        create_env()
-        usr = models.UserPolicyObject.objects.first()
-        addr = models.AddressPolicyObject.objects.first()
-        zone = models.Zone.objects.first()
-        status = Status.objects.get(slug="active").id
-        cls.create_data = [
-            {"address": addr.id, "user": usr.id, "zone": zone.id, "status": status},
-            {"address": addr.id, "status": status},
-        ]
-
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-
-class DestinationAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
-    """Test the Source viewsets."""
-    model = models.Destination
-    bulk_update_data = {"description": "test update description"}
-
-    @classmethod
-    def setUpTestData(cls):
-        """Create test data for API calls."""
-        create_env()
-        addr = models.AddressPolicyObject.objects.first()
-        zone = models.Zone.objects.first()
-        status = Status.objects.get(slug="active").id
-        cls.create_data = [
-            {"address": addr.id, "zone": zone.id, "status": status},
-            {"address": addr.id, "status": status},
-        ]
-
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-
 class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     # pylint: disable=R0901
     """Test the PolicyRule viewsets."""
@@ -340,25 +216,31 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
-        src = models.Source.objects.first()
-        dest = models.Destination.objects.last()
-        svc = models.ServicePolicyObject.objects.first()
+        src_usr = models.UserObject.objects.first()
+        src_addr = models.AddressObject.objects.first()
+        dest_addr = models.AddressObject.objects.last()
         status = Status.objects.get(slug="active").id
+        svc = models.ServiceObject.objects.first()
         cls.create_data = [
             {
-                "source": src.id,
-                "destination": dest.id,
-                "service": svc.id,
-                "action": "Deny",
+                # pylint: disable=R0801
+                "source_user": [src_usr.id],
+                "source_address": [src_addr.id],
+                "destination_address": [dest_addr.id],
+                "action": "deny",
                 "log": True,
+                "service": [svc.id],
+                "name": "test rule",
                 "status": status,
             },
             {
-                "source": src.id,
-                "destination": dest.id,
-                "service": svc.id,
-                "action": "Deny",
+                "source_user": [src_usr.id],
+                "source_address": [src_addr.id],
+                "destination_address": [dest_addr.id],
+                "action": "deny",
                 "log": False,
+                "service": [svc.id],
+                "name": "test rule",
                 "status": status,
             },
         ]

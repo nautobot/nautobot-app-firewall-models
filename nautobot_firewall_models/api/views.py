@@ -38,14 +38,6 @@ class AddressObjectGroupViewSet(ModelViewSet):  # pylint: disable=too-many-ances
     filterset_class = filters.AddressObjectGroupFilterSet
 
 
-class AddressPolicyObjectViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
-    """AddressPolicyObject viewset."""
-
-    queryset = models.AddressPolicyObject.objects.all()
-    serializer_class = serializers.AddressPolicyObjectSerializer
-    filterset_class = filters.AddressPolicyObjectFilterSet
-
-
 class ServiceObjectViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
     """ServiceObject viewset."""
 
@@ -60,14 +52,6 @@ class ServiceObjectGroupViewSet(ModelViewSet):  # pylint: disable=too-many-ances
     queryset = models.ServiceObjectGroup.objects.all()
     serializer_class = serializers.ServiceObjectGroupSerializer
     filterset_class = filters.ServiceObjectGroupFilterSet
-
-
-class ServicePolicyObjectViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
-    """ServicePolicyObject viewset."""
-
-    queryset = models.ServicePolicyObject.objects.all()
-    serializer_class = serializers.ServicePolicyObjectSerializer
-    filterset_class = filters.ServicePolicyObjectFilterSet
 
 
 class UserObjectViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
@@ -86,36 +70,12 @@ class UserObjectGroupViewSet(ModelViewSet):  # pylint: disable=too-many-ancestor
     filterset_class = filters.UserObjectGroupFilterSet
 
 
-class UserPolicyObjectViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
-    """UserPolicyObject viewset."""
-
-    queryset = models.UserPolicyObject.objects.all()
-    serializer_class = serializers.UserPolicyObjectSerializer
-    filterset_class = filters.UserPolicyObjectFilterSet
-
-
 class ZoneViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
     """Zone viewset."""
 
     queryset = models.Zone.objects.all()
     serializer_class = serializers.ZoneSerializer
     filterset_class = filters.ZoneFilterSet
-
-
-class SourceViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
-    """Source viewset."""
-
-    queryset = models.Source.objects.all()
-    serializer_class = serializers.SourceSerializer
-    filterset_class = filters.SourceFilterSet
-
-
-class DestinationViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors
-    """Destination viewset."""
-
-    queryset = models.Destination.objects.all()
-    serializer_class = serializers.DestinationSerializer
-    filterset_class = filters.DestinationFilterSet
 
 
 class PolicyRuleViewSet(ModelViewSet):  # pylint: disable=too-many-ancestors

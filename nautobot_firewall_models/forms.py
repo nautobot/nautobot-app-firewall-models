@@ -16,6 +16,7 @@ from nautobot.utilities.forms import (
     DynamicModelChoiceField,
     DynamicModelMultipleChoiceField,
     TagFilterField,
+    add_blank_choice,
 )
 
 from nautobot_firewall_models import models, fields, choices
@@ -180,42 +181,6 @@ class AddressObjectGroupBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, Bu
         ]
 
 
-class AddressPolicyObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
-    """Filter form to filter searches."""
-
-    model = models.AddressPolicyObject
-    q = forms.CharField(
-        required=False,
-        label="Search",
-        help_text="Search within Name or Description.",
-    )
-    name = forms.CharField(required=False, label="Name")
-
-
-class AddressPolicyObjectForm(BootstrapMixin, forms.ModelForm):
-    """AddressPolicyObject creation/edit form."""
-
-    class Meta:
-        """Meta attributes."""
-
-        model = models.AddressPolicyObject
-        fields = ["name", "description", "address_objects", "address_object_groups", "status"]
-
-
-class AddressPolicyObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
-    """AddressPolicyObject bulk edit form."""
-
-    pk = DynamicModelMultipleChoiceField(
-        queryset=models.AddressPolicyObject.objects.all(), widget=forms.MultipleHiddenInput
-    )
-    description = forms.CharField(required=False)
-
-    class Meta:
-        """Meta attributes."""
-
-        nullable_fields = ["description", "address_objects", "address_object_groups"]
-
-
 class ServiceObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
     """Filter form to filter searches."""
 
@@ -299,42 +264,6 @@ class ServiceObjectGroupBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, Bu
         ]
 
 
-class ServicePolicyObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
-    """Filter form to filter searches."""
-
-    model = models.ServicePolicyObject
-    q = forms.CharField(
-        required=False,
-        label="Search",
-        help_text="Search within Name or Description.",
-    )
-    name = forms.CharField(required=False, label="Name")
-
-
-class ServicePolicyObjectForm(BootstrapMixin, forms.ModelForm):
-    """ServicePolicyObject creation/edit form."""
-
-    class Meta:
-        """Meta attributes."""
-
-        model = models.ServicePolicyObject
-        fields = ["name", "description", "service_objects", "service_object_groups", "status"]
-
-
-class ServicePolicyObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
-    """ServicePolicyObject bulk edit form."""
-
-    pk = DynamicModelMultipleChoiceField(
-        queryset=models.ServicePolicyObject.objects.all(), widget=forms.MultipleHiddenInput
-    )
-    description = forms.CharField(required=False)
-
-    class Meta:
-        """Meta attributes."""
-
-        nullable_fields = ["description", "service_objects", "service_object_groups"]
-
-
 class UserObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
     """Filter form to filter searches."""
 
@@ -349,6 +278,15 @@ class UserObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFil
 
 class UserObjectForm(BootstrapMixin, forms.ModelForm):
     """UserObject creation/edit form."""
+
+    username = forms.CharField(
+        help_text="Signifies the username in identify provider (i.e. john.smith)", label="Username"
+    )
+    name = forms.CharField(
+        help_text="Signifies the name of the user, commonly first & last name (i.e. John Smith)",
+        label="Name",
+        required=False,
+    )
 
     class Meta:
         """Meta attributes."""
@@ -411,42 +349,6 @@ class UserObjectGroupBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkE
         ]
 
 
-class UserPolicyObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
-    """Filter form to filter searches."""
-
-    model = models.UserPolicyObject
-    q = forms.CharField(
-        required=False,
-        label="Search",
-        help_text="Search within Name or Description.",
-    )
-    name = forms.CharField(required=False, label="Name")
-
-
-class UserPolicyObjectForm(BootstrapMixin, forms.ModelForm):
-    """UserPolicyObject creation/edit form."""
-
-    class Meta:
-        """Meta attributes."""
-
-        model = models.UserPolicyObject
-        fields = ["name", "description", "user_objects", "user_object_groups", "status"]
-
-
-class UserPolicyObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
-    """UserPolicyObject bulk edit form."""
-
-    pk = DynamicModelMultipleChoiceField(
-        queryset=models.UserPolicyObject.objects.all(), widget=forms.MultipleHiddenInput
-    )
-    description = forms.CharField(required=False)
-
-    class Meta:
-        """Meta attributes."""
-
-        nullable_fields = ["description", "user_objects", "user_object_groups"]
-
-
 class ZoneFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
     """Filter form to filter searches."""
 
@@ -487,74 +389,6 @@ class ZoneBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
         nullable_fields = ["description", "vrfs", "interfaces"]
 
 
-class DestinationFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
-    """Filter form to filter searches."""
-
-    model = models.Destination
-    q = forms.CharField(
-        required=False,
-        label="Search",
-        help_text="Search within Name or Description.",
-    )
-    display = forms.CharField(required=False, label="Display")
-
-
-class DestinationForm(BootstrapMixin, forms.ModelForm):
-    """Destination creation/edit form."""
-
-    class Meta:
-        """Meta attributes."""
-
-        model = models.Destination
-        fields = ["description", "address", "zone", "status"]
-
-
-class DestinationBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
-    """Destination bulk edit form."""
-
-    pk = DynamicModelMultipleChoiceField(queryset=models.Destination.objects.all(), widget=forms.MultipleHiddenInput)
-    description = forms.CharField(required=False)
-
-    class Meta:
-        """Meta attributes."""
-
-        nullable_fields = ["description", "zone"]
-
-
-class SourceFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
-    """Filter form to filter searches."""
-
-    model = models.Source
-    q = forms.CharField(
-        required=False,
-        label="Search",
-        help_text="Search within Name or Description.",
-    )
-    display = forms.CharField(required=False, label="Display")
-
-
-class SourceForm(BootstrapMixin, forms.ModelForm):
-    """Source creation/edit form."""
-
-    class Meta:
-        """Meta attributes."""
-
-        model = models.Source
-        fields = ["description", "address", "user", "zone", "status"]
-
-
-class SourceBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
-    """Source bulk edit form."""
-
-    pk = DynamicModelMultipleChoiceField(queryset=models.Source.objects.all(), widget=forms.MultipleHiddenInput)
-    description = forms.CharField(required=False)
-
-    class Meta:
-        """Meta attributes."""
-
-        nullable_fields = ["description", "user", "zone"]
-
-
 class PolicyRuleFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
     """Filter form to filter searches."""
 
@@ -573,27 +407,68 @@ class PolicyRuleForm(BootstrapMixin, forms.ModelForm):
 
     name = forms.CharField(required=False, label="Name")
     tags = DynamicModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)
-    source = DynamicModelChoiceField(queryset=models.Source.objects.all(), label="Source")
-    service = DynamicModelChoiceField(queryset=models.ServicePolicyObject.objects.all(), label="Service")
-    destination = DynamicModelChoiceField(queryset=models.Destination.objects.all(), label="Destination")
+    source_user = DynamicModelMultipleChoiceField(
+        queryset=models.UserObject.objects.all(), label="Source User Objects", required=False
+    )
+    source_user_group = DynamicModelMultipleChoiceField(
+        queryset=models.UserObjectGroup.objects.all(), label="Source User Object Groups", required=False
+    )
+    source_address = DynamicModelMultipleChoiceField(
+        queryset=models.AddressObject.objects.all(), label="Source Address Objects", required=False
+    )
+    source_address_group = DynamicModelMultipleChoiceField(
+        queryset=models.AddressObjectGroup.objects.all(), label="Source Address Object Groups", required=False
+    )
+    source_zone = DynamicModelChoiceField(queryset=models.Zone.objects.all(), label="Source Zone", required=False)
+    destination_address = DynamicModelMultipleChoiceField(
+        queryset=models.AddressObject.objects.all(), label="Destination Address Objects", required=False
+    )
+    destination_address_group = DynamicModelMultipleChoiceField(
+        queryset=models.AddressObjectGroup.objects.all(), label="Destination Address Object Groups", required=False
+    )
+    destination_zone = DynamicModelChoiceField(
+        queryset=models.Zone.objects.all(), label="Destination Zone", required=False
+    )
+    service = DynamicModelMultipleChoiceField(
+        queryset=models.ServiceObject.objects.all(), label="Service Objects", required=False
+    )
+    service_group = DynamicModelMultipleChoiceField(
+        queryset=models.ServiceObjectGroup.objects.all(), label="Service Object Groups", required=False
+    )
+    request_id = forms.CharField(required=False, label="Optional field for request ticket identifier.")
 
     class Meta:
         """Meta attributes."""
 
         model = models.PolicyRule
-        fields = ["name", "action", "log", "source", "service", "destination", "tags", "status"]
+        fields = [
+            # pylint: disable=R0801
+            "name",
+            "source_user",
+            "source_user_group",
+            "source_address",
+            "source_address_group",
+            "source_zone",
+            "destination_address",
+            "destination_address_group",
+            "destination_zone",
+            "service",
+            "service_group",
+            "action",
+            "log",
+            "status",
+            "tags",
+            "request_id",
+        ]
 
 
+# TODO: Refactor
 class PolicyRuleBulkEditForm(BootstrapMixin, AddRemoveTagsForm, StatusBulkEditFormMixin, BulkEditForm):
     """PolicyRule bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), widget=forms.MultipleHiddenInput)
-    action = forms.ChoiceField(choices=choices.ACTION_CHOICES, required=False)
+    action = forms.ChoiceField(choices=add_blank_choice(choices.ACTION_CHOICES), required=False)
     log = forms.BooleanField(required=False)
-    source = DynamicModelChoiceField(queryset=models.Source.objects.all(), label="Source", required=False)
-    destination = DynamicModelChoiceField(
-        queryset=models.Destination.objects.all(), label="Destination", required=False
-    )
 
     class Meta:
         """Meta attributes."""
