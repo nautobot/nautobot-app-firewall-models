@@ -8,8 +8,10 @@ from nautobot.extras.forms import (
     StatusBulkEditFormMixin,
     CustomFieldFilterForm,
 )
-from nautobot.extras.models import Tag
+from nautobot.extras.models import Tag, DynamicGroup
 from nautobot.ipam.models import VRF, Prefix, IPAddress
+from nautobot.tenancy.forms import TenancyFilterForm, TenancyForm
+from nautobot.tenancy.models import Tenant
 from nautobot.utilities.forms import (
     BootstrapMixin,
     BulkEditForm,
@@ -476,7 +478,7 @@ class PolicyRuleBulkEditForm(BootstrapMixin, AddRemoveTagsForm, StatusBulkEditFo
         nullable_fields = ["description", "tags"]
 
 
-class PolicyFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
+class PolicyFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm, TenancyFilterForm):
     """Filter form to filter searches."""
 
     model = models.Policy
@@ -489,17 +491,27 @@ class PolicyFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterF
     devices = DynamicModelChoiceField(queryset=Device.objects.all(), required=False)
 
 
-class PolicyForm(BootstrapMixin, forms.ModelForm):
+class PolicyForm(BootstrapMixin, forms.ModelForm, TenancyForm):
     """Policy creation/edit form."""
 
     devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
+    dynamic_groups = DynamicModelMultipleChoiceField(queryset=DynamicGroup.objects.all(), required=False)
     policy_rules = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), required=False)
 
     class Meta:
         """Meta attributes."""
 
         model = models.Policy
-        fields = ["name", "description", "policy_rules", "status", "devices"]
+        fields = [
+            "name",
+            "description",
+            "policy_rules",
+            "status",
+            "devices",
+            "dynamic_groups",
+            "tenant_group",
+            "tenant",
+        ]
 
 
 class PolicyBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
@@ -508,7 +520,9 @@ class PolicyBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
     pk = DynamicModelMultipleChoiceField(queryset=models.Policy.objects.all(), widget=forms.MultipleHiddenInput)
     description = forms.CharField(required=False)
     devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
+    dynamic_groups = DynamicModelMultipleChoiceField(queryset=DynamicGroup.objects.all(), required=False)
     policy_rules = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), required=False)
+    tenant = DynamicModelChoiceField(queryset=Tenant.objects.all(), required=False)
 
     class Meta:
         """Meta attributes."""

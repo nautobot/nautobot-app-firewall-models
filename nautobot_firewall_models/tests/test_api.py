@@ -74,6 +74,14 @@ class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_list_objects_brief(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
+        pass
+
 
 class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     # pylint: disable=R0901
@@ -96,6 +104,26 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_list_objects_brief(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
+        pass
+
+    def test_create_object(self):
+        self.validation_excluded_fields = ["address_objects"]
+        return super().test_create_object()
+
+    def test_update_object(self):
+        self.validation_excluded_fields = ["address_objects"]
+        return super().test_update_object()
+
+    def test_bulk_create_objects(self):
+        self.validation_excluded_fields = ["address_objects"]
+        return super().test_bulk_create_objects()
+
 
 class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     # pylint: disable=R0901
@@ -116,6 +144,14 @@ class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("Not implemented")
     def test_list_objects_brief(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
         pass
 
 
@@ -140,6 +176,26 @@ class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_list_objects_brief(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
+        pass
+
+    def test_create_object(self):
+        self.validation_excluded_fields = ["service_objects"]
+        return super().test_create_object()
+
+    def test_update_object(self):
+        self.validation_excluded_fields = ["service_objects"]
+        return super().test_update_object()
+
+    def test_bulk_create_objects(self):
+        self.validation_excluded_fields = ["service_objects"]
+        return super().test_bulk_create_objects()
+
 
 class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     # pylint: disable=R0901
@@ -159,6 +215,14 @@ class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("Not implemented")
     def test_list_objects_brief(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
         pass
 
 
@@ -183,6 +247,26 @@ class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_list_objects_brief(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
+        pass
+
+    def test_create_object(self):
+        self.validation_excluded_fields = ["user_objects"]
+        return super().test_create_object()
+
+    def test_update_object(self):
+        self.validation_excluded_fields = ["user_objects"]
+        return super().test_update_object()
+
+    def test_bulk_create_objects(self):
+        self.validation_excluded_fields = ["user_objects"]
+        return super().test_bulk_create_objects()
+
 
 class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
     # pylint: disable=R0901
@@ -202,6 +286,14 @@ class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("Not implemented")
     def test_list_objects_brief(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
         pass
 
 
@@ -248,6 +340,14 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_list_objects_brief(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
+        pass
+
 
 class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
     # pylint: disable=R0901
@@ -281,3 +381,11 @@ class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_bulk_create_objects(self):
         self.validation_excluded_fields = ["policy_rules"]
         return super().test_bulk_create_objects()
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
+        pass

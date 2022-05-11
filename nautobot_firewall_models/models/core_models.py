@@ -1,14 +1,13 @@
 """Models for the Firewall plugin."""
 
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from nautobot.core.models.generics import PrimaryModel, BaseModel
-from nautobot.extras.models import StatusField, Status
+from nautobot.core.models.generics import PrimaryModel
+from nautobot.extras.models import StatusField
 from nautobot.extras.models.tags import TaggedItem
 from nautobot.extras.utils import extras_features
 from nautobot.ipam.fields import VarbinaryIPField
@@ -16,12 +15,7 @@ from netaddr import IPAddress
 from taggit.managers import TaggableManager
 
 from nautobot_firewall_models import choices, validators
-
-
-def get_default_status():
-    """Returns a default status value basedo n plugin config."""
-    status_name = settings.PLUGINS_CONFIG.get("nautobot_firewall_models", {}).get("status_name", "Active")
-    return Status.objects.get(name=status_name)
+from nautobot_firewall_models.utils import get_default_status
 
 
 @extras_features(
@@ -49,7 +43,7 @@ class IPRange(PrimaryModel):
         help_text="IPv4 or IPv6 host address",
     )
     vrf = models.ForeignKey(
-        to="ipam.VRF", on_delete=models.CASCADE, related_name="ip_ranges", blank=True, null=True, verbose_name="VRF"
+        to="ipam.VRF", on_delete=models.PROTECT, related_name="ip_ranges", blank=True, null=True, verbose_name="VRF"
     )
     description = models.CharField(
         max_length=200,
@@ -116,7 +110,9 @@ class FQDN(PrimaryModel):
         blank=True,
     )
     name = models.CharField(max_length=100, unique=True)
-    ip_addresses = models.ManyToManyField(to="ipam.IPAddress", blank=True, related_name="fqdns")
+    ip_addresses = models.ManyToManyField(
+        to="ipam.IPAddress", blank=True, through="FQDNIPAddressM2M", related_name="fqdns"
+    )
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
@@ -158,10 +154,10 @@ class AddressObject(PrimaryModel):
         blank=True,
     )
     name = models.CharField(max_length=100, unique=True)
-    fqdn = models.ForeignKey(to=FQDN, on_delete=models.CASCADE, null=True, blank=True)
-    ip_range = models.ForeignKey(to=IPRange, on_delete=models.CASCADE, null=True, blank=True)
-    ip_address = models.ForeignKey(to="ipam.IPAddress", on_delete=models.CASCADE, null=True, blank=True)
-    prefix = models.ForeignKey(to="ipam.Prefix", on_delete=models.CASCADE, null=True, blank=True)
+    fqdn = models.ForeignKey(to=FQDN, on_delete=models.PROTECT, null=True, blank=True)
+    ip_range = models.ForeignKey(to=IPRange, on_delete=models.PROTECT, null=True, blank=True)
+    ip_address = models.ForeignKey(to="ipam.IPAddress", on_delete=models.PROTECT, null=True, blank=True)
+    prefix = models.ForeignKey(to="ipam.Prefix", on_delete=models.PROTECT, null=True, blank=True)
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
@@ -226,7 +222,9 @@ class AddressObjectGroup(PrimaryModel):
         blank=True,
     )
     name = models.CharField(max_length=50, unique=True)
-    address_objects = models.ManyToManyField(to=AddressObject, blank=True, related_name="address_object_groups")
+    address_objects = models.ManyToManyField(
+        to=AddressObject, blank=True, through="AddressObjectGroupM2M", related_name="address_object_groups"
+    )
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
@@ -307,7 +305,9 @@ class UserObjectGroup(PrimaryModel):
         blank=True,
     )
     name = models.CharField(max_length=50, unique=True)
-    user_objects = models.ManyToManyField(to=UserObject, blank=True, related_name="user_object_groups")
+    user_objects = models.ManyToManyField(
+        to=UserObject, blank=True, through="UserObjectGroupM2M", related_name="user_object_groups"
+    )
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
@@ -348,8 +348,10 @@ class Zone(PrimaryModel):
         blank=True,
     )
     name = models.CharField(max_length=50, unique=True)
-    vrfs = models.ManyToManyField(to="ipam.VRF", blank=True, related_name="zones")
-    interfaces = models.ManyToManyField(to="dcim.Interface", blank=True, related_name="zones")
+    vrfs = models.ManyToManyField(to="ipam.VRF", blank=True, through="ZoneVRFM2M", related_name="zones")
+    interfaces = models.ManyToManyField(
+        to="dcim.Interface", blank=True, through="ZoneInterfaceM2M", related_name="zones"
+    )
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
@@ -440,7 +442,9 @@ class ServiceObjectGroup(PrimaryModel):
         blank=True,
     )
     name = models.CharField(max_length=50, unique=True)
-    service_objects = models.ManyToManyField(to=ServiceObject, blank=True, related_name="service_object_groups")
+    service_objects = models.ManyToManyField(
+        to=ServiceObject, blank=True, through="ServiceObjectGroupM2M", related_name="service_object_groups"
+    )
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
@@ -478,20 +482,28 @@ class PolicyRule(PrimaryModel):
 
     name = models.CharField(max_length=50)
     tags = TaggableManager(through=TaggedItem)
-    source_user = models.ManyToManyField(to=UserObject, related_name="policy_rules")
-    source_user_group = models.ManyToManyField(to=UserObjectGroup, related_name="policy_rules")
-    source_address = models.ManyToManyField(to=AddressObject, related_name="source_policy_rules")
-    source_address_group = models.ManyToManyField(to=AddressObjectGroup, related_name="source_policy_rules")
+    source_user = models.ManyToManyField(to=UserObject, through="SrcUserM2M", related_name="policy_rules")
+    source_user_group = models.ManyToManyField(
+        to=UserObjectGroup, through="SrcUserGroupM2M", related_name="policy_rules"
+    )
+    source_address = models.ManyToManyField(to=AddressObject, through="SrcAddrM2M", related_name="source_policy_rules")
+    source_address_group = models.ManyToManyField(
+        to=AddressObjectGroup, through="SrcAddrGroupM2M", related_name="source_policy_rules"
+    )
     source_zone = models.ForeignKey(
         to=Zone, null=True, blank=True, on_delete=models.SET_NULL, related_name="source_policy_rules"
     )
-    destination_address = models.ManyToManyField(to=AddressObject, related_name="destination_policy_rules")
-    destination_address_group = models.ManyToManyField(to=AddressObjectGroup, related_name="destination_policy_rules")
+    destination_address = models.ManyToManyField(
+        to=AddressObject, through="DestAddrM2M", related_name="destination_policy_rules"
+    )
+    destination_address_group = models.ManyToManyField(
+        to=AddressObjectGroup, through="DestAddrGroupM2M", related_name="destination_policy_rules"
+    )
     destination_zone = models.ForeignKey(
         to=Zone, on_delete=models.SET_NULL, null=True, blank=True, related_name="destination_policy_rules"
     )
-    service = models.ManyToManyField(to=ServiceObject, related_name="policy_rules")
-    service_group = models.ManyToManyField(to=ServiceObjectGroup, related_name="policy_rules")
+    service = models.ManyToManyField(to=ServiceObject, through="SvcM2M", related_name="policy_rules")
+    service_group = models.ManyToManyField(to=ServiceObjectGroup, through="SvcGroupM2M", related_name="policy_rules")
     action = models.CharField(choices=choices.ACTION_CHOICES, max_length=20)
     log = models.BooleanField(default=False)
     status = StatusField(
@@ -547,6 +559,13 @@ class Policy(PrimaryModel):
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
         default=get_default_status,
     )
+    tenant = models.ForeignKey(
+        to="tenancy.Tenant",
+        on_delete=models.PROTECT,
+        related_name="policies",
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         """Meta class."""
@@ -561,51 +580,3 @@ class Policy(PrimaryModel):
     def __str__(self):
         """Stringify instance."""
         return self.name
-
-
-class PolicyRuleM2M(BaseModel):
-    # pylint: disable=R0901
-    """Through model to add index to the the Policy & PolicyRule relationship."""
-
-    policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
-    rule = models.ForeignKey(PolicyRule, on_delete=models.CASCADE)
-    index = models.PositiveSmallIntegerField(null=True, blank=True)
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["index"]
-        constraints = [
-            UniqueConstraint(fields=["policy", "rule", "index"], name="unique_with_index"),
-            UniqueConstraint(fields=["policy", "rule"], name="unique_without_index", condition=Q(index=None)),
-        ]
-
-
-class PolicyDeviceM2M(BaseModel):
-    # pylint: disable=R0901
-    """Through model to add index to the the Policy & Device relationship."""
-
-    policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
-    device = models.ForeignKey("dcim.Device", on_delete=models.CASCADE)
-    weight = models.PositiveSmallIntegerField(default=100)
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["weight"]
-        unique_together = ["policy", "device"]
-
-
-class PolicyDynamicGroupM2M(BaseModel):
-    # pylint: disable=R0901
-    """Through model to add index to the the Policy & DynamicGroup relationship."""
-
-    policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
-    dynamic_group = models.ForeignKey("extras.DynamicGroup", on_delete=models.CASCADE)
-    weight = models.PositiveSmallIntegerField(default=100)
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["weight"]
-        unique_together = ["policy", "dynamic_group"]

@@ -85,6 +85,10 @@
                     <td>Dynamic Groups</td>
                     <td>{% for i in object.dynamic_groups.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% empty %}{{ None|placeholder }}{% endfor %}</td>
                 </tr>
+                <tr>
+                    <td>Tenant</td>
+                    <td>{% if object.tenant %}<a href="{{ i.get_absolute_url }}">{{ object.tenant }}</a><br/>{% else %}{{ None|placeholder }}{% endif %}</td>
+                </tr>
             </table>
         </div>
         {% include 'inc/custom_fields_panel.html' %}
