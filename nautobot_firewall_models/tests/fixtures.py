@@ -6,6 +6,7 @@ from nautobot.extras.models import DynamicGroup
 from nautobot.extras.models.statuses import Status
 from nautobot.ipam.models import Prefix, VRF
 from nautobot.ipam.models import IPAddress as IPAddr
+from nautobot.tenancy.models import Tenant, TenantGroup
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
@@ -130,12 +131,15 @@ def create_env():
     pol_rule5.source_address_group.set([AddressObjectGroup.objects.get(name="ANY")])
     pol_rule5.destination_address_group.set([AddressObjectGroup.objects.get(name="ANY")])
     pol_rule5.source_user_group.set([UserObjectGroup.objects.get(name="ANY")])
+    tenant_group = TenantGroup.objects.create(name="ABC Holding Corp", slug="abc-holding-corp")
+    tenant1 = Tenant.objects.create(name="ABC LLC", slug="abc-llc", group=tenant_group)
+    tenant2 = Tenant.objects.create(name="XYZ LLC", slug="xyz-llc")
     pol1 = Policy.objects.create(name="Policy 1", status=status)
     pol1.policy_rules.set([pol_rule1])
-    pol2 = Policy.objects.create(name="Policy 2", status=status)
+    pol2 = Policy.objects.create(name="Policy 2", status=status, tenant=tenant2)
     PolicyRuleM2M.objects.create(policy=pol2, rule=pol_rule1, index=10)
     PolicyRuleM2M.objects.create(policy=pol2, rule=pol_rule2, index=20)
-    pol3 = Policy.objects.create(name="Policy 3", status=status)
+    pol3 = Policy.objects.create(name="Policy 3", status=status, tenant=tenant1)
     PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule1, index=10)
     PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule2, index=20)
     PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule3, index=30)
