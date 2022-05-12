@@ -47,7 +47,7 @@ class IPRangeForm(BootstrapMixin, fields.IPRangeFieldMixin, forms.ModelForm):
         """Meta attributes."""
 
         model = models.IPRange
-        fields = ["vrf", "description", "status"]
+        fields = ["vrf", "description", "status", "tags"]
 
 
 class IPRangeBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
@@ -86,7 +86,7 @@ class FQDNForm(BootstrapMixin, forms.ModelForm):
         """Meta attributes."""
 
         model = models.FQDN
-        fields = ["name", "description", "ip_addresses", "status"]
+        fields = ["name", "description", "ip_addresses", "status", "tags"]
 
 
 class FQDNBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
@@ -130,7 +130,7 @@ class AddressObjectForm(BootstrapMixin, forms.ModelForm):
         """Meta attributes."""
 
         model = models.AddressObject
-        fields = ["name", "description", "fqdn", "ip_range", "ip_address", "prefix", "status"]
+        fields = ["name", "description", "fqdn", "ip_range", "ip_address", "prefix", "status", "tags"]
 
 
 class AddressObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
@@ -164,7 +164,7 @@ class AddressObjectGroupForm(BootstrapMixin, forms.ModelForm):
         """Meta attributes."""
 
         model = models.AddressObjectGroup
-        fields = ["name", "description", "address_objects", "status"]
+        fields = ["name", "description", "address_objects", "status", "tags"]
 
 
 class AddressObjectGroupBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
@@ -209,7 +209,7 @@ class ServiceObjectForm(BootstrapMixin, forms.ModelForm):
         """Meta attributes."""
 
         model = models.ServiceObject
-        fields = ["name", "description", "port", "ip_protocol", "status"]
+        fields = ["name", "description", "port", "ip_protocol", "status", "tags"]
 
 
 class ServiceObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
@@ -247,7 +247,7 @@ class ServiceObjectGroupForm(BootstrapMixin, forms.ModelForm):
         """Meta attributes."""
 
         model = models.ServiceObjectGroup
-        fields = ["name", "description", "service_objects", "status"]
+        fields = ["name", "description", "service_objects", "status", "tags"]
 
 
 class ServiceObjectGroupBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
@@ -294,7 +294,7 @@ class UserObjectForm(BootstrapMixin, forms.ModelForm):
         """Meta attributes."""
 
         model = models.UserObject
-        fields = ["username", "name", "status"]
+        fields = ["username", "name", "status", "tags"]
 
 
 class UserObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
@@ -332,7 +332,7 @@ class UserObjectGroupForm(BootstrapMixin, forms.ModelForm):
         """Meta attributes."""
 
         model = models.UserObjectGroup
-        fields = ["name", "description", "user_objects", "status"]
+        fields = ["name", "description", "user_objects", "status", "tags"]
 
 
 class UserObjectGroupBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
@@ -374,7 +374,7 @@ class ZoneForm(BootstrapMixin, forms.ModelForm):
         """Meta attributes."""
 
         model = models.Zone
-        fields = ["name", "description", "vrfs", "interfaces", "status"]
+        fields = ["name", "description", "vrfs", "interfaces", "status", "tags"]
 
 
 class ZoneBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
@@ -511,6 +511,7 @@ class PolicyForm(BootstrapMixin, forms.ModelForm, TenancyForm):
             "dynamic_groups",
             "tenant_group",
             "tenant",
+            "tags",
         ]
 
 
