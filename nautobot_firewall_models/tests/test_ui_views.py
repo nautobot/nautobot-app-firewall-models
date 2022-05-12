@@ -99,6 +99,22 @@ class AddressObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_has_advanced_tab(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission(self):
+        pass
+
 
 class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
@@ -128,6 +144,22 @@ class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("Not implemented")
     def test_has_advanced_tab(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission(self):
         pass
 
 
@@ -167,6 +199,22 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
         self.assertEqual(str(svc), svc.name)
 
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission(self):
+        pass
+
 
 class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
@@ -198,6 +246,22 @@ class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_has_advanced_tab(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission(self):
+        pass
+
 
 class UserObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
@@ -226,6 +290,22 @@ class UserObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("Not implemented")
     def test_has_advanced_tab(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission(self):
         pass
 
 
@@ -259,6 +339,22 @@ class UserObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_has_advanced_tab(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission(self):
+        pass
+
 
 class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
@@ -287,6 +383,22 @@ class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("Not implemented")
     def test_has_advanced_tab(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission(self):
         pass
 
 
@@ -333,6 +445,22 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_has_advanced_tab(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission(self):
+        pass
+
 
 class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
@@ -367,4 +495,20 @@ class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("Not implemented")
     def test_has_advanced_tab(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission(self):
         pass

@@ -1,5 +1,6 @@
 """Test Firewall models."""
 # flake8: noqa: F403,405
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from nautobot.ipam.models import VRF
 from nautobot.extras.models import Status
