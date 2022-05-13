@@ -10,27 +10,27 @@ class AddressObjectGroupM2M(BaseModel):
     # pylint: disable=R0901
     """Custom through model to on_delete=models.PROTECT."""
     address = models.ForeignKey("nautobot_firewall_models.AddressObject", on_delete=models.PROTECT)
-    address_group = models.ForeignKey("nautobot_firewall_models.AddressObjectGroup", on_delete=models.PROTECT)
+    address_group = models.ForeignKey("nautobot_firewall_models.AddressObjectGroup", on_delete=models.CASCADE)
 
 
 class DestAddrGroupM2M(BaseModel):
     # pylint: disable=R0901
     """Custom through model to on_delete=models.PROTECT."""
     addr_group = models.ForeignKey("nautobot_firewall_models.AddressObjectGroup", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.PROTECT)
+    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
 
 
 class DestAddrM2M(BaseModel):
     # pylint: disable=R0901
     """Custom through model to on_delete=models.PROTECT."""
     user = models.ForeignKey("nautobot_firewall_models.AddressObject", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.PROTECT)
+    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
 
 
 class FQDNIPAddressM2M(BaseModel):
     # pylint: disable=R0901
     """Custom through model to on_delete=models.PROTECT."""
-    fqdn = models.ForeignKey("nautobot_firewall_models.FQDN", on_delete=models.PROTECT)
+    fqdn = models.ForeignKey("nautobot_firewall_models.FQDN", on_delete=models.CASCADE)
     ip_address = models.ForeignKey("ipam.IPAddress", on_delete=models.PROTECT)
 
 
@@ -38,7 +38,7 @@ class PolicyDeviceM2M(BaseModel):
     # pylint: disable=R0901
     """Through model to add index to the the Policy & Device relationship."""
 
-    policy = models.ForeignKey("nautobot_firewall_models.Policy", on_delete=models.PROTECT)
+    policy = models.ForeignKey("nautobot_firewall_models.Policy", on_delete=models.CASCADE)
     device = models.ForeignKey("dcim.Device", on_delete=models.PROTECT)
     weight = models.PositiveSmallIntegerField(default=100)
 
@@ -53,7 +53,7 @@ class PolicyDynamicGroupM2M(BaseModel):
     # pylint: disable=R0901
     """Through model to add index to the the Policy & DynamicGroup relationship."""
 
-    policy = models.ForeignKey("nautobot_firewall_models.Policy", on_delete=models.PROTECT)
+    policy = models.ForeignKey("nautobot_firewall_models.Policy", on_delete=models.CASCADE)
     dynamic_group = models.ForeignKey("extras.DynamicGroup", on_delete=models.PROTECT)
     weight = models.PositiveSmallIntegerField(default=100)
 
@@ -68,7 +68,7 @@ class PolicyRuleM2M(BaseModel):
     # pylint: disable=R0901
     """Through model to add index to the the Policy & PolicyRule relationship."""
 
-    policy = models.ForeignKey("nautobot_firewall_models.Policy", on_delete=models.PROTECT)
+    policy = models.ForeignKey("nautobot_firewall_models.Policy", on_delete=models.CASCADE)
     rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.PROTECT)
     index = models.PositiveSmallIntegerField(null=True, blank=True)
 
@@ -87,7 +87,7 @@ class ServiceObjectGroupM2M(BaseModel):
 
     # pylint: disable=R0901
     service = models.ForeignKey("nautobot_firewall_models.ServiceObject", on_delete=models.PROTECT)
-    service_group = models.ForeignKey("nautobot_firewall_models.ServiceObjectGroup", on_delete=models.PROTECT)
+    service_group = models.ForeignKey("nautobot_firewall_models.ServiceObjectGroup", on_delete=models.CASCADE)
 
 
 class SrcAddrM2M(BaseModel):
@@ -95,7 +95,7 @@ class SrcAddrM2M(BaseModel):
 
     # pylint: disable=R0901
     addr = models.ForeignKey("nautobot_firewall_models.AddressObject", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.PROTECT)
+    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
 
 
 class SrcAddrGroupM2M(BaseModel):
@@ -103,7 +103,7 @@ class SrcAddrGroupM2M(BaseModel):
 
     # pylint: disable=R0901
     addr_group = models.ForeignKey("nautobot_firewall_models.AddressObjectGroup", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.PROTECT)
+    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
 
 
 class SrcUserM2M(BaseModel):
@@ -111,7 +111,7 @@ class SrcUserM2M(BaseModel):
 
     # pylint: disable=R0901
     user = models.ForeignKey("nautobot_firewall_models.UserObject", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.PROTECT)
+    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
 
 
 class SrcUserGroupM2M(BaseModel):
@@ -119,7 +119,7 @@ class SrcUserGroupM2M(BaseModel):
 
     # pylint: disable=R0901
     user_group = models.ForeignKey("nautobot_firewall_models.UserObjectGroup", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.PROTECT)
+    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
 
 
 class SvcM2M(BaseModel):
@@ -127,7 +127,7 @@ class SvcM2M(BaseModel):
 
     # pylint: disable=R0901
     svc = models.ForeignKey("nautobot_firewall_models.ServiceObject", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.PROTECT)
+    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
 
 
 class SvcGroupM2M(BaseModel):
@@ -135,7 +135,7 @@ class SvcGroupM2M(BaseModel):
 
     # pylint: disable=R0901
     svc_group = models.ForeignKey("nautobot_firewall_models.ServiceObjectGroup", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.PROTECT)
+    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
 
 
 class UserObjectGroupM2M(BaseModel):
@@ -143,14 +143,14 @@ class UserObjectGroupM2M(BaseModel):
 
     # pylint: disable=R0901
     user = models.ForeignKey("nautobot_firewall_models.UserObject", on_delete=models.PROTECT)
-    user_group = models.ForeignKey("nautobot_firewall_models.UserObjectGroup", on_delete=models.PROTECT)
+    user_group = models.ForeignKey("nautobot_firewall_models.UserObjectGroup", on_delete=models.CASCADE)
 
 
 class ZoneInterfaceM2M(BaseModel):
     """Custom through model to on_delete=models.PROTECT."""
 
     # pylint: disable=R0901
-    zone = models.ForeignKey("nautobot_firewall_models.Zone", on_delete=models.PROTECT)
+    zone = models.ForeignKey("nautobot_firewall_models.Zone", on_delete=models.CASCADE)
     interface = models.ForeignKey("dcim.Interface", on_delete=models.PROTECT)
 
 
@@ -158,5 +158,5 @@ class ZoneVRFM2M(BaseModel):
     """Custom through model to on_delete=models.PROTECT."""
 
     # pylint: disable=R0901
-    zone = models.ForeignKey("nautobot_firewall_models.Zone", on_delete=models.PROTECT)
+    zone = models.ForeignKey("nautobot_firewall_models.Zone", on_delete=models.CASCADE)
     vrf = models.ForeignKey("ipam.vrf", on_delete=models.PROTECT)
