@@ -1,12 +1,12 @@
 """Filtering for Firewall Model Plugin."""
 
-from nautobot.extras.filters import CreatedUpdatedFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet
-from nautobot.utilities.filters import BaseFilterSet, TagFilter
+from nautobot.extras.filters import StatusModelFilterSetMixin, NautobotFilterSet
+from nautobot.utilities.filters import TagFilter
 
 from nautobot_firewall_models import models
 
 
-class IPRangeFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
+class IPRangeFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
     """Filter for IPRange."""
 
     class Meta:
@@ -18,7 +18,7 @@ class IPRangeFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldMode
         fields = ["id", "vrf", "size", "description"]
 
 
-class FQDNFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
+class FQDNFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
     """Filter for FQDN."""
 
     class Meta:
@@ -29,9 +29,7 @@ class FQDNFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFi
         fields = ["id", "name", "description"]
 
 
-class AddressObjectFilterSet(
-    BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet
-):
+class AddressObjectFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
     """Filter for AddressObject."""
 
     class Meta:
@@ -42,9 +40,7 @@ class AddressObjectFilterSet(
         fields = ["id", "name", "ip_address", "prefix", "ip_range", "fqdn", "description"]
 
 
-class AddressObjectGroupFilterSet(
-    BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet
-):
+class AddressObjectGroupFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
     """Filter for AddressObjectGroup."""
 
     class Meta:
@@ -55,9 +51,7 @@ class AddressObjectGroupFilterSet(
         fields = ["id", "name", "address_objects", "description"]
 
 
-class ServiceObjectFilterSet(
-    BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet
-):
+class ServiceObjectFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
     """Filter for ServiceObject."""
 
     class Meta:
@@ -65,12 +59,10 @@ class ServiceObjectFilterSet(
 
         model = models.ServiceObject
 
-        fields = ["id", "name", "slug", "ip_protocol", "port", "description"]
+        fields = ["id", "name", "ip_protocol", "port", "description"]
 
 
-class ServiceObjectGroupFilterSet(
-    BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet
-):
+class ServiceObjectGroupFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
     """Filter for ServiceObjectGroup."""
 
     class Meta:
@@ -81,7 +73,7 @@ class ServiceObjectGroupFilterSet(
         fields = ["id", "name", "service_objects", "description"]
 
 
-class UserObjectFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
+class UserObjectFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
     """Filter for UserObject."""
 
     class Meta:
@@ -91,9 +83,7 @@ class UserObjectFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldM
         fields = ["id", "name", "username"]
 
 
-class UserObjectGroupFilterSet(
-    BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet
-):
+class UserObjectGroupFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
     """Filter for UserObjectGroup."""
 
     class Meta:
@@ -103,7 +93,7 @@ class UserObjectGroupFilterSet(
         fields = ["id", "name", "user_objects", "description"]
 
 
-class ZoneFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
+class ZoneFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
     """Filter for Zone."""
 
     class Meta:
@@ -115,7 +105,7 @@ class ZoneFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFi
 
 
 # TODO: Refactor
-class PolicyRuleFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
+class PolicyRuleFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
     """Filter for PolicyRule."""
 
     tag = TagFilter()
@@ -127,11 +117,11 @@ class PolicyRuleFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldM
         fields = ["id", "action", "log"]
 
 
-class PolicyFilterSet(BaseFilterSet, StatusModelFilterSetMixin, CustomFieldModelFilterSet, CreatedUpdatedFilterSet):
+class PolicyFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
     """Filter for Policy."""
 
     class Meta:
         """Meta attributes for filter."""
 
         model = models.Policy
-        fields = ["id", "name", "description", "policy_rules", "devices"]
+        fields = ["id", "name", "description", "policy_rules", "assigned_devices", "assigned_dynamic_groups"]

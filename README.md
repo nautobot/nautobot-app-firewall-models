@@ -7,7 +7,7 @@ The plugin is available as a Python package in pypi and can be installed with pi
 pip install nautobot-firewall-models
 ```
 
-> The plugin is compatible with Nautobot 1.1.0 and higher
+> The plugin is compatible with Nautobot 1.3.0 and higher
 
 To ensure Nautobot Plugin Firewall Model is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `nautobot-firewall-models` package:
 

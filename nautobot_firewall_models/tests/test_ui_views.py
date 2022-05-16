@@ -33,10 +33,6 @@ class IPRangeUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
-    @skip("Not implemented")
-    def test_has_advanced_tab(self):
-        pass
-
 
 class FQDNUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     # pylint: disable=R0901
@@ -61,10 +57,6 @@ class FQDNUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_has_advanced_tab(self):
         pass
 
 
@@ -93,10 +85,6 @@ class AddressObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_has_advanced_tab(self):
         pass
 
     @skip("on_delete set to PROTECT")
@@ -142,10 +130,6 @@ class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
-    @skip("Not implemented")
-    def test_has_advanced_tab(self):
-        pass
-
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -186,10 +170,6 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_has_advanced_tab(self):
         pass
 
     def test_service_object_str(self):
@@ -242,10 +222,6 @@ class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
-    @skip("Not implemented")
-    def test_has_advanced_tab(self):
-        pass
-
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -286,10 +262,6 @@ class UserObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_has_advanced_tab(self):
         pass
 
     @skip("on_delete set to PROTECT")
@@ -335,10 +307,6 @@ class UserObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
-    @skip("Not implemented")
-    def test_has_advanced_tab(self):
-        pass
-
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -379,10 +347,6 @@ class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_has_advanced_tab(self):
         pass
 
     @skip("on_delete set to PROTECT")
@@ -441,10 +405,6 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
-    @skip("Not implemented")
-    def test_has_advanced_tab(self):
-        pass
-
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -491,10 +451,6 @@ class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_has_advanced_tab(self):
         pass
 
     @skip("on_delete set to PROTECT")

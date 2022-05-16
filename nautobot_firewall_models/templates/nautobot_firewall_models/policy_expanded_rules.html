@@ -1,71 +1,11 @@
-{% extends 'base.html' %}
+
 {% load buttons %}
 {% load static %}
 {% load custom_links %}
 {% load helpers %}
 {% load plugins %}
 
-{% block title %}{{ object }}{% endblock %}
 
-{% block header %}
-    <div class="row noprint">
-        <div class="col-sm-8 col-md-9">
-            <ol class="breadcrumb">
-                <li><a href="{% url 'plugins:nautobot_firewall_models:policy_list' %}">Policies</a></li>
-                <li>{{ object }}</li>
-            </ol>
-        </div>
-        <div class="col-sm-4 col-md-3">
-            <form action="{% url 'plugins:nautobot_firewall_models:policy_list' %}" method="get">
-                <div class="input-group">
-                    <input type="text" name="q" class="form-control" />
-                    <span class="input-group-btn">
-                        <button type="submit" class="btn btn-primary">
-                            <span class="mdi mdi-magnify" aria-hidden="true"></span>
-                        </button>
-                    </span>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="pull-right noprint">
-        {% if perms.nautobot_firewall_models.edit_policy %}
-            <a href="{% url 'plugins:nautobot_firewall_models:policy_edit' pk=object.id %}" class="btn btn-warning">
-                <span class="mdi mdi-pencil" aria-hidden="true"></span> Edit
-            </a>
-        {% endif %}
-        {% if perms.nautobot_firewall_models.delete_policy %}
-            <a href="{% url 'plugins:nautobot_firewall_models:policy_delete' pk=object.id %}" class="btn btn-danger">
-                <span class="mdi mdi-trash-can-outline" aria-hidden="true"></span> Delete
-            </a>
-        {% endif %}
-    </div>
-    <h1>{{ object }}</h1>
-    {% include 'inc/created_updated.html' with obj=object %}
-    <div class="pull-right noprint">
-        {% custom_links object %}
-    </div>
-    <ul class="nav nav-tabs">
-        <li role="presentation">
-            <a href="{{ object.get_absolute_url }}">Policy</a>
-        </li>
-        <li role="presentation" class="active">
-            <a href="{% url 'plugins:nautobot_firewall_models:policy_policyrules' pk=object.id %}">Policy Rules</a>
-        </li>
-        {% if perms.nautobot_firewall_models.edit_policy %}
-            <li role="presentation">
-                <a href="{% url 'plugins:nautobot_firewall_models:policy_policyrules_assign_index' pk=object.id %}">Edit Policy Rule Indexes</a>
-            </li>
-        {% endif %}
-        {% if perms.extras.view_objectchange %}
-            <li role="presentation"{% if active_tab == 'changelog' %} class="active"{% endif %}>
-                <a href="{% url 'plugins:nautobot_firewall_models:policy_changelog' pk=object.id %}">Change Log</a>
-            </li>
-        {% endif %}
-    </ul>
-{% endblock %}
-
-{% block content %}
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
@@ -81,9 +21,3 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-12">
-        {% plugin_full_width_page object %}
-    </div>
-</div>
-{% endblock %}

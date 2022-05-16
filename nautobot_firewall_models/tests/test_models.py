@@ -86,7 +86,6 @@ class TestModels(TestCase):
 
         self.assertEqual(protocol.description, "")
         self.assertEqual(protocol.name, "HTTPS")
-        self.assertEqual(protocol.slug, "https")
         self.assertEqual(protocol.port, "8443")
         self.assertEqual(str(protocol), "HTTPS")
 
@@ -102,7 +101,6 @@ class TestModels(TestCase):
 
         self.assertEqual(protocol.description, "Encrypted HTTP traffic")
         self.assertEqual(protocol.name, "HTTPS")
-        self.assertEqual(protocol.slug, "https")
         self.assertEqual(protocol.port, "8443")
         self.assertEqual(str(protocol), "HTTPS")
 

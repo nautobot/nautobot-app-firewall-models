@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
-from django.template.defaultfilters import slugify
 from django.urls import reverse
 from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.models import StatusField
@@ -109,7 +108,7 @@ class FQDN(PrimaryModel):
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=254, unique=True)
     ip_addresses = models.ManyToManyField(
         to="ipam.IPAddress", blank=True, through="FQDNIPAddressM2M", related_name="fqdns"
     )
@@ -221,7 +220,7 @@ class AddressObjectGroup(PrimaryModel):
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     address_objects = models.ManyToManyField(
         to=AddressObject, blank=True, through="AddressObjectGroupM2M", related_name="address_object_groups"
     )
@@ -261,10 +260,10 @@ class UserObject(PrimaryModel):
     """UserObject model."""
 
     username = models.CharField(
-        max_length=50,
+        max_length=100,
         unique=True,
     )
-    name = models.CharField(max_length=50, blank=True)
+    name = models.CharField(max_length=100, blank=True)
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
@@ -304,7 +303,7 @@ class UserObjectGroup(PrimaryModel):
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     user_objects = models.ManyToManyField(
         to=UserObject, blank=True, through="UserObjectGroupM2M", related_name="user_object_groups"
     )
@@ -347,7 +346,7 @@ class Zone(PrimaryModel):
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     vrfs = models.ManyToManyField(to="ipam.VRF", blank=True, through="ZoneVRFM2M", related_name="zones")
     interfaces = models.ManyToManyField(
         to="dcim.Interface", blank=True, through="ZoneInterfaceM2M", related_name="zones"
@@ -391,8 +390,7 @@ class ServiceObject(PrimaryModel):
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=50, editable=False)
+    name = models.CharField(max_length=100)
     port = models.CharField(null=True, blank=True, validators=[validators.validate_port], max_length=20)
     ip_protocol = models.CharField(choices=choices.IP_PROTOCOL_CHOICES, max_length=20)
     status = StatusField(
@@ -406,7 +404,7 @@ class ServiceObject(PrimaryModel):
 
         ordering = ["name"]
         verbose_name_plural = "Service Objects"
-        unique_together = ["slug", "port", "ip_protocol"]
+        unique_together = ["port", "ip_protocol"]
 
     def get_absolute_url(self):
         """Return detail view URL."""
@@ -417,8 +415,7 @@ class ServiceObject(PrimaryModel):
         return self.name
 
     def save(self, *args, **kwargs):
-        """Overloads to enforce use of slugify."""
-        self.slug = slugify(self.name)
+        """Overload save to call fullclear to ensure validators run."""
         self.full_clean()
         super().save(*args, **kwargs)
 
@@ -441,7 +438,7 @@ class ServiceObjectGroup(PrimaryModel):
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     service_objects = models.ManyToManyField(
         to=ServiceObject, blank=True, through="ServiceObjectGroupM2M", related_name="service_object_groups"
     )
@@ -480,7 +477,7 @@ class PolicyRule(PrimaryModel):
     # pylint: disable=R0901
     """PolicyRule model."""
 
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     tags = TaggableManager(through=TaggedItem)
     source_user = models.ManyToManyField(to=UserObject, through="SrcUserM2M", related_name="policy_rules")
     source_user_group = models.ManyToManyField(
@@ -511,7 +508,7 @@ class PolicyRule(PrimaryModel):
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
         default=get_default_status,
     )
-    request_id = models.CharField(max_length=50, null=True, blank=True)
+    request_id = models.CharField(max_length=100, null=True, blank=True)
 
     class Meta:
         """Meta class."""
@@ -548,10 +545,12 @@ class Policy(PrimaryModel):
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     policy_rules = models.ManyToManyField(to=PolicyRule, through="PolicyRuleM2M", related_name="policies")
-    devices = models.ManyToManyField(to="dcim.Device", through="PolicyDeviceM2M", related_name="firewall_policies")
-    dynamic_groups = models.ManyToManyField(
+    assigned_devices = models.ManyToManyField(
+        to="dcim.Device", through="PolicyDeviceM2M", related_name="firewall_policies"
+    )
+    assigned_dynamic_groups = models.ManyToManyField(
         to="extras.DynamicGroup", through="PolicyDynamicGroupM2M", related_name="firewall_policies"
     )
     status = StatusField(

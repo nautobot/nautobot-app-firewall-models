@@ -19,12 +19,6 @@ class PolicyListView(generic.ObjectListView):
 class PolicyView(generic.ObjectView):
     """Detail view."""
 
-    queryset = models.Policy.objects.all()
-
-
-class PolicyExpandedRulesView(generic.ObjectView):
-    """Expanded Rules view."""
-
     queryset = models.Policy.objects.all().prefetch_related(
         "policyrulem2m_set__rule__service",
         "policyrulem2m_set__rule__service_group",
@@ -37,25 +31,6 @@ class PolicyExpandedRulesView(generic.ObjectView):
         "policyrulem2m_set__rule__destination_address",
         "policyrulem2m_set__rule__destination_address_group",
     )
-    template_name = "nautobot_firewall_models/policy_expanded_rules.html"
-
-
-class PolicyExpandedRulesIndexEditView(generic.ObjectView):
-    """Expanded Rules view."""
-
-    queryset = models.Policy.objects.all().prefetch_related(
-        "policyrulem2m_set__rule__service",
-        "policyrulem2m_set__rule__service_group",
-        "policyrulem2m_set__rule__source_address",
-        "policyrulem2m_set__rule__source_address_group",
-        "policyrulem2m_set__rule__source_user",
-        "policyrulem2m_set__rule__source_user_group",
-        "policyrulem2m_set__rule__source_zone",
-        "policyrulem2m_set__rule__destination_zone",
-        "policyrulem2m_set__rule__destination_address",
-        "policyrulem2m_set__rule__destination_address_group",
-    )
-    template_name = "nautobot_firewall_models/assign_policy_rule_index.html"
 
     def post(self, request, pk, *args, **kwargs):
         # pylint: disable=C0103:

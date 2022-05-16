@@ -8,7 +8,7 @@ from nautobot_firewall_models import models
 
 
 class IPRangeTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
+    # pylint: disable=too-few-public-methods
     """Table for list view."""
 
     pk = ToggleColumn()
@@ -24,7 +24,7 @@ class IPRangeTable(StatusTableMixin, BaseTable):
 
 
 class FQDNTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
+    # pylint: disable=too-few-public-methods
     """Table for list view."""
 
     pk = ToggleColumn()
@@ -39,7 +39,7 @@ class FQDNTable(StatusTableMixin, BaseTable):
 
 
 class AddressObjectTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
+    # pylint: disable=too-few-public-methods
     """Table for list view."""
 
     pk = ToggleColumn()
@@ -54,7 +54,7 @@ class AddressObjectTable(StatusTableMixin, BaseTable):
 
 
 class AddressObjectGroupTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
+    # pylint: disable=too-few-public-methods
     """Table for list view."""
 
     pk = ToggleColumn()
@@ -69,7 +69,7 @@ class AddressObjectGroupTable(StatusTableMixin, BaseTable):
 
 
 class ServiceObjectTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
+    # pylint: disable=too-few-public-methods
     """Table for list view."""
 
     pk = ToggleColumn()
@@ -84,7 +84,7 @@ class ServiceObjectTable(StatusTableMixin, BaseTable):
 
 
 class ServiceObjectGroupTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
+    # pylint: disable=too-few-public-methods
     """Table for list view."""
 
     pk = ToggleColumn()
@@ -99,7 +99,7 @@ class ServiceObjectGroupTable(StatusTableMixin, BaseTable):
 
 
 class UserObjectTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
+    # pylint: disable=too-few-public-methods
     """Table for list view."""
 
     pk = ToggleColumn()
@@ -114,7 +114,7 @@ class UserObjectTable(StatusTableMixin, BaseTable):
 
 
 class UserObjectGroupTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
+    # pylint: disable=too-few-public-methods
     """Table for list view."""
 
     pk = ToggleColumn()
@@ -129,7 +129,7 @@ class UserObjectGroupTable(StatusTableMixin, BaseTable):
 
 
 class ZoneTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
+    # pylint: disable=too-few-public-methods
     """Table for list view."""
 
     pk = ToggleColumn()
@@ -145,7 +145,7 @@ class ZoneTable(StatusTableMixin, BaseTable):
 
 # TODO: refactor
 class PolicyRuleTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
+    # pylint: disable=too-few-public-methods
     """Table for list view."""
 
     pk = ToggleColumn()
@@ -177,17 +177,17 @@ class PolicyRuleTable(StatusTableMixin, BaseTable):
 
 
 class PolicyTable(StatusTableMixin, BaseTable):
-    # pylint: disable=R0903
+    # pylint: disable=too-few-public-methods
     """Table for list view."""
 
     pk = ToggleColumn()
     name = tables.Column(linkify=True)
     actions = ButtonsColumn(models.Policy, buttons=("edit", "delete"))
-    devices = tables.ManyToManyColumn(linkify_item=True)
-    dynamic_groups = tables.ManyToManyColumn(linkify_item=True)
+    assigned_devices = tables.ManyToManyColumn(linkify_item=True)
+    assigned_dynamic_groups = tables.ManyToManyColumn(linkify_item=True)
 
     class Meta(BaseTable.Meta):
         """Meta attributes."""
 
         model = models.Policy
-        fields = ("pk", "name", "description", "policy_rules", "devices", "dynamic_groups", "status")
+        fields = ("pk", "name", "description", "policy_rules", "assigned_devices", "assigned_dynamic_groups", "status")
