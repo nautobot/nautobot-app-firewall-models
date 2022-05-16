@@ -20,30 +20,24 @@ Once installed, the plugin needs to be enabled in your `nautobot_config.py`
 ```python
 # In your nautobot_config.py
 PLUGINS = ["nautobot_firewall_models"]
+
+# Optional to overload the default status from Action
+# IF overloaded the status_name _must_ exist AND have all firewall content-types associated
+PLUGINS_CONFIG = {
+    "nautobot_firewall_models": {
+        "status_name": "Active"
+    }
+}
 ```
 
 ## Usage
 A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to model layer 4 firewall policies and/or extended access control lists. 
 
-### Assigning Policies
-Policies have a `devices` attribute that is a many to many relationship to the `nautobot.dcim.models.Device` object, doing so allows for the same policy to be associated with multiple `Device` objects. *IF* you would like to associate a `Policy` to another object type, custom relationships cans be used to extend how you associate the policy. Concepts of clustering and high availability are currently not in scope of this plugin.
-
-### Service Object
-The `Service` object within the plugin is not the same as `nautobot.ipam.models.Service`, the IPAM representation of the object is meant to define services running on a single `Device` or `VirtualMachine` object *NOT* a representation of port/protocol that may or may not have a device or IP associated to it.
-
 ## Screenshots
 
 <p align="center">
-<img src="./docs/images/navigation.png" class="center">
-<img src="./docs/images/policylist.png" class="center">
+<img src="./docs/images/navmenu.png" class="center">
 <img src="./docs/images/policy.png" class="center">
-<img src="./docs/images/policyrulelist.png" class="center">
-<img src="./docs/images/policyrule.png" class="center">
-<img src="./docs/images/destination.png" class="center">
-<img src="./docs/images/serviceobjectlist.png" class="center">
-<img src="./docs/images/addresspolicyobjectlist.png" class="center">
-<img src="./docs/images/addressobjectgrouplist.png" class="center">
-<img src="./docs/images/addressobjectlist.png" class="center">
 </p>
 
 ### Models
@@ -51,185 +45,9 @@ The `Service` object within the plugin is not the same as `nautobot.ipam.models.
 <img src="./docs/images/datamodel.png" class="center">
 </p>
 
+### Assigning Policies
+Policies have a `assigned_devices` attribute that is a many to many relationship to the `nautobot.dcim.models.Device` object, doing so allows for the same policy to be associated with multiple `Device` objects. `DynamicGroups` can also be used for assigning policies to a device through a dynamic group, this is done via the `assigned_dynamic_groups` attribute. *IF* you would like to associate a `Policy` to another object type, custom relationships cans be used to extend how you associate the policy. Concepts of clustering and high availability are currently not in scope of this plugin.
 
-#### Address
-* FQDN:
-  * Endpoint: `/api/plugins/firewall/fqdn/`
-  * Fully qualified domain names
-  * Can be tied to IP Addresses in Nautobot in a `ManyToMany` relationship
-* IP Range: 
-  * Endpoint: `/api/plugins/firewall/ip-range/`
-  * Range of IP Addresses `10.0.0.1-10.0.0.10`
-  * Must be unique with `start_address`, `end_address`, & `vrf`
-  * `vrf` is an optional attribute
-* Address Object: 
-  * Endpoint: `/api/plugins/firewall/address-object/`
-  * Defines all possible addresses as a common object
-  * `address` attribute will return the related object
-  * Can be one of the following
-    * `ipam.IPAddress`
-    * `ipam.Prefix`
-    * `FQDN`
-    * `IPRange`
-* Address Object Group:
-  * Endpoint: `/api/plugins/firewall/address-object-group/`
-  * Holds `ManyToMany` relationships to `AddressObject`
-* Address Policy Object:
-  * Endpoint: `/api/plugins/firewall/address-policy-object/`
-  * Holds `ManyToMany` relationships to `AddressObject` & `AddressObjectGroup`
-  * Allows for a single or group `AddressObject` & `AddressObjectGroup` to be mapped to policy
-  * Does NOT require a nested object to be set. (Example. `any` to signify any address)
-  * Used for `Source` & `Destination`
-
-#### Service
-* Service Object:
-  * Endpoint: `/api/plugins/firewall/service-object/`
-  * Defines Port/Name/IP Protocol as an common object
-* Service Object Group:
-  * Endpoint: `/api/plugins/firewall/service-object-group/`
-  * Holds `ManyToMany` relationships to `ServiceObject`
-* Service Policy Object:
-  * Endpoint: `/api/plugins/firewall/service-policy-object/`
-  * Holds `ManyToMany` relationships to `ServiceObject` & `ServiceObjectGroup`
-  * Allows for a single or group `ServiceObject` & `ServiceObjectGroup` to be mapped to policy
-  * Does NOT require a nested object to be set. (Example. `any` to signify any service)
-  * Used for `Source` & `Destination`
-
-#### User
-* User Object:
-  * Endpoint: `/api/plugins/firewall/user-object/`
-  * Defines users as objects for policies.
-  * `NOT` related to Nautobot User objects.
-* User Object Group:
-  * Endpoint: `/api/plugins/firewall/user-object-group/`
-  * Holds `ManyToMany` relationships to `UserObject`
-* User Policy Object:
-  * Endpoint: `/api/plugins/firewall/user-policy-object/`
-  * Holds `ManyToMany` relationships to `UserObject` & `UserObjectGroup`
-  * Allows for a single or group `UserObject` & `UserObjectGroup` to be mapped to policy
-  * Does NOT require a nested object to be set. (Example. `any` to signify any user)
-  * Only used for `Source`
-  * Feature may not be supported in all L4 firewalls.
-
-#### Zone
-* Zone:
-  * Endpoint: `/api/plugins/firewall/zone/`
-  * Simple model to define firewall zones.
-
-#### Policy
-* Source/Destination:
-  * Endpoint: `/api/plugins/firewall/source-destination/`
-  * Builds a source definition that includes the following attrs.
-    * `AddressPolicyObject` (Required)
-    * `ServicePolicyObject` (Required)
-    * `UserPolicyObject` (Optional)
-    * `Zone` (Optional)
-    * Description (Optional)
-    * `Status` (Required)
-* Policy Rule:
-  * Endpoint: `/api/plugins/firewall/policy-rule/`
-  * Builds an individual firewall policy rule/term with the following attrs.
-    * Name (Optional)
-    * Description (Optional)
-    * Index (Required)
-    * Action (Required)
-    * Log (Required)
-    * Source `SourceDestination` (Required)
-    * Destination `SourceDestination` (Required)
-    * `Status` (Required)
-* Policy:
-  * Endpoint: `/api/plugins/firewall/policy/`
-  * Final product of individual firewall policy rules/terms combined into a complete firewall policy.
-    * Name (Required)
-    * Description (Optional)
-    * `PolicyRules` (Required)
-    * `Devices` (Required)
-    * `Status` (Required)
-
-### Rest API
-The plugin includes API endpoints to manage its related objects, complete info in the Swagger section.### GraphQL API
-All objects are available for GraphQL queries.
-
-#### Sample GraphQL Query
-
-```
-query {
-  policies {
-    name
-    description
-    policy_rules {
-      index
-      tags {
-        name
-      }
-      action
-      log
-      source {
-        description
-        zone {
-          name
-        }
-				user {
-          user_objects {
-            username
-          }
-          user_object_groups {
-            user_objects {
-              username
-            }
-          }
-        }
-        address {
-          address_objects {
-            name
-          }
-          address_object_groups {
-            address_objects {
-              name
-            }
-          }
-        }
-        service {
-          service_objects {
-            name
-          }
-          service_object_groups {
-            service_objects {
-              name
-            }
-          }
-        }
-      }
-      destination {
-        description
-        zone {
-          name
-        }
-        address {
-          address_objects {
-            name
-          }
-          address_object_groups {
-            address_objects {
-              name
-            }
-          }
-        }
-        service {
-          service_objects {
-            name
-          }
-          service_object_groups {
-            service_objects {
-              name
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
 
 ## Contributing
 
@@ -311,6 +129,9 @@ Once you have Poetry and Docker installed you can run the following commands to 
 poetry shell
 poetry install
 invoke start
+
+## Optionally you can populate a minimal set of demo data for the plugin
+invoke testdata
 ```
 
 Nautobot server can now be accessed at [http://localhost:8080](http://localhost:8080).
