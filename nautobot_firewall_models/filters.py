@@ -104,7 +104,7 @@ class ZoneFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
         fields = ["id", "name", "vrfs", "interfaces", "description"]
 
 
-# TODO: Refactor
+# TODO: Refactor to allow for better filtering, currently very limited.
 class PolicyRuleFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
     """Filter for PolicyRule."""
 

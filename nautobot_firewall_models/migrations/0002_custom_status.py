@@ -2,7 +2,6 @@
 import os
 
 from django.db import migrations
-from django.template.defaultfilters import slugify
 import yaml
 
 
@@ -35,9 +34,7 @@ def create_default_objects(apps, schema_editor):
         name="ANY", status=status, description="Used to signify ANY ServiceObject."
     )
     for i in services:
-        apps.get_model("nautobot_firewall_models.ServiceObject").objects.create(
-            status=status, slug=slugify(i["name"]), **i
-        )
+        apps.get_model("nautobot_firewall_models.ServiceObject").objects.create(status=status, **i)
 
 
 class Migration(migrations.Migration):

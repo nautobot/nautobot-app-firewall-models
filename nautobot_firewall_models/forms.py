@@ -281,11 +281,8 @@ class UserObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFil
 class UserObjectForm(BootstrapMixin, forms.ModelForm):
     """UserObject creation/edit form."""
 
-    username = forms.CharField(
-        help_text="Signifies the username in identify provider (i.e. john.smith)", label="Username"
-    )
+    username = forms.CharField(label="Username")
     name = forms.CharField(
-        help_text="Signifies the name of the user, commonly first & last name (i.e. John Smith)",
         label="Name",
         required=False,
     )
