@@ -165,6 +165,17 @@ This will safely shut down all of your running Docker containers for this projec
 
 > NOTE: If you're wanting to reset the database and configuration settings, you can use the `invoke destroy` command, but it will result in data loss so make sure that is what you want to do.
 
+### Populate Test Data
+
+To simplify setting a development environment a management command is available that is also wrapped in an invoke command. The management command utilizes the same data that is used to run the unittests and will stay up to date based on data model changes. IF you are running a development environment outside of docker or would like to deploy in a test environment the management command without invoke is `nautobot-server create_test_firewall_data`
+
+```bash
+➜ invoke testdata
+Creating nautobot_firewall_models_nautobot_run ... done
+Attempting to populate dummy data.
+Successfully populated dummy data!
+```
+
 ### Real-Time Updates? How Cool!
 
 Your environment should now be fully setup, all necessary Docker containers are created and running, and you're logged into Nautobot in your web browser. Now what?

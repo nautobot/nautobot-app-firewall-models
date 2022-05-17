@@ -10,7 +10,7 @@ from nautobot_firewall_models import models
 
 
 class IPRangeSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
+    # pylint: disable=too-many-ancestors
     """IPRange Serializer."""
 
     start_address = serializers.CharField()
@@ -24,7 +24,7 @@ class IPRangeSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
 
 
 class FQDNSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
+    # pylint: disable=too-many-ancestors
     """FQDN Serializer."""
 
     class Meta:
@@ -35,7 +35,7 @@ class FQDNSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
 
 
 class AddressObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
+    # pylint: disable=too-many-ancestors
     """AddressObject Serializer."""
 
     class Meta:
@@ -46,7 +46,7 @@ class AddressObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
 
 
 class AddressObjectGroupSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
+    # pylint: disable=too-many-ancestors
     """AddressObjectGroup Serializer."""
 
     class Meta:
@@ -57,7 +57,7 @@ class AddressObjectGroupSerializer(TaggedObjectSerializer, ValidatedModelSeriali
 
 
 class ServiceObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
+    # pylint: disable=too-many-ancestors
     """ServiceObject Serializer."""
 
     class Meta:
@@ -68,7 +68,7 @@ class ServiceObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
 
 
 class ServiceObjectGroupSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
+    # pylint: disable=too-many-ancestors
     """ServiceObjectGroup Serializer."""
 
     class Meta:
@@ -79,7 +79,7 @@ class ServiceObjectGroupSerializer(TaggedObjectSerializer, ValidatedModelSeriali
 
 
 class UserObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
+    # pylint: disable=too-many-ancestors
     """UserObject Serializer."""
 
     class Meta:
@@ -90,7 +90,7 @@ class UserObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
 
 
 class UserObjectGroupSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
+    # pylint: disable=too-many-ancestors
     """UserObjectGroup Serializer."""
 
     class Meta:
@@ -101,7 +101,7 @@ class UserObjectGroupSerializer(TaggedObjectSerializer, ValidatedModelSerializer
 
 
 class ZoneSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
+    # pylint: disable=too-many-ancestors
     """Zone Serializer."""
 
     class Meta:
@@ -112,7 +112,7 @@ class ZoneSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
 
 
 class PolicyRuleSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
+    # pylint: disable=too-many-ancestors
     """PolicyRule Serializer."""
     source_user = SerializedPKRelatedField(
         queryset=models.UserObject.objects.all(),
@@ -180,7 +180,7 @@ class PolicyRuleM2MNestedSerializer(serializers.ModelSerializer):
         fields = ["rule", "index"]
 
 
-class PolicyDeivceM2MNestedSerializer(serializers.ModelSerializer):
+class PolicyDeviceM2MNestedSerializer(serializers.ModelSerializer):
     """PolicyDeviceM2M NestedSerializer."""
 
     class Meta:
@@ -201,12 +201,12 @@ class PolicyDynamicGroupM2MNestedSerializer(serializers.ModelSerializer):
 
 
 class PolicySerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=R0901
+    # pylint: disable=too-many-ancestors
     """Policy Serializer."""
 
     policy_rules = PolicyRuleM2MNestedSerializer(many=True, required=False, source="policyrulem2m_set")
-    devices = PolicyDeivceM2MNestedSerializer(many=True, required=False, source="policydevicem2m_set")
-    dynamic_groups = PolicyDynamicGroupM2MNestedSerializer(
+    assigned_devices = PolicyDeviceM2MNestedSerializer(many=True, required=False, source="policydevicem2m_set")
+    assigned_dynamic_groups = PolicyDynamicGroupM2MNestedSerializer(
         many=True, required=False, source="policydynamicgroupm2m_set"
     )
 
@@ -219,33 +219,33 @@ class PolicySerializer(TaggedObjectSerializer, ValidatedModelSerializer):
     def create(self, validated_data):
         """Overload create to account for custom m2m field."""
         policy_rules = validated_data.pop("policyrulem2m_set", None)
-        devices = validated_data.pop("policydevicem2m_set", None)
-        dynamic_groups = validated_data.pop("policydynamicgroupm2m_set", None)
+        assigned_devices = validated_data.pop("policydevicem2m_set", None)
+        assigned_dynamic_groups = validated_data.pop("policydynamicgroupm2m_set", None)
         instance = super().create(validated_data)
 
         if policy_rules is not None:
             return self._save_policy_rules(instance, policy_rules)
-        if devices is not None:
-            return self._save_devices(instance, devices)
-        if dynamic_groups is not None:
-            return self._save_dynamic_groups(instance, dynamic_groups)
+        if assigned_devices is not None:
+            return self._save_assigned_devices(instance, assigned_devices)
+        if assigned_dynamic_groups is not None:
+            return self._save_assigned_dynamic_groups(instance, assigned_dynamic_groups)
 
         return instance
 
     def update(self, instance, validated_data):
         """Overload create to account for update m2m field."""
         policy_rules = validated_data.pop("policyrulem2m_set", None)
-        devices = validated_data.pop("policydevicem2m_set", None)
-        dynamic_groups = validated_data.pop("policydynamicgroupm2m_set", None)
+        assigned_devices = validated_data.pop("policydevicem2m_set", None)
+        assigned_dynamic_groups = validated_data.pop("policydynamicgroupm2m_set", None)
 
         instance = super().update(instance, validated_data)
 
         if policy_rules is not None:
             return self._save_policy_rules(instance, policy_rules)
-        if devices is not None:
-            return self._save_devices(instance, devices)
-        if dynamic_groups is not None:
-            return self._save_dynamic_groups(instance, dynamic_groups)
+        if assigned_devices is not None:
+            return self._save_assigned_devices(instance, assigned_devices)
+        if assigned_dynamic_groups is not None:
+            return self._save_assigned_dynamic_groups(instance, assigned_dynamic_groups)
 
         return instance
 
@@ -262,11 +262,11 @@ class PolicySerializer(TaggedObjectSerializer, ValidatedModelSerializer):
 
         return instance
 
-    def _save_devices(self, instance, devices):
+    def _save_assigned_devices(self, instance, assigned_devices):
         # pylint: disable=R0201
         """Helper function for custom m2m field."""
-        instance.devices.clear()
-        for dev in devices:
+        instance.assigned_devices.clear()
+        for dev in assigned_devices:
             models.PolicyDeviceM2M.objects.create(
                 device=Device.objects.get(id=dev["device"].id),
                 weight=dev.get("weight", None),
@@ -275,12 +275,12 @@ class PolicySerializer(TaggedObjectSerializer, ValidatedModelSerializer):
 
         return instance
 
-    def _save_dynamic_groups(self, instance, dynamic_groups):
+    def _save_assigned_dynamic_groups(self, instance, assigned_dynamic_groups):
         # pylint: disable=R0201
         """Helper function for custom m2m field."""
-        instance.dynamic_groups.clear()
+        instance.assigned_dynamic_groups.clear()
 
-        for d_g in dynamic_groups:
+        for d_g in assigned_dynamic_groups:
             models.PolicyDynamicGroupM2M.objects.create(
                 dynamic_group=DynamicGroup.objects.get(id=d_g["dynamic_group"].id),
                 index=d_g.get("weight", None),

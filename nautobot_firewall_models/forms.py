@@ -281,11 +281,8 @@ class UserObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFil
 class UserObjectForm(BootstrapMixin, forms.ModelForm):
     """UserObject creation/edit form."""
 
-    username = forms.CharField(
-        help_text="Signifies the username in identify provider (i.e. john.smith)", label="Username"
-    )
+    username = forms.CharField(label="Username")
     name = forms.CharField(
-        help_text="Signifies the name of the user, commonly first & last name (i.e. John Smith)",
         label="Name",
         required=False,
     )
@@ -488,14 +485,14 @@ class PolicyFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterF
         help_text="Search within Name or Description.",
     )
     name = forms.CharField(required=False, label="Name")
-    devices = DynamicModelChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_devices = DynamicModelChoiceField(queryset=Device.objects.all(), required=False)
 
 
 class PolicyForm(BootstrapMixin, forms.ModelForm, TenancyForm):
     """Policy creation/edit form."""
 
-    devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
-    dynamic_groups = DynamicModelMultipleChoiceField(queryset=DynamicGroup.objects.all(), required=False)
+    assigned_devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_dynamic_groups = DynamicModelMultipleChoiceField(queryset=DynamicGroup.objects.all(), required=False)
     policy_rules = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), required=False)
 
     class Meta:
@@ -507,8 +504,8 @@ class PolicyForm(BootstrapMixin, forms.ModelForm, TenancyForm):
             "description",
             "policy_rules",
             "status",
-            "devices",
-            "dynamic_groups",
+            "assigned_devices",
+            "assigned_dynamic_groups",
             "tenant_group",
             "tenant",
             "tags",
@@ -520,8 +517,8 @@ class PolicyBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
 
     pk = DynamicModelMultipleChoiceField(queryset=models.Policy.objects.all(), widget=forms.MultipleHiddenInput)
     description = forms.CharField(required=False)
-    devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
-    dynamic_groups = DynamicModelMultipleChoiceField(queryset=DynamicGroup.objects.all(), required=False)
+    assigned_devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_dynamic_groups = DynamicModelMultipleChoiceField(queryset=DynamicGroup.objects.all(), required=False)
     policy_rules = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), required=False)
     tenant = DynamicModelChoiceField(queryset=Tenant.objects.all(), required=False)
 

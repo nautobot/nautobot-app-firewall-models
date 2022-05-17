@@ -312,6 +312,13 @@ def bandit(context):
 
 
 @task
+def yamllint(context):
+    """Run bandit to validate basic static code security analysis."""
+    command = "yamllint ."
+    run_command(context, command)
+
+
+@task
 def check_migrations(context):
     """Check for missing migrations."""
     command = "nautobot-server --config=nautobot/core/tests/nautobot_config.py makemigrations --dry-run --check"

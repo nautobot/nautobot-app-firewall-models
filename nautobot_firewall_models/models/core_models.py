@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
-from django.template.defaultfilters import slugify
 from django.urls import reverse
 from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.models import StatusField
@@ -29,18 +28,18 @@ from nautobot_firewall_models.utils import get_default_status
     "webhooks",
 )
 class IPRange(PrimaryModel):
-    # pylint: disable=R0901
+    # pylint: disable=too-many-ancestors
     """IPRange model to track ranges of IPs in firewall rules."""
 
     start_address = VarbinaryIPField(
         null=False,
         db_index=True,
-        help_text="IPv4 or IPv6 host address",
+        help_text="Starting IPv4 or IPv6 host address",
     )
     end_address = VarbinaryIPField(
         null=False,
         db_index=True,
-        help_text="IPv4 or IPv6 host address",
+        help_text="Ending IPv4 or IPv6 host address",
     )
     vrf = models.ForeignKey(
         to="ipam.VRF", on_delete=models.PROTECT, related_name="ip_ranges", blank=True, null=True, verbose_name="VRF"
@@ -102,16 +101,22 @@ class IPRange(PrimaryModel):
     "webhooks",
 )
 class FQDN(PrimaryModel):
-    # pylint: disable=R0901
-    """FQDN model."""
+    # pylint: disable=too-many-ancestors
+    """Models fully qualified domain names, can be used on some firewall in place of a static IP."""
 
     description = models.CharField(
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(
+        max_length=254, unique=True, help_text="Resolvable fully qualified domain name (i.e. networktocode.com)"
+    )
     ip_addresses = models.ManyToManyField(
-        to="ipam.IPAddress", blank=True, through="FQDNIPAddressM2M", related_name="fqdns"
+        to="ipam.IPAddress",
+        blank=True,
+        through="FQDNIPAddressM2M",
+        related_name="fqdns",
+        help_text="IP(s) an FQDN should resolve to.",
     )
     status = StatusField(
         on_delete=models.PROTECT,
@@ -146,14 +151,14 @@ class FQDN(PrimaryModel):
     "webhooks",
 )
 class AddressObject(PrimaryModel):
-    # pylint: disable=R0901
-    """FQDN model."""
+    # pylint: disable=too-many-ancestors
+    """Intermediate model to aggregate underlying address items, to allow for easier management."""
 
     description = models.CharField(
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True, help_text="Name descriptor for an address object type.")
     fqdn = models.ForeignKey(to=FQDN, on_delete=models.PROTECT, null=True, blank=True)
     ip_range = models.ForeignKey(to=IPRange, on_delete=models.PROTECT, null=True, blank=True)
     ip_address = models.ForeignKey(to="ipam.IPAddress", on_delete=models.PROTECT, null=True, blank=True)
@@ -214,14 +219,14 @@ class AddressObject(PrimaryModel):
     "webhooks",
 )
 class AddressObjectGroup(PrimaryModel):
-    # pylint: disable=R0901
-    """AddressObjectGroup model."""
+    # pylint: disable=too-many-ancestors
+    """Groups together AddressObjects to better mimic grouping sets of address objects that have a some commonality."""
 
     description = models.CharField(
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True, help_text="Name descriptor for a group address objects.")
     address_objects = models.ManyToManyField(
         to=AddressObject, blank=True, through="AddressObjectGroupM2M", related_name="address_object_groups"
     )
@@ -257,14 +262,17 @@ class AddressObjectGroup(PrimaryModel):
     "webhooks",
 )
 class UserObject(PrimaryModel):
-    # pylint: disable=R0901
-    """UserObject model."""
+    # pylint: disable=too-many-ancestors
+    """Source users can be used to identify the origin of traffic for a user on some firewalls."""
 
     username = models.CharField(
-        max_length=50,
-        unique=True,
+        max_length=100, unique=True, help_text="Signifies the username in identify provider (i.e. john.smith)"
     )
-    name = models.CharField(max_length=50, blank=True)
+    name = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text="Signifies the name of the user, commonly first & last name (i.e. John Smith)",
+    )
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
@@ -297,14 +305,14 @@ class UserObject(PrimaryModel):
     "webhooks",
 )
 class UserObjectGroup(PrimaryModel):
-    # pylint: disable=R0901
-    """UserObjectGroup model."""
+    # pylint: disable=too-many-ancestors
+    """Grouping of individual user objects, does NOT have any relationship to AD groups or any other IDP group."""
 
     description = models.CharField(
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     user_objects = models.ManyToManyField(
         to=UserObject, blank=True, through="UserObjectGroupM2M", related_name="user_object_groups"
     )
@@ -340,14 +348,14 @@ class UserObjectGroup(PrimaryModel):
     "webhooks",
 )
 class Zone(PrimaryModel):
-    # pylint: disable=R0901
-    """Zone model."""
+    # pylint: disable=too-many-ancestors
+    """Zones common on firewalls and are typically seen as representations of area (i.e. DMZ trust untrust)."""
 
     description = models.CharField(
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True, help_text="Name of the zone (i.e. trust)")
     vrfs = models.ManyToManyField(to="ipam.VRF", blank=True, through="ZoneVRFM2M", related_name="zones")
     interfaces = models.ManyToManyField(
         to="dcim.Interface", blank=True, through="ZoneInterfaceM2M", related_name="zones"
@@ -384,17 +392,24 @@ class Zone(PrimaryModel):
     "webhooks",
 )
 class ServiceObject(PrimaryModel):
-    # pylint: disable=R0901
-    """ServiceObject model."""
+    # pylint: disable=too-many-ancestors
+    """ServiceObject matches a IANA IP Protocol with a name and optional port number (i.e. TCP HTTPS 443)."""
 
     description = models.CharField(
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=50, editable=False)
-    port = models.CharField(null=True, blank=True, validators=[validators.validate_port], max_length=20)
-    ip_protocol = models.CharField(choices=choices.IP_PROTOCOL_CHOICES, max_length=20)
+    name = models.CharField(max_length=100, help_text="Name of the service (i.e. HTTP)")
+    port = models.CharField(
+        null=True,
+        blank=True,
+        validators=[validators.validate_port],
+        max_length=20,
+        help_text="The port or port range to tie to a service (i.e. HTTP would be port 80)",
+    )
+    ip_protocol = models.CharField(
+        choices=choices.IP_PROTOCOL_CHOICES, max_length=20, help_text="IANA IP Protocol (i.e. TCP UDP ICMP)"
+    )
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
@@ -406,7 +421,7 @@ class ServiceObject(PrimaryModel):
 
         ordering = ["name"]
         verbose_name_plural = "Service Objects"
-        unique_together = ["slug", "port", "ip_protocol"]
+        unique_together = ["port", "ip_protocol"]
 
     def get_absolute_url(self):
         """Return detail view URL."""
@@ -417,8 +432,7 @@ class ServiceObject(PrimaryModel):
         return self.name
 
     def save(self, *args, **kwargs):
-        """Overloads to enforce use of slugify."""
-        self.slug = slugify(self.name)
+        """Overload save to call fullclear to ensure validators run."""
         self.full_clean()
         super().save(*args, **kwargs)
 
@@ -434,14 +448,14 @@ class ServiceObject(PrimaryModel):
     "webhooks",
 )
 class ServiceObjectGroup(PrimaryModel):
-    # pylint: disable=R0901
-    """ServiceGroup model."""
+    # pylint: disable=too-many-ancestors
+    """Groups service objects."""
 
     description = models.CharField(
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     service_objects = models.ManyToManyField(
         to=ServiceObject, blank=True, through="ServiceObjectGroupM2M", related_name="service_object_groups"
     )
@@ -477,10 +491,14 @@ class ServiceObjectGroup(PrimaryModel):
     "webhooks",
 )
 class PolicyRule(PrimaryModel):
-    # pylint: disable=R0901
-    """PolicyRule model."""
+    # pylint: disable=too-many-ancestors
+    """
+    A PolicyRule is a the equivalent of a single in a firewall policy or access list.
 
-    name = models.CharField(max_length=50)
+    Firewall policiesare typically made up of several individual rules.
+    """
+
+    name = models.CharField(max_length=100)
     tags = TaggableManager(through=TaggedItem)
     source_user = models.ManyToManyField(to=UserObject, through="SrcUserM2M", related_name="policy_rules")
     source_user_group = models.ManyToManyField(
@@ -511,7 +529,7 @@ class PolicyRule(PrimaryModel):
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
         default=get_default_status,
     )
-    request_id = models.CharField(max_length=50, null=True, blank=True)
+    request_id = models.CharField(max_length=100, null=True, blank=True)
 
     class Meta:
         """Meta class."""
@@ -541,17 +559,23 @@ class PolicyRule(PrimaryModel):
     "webhooks",
 )
 class Policy(PrimaryModel):
-    # pylint: disable=R0901
-    """Policy model."""
+    # pylint: disable=too-many-ancestors
+    """
+    The overarching model that is the full firewall policy with all underlying rules and child objects.
+
+    Each Policy can be assigned to both devices and to dynamic groups which in turn can assign the policy to a related device.
+    """
 
     description = models.CharField(
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     policy_rules = models.ManyToManyField(to=PolicyRule, through="PolicyRuleM2M", related_name="policies")
-    devices = models.ManyToManyField(to="dcim.Device", through="PolicyDeviceM2M", related_name="firewall_policies")
-    dynamic_groups = models.ManyToManyField(
+    assigned_devices = models.ManyToManyField(
+        to="dcim.Device", through="PolicyDeviceM2M", related_name="firewall_policies"
+    )
+    assigned_dynamic_groups = models.ManyToManyField(
         to="extras.DynamicGroup", through="PolicyDynamicGroupM2M", related_name="firewall_policies"
     )
     status = StatusField(

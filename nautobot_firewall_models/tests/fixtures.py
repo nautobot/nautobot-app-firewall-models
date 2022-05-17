@@ -50,15 +50,9 @@ def create_env():
     addr_grp3 = AddressObjectGroup.objects.create(name="addr group3", status=status)
     addr_grp3.address_objects.set([addr_obj1, addr_obj2, addr_obj3, addr_obj4])
 
-    svc_obj1, _ = ServiceObject.objects.get_or_create(
-        name="PGSQL", port="5432", slug="pgsql", ip_protocol="TCP", status=status
-    )
-    svc_obj2, _ = ServiceObject.objects.get_or_create(
-        name="SSH", port="22", slug="ssh", ip_protocol="TCP", status=status
-    )
-    svc_obj3, _ = ServiceObject.objects.get_or_create(
-        name="FTP", port="20-21", slug="ftp", ip_protocol="TCP", status=status
-    )
+    svc_obj1, _ = ServiceObject.objects.get_or_create(name="PGSQL", port="5432", ip_protocol="TCP", status=status)
+    svc_obj2, _ = ServiceObject.objects.get_or_create(name="SSH", port="22", ip_protocol="TCP", status=status)
+    svc_obj3, _ = ServiceObject.objects.get_or_create(name="FTP", port="20-21", ip_protocol="TCP", status=status)
     svc_grp1 = ServiceObjectGroup.objects.create(name="svc group1", status=status)
     svc_grp1.service_objects.set([svc_obj1])
     svc_grp2 = ServiceObjectGroup.objects.create(name="svc group2", status=status)
