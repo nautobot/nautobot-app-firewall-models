@@ -44,7 +44,7 @@
             <tr>
                 <td>Prefix</td>
                 <td>
-                    {% if object.fqdn %}
+                    {% if object.prefix %}
                         <a href="{{ object.prefix.get_absolute_url }}">{{ object.prefix }}</a>
                     {% else %}
                         <span class="text-muted">None</span>
