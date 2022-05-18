@@ -441,7 +441,7 @@ class PolicyRuleForm(BootstrapMixin, forms.ModelForm):
 
         model = models.PolicyRule
         fields = [
-            # pylint: disable=R0801
+            # pylint: disable=duplicate-code
             "name",
             "source_user",
             "source_user_group",

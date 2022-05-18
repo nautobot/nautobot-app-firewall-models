@@ -10,8 +10,8 @@ from .fixtures import create_env, create_ip_range, create_fqdn
 
 
 class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
     """Test the IPRange viewsets."""
+
     model = models.IPRange
     bulk_update_data = {"description": "test update description"}
 
@@ -31,8 +31,8 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
 
 
 class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
     """Test the Protocol viewsets."""
+
     model = models.FQDN
     bulk_update_data = {"description": "test update description"}
 
@@ -52,8 +52,8 @@ class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
 
 
 class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
     """Test the AddressObject viewsets."""
+
     model = models.AddressObject
     bulk_update_data = {"description": "test update description"}
 
@@ -84,8 +84,8 @@ class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
 
 
 class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
     """Test the AddressObjectGroup viewsets."""
+
     model = models.AddressObjectGroup
     bulk_update_data = {"description": "test update description"}
 
@@ -126,8 +126,8 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
 
 
 class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
     """Test the ServiceObject viewsets."""
+
     model = models.ServiceObject
     bulk_update_data = {"description": "test update description"}
     choices_fields = ["ip_protocol"]
@@ -156,8 +156,8 @@ class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
 
 
 class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
     """Test the ServiceGroup viewsets."""
+
     model = models.ServiceObjectGroup
     bulk_update_data = {"description": "test update description"}
 
@@ -198,8 +198,8 @@ class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
 
 
 class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
     """Test the User viewsets."""
+
     model = models.UserObject
     bulk_update_data = {"name": "User Name 123"}
 
@@ -227,8 +227,8 @@ class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
 
 
 class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
     """Test the UserGroup viewsets."""
+
     model = models.UserObjectGroup
     bulk_update_data = {"description": "test update description"}
 
@@ -269,8 +269,8 @@ class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
 
 
 class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
     """Test the Zone viewsets."""
+
     model = models.Zone
     bulk_update_data = {"description": "test update description"}
 
@@ -298,8 +298,8 @@ class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
 
 
 class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
     """Test the PolicyRule viewsets."""
+
     model = models.PolicyRule
     bulk_update_data = {"log": False}
     choices_fields = ["action"]
@@ -350,8 +350,8 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
 
 
 class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
-    # pylint: disable=R0901
     """Test the Policy viewsets."""
+
     model = models.Policy
     bulk_update_data = {"description": "test update description"}
 

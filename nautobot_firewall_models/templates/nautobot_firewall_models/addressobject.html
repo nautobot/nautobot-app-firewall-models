@@ -13,19 +13,43 @@
             </tr>
             <tr>
                 <td>FQDN</td>
-                <td><a href="{{ object.fqdn.get_absolute_url }}">{{ object.fqdn|placeholder }}</a></td>
+                <td>
+                    {% if object.fqdn %}
+                        <a href="{{ object.fqdn.get_absolute_url }}">{{ object.fqdn }}</a>
+                    {% else %}
+                        <span class="text-muted">None</span>
+                    {% endif %}
+                </td>
             </tr>
             <tr>
                 <td>IP Range</td>
-                <td><a href="{{ object.ip_range.get_absolute_url }}">{{ object.ip_range|placeholder }}</a></td>
+                <td>
+                    {% if object.ip_range %}
+                        <a href="{{ object.ip_range.get_absolute_url }}">{{ object.ip_range }}</a>
+                    {% else %}
+                        <span class="text-muted">None</span>
+                    {% endif %}
+                </td>
             </tr>
             <tr>
                 <td>IP Address</td>
-                <td><a href="{{ object.ip_address.get_absolute_url }}">{{ object.ip_address|placeholder }}</a></td>
+                <td>
+                    {% if object.ip_address %}
+                        <a href="{{ object.ip_address.get_absolute_url }}">{{ object.ip_address }}</a>
+                    {% else %}
+                        <span class="text-muted">None</span>
+                    {% endif %}
+                </td>
             </tr>
             <tr>
                 <td>Prefix</td>
-                <td><a href="{{ object.prefix.get_absolute_url }}">{{ object.prefix|placeholder }}</a></td>
+                <td>
+                    {% if object.prefix %}
+                        <a href="{{ object.prefix.get_absolute_url }}">{{ object.prefix }}</a>
+                    {% else %}
+                        <span class="text-muted">None</span>
+                    {% endif %}
+                </td>
             </tr>
             <tr>
                 <td>Status</td>

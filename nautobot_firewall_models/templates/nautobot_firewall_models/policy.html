@@ -39,11 +39,27 @@
                             </tr>
                             <tr>
                                 <td>Devices</td>
-                                <td>{% for i in object.devices.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% empty %}{{ None|placeholder }}{% endfor %}</td>
+                                <td>
+                                    <ul>
+                                        {% for i in object.assigned_devices.all %}
+                                            <li><a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a></li>
+                                        {% empty %}
+                                            None
+                                        {% endfor %}
+                                    </ul>
+                                </td>
                             </tr>
                             <tr>
                                 <td>Dynamic Groups</td>
-                                <td>{% for i in object.dynamic_groups.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% empty %}{{ None|placeholder }}{% endfor %}</td>
+                                <td>
+                                    <ul>
+                                        {% for i in object.assigned_dynamic_groups.all %}
+                                            <li><a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a></li>
+                                        {% empty %}
+                                            None
+                                        {% endfor %}
+                                    </ul>
+                                </td>
                             </tr>
                             <tr>
                                 <td>Tenant Group </td>

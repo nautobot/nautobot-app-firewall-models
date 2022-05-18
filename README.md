@@ -21,7 +21,7 @@ Once installed, the plugin needs to be enabled in your `nautobot_config.py`
 # In your nautobot_config.py
 PLUGINS = ["nautobot_firewall_models"]
 
-# Optional to overload the default status from Action
+# Optional to overload the default status from "Active"
 # IF overloaded the status_name _must_ exist AND have all firewall content-types associated
 PLUGINS_CONFIG = {
     "nautobot_firewall_models": {
