@@ -10,7 +10,6 @@ from nautobot_firewall_models import models
 
 
 class IPRangeSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=too-many-ancestors
     """IPRange Serializer."""
 
     start_address = serializers.CharField()
@@ -24,7 +23,6 @@ class IPRangeSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
 
 
 class FQDNSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=too-many-ancestors
     """FQDN Serializer."""
 
     class Meta:
@@ -35,7 +33,6 @@ class FQDNSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
 
 
 class AddressObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=too-many-ancestors
     """AddressObject Serializer."""
 
     class Meta:
@@ -46,7 +43,6 @@ class AddressObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
 
 
 class AddressObjectGroupSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=too-many-ancestors
     """AddressObjectGroup Serializer."""
 
     class Meta:
@@ -57,7 +53,6 @@ class AddressObjectGroupSerializer(TaggedObjectSerializer, ValidatedModelSeriali
 
 
 class ServiceObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=too-many-ancestors
     """ServiceObject Serializer."""
 
     class Meta:
@@ -68,7 +63,6 @@ class ServiceObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
 
 
 class ServiceObjectGroupSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=too-many-ancestors
     """ServiceObjectGroup Serializer."""
 
     class Meta:
@@ -79,7 +73,6 @@ class ServiceObjectGroupSerializer(TaggedObjectSerializer, ValidatedModelSeriali
 
 
 class UserObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=too-many-ancestors
     """UserObject Serializer."""
 
     class Meta:
@@ -90,7 +83,6 @@ class UserObjectSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
 
 
 class UserObjectGroupSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=too-many-ancestors
     """UserObjectGroup Serializer."""
 
     class Meta:
@@ -101,7 +93,6 @@ class UserObjectGroupSerializer(TaggedObjectSerializer, ValidatedModelSerializer
 
 
 class ZoneSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=too-many-ancestors
     """Zone Serializer."""
 
     class Meta:
@@ -112,8 +103,8 @@ class ZoneSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
 
 
 class PolicyRuleSerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=too-many-ancestors
     """PolicyRule Serializer."""
+
     source_user = SerializedPKRelatedField(
         queryset=models.UserObject.objects.all(),
         serializer=UserObjectSerializer,
@@ -201,7 +192,6 @@ class PolicyDynamicGroupM2MNestedSerializer(serializers.ModelSerializer):
 
 
 class PolicySerializer(TaggedObjectSerializer, ValidatedModelSerializer):
-    # pylint: disable=too-many-ancestors
     """Policy Serializer."""
 
     policy_rules = PolicyRuleM2MNestedSerializer(many=True, required=False, source="policyrulem2m_set")

@@ -14,7 +14,15 @@
             </tr>
             <tr>
                 <td>User Objects</td>
-                <td>{% for i in object.user_objects.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}</td>
+                <td>
+                    <ul>
+                        {% for i in object.user_objects.all %}
+                            <li><a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a></li>
+                        {% empty %}
+                            None
+                        {% endfor %}
+                    </ul>
+                </td>
             </tr>
             <tr>
                 <td>Status</td>

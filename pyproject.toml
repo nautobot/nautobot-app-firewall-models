@@ -76,6 +76,8 @@ min-similarity-lines=6
 disable = """,
     line-too-long,
     bad-continuation,
+    too-few-public-methods,
+    too-many-ancestors
     """
 
 [tool.pylint.miscellaneous]

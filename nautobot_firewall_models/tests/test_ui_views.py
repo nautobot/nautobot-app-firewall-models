@@ -9,8 +9,8 @@ from .fixtures import create_env, create_fqdn, create_ip_range
 
 
 class IPRangeUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
-    # pylint: disable=R0901
     """Test the IPRange viewsets."""
+
     model = IPRange
     bulk_edit_data = {"description": "test update description"}
 
@@ -35,8 +35,8 @@ class IPRangeUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
 
 class FQDNUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
-    # pylint: disable=R0901
     """Test the Protocol viewsets."""
+
     model = FQDN
     bulk_edit_data = {"description": "test update description"}
 
@@ -61,8 +61,8 @@ class FQDNUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
 
 class AddressObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
-    # pylint: disable=R0901
     """Test the AddressObject viewsets."""
+
     model = AddressObject
     bulk_edit_data = {"description": "test update description"}
 
@@ -105,8 +105,8 @@ class AddressObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
 
 class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
-    # pylint: disable=R0901
     """Test the AddressObjectGroup viewsets."""
+
     model = AddressObjectGroup
     bulk_edit_data = {"description": "test update description"}
 
@@ -148,8 +148,8 @@ class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
 
 class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
-    # pylint: disable=R0901
     """Test the ServiceObject viewsets."""
+
     model = ServiceObject
     bulk_edit_data = {"description": "test update description"}
 
@@ -197,8 +197,8 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
 
 class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
-    # pylint: disable=R0901
     """Test the ServiceGroup viewsets."""
+
     model = ServiceObjectGroup
     bulk_edit_data = {"description": "test update description"}
 
@@ -240,8 +240,8 @@ class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
 
 class UserObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
-    # pylint: disable=R0901
     """Test the User viewsets."""
+
     model = UserObject
     bulk_edit_data = {"name": "User Name 123"}
 
@@ -282,8 +282,8 @@ class UserObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
 
 class UserObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
-    # pylint: disable=R0901
     """Test the UserGroup viewsets."""
+
     model = UserObjectGroup
     bulk_edit_data = {"description": "test update description"}
 
@@ -325,8 +325,8 @@ class UserObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
 
 class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
-    # pylint: disable=R0901
     """Test the Zone viewsets."""
+
     model = Zone
     bulk_edit_data = {"description": "test update description"}
 
@@ -367,8 +367,8 @@ class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
 
 class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
-    # pylint: disable=R0901
     """Test the PolicyRule viewsets."""
+
     model = PolicyRule
     bulk_edit_data = {"log": True}
 
@@ -423,8 +423,8 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
 
 class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
-    # pylint: disable=R0901
     """Test the Policy viewsets."""
+
     model = Policy
     bulk_edit_data = {"description": "test update description"}
 
