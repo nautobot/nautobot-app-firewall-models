@@ -34,7 +34,7 @@
             <tr>
                 <td>IP Address</td>
                 <td>
-                    {% if object.fqdn %}
+                    {% if object.ip_address %}
                         <a href="{{ object.ip_address.get_absolute_url }}">{{ object.ip_address }}</a>
                     {% else %}
                         <span class="text-muted">None</span>
