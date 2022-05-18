@@ -24,7 +24,7 @@
             <tr>
                 <td>IP Range</td>
                 <td>
-                    {% if object.fqdn %}
+                    {% if object.ip_range %}
                         <a href="{{ object.ip_range.get_absolute_url }}">{{ object.ip_range }}</a>
                     {% else %}
                         <span class="text-muted">None</span>
