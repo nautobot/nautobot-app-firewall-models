@@ -1,11 +1,19 @@
 # Nautobot Plugin Firewall Model
+
+| Przemek: Add overview of what this plugin is as a first thing, what are we trying to solve here. 
+
+| Przemek: Does the plugin have a name? Would `Nautobot Firewall Models Plugin` flow better?
 ## Installation
 
 The plugin is available as a Python package in pypi and can be installed with pip
 
+| Przemek: "package in **PyPI** and"
+
 ```shell
 pip install nautobot-firewall-models
 ```
+
+| Przemek: Would it make sense to make name of the plugin match the package name?
 
 > The plugin is compatible with Nautobot 1.3.0 and higher
 
@@ -30,8 +38,25 @@ PLUGINS_CONFIG = {
 }
 ```
 
+| Przemek: Would be good to add `Settings` section and list available settings. These should have explanation as to the purpose and any prerequisite set-up steps required (code comments are not clear enough on their own in my opinion).
+
 ## Usage
+
 A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to model layer 4 firewall policies and/or extended access control lists. 
+
+| Przemek: I'm guessing the above should be in overview.
+
+| Przemek: Would it be worth listing a few use cases with short examples?
+
+| Przemek: What is the order in which objects need to be defined?
+
+| Przemek: A Hello World example showing how all the models tie together and how policy is created and assigned would be great.
+
+| Przemek: Are there any best practices we can offer users of this plugin? Naming of the objects, etc.?
+
+| Przemek: List out any objects that come with the plugin.
+
+| Przemek: To make it easier to visualize how the plugin connects to the real world we could provide table showing mapping between the plugin models and the models from the domain being modeled.
 
 ## Screenshots
 
@@ -45,8 +70,25 @@ A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to m
 <img src="./docs/images/datamodel.png" class="center">
 </p>
 
+| Przemek: There's a lot of models here and some have many fields. As an end user I'd like to have these listed in a table, or a list. For each of those models I'd be great to have explanation of its purpose, how it interacts with other models, and examples.
+
+| Przemek: For each model I'd be good to list all of the fields. This could be auto-generated from doc strings.
+
 ### Assigning Policies
-Policies have a `assigned_devices` attribute that is a many to many relationship to the `nautobot.dcim.models.Device` object, doing so allows for the same policy to be associated with multiple `Device` objects. `DynamicGroups` can also be used for assigning policies to a device through a dynamic group, this is done via the `assigned_dynamic_groups` attribute. *IF* you would like to associate a `Policy` to another object type, custom relationships cans be used to extend how you associate the policy. Concepts of clustering and high availability are currently not in scope of this plugin.
+
+| Przemek: What are policies? How does one define policies? It would be beneficial to show intermediate steps leading user to this point.
+
+| Przemek: Perhaps we could start by saying "There are 3 primary ways of assigning policies to devices". Then have headings or bullet points listing methods.
+
+Policies have a `assigned_devices` attribute that is a many to many relationship to the `nautobot.dcim.models.Device` object, doing so allows for the same policy to be associated with multiple `Device` objects.
+
+| Przemek: I think it could be simpler to say that "Policies can be assigned with multiple devices and each device can have multiple policies. To assign policy to devices, select device names in the `Assigned devices` field."
+
+ `DynamicGroups` can also be used for assigning policies to a device through a dynamic group, this is done via the `assigned_dynamic_groups` attribute. *IF* you would like to associate a `Policy` to another object type, custom relationships cans be used to extend how you associate the policy. Concepts of clustering and high availability are currently not in scope of this plugin.
+
+| Przemek: What are `DynamicGroups`, is there documentation that shows how these can be used? Also could we include an example?
+| Przemek: What does this mean? "Concepts of clustering and high availability are currently not in scope of this plugin."
+
 
 
 ## Contributing
