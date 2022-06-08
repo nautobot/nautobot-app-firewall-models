@@ -42,7 +42,7 @@ class PolicyView(generic.ObjectView):
             pol_index = index[0] if index[0] != "" else None
             m2m.index = pol_index
             m2m.validated_save()
-        return redirect(reverse("plugins:nautobot_firewall_models:policy_policyrules", kwargs={"pk": pk}))
+        return redirect(reverse("plugins:nautobot_firewall_models:policy", kwargs={"pk": pk}))
 
 
 class PolicyDeleteView(generic.ObjectDeleteView):
