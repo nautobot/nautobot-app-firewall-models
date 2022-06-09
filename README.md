@@ -1,7 +1,9 @@
-# Nautobot Plugin Firewall Model
+# Nautobot Firewall Models Plugin
+
+A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to model layer 4 firewall policies and/or extended access control lists. 
 ## Installation
 
-The plugin is available as a Python package in pypi and can be installed with pip
+The plugin is available as a Python package in PyPI and can be installed with `pip`:
 
 ```shell
 pip install nautobot-firewall-models
@@ -20,18 +22,19 @@ Once installed, the plugin needs to be enabled in your `nautobot_config.py`
 ```python
 # In your nautobot_config.py
 PLUGINS = ["nautobot_firewall_models"]
+```
 
-# Optional to overload the default status from "Active"
-# IF overloaded the status_name _must_ exist AND have all firewall content-types associated
+## Optional Settings
+
+All models have a `status` attribute and the default status is set to use `active`. It is optional to configure the default status, the default_status is set it _must_ exist AND have all firewall content-types associated. The value is a `slug` representation of an instance of a Status object.
+
+```python
 PLUGINS_CONFIG = {
     "nautobot_firewall_models": {
-        "status_name": "Active"
+        "default_status": "active"
     }
 }
 ```
-
-## Usage
-A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to model layer 4 firewall policies and/or extended access control lists. 
 
 ## Screenshots
 
@@ -40,13 +43,16 @@ A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to m
 <img src="./docs/images/policy.png" class="center">
 </p>
 
-### Models
-<p align="center">
-<img src="./docs/images/datamodel.png" class="center">
-</p>
+## Usage
+Please refer to [model](./docs/models.md) & [example](./docs/example.md) for descriptive representations of the models and how to get started in a local development environment.
 
+Future development will include the ability to onboard an existing access list from a device and the ability to generate device configuration.
 ### Assigning Policies
-Policies have a `assigned_devices` attribute that is a many to many relationship to the `nautobot.dcim.models.Device` object, doing so allows for the same policy to be associated with multiple `Device` objects. `DynamicGroups` can also be used for assigning policies to a device through a dynamic group, this is done via the `assigned_dynamic_groups` attribute. *IF* you would like to associate a `Policy` to another object type, custom relationships cans be used to extend how you associate the policy. Concepts of clustering and high availability are currently not in scope of this plugin.
+There are 3 primary ways of assigning policies to devices. Directly via the `assigned_devices` attribute on the Policy. Dynamically via a `DynamicGroup` using the `assigned_dynamic_groups` attribute. Lastly *IF* you need to assign a Policy to another object custom relationships can be used to extent how you associate a Policy to a Device (i.e. assigning to an Interface instead of directly to the Device).
+
+Policies can be initially created black and assigned to Devices & DynamicGroups, however it is recommended to first create the underlying objects and build from the "bottom up". This is covered in more detail in the [model documentation](./docs/models.md).
+
+Concepts of firewall clustering and high availability (i.e. active/active active/standby devices) are currently not in scope of this plugin as it is only meant to define the policy and not how the hardware. 
 
 
 ## Contributing
