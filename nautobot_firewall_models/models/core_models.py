@@ -17,6 +17,18 @@ from nautobot_firewall_models import choices, validators
 from nautobot_firewall_models.utils import get_default_status
 
 
+def get_single_attr(obj, attrs):
+    for attr in attrs:
+        if getattr(obj, attr) is not None:
+            return attr
+    else:
+        raise ValueError(f"The object {obj} did not have any of the attrs {attrs}")
+
+
+def list_expander(length):
+    return [None] * length
+
+
 @extras_features(
     "custom_fields",
     "custom_links",
@@ -531,6 +543,101 @@ class PolicyRule(PrimaryModel):
         """Return detail view URL."""
         return reverse("plugins:nautobot_firewall_models:policyrule", args=[self.pk])
 
+    def rule_details(self):
+        row = {}
+        row["rule"] = self
+        row["source_address_group"] = self.source_address_group.all()
+        row["source_address"] = self.source_address.all()
+        row["source_user"] = self.source_user.all()
+        row["source_user_group"] = self.source_user_group.all()
+        row["source_zone"] = self.source_zone
+
+        row["destination_address_group"] = self.destination_address_group.all()
+        row["destination_address"] = self.destination_address.all()
+        row["destination_zone"] = self.destination_zone
+
+        row["service"] = self.service.all()
+        row["service_group"] = self.service_group.all()
+
+        row["action"] = self.action
+        row["log"] = self.log
+        row["status"] = self.status
+        return row
+
+    def rule_json(self):
+        def addr_details(address, prefix):
+            if not address:
+                return {}
+            list_len = len(address)
+            details = {
+                f"{prefix}__name": list_expander(list_len),
+                f"{prefix}__description": list_expander(list_len),
+                f"{prefix}__value": list_expander(list_len),
+                f"{prefix}__type": list_expander(list_len),
+                f"{prefix}__status": list_expander(list_len),
+            }
+            for index, addr in enumerate(address):
+                details[f"{prefix}__name"][index] = addr.name
+                details[f"{prefix}__description"][index] = addr.description
+                details[f"{prefix}__status"][index] = addr.status.name
+
+                # Since only one attr can be active, we just need to find which one and get that attr
+                attr = get_single_attr(addr, ["prefix", "fqdn", "ip_range", "ip_address"])
+                details[f"{prefix}__value"][index] = str(getattr(addr, attr))
+                details[f"{prefix}__type"][index] = attr
+            return details
+
+        def zone_details(zone, prefix):
+            if not zone:
+                return {}
+            details = {}
+            for attr in ["name", "status", "description"]:
+                if getattr(zone, attr) is not None:
+                    details[f"{prefix}__{attr}"] = str(getattr(zone, attr))
+            return details
+
+        def user_details(users, prefix):
+            if not users:
+                return {}
+            attrs = ["username", "name", "status"]
+            list_len = len(users)
+            details = {}
+            for attr in attrs:
+                details[f"{prefix}__{attr}"] = list_expander(list_len)
+            for index, user in enumerate(users):
+                for attr in attrs:
+                    if getattr(user, attr) is not None:
+                        details[f"{prefix}__{attr}"][index] = str(getattr(user, attr))
+            return details
+
+        def service_details(services, prefix):
+            if not services:
+                return {}
+            attrs = ["name", "port", "ip_protocol", "status"]
+            list_len = len(services)
+            details = {}
+            for attr in attrs:
+                details[f"{prefix}__{attr}"] = list_expander(list_len)
+            for index, service in enumerate(services):
+                for attr in attrs:
+                    if getattr(service, attr) is not None:
+                        details[f"{prefix}__{attr}"][index] = str(getattr(service, attr))
+            return details
+
+        # TODO: All Groups (service_groups, user_groups, etc.) and add tags
+        rule_dict_obj = self.rule_details()
+        row = {}
+        row.update(addr_details(rule_dict_obj["source_address"], "source_address"))
+        row.update(zone_details(rule_dict_obj["source_zone"], "source_zone"))
+        row.update(user_details(rule_dict_obj["source_user"], "source_user"))
+        row.update(addr_details(rule_dict_obj["destination_address"], "destination_address"))
+        row.update(zone_details(rule_dict_obj["destination_zone"], "destination_zone"))
+        row.update(service_details(rule_dict_obj["service"], "service"))
+        row.update({"action__value": rule_dict_obj["action"]})
+        row.update({"log__value": rule_dict_obj["log"]})
+        row.update({"status__value": str(rule_dict_obj["status"])})
+        return row
+
     def __str__(self):
         """Stringify instance."""
         if self.request_id:
@@ -579,6 +686,18 @@ class Policy(PrimaryModel):
         blank=True,
         null=True,
     )
+
+    def policy_details(self):
+        data = []
+        for policy_rule in self.policy_rules.all():
+            data.append(policy_rule.rule_details())
+        return data
+
+    def policy_json(self):
+        data = []
+        for policy_rule in self.policy_rules.all():
+            data.append(policy_rule.rule_json())
+        return data
 
     class Meta:
         """Meta class."""
