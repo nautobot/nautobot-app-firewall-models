@@ -1,20 +1,36 @@
 """Models for the Firewall plugin."""
+import json
 
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
 from django.urls import reverse
+from rest_framework.renderers import JSONRenderer
+
 from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.models import StatusField
 from nautobot.extras.models.tags import TaggedItem
 from nautobot.extras.utils import extras_features
 from nautobot.ipam.fields import VarbinaryIPField
+from nautobot.utilities.utils import serialize_object_v2
 from netaddr import IPAddress
 from taggit.managers import TaggableManager
 
 from nautobot_firewall_models import choices, validators
-from nautobot_firewall_models.utils import get_default_status
+from nautobot_firewall_models.utils import get_default_status, model_to_json
+
+
+def get_single_attr(obj, attrs):
+    for attr in attrs:
+        if getattr(obj, attr) is not None:
+            return attr
+    else:
+        raise ValueError(f"The object {obj} did not have any of the attrs {attrs}")
+
+
+def list_expander(length):
+    return [None] * length
 
 
 @extras_features(
@@ -531,6 +547,31 @@ class PolicyRule(PrimaryModel):
         """Return detail view URL."""
         return reverse("plugins:nautobot_firewall_models:policyrule", args=[self.pk])
 
+    def rule_details(self):
+        row = {}
+        row["rule"] = self
+        row["source_address_group"] = self.source_address_group.all()
+        row["source_address"] = self.source_address.all()
+        row["source_user"] = self.source_user.all()
+        row["source_user_group"] = self.source_user_group.all()
+        row["source_zone"] = self.source_zone
+
+        row["destination_address_group"] = self.destination_address_group.all()
+        row["destination_address"] = self.destination_address.all()
+        row["destination_zone"] = self.destination_zone
+
+        row["service"] = self.service.all()
+        row["service_group"] = self.service_group.all()
+
+        row["action"] = self.action
+        row["log"] = self.log
+        row["status"] = self.status
+        row["request_id"] = self.request_id
+        return row
+
+    def to_json(self):
+        return json.loads(JSONRenderer().render(serialize_object_v2(self)))
+
     def __str__(self):
         """Stringify instance."""
         if self.request_id:
@@ -579,6 +620,15 @@ class Policy(PrimaryModel):
         blank=True,
         null=True,
     )
+
+    def policy_details(self):
+        data = []
+        for policy_rule in self.policy_rules.all():
+            data.append(policy_rule.rule_details())
+        return data
+
+    def to_json(self):
+        return json.loads(JSONRenderer().render(serialize_object_v2(self)))
 
     class Meta:
         """Meta class."""

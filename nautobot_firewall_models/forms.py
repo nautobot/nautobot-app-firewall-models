@@ -7,6 +7,10 @@ from nautobot.extras.forms import (
     StatusFilterFormMixin,
     StatusBulkEditFormMixin,
     CustomFieldFilterForm,
+    CustomFieldBulkEditForm,
+    CustomFieldModelCSVForm,
+    CustomFieldModelForm,
+    RelationshipModelForm,
 )
 from nautobot.extras.models import Tag, DynamicGroup
 from nautobot.ipam.models import VRF, Prefix, IPAddress
@@ -20,6 +24,7 @@ from nautobot.utilities.forms import (
     TagFilterField,
     add_blank_choice,
 )
+
 
 from nautobot_firewall_models import models, fields, choices
 
@@ -528,3 +533,55 @@ class PolicyBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
         nullable_fields = [
             "description",
         ]
+
+
+# CapircaPolicy
+
+
+class CapircaPolicyForm(BootstrapMixin, CustomFieldModelForm, RelationshipModelForm):
+    """Filter Form for CapircaPolicy instances."""
+
+    device = DynamicModelChoiceField(queryset=Device.objects.all())
+
+    class Meta:
+        """Boilerplate form Meta data for compliance rule."""
+
+        model = models.capirca_models.CapircaPolicy
+        fields = (
+            "device",
+            "pol",
+            "net",
+            "svc",
+            "cfg",
+        )
+
+
+class CapircaPolicyFilterForm(BootstrapMixin, CustomFieldFilterForm):
+    """Form for CapircaPolicy instances."""
+
+    model = models.capirca_models.CapircaPolicy
+
+    q = forms.CharField(required=False, label="Search")
+
+
+class CapircaPolicyBulkEditForm(BootstrapMixin, AddRemoveTagsForm, CustomFieldBulkEditForm):
+    """BulkEdit form for CapircaPolicy instances."""
+
+    pk = forms.ModelMultipleChoiceField(
+        queryset=models.capirca_models.CapircaPolicy.objects.all(), widget=forms.MultipleHiddenInput
+    )
+
+    class Meta:
+        """Boilerplate form Meta data for CapircaPolicy."""
+
+        nullable_fields = []
+
+
+class CapircaPolicyCSVForm(CustomFieldModelCSVForm):
+    """CSV Form for CapircaPolicy instances."""
+
+    class Meta:
+        """Boilerplate form Meta data for CapircaPolicy."""
+
+        model = models.capirca_models.CapircaPolicy
+        fields = models.capirca_models.CapircaPolicy.csv_headers

@@ -1,9 +1,11 @@
 """Filtering for Firewall Model Plugin."""
 
+import django_filters
 from nautobot.extras.filters import StatusModelFilterSetMixin, NautobotFilterSet
 from nautobot.utilities.filters import TagFilter
 
 from nautobot_firewall_models import models
+from nautobot.dcim.models import Device
 
 
 class IPRangeFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
@@ -125,3 +127,21 @@ class PolicyFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
 
         model = models.Policy
         fields = ["id", "name", "description", "policy_rules", "assigned_devices", "assigned_dynamic_groups"]
+
+
+class CapircaPolicyFilterSet(NautobotFilterSet):
+    """Filter for CapircaPolicy."""
+
+    device = django_filters.ModelMultipleChoiceFilter(
+        field_name="device__name",
+        queryset=Device.objects.all(),
+        to_field_name="name",
+        label="Device Name",
+    )
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.CapircaPolicy
+        # fields = ["device", "pol", "net", "svc", "cfg"]
+        fields = ["id"]
