@@ -43,7 +43,7 @@ class DynamicGroupDevicePolicies(PluginTemplateExtension):  # pylint: disable=ab
                 extra_context={"capirca_object": obj},
             )
         except CapircaPolicy.DoesNotExist:
-            pass
+            return ""
 
 
 template_extensions = [DynamicGroupDevicePolicies, DevicePolicies]
