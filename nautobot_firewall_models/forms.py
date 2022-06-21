@@ -406,7 +406,7 @@ class PolicyRuleFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFil
     tag = TagFilterField(models.PolicyRule)
 
 
-class PolicyRuleForm(BootstrapMixin, forms.ModelForm):
+class PolicyRuleForm(BootstrapMixin, CustomFieldModelForm):
     """PolicyRule creation/edit form."""
 
     name = forms.CharField(required=False, label="Name")
@@ -445,8 +445,7 @@ class PolicyRuleForm(BootstrapMixin, forms.ModelForm):
         """Meta attributes."""
 
         model = models.PolicyRule
-        fields = [
-            # pylint: disable=duplicate-code
+        fields = (
             "name",
             "source_user",
             "source_user_group",
@@ -463,7 +462,7 @@ class PolicyRuleForm(BootstrapMixin, forms.ModelForm):
             "status",
             "tags",
             "request_id",
-        ]
+        )
 
 
 # TODO: Refactor

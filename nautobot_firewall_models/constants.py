@@ -6,6 +6,11 @@ CAPIRCA_OS_MAPPER = {}
 if PLUGIN_CFG.get("capirca_mapping"):
     CAPIRCA_OS_MAPPER = PLUGIN_CFG["capirca_mapping"]
 
+ALLOW_STATUS = ["active"]
+if PLUGIN_CFG.get("allowed_status"):
+    ALLOW_STATUS = PLUGIN_CFG["allowed_status"]
+
+
 ACTION_MAP = {"allow": "accept", "deny": "deny", "drop": "reject"}  # no next or reject-with-tcp-rst
 LOGGING_MAP = {"true": "true", "false": "disable"}
 

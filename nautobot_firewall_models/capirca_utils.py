@@ -6,8 +6,9 @@ from django.utils.module_loading import import_string
 from capirca.lib.naming import Naming
 from capirca.lib import policy
 from django.core.exceptions import ValidationError
+from nautobot.dcim.models import Platform
 
-from nautobot_firewall_models.constants import CAPIRCA_OS_MAPPER, ACTION_MAP, LOGGING_MAP, CAPIRCA_MAPPER
+from nautobot_firewall_models.constants import ALLOW_STATUS, CAPIRCA_OS_MAPPER, ACTION_MAP, LOGGING_MAP, CAPIRCA_MAPPER
 
 
 def clean_list(_list, remove_empty=False):
@@ -17,10 +18,18 @@ def clean_list(_list, remove_empty=False):
     return _list
 
 
+def check_status(status):
+    """Check if status is active or as provided via plugin settings. If nothing, it is always good."""
+    if len(ALLOW_STATUS) == 0 or status not in ALLOW_STATUS:
+        return True
+    return False
+
+
 class PolicyToCapirca:
     def __init__(self, policy_obj, platform, *args, **kwargs):
         """Overload init to account for computed field."""
         self.policy_name = str(policy_obj)
+        self.platform_obj = Platform.objects.get(slug=platform)
         self.platform = CAPIRCA_OS_MAPPER.get(platform, platform)
         self.policy_obj = policy_obj.policy_details()
         self.address = {}
@@ -30,9 +39,14 @@ class PolicyToCapirca:
         self.svc_file = ""
         self.net_file = ""
         self.cfg_file = ""
+        # TODO: Evaluate if this is the best way to manage
+        # Currently this hints as to when to
+        _allow_list = self.platform_obj.custom_field_data.get("capirca_allow")
+        self.cf_allow_list_enabled = True if "capirca_allow" in self.platform_obj.custom_field_data else False
+        self.cf_allow_list = _allow_list if _allow_list else []
 
     def _get_address_details(self, data):
-        if not data["status"]["value"] == "active":
+        if check_status(data["status"]["value"]):
             return {}
         if data.get("ip_range"):
             raise ValidationError(
@@ -52,7 +66,7 @@ class PolicyToCapirca:
         return name
 
     def _get_address_group_details(self, data):
-        if not data["status"]["value"] == "active":
+        if check_status(data["status"]["value"]):
             return {}
 
         name = data["name"]
@@ -65,11 +79,29 @@ class PolicyToCapirca:
 
         return name
 
-    def _get_service_details(self, data):
-        if not data["status"]["value"] == "active":
+    def _get_service_protocols(self, data):
+        if check_status(data["status"]["value"]):
             return {}
         ip_protocol = data["ip_protocol"].lower()
-        if not ip_protocol in ["tcp", "udp"]:
+        if ip_protocol not in ["tcp", "udp", "icmp"]:
+            return {}
+        return ip_protocol
+
+    def _get_service_group_protocols(self, data):
+        if check_status(data["status"]["value"]):
+            return {}
+
+        protocol_group = []
+        for service in data["service_objects"]:
+            protocol_group.append(self._get_service_protocols(service))
+
+        return protocol_group
+
+    def _get_service_details(self, data):
+        if check_status(data["status"]["value"]):
+            return {}
+        ip_protocol = data["ip_protocol"].lower()
+        if ip_protocol not in ["tcp", "udp"]:
             return {}
 
         name = data["name"]
@@ -81,7 +113,7 @@ class PolicyToCapirca:
         return (name, ip_protocol)
 
     def _get_service_group_details(self, data):
-        if not data["status"]["value"] == "active":
+        if check_status(data["status"]["value"]):
             return {}
 
         name = data["name"]
@@ -95,12 +127,24 @@ class PolicyToCapirca:
 
         return (name, ip_protocol)
 
+    def _check_for_emtpy(self, _type, start, end):
+        if len(start) > 0 and len(end) == 0:
+            data = ", ".join([str(value) for value in start])
+            raise ValidationError(
+                f"{_type} with values of `{data}` had all instances removed."
+                "The likely cause of this is either the status was not active or "
+                "Capirca does not support the value you provided, and was removed from consideration"
+            )
+
     def get_policy_data(self):
 
         for rule in self.policy_obj:
+            if check_status(rule["rule"].status.slug):
+                continue
             p_source_addr = []
             p_destination_addr = []
             p_service = []
+            p_protocol = []
             for source_address_group in rule["source_address_group"]:
                 p_source_addr.append(self._get_address_group_details(model_to_json(source_address_group)))
             for source_address in rule["source_address"]:
@@ -116,25 +160,59 @@ class PolicyToCapirca:
             for service_group in rule["service_group"]:
                 p_service.append(self._get_service_group_details(model_to_json(service_group)))
 
+            for service in rule["service"]:
+                p_protocol.append(self._get_service_protocols(model_to_json(service)))
+            for service_group in rule["service_group"]:
+                p_protocol.extend(self._get_service_group_protocols(model_to_json(service_group)))
+
+            if rule["action"] not in ACTION_MAP:
+                raise ValidationError(
+                    f"The action `{rule['action']}` is not one of the support actions {str(ACTION_MAP.keys())}."
+                )
+
+            p_source_addr = clean_list(p_source_addr, True)
+            p_destination_addr = clean_list(p_destination_addr, True)
+            p_service = [i[0] for i in p_service if i]
+            p_protocol = clean_list(p_protocol)
+
+            check_empty_map = [
+                ("source_address", rule["source_address"], p_source_addr),
+                ("source_address", rule["source_address_group"], p_source_addr),
+                ("destination_address", rule["destination_address"], p_destination_addr),
+                ("destination_address", rule["destination_address_group"], p_destination_addr),
+                ("protocol", rule["service"], p_protocol),  # service is not needed since it will always be in proto
+                ("protocol", rule["service_group"], p_protocol),
+            ]
+            for item in check_empty_map:
+                self._check_for_emtpy(*item)
+
             rule_details = {
                 "rule_name": rule["rule"].name,
-                "source-address": clean_list(p_source_addr, True),
+                "source-address": p_source_addr,
                 "from-zone": rule["source_zone"].name,
-                "destination-address": clean_list(p_destination_addr, True),
+                "destination-address": p_destination_addr,
                 "to-zone": rule["destination_zone"].name,
-                "destination-port": [i[0] for i in p_service],
-                "protocol": clean_list([i[1].lower() for i in p_service]),
+                "destination-port": p_service,
+                "protocol": p_protocol,
                 "action": ACTION_MAP[rule["action"]],
                 "logging": LOGGING_MAP[str(rule["log"]).lower()],
                 "comment": rule["request_id"],
             }
+
+            # This is the logic that helps automatically add header and term info to policy data
+            for field, value in rule["rule"].custom_field_data.items():
+                if field.startswith("ctd_") or field.startswith("chd_") and value:
+                    # This can be made more DRY, but I chose the more explicit route
+                    if self.cf_allow_list_enabled and field in self.cf_allow_list:
+                        rule_details[field] = value
+                    elif self.cf_allow_list_enabled is False:
+                        rule_details[field] = value
             self.policy.append(rule_details)
 
     def get_capirca_cfg(self):
         if not self.policy:
             self.get_policy_data()
 
-        # TODO: Allow for mapping this model from user defined
         if not CAPIRCA_MAPPER.get(self.platform):
             raise ValidationError(
                 f"The platform slug {self.platform} was not one of the supported options {list(CAPIRCA_MAPPER.keys())}."
@@ -143,17 +221,18 @@ class PolicyToCapirca:
         pol = []
         for index, rule in enumerate(self.policy):
 
-            if CAPIRCA_MAPPER[self.platform]["type"] == "zone":
+            if CAPIRCA_MAPPER[self.platform]["type"] == "zone" or index == 0:
                 pol.append("header {")
-                _header = f"  target:: {self.platform} from-zone {rule['from-zone']} to-zone {rule['to-zone']}"
-                pol.append(_header)
-                pol.append("}")
-                pol.append("")
-            elif index == 0:
-                pol.append("header {")
+
                 _header = f"  target:: {self.platform}"
+                if CAPIRCA_MAPPER[self.platform]["type"] == "zone":
+                    _header += f" from-zone {rule['from-zone']} to-zone {rule['to-zone']}"
                 if CAPIRCA_MAPPER[self.platform]["type"] == "filter-name":
                     _header += f" {self.policy_name}"
+                # Custom fields with `chd_` get added to the header
+                for field in [x for x in rule.keys() if x.startswith("chd_")]:
+                    _header += f" {rule[field]}"
+
                 pol.append(_header)
                 pol.append("}")
                 pol.append("")
@@ -164,6 +243,9 @@ class PolicyToCapirca:
             pol.append(f"term {rule['rule_name']}" + " {")
             del rule["rule_name"]
             for key, value in rule.items():
+                # Custom fields with `ctd_` get added to the term
+                if key.startswith("ctd_"):
+                    key = key[len("ctd_") :]
                 if not value:
                     continue
                 if isinstance(value, list):
@@ -208,8 +290,10 @@ class DevicePolicyToCapirca(PolicyToCapirca):
     def __init__(self, device_obj, *args, **kwargs):
         """Overload init to account for computed field."""
         self.policy_name = ""
-        self.platform = CAPIRCA_OS_MAPPER.get(device_obj.platform.slug, device_obj.platform.slug)
+        self.platform_original = device_obj.platform.slug
         self.policy_objs = []
+        self.policy_obj = ""
+        self.platform = CAPIRCA_OS_MAPPER.get(device_obj.platform.slug, device_obj.platform.slug)
         self.address = {}
         self.service = {}
         self.policy = []
@@ -218,6 +302,9 @@ class DevicePolicyToCapirca(PolicyToCapirca):
         self.svc_file = ""
         self.net_file = ""
         self.cfg_file = ""
+        _allow_list = device_obj.platform.custom_field_data.get("capirca_allow")
+        self.cf_allow_list_enabled = True if "capirca_allow" in device_obj.platform.custom_field_data else False
+        self.cf_allow_list = _allow_list if _allow_list else []
 
         for dynamic_group in device_obj.dynamic_groups.all():
             for policy_group in dynamic_group.policydynamicgroupm2m_set.all():
@@ -227,7 +314,10 @@ class DevicePolicyToCapirca(PolicyToCapirca):
 
     def get_all_capirca_cfg(self):
         for pol in self.policy_objs:
-            class_obj = PolicyToCapirca(pol, self.platform)
+            if check_status(pol.status.slug):
+                continue
+            self.policy_obj = pol
+            class_obj = PolicyToCapirca(pol, self.platform_original)
             class_obj.get_policy_data()
             self.address.update(class_obj.address)
             self.service.update(class_obj.service)

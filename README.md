@@ -25,7 +25,13 @@ PLUGINS = ["nautobot_firewall_models"]
 # IF overloaded the status_name _must_ exist AND have all firewall content-types associated
 PLUGINS_CONFIG = {
     "nautobot_firewall_models": {
-        "status_name": "Active"
+        "status_name": "Active",
+        "allowed_status": ["active"], # default shown, `[]` allows all
+        "capirca_os_map": {
+            "cisco_ios": "cisco",
+            "arista_eos": "arista",
+        },
+        # "custom_capirca": "my.custom.func", # provides ability to overide capirca logic
     }
 }
 ```
@@ -33,7 +39,7 @@ PLUGINS_CONFIG = {
 ## Usage
 A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to model layer 4 firewall policies and/or extended access control lists. 
 
-## Screenshots
+### Screenshots
 
 <p align="center">
 <img src="./docs/images/navmenu.png" class="center">
@@ -48,6 +54,70 @@ A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to m
 ### Assigning Policies
 Policies have a `assigned_devices` attribute that is a many to many relationship to the `nautobot.dcim.models.Device` object, doing so allows for the same policy to be associated with multiple `Device` objects. `DynamicGroups` can also be used for assigning policies to a device through a dynamic group, this is done via the `assigned_dynamic_groups` attribute. *IF* you would like to associate a `Policy` to another object type, custom relationships cans be used to extend how you associate the policy. Concepts of clustering and high availability are currently not in scope of this plugin.
 
+### Capirca Integrations
+
+The firewall model plugin provide the ability to integrate with Capirca for configuration generation. The authors have applied a very light opionion onto the translation from the firewall models to generate valid pol, net, and svc files that are consumed by Capirca.
+
+FW Model                    | Capirca
+--------------------------- | -------
+Name (as applicable)        | Header - Filter Name
+Zone (as applicable)        | Header - to-zone/from-zone
+Source Address / Group      | Term - source-address
+Destination Address / Group | Term - destination-address
+Destination Service / Group | Term - destination-port, protocol
+Action                      | Term - action
+Logging                     | Term - logging
+Address - IP                | *.net
+Address - Prefix            | *.net
+Address Group               | *.net
+Service - tcp/udp           | *.svc
+Service Group               | *.svc
+
+> Note: If this terminology is not familiar, please review the [Capirca](https://github.com/google/capirca).
+
+Special Considerations
+* FQDN and IP Range are not supported by Capirca and will fail if attempting to use those features
+* The zone is only used where Capirca supports it, at the time of this writing Palo Alto and Juniper SRX
+  * Zone based firewalls have headers on every rule
+* A "Filter Name" is a concentation of the Policies applied to a given firewall
+  * Not all firewalls get a filter name, such as zone or direction based firewalls, which require a `chd_` custom field, more info below
+* An object (policy, policy rule, src-addr, dst-addr, etc.) is put into and out of use based on whether or not the status is `active` or as defined in your plugin configuration
+  * Anything other than active is ignored
+* Removing the last active object in an source-address, destination-address or service will fail the process to avoid your policy failing open
+* The platform must match the Capirca generator name
+  * You can optionally provide a map in in the settings`capirca_mapping` to map from the current platform name, to the Capirca generator name
+
+
+In addition to the above, you can add to any header or term by creating specfic custom fields on the `PolicyRule` data model. They must start with:
+* `chd_` - Capirca Header Data - will be applied to the `header` for any given rule.
+* `ctd_` - Capirca Term Data - will be applied to the `term` for any given rule.
+
+The process is to create a custom field, such as `ctd_pan-application`, this will be applied to the PolicyRule as you describe. This can become problematic if you share the model for multiple firewall OS's. This can additionally by applying a custom field to the `Platform` model. This **must** be named `capirca_allow` and be of type JSON and be a single list. For each OS defined by the platform, you can allow that custom field to populate. This allows you to use the same model, and not let the custom fields to conflict with each other.
+
+```python
+capirca_allow = ['ctd_pan-application', 'ctd_expiration']
+```
+
+As previously mentioned, there is only a small opionion that is applied from the translation between the model and Capirca. That being said, Capirca has an opionion on how rules and objects are deployed, and within this project there is consideration for how that may not align with anyone's intention on how Capirca should work. All such considerations should be referred to the Capirca project. There is no intention to modify the output that Capirca creates **in any situation** within the this plugin.
+
+In an effort to provide flexibility, you can override the translation process. However, you would be responsible for that implementation. You can provide within your setting, an [import_string](https://docs.djangoproject.com/en/4.0/ref/utils/#django.utils.module_loading.import_string) dotted path to your own funtion. This is provided in the `custom_capirca` setting within your Plugin Configurations. The signature takes a `Device` object instance and must return a tuple of `(pol, svc, net, cfg)`, none of which are required to have data.
+
+```python
+self.pol, self.svc, self.net, self.cfg = import_string(PLUGIN_CFG["custom_capirca"])(self.device)
+```
+
+To Summarize what this integration provides and does not provide
+Provides:
+* Integrations with Capirca
+* The ability to manage per platform Headers and Terms
+* A Job that generated the configurations at the time you want
+* The ability to override the opionianted Capirca solution.
+
+Does not Provide:
+* An opioniated configuration management solution that matches anything other that Capirca provided configurations
+* The ability to push configurations directly and natively from Nautobot
+* The immediate updating from data in a `Policy` or `PolicyRule` that gets reflected in the configuration, instead when the job is ran
+* Any post processing of configuration or pre-validation of data (such as checking if object name starts with an integer)
 
 ## Contributing
 
