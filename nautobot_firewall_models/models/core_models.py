@@ -107,7 +107,7 @@ class FQDN(PrimaryModel):
         blank=True,
     )
     name = models.CharField(
-        max_length=254, unique=True, help_text="Resolvable fully qualified domain name (i.e. networktocode.com)"
+        max_length=254, unique=True, help_text="Resolvable fully qualified domain name (e.g. networktocode.com)"
     )
     ip_addresses = models.ManyToManyField(
         to="ipam.IPAddress",
@@ -261,12 +261,12 @@ class UserObject(PrimaryModel):
     """Source users can be used to identify the origin of traffic for a user on some firewalls."""
 
     username = models.CharField(
-        max_length=100, unique=True, help_text="Signifies the username in identify provider (i.e. john.smith)"
+        max_length=100, unique=True, help_text="Signifies the username in identify provider (e.g. john.smith)"
     )
     name = models.CharField(
         max_length=100,
         blank=True,
-        help_text="Signifies the name of the user, commonly first & last name (i.e. John Smith)",
+        help_text="Signifies the name of the user, commonly first & last name (e.g. John Smith)",
     )
     status = StatusField(
         on_delete=models.PROTECT,
@@ -342,13 +342,13 @@ class UserObjectGroup(PrimaryModel):
     "webhooks",
 )
 class Zone(PrimaryModel):
-    """Zones common on firewalls and are typically seen as representations of area (i.e. DMZ trust untrust)."""
+    """Zones common on firewalls and are typically seen as representations of area (e.g. DMZ trust untrust)."""
 
     description = models.CharField(
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=100, unique=True, help_text="Name of the zone (i.e. trust)")
+    name = models.CharField(max_length=100, unique=True, help_text="Name of the zone (e.g. trust)")
     vrfs = models.ManyToManyField(to="ipam.VRF", blank=True, through="ZoneVRFM2M", related_name="zones")
     interfaces = models.ManyToManyField(
         to="dcim.Interface", blank=True, through="ZoneInterfaceM2M", related_name="zones"
@@ -385,22 +385,22 @@ class Zone(PrimaryModel):
     "webhooks",
 )
 class ServiceObject(PrimaryModel):
-    """ServiceObject matches a IANA IP Protocol with a name and optional port number (i.e. TCP HTTPS 443)."""
+    """ServiceObject matches a IANA IP Protocol with a name and optional port number (e.g. TCP HTTPS 443)."""
 
     description = models.CharField(
         max_length=200,
         blank=True,
     )
-    name = models.CharField(max_length=100, help_text="Name of the service (i.e. HTTP)")
+    name = models.CharField(max_length=100, help_text="Name of the service (e.g. HTTP)")
     port = models.CharField(
         null=True,
         blank=True,
         validators=[validators.validate_port],
         max_length=20,
-        help_text="The port or port range to tie to a service (i.e. HTTP would be port 80)",
+        help_text="The port or port range to tie to a service (e.g. HTTP would be port 80)",
     )
     ip_protocol = models.CharField(
-        choices=choices.IP_PROTOCOL_CHOICES, max_length=20, help_text="IANA IP Protocol (i.e. TCP UDP ICMP)"
+        choices=choices.IP_PROTOCOL_CHOICES, max_length=20, help_text="IANA IP Protocol (e.g. TCP UDP ICMP)"
     )
     status = StatusField(
         on_delete=models.PROTECT,
@@ -413,7 +413,6 @@ class ServiceObject(PrimaryModel):
 
         ordering = ["name"]
         verbose_name_plural = "Service Objects"
-        unique_together = ["port", "ip_protocol"]
 
     def get_absolute_url(self):
         """Return detail view URL."""
@@ -520,6 +519,7 @@ class PolicyRule(PrimaryModel):
         default=get_default_status,
     )
     request_id = models.CharField(max_length=100, null=True, blank=True)
+    description = models.CharField(max_length=200, null=True, blank=True)
 
     class Meta:
         """Meta class."""

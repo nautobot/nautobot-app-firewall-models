@@ -1,0 +1,75 @@
+{% extends 'generic/object_edit.html' %}
+{% load form_helpers %}
+{% load helpers %}
+
+{% block javascript %}
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Duplicate Service Objects</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">The following Service Object(s) were found with the same IP Protocol and Port. Please confirm you would like to create a duplicated object.</div>
+        <div class="modal-body">
+          <ul id="duplicate_results"></ul>
+        </div>
+        <form enctype="multipart/form-data" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="name" id="confirm_name">
+          <input type="hidden" name="description" id="confirm_description">
+          <input type="hidden" name="port" id="confirm_port">
+          <input type="hidden" name="ip_protocol" id="confirm_ip_protocol">
+          <input type="hidden" name="status" id="confirm_status">
+          <select name="tags" id="confirm_tags" multiple hidden></select>
+          <div class="modal-footer">
+            <button type="submit" name="_create" class="btn btn-primary">Create</button>
+            <button type="submit" name="_addanother" class="btn btn-primary">Create and Add Another</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(".form-horizontal").submit(function(event) {
+      event.preventDefault();
+      $("button[name='_create']").prop("disabled", true);
+      $("button[name='_addanother']").prop("disabled", true);
+      var base_url = "{% url 'plugins:nautobot_firewall_models:serviceobject_list' %}";
+      var name = $("#id_name").val();
+      var description = $("#id_description").val();
+      var port = $("#id_port").val();
+      var ip_protocol = $("#id_ip_protocol").val();
+      var status = $("#id_status").val();
+      var tags = $("#id_tags").children().clone();
+      $.get(
+        "{% url 'plugins-api:nautobot_firewall_models-api:serviceobject-list' %}", 
+        {port: port, ip_protocol: ip_protocol}
+      ).done(function(data){
+        if (data.count > 0) {
+          for (let i = 0; i < data.results.length; i++) {
+            $("#duplicate_results").append(
+              $("<li>").append(
+                $("<a>").attr("href", base_url+data.results[i].id+"/").html(data.results[i].name+": "+data.results[i].ip_protocol+" "+data.results[i].port)
+              )
+            )
+          }
+          $("#confirm_name").val(name);
+          $("#confirm_description").val(description);
+          $("#confirm_port").val(port);
+          $("#confirm_ip_protocol").val(ip_protocol);
+          $("#confirm_status").val(status);
+          $("#confirm_tags").html(tags);
+          $("button[name='_create']").prop("disabled", false);
+          $("button[name='_addanother']").prop("disabled", false);
+          $("#exampleModal").modal();
+        } else {
+          event.currentTarget.submit();
+        }
+      });
+    });
+  </script>
+{% endblock %}

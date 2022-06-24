@@ -260,6 +260,21 @@ urlpatterns = [
     path("policy/delete/", policy.PolicyBulkDeleteView.as_view(), name="policy_bulk_delete"),
     path("policy/edit/", policy.PolicyBulkEditView.as_view(), name="policy_bulk_edit"),
     path("policy/<uuid:pk>/", policy.PolicyView.as_view(), name="policy"),
+    path(
+        "policy/<uuid:pk>/dynamic-groups/",
+        policy.PolicyDynamicGroupWeight.as_view(),
+        name="policy_set_dynamic_group_weight",
+    ),
+    path(
+        "policy/<uuid:pk>/devices/",
+        policy.PolicyDeviceWeight.as_view(),
+        name="policy_set_device_weight",
+    ),
+    path(
+        "policy/<uuid:pk>/policy-rules/",
+        policy.PolicyPolicyRuleIndex.as_view(),
+        name="policy_set_policy_rule_index",
+    ),
     path("policy/<uuid:pk>/delete/", policy.PolicyDeleteView.as_view(), name="policy_delete"),
     path("policy/<uuid:pk>/edit/", policy.PolicyEditView.as_view(), name="policy_edit"),
     path(

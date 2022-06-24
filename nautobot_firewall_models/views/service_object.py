@@ -32,6 +32,7 @@ class ServiceObjectEditView(generic.ObjectEditView):
 
     queryset = models.ServiceObject.objects.all()
     model_form = forms.ServiceObjectForm
+    template_name = "nautobot_firewall_models/serviceobject_edit.html"
 
 
 class ServiceObjectBulkDeleteView(generic.BulkDeleteView):

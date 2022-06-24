@@ -1,4 +1,5 @@
 {% extends 'generic/object_detail.html' %}
+{% load helpers %}
 {% load plugins %}
 {% block content %}
     <div class="tab-content">
@@ -13,6 +14,22 @@
                             {% include 'nautobot_firewall_models/inc/policyrule_tablehead.html' with  parent_policy=False %}
                             {% include 'nautobot_firewall_models/inc/policyrule_tablerow.html' with rule=object parent_policy=False %}
                         </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>Description</strong>
+                        </div>
+                        <div class="panel-body">
+                            {% if object.description %}
+                                <span>{{ object.description }}</span>
+                            {% else %}
+                                <span class="text-muted">No description set</span>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>

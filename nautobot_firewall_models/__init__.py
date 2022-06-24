@@ -24,7 +24,7 @@ class NautobotFirewallModelsConfig(PluginConfig):
     min_version = "1.3.0"
     max_version = "1.9999"
     default_settings = {}
-    caching_config = {}
+    caching_config = {"*": {"timeout": 0}}
 
 
 config = NautobotFirewallModelsConfig  # pylint:disable=invalid-name
