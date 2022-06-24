@@ -1,0 +1,33 @@
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>Firewall Policies</strong></div>
+    {% if not policies %}
+    <div class="panel-body">
+        <span class="text-muted">None</span>
+    </div>
+    {% else %}
+    <table class="table table-hover panel-body">
+        <tr>
+            <th>Policy</th>
+            <th>Weight</th>
+        </tr>
+        <tbody>
+            {% for m2m in policies %}
+                <tr>
+                    <td>
+                        <a href="{{ m2m.policy.get_absolute_url }}">{{ m2m.policy }}</a>
+                    </td>
+                    <td>
+                        {{ m2m.weight }}
+                    </td>
+                </tr>
+            {% empty %}
+                <div class="panel-body">
+                    <span class="text-muted">None</span>
+                </div>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}

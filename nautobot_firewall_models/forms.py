@@ -160,6 +160,8 @@ class AddressObjectGroupFilterForm(BootstrapMixin, StatusFilterFormMixin, Custom
 class AddressObjectGroupForm(BootstrapMixin, forms.ModelForm):
     """AddressObjectGroup creation/edit form."""
 
+    address_objects = DynamicModelMultipleChoiceField(queryset=models.AddressObject.objects.all())
+
     class Meta:
         """Meta attributes."""
 
@@ -194,14 +196,14 @@ class ServiceObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomField
     )
     name = forms.CharField(required=False, label="Name")
     port = forms.IntegerField(required=False)
-    ip_protocol = forms.ChoiceField(choices=choices.IP_PROTOCOL_CHOICES, required=False)
+    ip_protocol = forms.ChoiceField(choices=add_blank_choice(choices.IP_PROTOCOL_CHOICES), required=False)
 
 
 class ServiceObjectForm(BootstrapMixin, forms.ModelForm):
     """ServiceObject creation/edit form."""
 
     port = forms.CharField(
-        help_text="Must be a single integer representation of port OR single port range without spaces (i.e. 80 or 8080-8088)",
+        help_text="Must be a single integer representation of port OR single port range without spaces (e.g. 80 or 8080-8088)",
         required=False,
     )
 
@@ -218,7 +220,7 @@ class ServiceObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEdi
     pk = DynamicModelMultipleChoiceField(queryset=models.ServiceObject.objects.all(), widget=forms.MultipleHiddenInput)
     description = forms.CharField(required=False)
     port = forms.CharField(
-        help_text="Must be a single integer representation of port OR single port range without spaces (i.e. 80 or 8080-8088)",
+        help_text="Must be a single integer representation of port OR single port range without spaces (e.g. 80 or 8080-8088)",
         required=False,
     )
 
@@ -242,6 +244,8 @@ class ServiceObjectGroupFilterForm(BootstrapMixin, StatusFilterFormMixin, Custom
 
 class ServiceObjectGroupForm(BootstrapMixin, forms.ModelForm):
     """ServiceObjectGroup creation/edit form."""
+
+    service_objects = DynamicModelMultipleChoiceField(queryset=models.ServiceObject.objects.all(), required=False)
 
     class Meta:
         """Meta attributes."""
@@ -323,7 +327,7 @@ class UserObjectGroupFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFie
 class UserObjectGroupForm(BootstrapMixin, forms.ModelForm):
     """UserObjectGroup creation/edit form."""
 
-    user_objects = DynamicModelMultipleChoiceField(queryset=models.UserObject.objects.all())
+    user_objects = DynamicModelMultipleChoiceField(queryset=models.UserObject.objects.all(), required=False)
 
     class Meta:
         """Meta attributes."""
@@ -366,12 +370,16 @@ class ZoneForm(BootstrapMixin, forms.ModelForm):
     """Zone creation/edit form."""
 
     vrfs = DynamicModelMultipleChoiceField(queryset=VRF.objects.all(), required=False, label="VRF")
+    device = DynamicModelChoiceField(queryset=Device.objects.all(), required=False)
+    interfaces = DynamicModelMultipleChoiceField(
+        queryset=Interface.objects.all(), required=False, label="Interface", query_params={"device_id": "$device"}
+    )
 
     class Meta:
         """Meta attributes."""
 
         model = models.Zone
-        fields = ["name", "description", "vrfs", "interfaces", "status", "tags"]
+        fields = ["name", "description", "vrfs", "device", "interfaces", "status", "tags"]
 
 
 class ZoneBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
@@ -458,6 +466,7 @@ class PolicyRuleForm(BootstrapMixin, forms.ModelForm):
             "status",
             "tags",
             "request_id",
+            "description",
         ]
 
 

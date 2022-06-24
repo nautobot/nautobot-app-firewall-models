@@ -2,7 +2,7 @@
 <tr>
     <td><input name="{{ m2m.rule.id }}" value="{% if m2m.index %}{{ m2m.index }}{% endif %}" {% if not m2m.index %}placeholder="No Index Set"{% endif %}></input></td>
     {% if m2m.rule.action == "remark" %}
-        <td colspan="10" style="text-align: center;"><strong>{{ m2m.rule }}</strong></td>
+        <td colspan="10" style="text-align: center;"><strong>{{ m2m.rule.name }}</strong></td>
     {% else %}
         <td>{% if m2m.rule.source_address_group.all %}{% for i in m2m.rule.source_address_group.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
         <td>{% if m2m.rule.source_address.all %}{% for i in m2m.rule.source_address.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>

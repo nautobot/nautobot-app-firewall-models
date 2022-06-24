@@ -7,38 +7,8 @@
 import os
 import sys
 
-from distutils.util import strtobool
-from django.core.exceptions import ImproperlyConfigured
 from nautobot.core import settings
-
-# Enforce required configuration parameters
-for key in [
-    "ALLOWED_HOSTS",
-    "POSTGRES_DB",
-    "POSTGRES_USER",
-    "POSTGRES_HOST",
-    "POSTGRES_PASSWORD",
-    "REDIS_HOST",
-    "REDIS_PASSWORD",
-    "SECRET_KEY",
-]:
-    if not os.environ.get(key):
-        raise ImproperlyConfigured(f"Required environment variable {key} is missing.")
-
-
-def is_truthy(arg):
-    """Convert "truthy" strings into Booleans.
-
-    Examples:
-        >>> is_truthy('yes')
-        True
-    Args:
-        arg (str): Truthy string (True values are y, yes, t, true, on and 1; false values are n, no,
-        f, false, off and 0. Raises ValueError if val is anything else.
-    """
-    if isinstance(arg, bool):
-        return arg
-    return bool(strtobool(arg))
+from nautobot.core.settings_funcs import is_truthy, parse_redis_connection
 
 
 TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
@@ -47,55 +17,59 @@ TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
 # access to the server via any other hostnames. The first FQDN in the list will be treated as the preferred name.
 #
 # Example: ALLOWED_HOSTS = ['nautobot.example.com', 'nautobot.internal.local']
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = os.getenv("NAUTOBOT_ALLOWED_HOSTS").split(" ")
 
 # PostgreSQL database configuration. See the Django documentation for a complete list of available parameters:
 #   https://docs.djangoproject.com/en/stable/ref/settings/#databases
 DATABASES = {
     "default": {
-        "NAME": os.getenv("POSTGRES_DB", "nautobot"),  # Database name
-        "USER": os.getenv("POSTGRES_USER", ""),  # Database username
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD", ""),  # Datbase password
-        "HOST": os.getenv("POSTGRES_HOST", "localhost"),  # Database server
-        "PORT": os.getenv("POSTGRES_PORT", ""),  # Database port (leave blank for default)
-        "CONN_MAX_AGE": os.getenv("POSTGRES_TIMEOUT", 300),  # Database timeout
-        "ENGINE": "django.db.backends.postgresql",  # Database driver (Postgres only supported!)
+        "NAME": os.getenv("NAUTOBOT_DB_NAME", "nautobot"),  # Database name
+        "USER": os.getenv("NAUTOBOT_DB_USER", ""),  # Database username
+        "PASSWORD": os.getenv("NAUTOBOT_DB_PASSWORD", ""),  # Database password
+        "HOST": os.getenv("NAUTOBOT_DB_HOST", "localhost"),  # Database server
+        "PORT": os.getenv("NAUTOBOT_DB_PORT", ""),  # Database port (leave blank for default)
+        "CONN_MAX_AGE": int(os.getenv("NAUTOBOT_DB_TIMEOUT", 300)),  # Database timeout
+        "ENGINE": os.getenv(
+            "NAUTOBOT_DB_ENGINE", "django.db.backends.postgresql"
+        ),  # Database driver ("mysql" or "postgresql")
+        # "OPTIONS": {"charset": "utf8mb4"},  # For MySQL unicode emoji support, uncomment this line
     }
 }
+# Nautobot uses RQ for task scheduling. These are the following defaults.
+# For detailed configuration see: https://github.com/rq/django-rq#installation
+# These defaults utilize the Django `CACHES` setting defined above for django-redis.
+# See: https://github.com/rq/django-rq#support-for-django-redis-and-django-redis-cache
+RQ_QUEUES = {
+    "default": {
+        "USE_REDIS_CACHE": "default",
+    },
+    "check_releases": {
+        "USE_REDIS_CACHE": "default",
+    },
+    "custom_fields": {
+        "USE_REDIS_CACHE": "default",
+    },
+    "webhooks": {
+        "USE_REDIS_CACHE": "default",
+    },
+}
 
-# Redis variables
-REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
-REDIS_PORT = os.getenv("REDIS_PORT", 6379)
-REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", "")
-
-# Check for Redis SSL
-REDIS_SCHEME = "redis"
-REDIS_SSL = is_truthy(os.environ.get("REDIS_SSL", False))
-if REDIS_SSL:
-    REDIS_SCHEME = "rediss"
+# Nautobot uses Cacheops for database query caching. These are the following defaults.
+# For detailed configuration see: https://github.com/Suor/django-cacheops#setup
+CACHEOPS_REDIS = os.getenv("NAUTOBOT_CACHEOPS_REDIS", parse_redis_connection(redis_database=1))
 
 # The django-redis cache is used to establish concurrent locks using Redis. The
 # django-rq settings will use the same instance/database by default.
-#
-# This "default" server is now used by RQ_QUEUES.
-# >> See: nautobot.core.settings.RQ_QUEUES
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"{REDIS_SCHEME}://{REDIS_HOST}:{REDIS_PORT}/0",
+        "LOCATION": parse_redis_connection(redis_database=0),
         "TIMEOUT": 300,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "PASSWORD": REDIS_PASSWORD,
         },
     }
 }
-
-# RQ_QUEUES is not set here because it just uses the default that gets imported
-# up top via `from nautobot.core.settings import *`.
-
-# REDIS CACHEOPS
-CACHEOPS_REDIS = f"{REDIS_SCHEME}://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/1"
 
 # This key is used for secure generation of random numbers and strings. It must never be exposed outside of this file.
 # For optimal security, SECRET_KEY should be at least 50 characters in length and contain a mix of letters, numbers, and
@@ -175,7 +149,7 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 # Set to True to enable server debugging. WARNING: Debugging introduces a substantial performance penalty and may reveal
 # sensitive information about your installation. Only enable debugging while performing testing. Never enable debugging
 # on a production system.
-DEBUG = is_truthy(os.environ.get("DEBUG", False))
+DEBUG = is_truthy(os.environ.get("NAUTOBOT_DEBUG", False))
 
 # Enforcement of unique IP space can be toggled on a per-VRF basis. To enforce unique IP space
 # within the global table (all prefixes and IP addresses not assigned to a VRF), set

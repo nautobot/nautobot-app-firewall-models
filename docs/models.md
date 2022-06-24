@@ -1,6 +1,14 @@
-# Models
+# Overview
+This plugin follows hierarchical approach to the modeling of the firewall objects. The aim is to provide flexible framework for building firewall policies.
 
-Modeling firewall objects can be quite complex and to provide as much flexibility as possible a nest approach has been taken. To also avoid downstream objects from being removed from Nautobot that then causes unexpected changes to a firewall policy EVERY many to many relationship is set so the child object cannot be deleted if it is used by a parent. For example an IPAddress used in an AddressObject that follows up the chain into a Policy, if someone was to try and delete this IPAddress Nautobot will prevent this from happening until either the relationship to the AddressObject is removed OR the AddressObject is deleted. This is to enforce a deliberate approach to managing objects and that you must first remove the object from it's parent before it can be deleted. In the below diagram you will see all models depicted and the furthest left if the most "parent" object with the each relationship that cascades down is a child of the parent to the left.
+Child objects associated to their parents via many-to-many relationship can be deleted only once the parent object is gone. This prevents accidental changes to firewall policies.
+
+For example, this would apply to an IP Address object used in an Address Object, which in turn is one of the descendants of a Policy object. That IP Address could NOT be deleted until of the below happened:
+
+* The relationships between IP Address and the Address Object is removed
+* The Address Object is deleted
+
+To reitarate, this acts as a protection mechanism to prevent unintentional object deletions.
 
 All the data models introduced by the Firewall plugin support the following Nautobot features:
 
@@ -13,38 +21,40 @@ All the data models introduced by the Firewall plugin support the following Naut
 * Custom data validation logic
 * Webhooks
 
+The below diagram shows hierarchy of the models, and how they relate to one another. Policy model is at the top of the hierarchy; it has no parents. Every other model is in the child-parent relationship with the preceding model, moving from left to right.
+
 <p align="center">
   <img src="./images/datamodel.png" class="center">
 </p>
 
 ## Creation Order
 
-With all the nested relationship to manage it is easiest to work from the right to the left of the diagram in creation.
+The simplest approach to creating policies is to work upwards, starting with the objects at the bottom of the hierarchy.
 
-1. Create the "end objects" AddressObjects UserObjects and ServiceObjects
-    * For AddressObjects first create the underlying objects to use in creating the AddressObject (i.e. create IPAddress before attempting to create an AddressObject for that IP).
-2. Create groups if needed, AddressObjectGroups UserObjectGroups and ServiceObjectGroups
-    * Groups are not required but are commonly used to group like objects together in firewall policies.
-3. Create PolicyRules
-4. Create Policy & assign indexes to rules.
-5. Add Device and/or DynamicGroup objects to a Policy
+1. If you require Address Objects, create the underlying objects first. For example, ensure IP Address is in place before you create an Address Object for that IP.
+2. Create the bottommost child objects, Address Objects, User Objects and ServiceObjects.
+3. Optionally create groups, Address Object Groups ,User Object Groups and ServiceObjectGroups.
+    * Groups are commonly used to aggregate objects of the same type in firewall policies.
+4. Create Policy Rules
+5. Create Policy and assign indexes to rules.
+6. Add Device and/or DynamicGroup objects to a Policy
 
-## Custom Through Models
+## Custom Many-To-Many Models
 
-This plugin heavily employs the use of [custom through models](https://docs.djangoproject.com/en/3.2/howto/custom-model-fields/) for both disabling deleting from the bottom up AND for adding additional attributes that are only relevant in the relationship but not on the objects independently. 
+This plugin uses [custom models to model many-to-many](https://docs.djangoproject.com/en/3.2/howto/custom-model-fields/) relationships (also known as through models). Some of these models implement the logic for deleting objects in child-parent relationships, as discussed earlier. Other models add attributes enriching relationships defined between objects.
+
 
 `PolicyRuleM2M`, `PolicyDeviceM2M`, `PolicyDynamicGroupM2M` are used for setting additional attributes and the remainder are solely defined for the disabling deleting from the bottom up.
 
-## Policy
-A Policy is a collection of PolicyRules that are assigned to Devices and DynamicGroups. When used in the context of an access list a Policy is the full access list.
+## Available Models
+### Policy
+A Policy models set of security rules permitting or blocking data packets.
 
-Example of access list that could be translated to a Policy
-```no-highlight
-Extended IP access list Virtual-Access1.1#1
-    20 permit icmp host 1.1.1.1 any
-    30 deny ip host 44.33.66.36 host 1.1.1.1
-    40 permit udp any host 1.1.1.1
-```
+Policy is defined as a collection of Policy Rules. Policies are assigned to Device and Dynamic Groups.
+
+You can think of a policy as roughly corresponding to access lists or policies on security appliances.
+
+#### Attributes
 
 * Name (string)
 * Description (optional, string)
@@ -56,8 +66,21 @@ Extended IP access list Virtual-Access1.1#1
 * Status (FK to Status)
 * Tags (M2M to Tag)
 
-## PolicyRuleM2M
+#### Examples
+Example of access list that could be translated to a Policy
+```no-highlight
+Extended IP access list Virtual-Access1.1#1
+    20 permit icmp host 1.1.1.1 any
+    30 deny ip host 44.33.66.36 host 1.1.1.1
+    40 permit udp any host 1.1.1.1
+```
+
+### PolicyRuleM2M
 Allows for creating an index value that is only relevant to the relationship, this allows for a PolicyRule to potentially be used multiple times across multiple Policies.
+
+This model is not directly exposed to the user but is exposed through the Policy object and the index is set via the Policy detail view.
+
+#### Attributes
 
 * Index (optional, int)
     * Sets the index of the PolicyRule in the Policy
@@ -68,8 +91,11 @@ Allows for creating an index value that is only relevant to the relationship, th
 * Policy (FK to Policy)
 * Policy Rules (FK to PolicyRule)
 
-## PolicyDeviceM2M
+### PolicyDeviceM2M
 Allows for created a weighted value on how a Policy is assigned to a Device.
+
+This model is not directly exposed to the user but is exposed through the Policy object and the weight is set via the Policy detail view.
+#### Attributes
 
 * Weight (int, default=100)
     * Meant to allow for setting priority on how a Policy is applied to a Device.
@@ -78,8 +104,11 @@ Allows for created a weighted value on how a Policy is assigned to a Device.
 * Policy (FK to Policy)
 * Devices (FK to Device)
 
-## PolicyDynamicGroupM2M
+### PolicyDynamicGroupM2M
 Allows for created a weighted value on how a Policy is assigned to a DynamicGroup.
+
+This model is not directly exposed to the user but is exposed through the Policy object and the weight is set via the Policy detail view.
+#### Attributes
 
 * Weight (int, default=100)
     * Meant to allow for setting priority on how a Policy is applied to a Device.
@@ -88,13 +117,10 @@ Allows for created a weighted value on how a Policy is assigned to a DynamicGrou
 * Policy (FK to Policy)
 * Dynamic Groups (FK to DynamicGroup)
 
-## PolicyRule
-Represents a single line in a Policy.
+### PolicyRule
+Represents a single security rule in a Policy.
 
-Example line in an access list that would translate to a PolicyRule
-```no-highlight
-30 deny ip host 44.33.66.36 host 1.1.1.1
-```
+#### Attributes
 
 * Name (optional, string)
 * Status (FK to Status)
@@ -112,47 +138,66 @@ Example line in an access list that would translate to a PolicyRule
 * Action (string, choice of deny drop allow)
 * Log (boolean)
 * Request ID (optional, string)
-    * Meant to represent an upstream request (i.e. an service request from an ITSM solution).
+    * Meant to represent an upstream request (e.g. an service request from an ITSM solution).
 
-## ServiceObject
-Represents a single destination service, if using a well known port it is recommended to use the port name as the name of the object. (i.e. a service called HTTP should be TCP 80, a non-standard service 8898 serving HTTP traffic may be best called `HTTP-8898` or `HTTP-SomeDescriptorForService`).
+#### Examples
+
+Example line in an access list that would translate to a PolicyRule
+```no-highlight
+30 deny ip host 44.33.66.36 host 1.1.1.1
+```
+
+### ServiceObject
+Service object represents a single destination service.
+
+For well-known ports, it is best to use the port name as the name of the object. For example, a service called `HTTP` should be TCP 80. A non-standard service 8898 serving HTTP traffic could be called `HTTP-8898` or `HTTP-SomeDescriptorForService`).
+
+#### Attributes
 
 * Name (string)
 * Description (optional, string)
 * Port (optional, int OR int range)
-    * Must be specified as a valid layer 4 port OR port range (i.e. 80 OR 8080-8088).
+    * Must be specified as a valid layer 4 port OR port range (e.g. 80 OR 8080-8088).
 * IP Protocol (string, choice field)
-    * IANA protocols (i.e. TCP UDP ICMP)
+    * IANA protocols (e.g. TCP UDP ICMP)
 * Status (FK to Status)
 
-## ServiceObjectGroup
+### ServiceObjectGroup
 Represents a group of ServiceObjects.
+
+#### Attributes
 
 * Name (string)
 * Description (optional, string)
 * Service Objects (M2M to ServiceObject)
 * Status (FK to Status)
 
-## UserObject
+### UserObject
 Defines a User and is NOT related to a user of Nautobot, commonly used to identify a source for traffic on networks with roaming users.
 
+#### Attributes
+
 * Name (optional, string)
-    * Signifies the name of the user, commonly first & last name (i.e. John Smith)
+    * Signifies the name of the user, commonly first & last name (e.g. John Smith)
     * Most likely would not be used in a policy but as a helper to identify an object
 * Username (string)
-    * Signifies the username in identify provider (i.e. john.smith)
+    * Signifies the username in identify provider (e.g. john.smith)
 * Status (FK to Status)
 
-## UserObjectGroup
+### UserObjectGroup
 Represents a group of UserObjects.
+
+#### Attributes
 
 * Name (string)
 * Description (optional, string)
 * User Objects (M2M to UserObject)
 * Status (FK to Status)
 
-## AddressObject
-Defines an object representation of some form of an IP object for cleaner nesting and modeling. Each AddressObject can only have ONE IP object type associated to it. The Address property will return the related IP object to the AddressObject (i.e. if FQDN is set instance.address would return the FQDN object).
+### AddressObject
+Defines an object representation of some form of an IP object for cleaner nesting and modeling. Each AddressObject can only have ONE IP object type associated to it. The Address property will return the related IP object to the AddressObject (e.g. if FQDN is set instance.address would return the FQDN object).
+
+#### Attributes
 
 * Name (string)
 * Description (optional, string)
@@ -163,16 +208,20 @@ Defines an object representation of some form of an IP object for cleaner nestin
 * Status (FK to Status)
 * Address (property that returns the assigned object)
 
-## AddressObjectGroup
+### AddressObjectGroup
 Represents a group of AddressObjects.
+
+#### Attributes
 
 * Name (string)
 * Description (optional, string)
 * Address Objects (M2M to AddressObject)
 * Status (FK to Status)
 
-## FQDN
+### FQDN
 Fully qualified domain name, can be used on some firewall in place of a static IP(s).
+
+#### Attributes
 
 * Name (string)
 * Description (optional, string)
@@ -181,8 +230,10 @@ Fully qualified domain name, can be used on some firewall in place of a static I
     * Should be used if a firewall needs to tie a FQDN to an IP instead of on process time
 * Status (FK to Status)
 
-## IPRange
+### IPRange
 Tracks ranges of IP addresses, is NOT represented in the IPAM objects in Nautobot and is ONLY used inside the plugin.
+
+#### Attributes
 
 * Description (optional, string)
 * Start Address (IPv4 OR IPv6)
@@ -191,8 +242,10 @@ Tracks ranges of IP addresses, is NOT represented in the IPAM objects in Nautobo
 * Size (int, automatically set)
 * Status (FK to Status)
 
-## Zone
-Zones are common on firewalls and are typically seen as representations of area (i.e. DMZ trust untrust).
+### Zone
+Zones are common on firewalls and are typically seen as representations of area (e.g. DMZ trust untrust).
+
+#### Attributes
 
 * Name (string)
 * Description (optional, string)
