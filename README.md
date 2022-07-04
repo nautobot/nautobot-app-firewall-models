@@ -3,6 +3,7 @@
 A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to model layer 4 firewall policies and/or extended access control lists. 
 
 Future development will include the ability to onboard an existing access list from a device and the ability to generate device configuration.
+
 ## Installation
 
 The plugin is available as a Python package in PyPI and can be installed with `pip`:
@@ -13,7 +14,7 @@ pip install nautobot-firewall-models
 
 > The plugin is compatible with Nautobot 1.3.0 and higher
 
-To ensure Nautobot Plugin Firewall Model is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `nautobot-firewall-models` package:
+To ensure Nautobot Firewall Models Plugin is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `nautobot-firewall-models` package:
 
 ```no-highlight
 # echo nautobot-firewall-models >> local_requirements.txt
@@ -28,11 +29,11 @@ PLUGINS = ["nautobot_firewall_models"]
 
 ## Optional Settings
 
-Models provided by this plugin have a `status` attribute and the default status is set to use `active`. This corresponds to the pre-built Nautobot `Active` status object.
+Models provided by this plugin have a `status` attribute and the default `status` is set to use `active`. This corresponds to the pre-built Nautobot `Active` Status object.
 
 Use the `default_status` plugin configuration setting to change the default value for the `status` attribute.
 
-The value assigned to `default_status` must match the slug of an existing Nautobot Status object. That Status object must have all of the Firewall Models listed in the Content Type associations. See examples below on selecting the Content Type(s) when createing/editing a Status object and the pre-built `Active` status with firewall content types added.
+The value assigned to `default_status` must match the slug of an existing Nautobot Status object. That Status object must have all of the Firewall Models listed in the Content Type associations. See examples below on selecting the Content Type(s) when creating/editing a Status object and the pre-built `Active` Status with firewall content types added.
 
 <p align="center">
   <img src="./docs/images/custom-status.png" class="center">
