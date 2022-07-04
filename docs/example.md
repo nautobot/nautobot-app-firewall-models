@@ -1,10 +1,14 @@
 # Example
-This example is using the same data that is loaded and used in unittesting of the plugin. To load the data for testing in a development environment `invoke testdata` will populate this information. If you are not using the local development environment you are still in luck. The invoke command is actually wrapping `nautobot-server create_test_firewall_data`. This management command is available to any environment that has this plugin installed and listed in `PLUGINS` in the `nautobot_config.py`.
+
+This example is using the same data that is used in unittesting of the plugin. To load the data for testing in a development environment use the `invoke testdata` command. If you are not using the local development environment you are still in luck. The invoke command is actually wrapping `nautobot-server create_test_firewall_data`. This management command is available to any environment that has this plugin installed and listed in `PLUGINS` in the `nautobot_config.py`.
 
 ## API
-All firewall models are built with the use of both the REST API & GraphQL API available to the end user.
+
+All firewall models are built with the use of both the REST API and GraphQL API available to the end user.
 
 ### GraphQL
+
+Example GraphQL query showing how to get instances for each of the models provided by this plugin:
 
 ####  Query
 ```no-highlight
@@ -83,6 +87,7 @@ All firewall models are built with the use of both the REST API & GraphQL API av
 ```
 
 #### Response
+
 ```json
 {
   "data": {
@@ -191,9 +196,11 @@ All firewall models are built with the use of both the REST API & GraphQL API av
 ```
 
 ### REST
-When using the REST GET method to `/api/plugins/firewall/policy/<uuid>/` below is an example output.
+
+Below is an example response to the REST API GET request for a Policy object at `/api/plugins/firewall/policy/<uuid>/`.
 
 #### Response
+
 ```json
 {
   "id": "246a037f-9858-4848-90a5-7ca967a3583f",

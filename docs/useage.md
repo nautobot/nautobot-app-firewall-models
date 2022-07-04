@@ -1,20 +1,21 @@
 # Assigning Policies
+
 There are three primary ways of assigning policies to devices:
 
 * Directly via the `assigned_devices` attribute on the Policy object.
 * Dynamically by assigning existing `DynamicGroup` object to the `assigned_dynamic_groups` on the Policy object.
-    * At this time in Nautobot v1.3.X DynamicGroups can only be assigned to a Device objects or VirtualMachine objects.
+    * At this time in Nautobot v1.3.X Dynamic Groups can only be assigned to Device objects or Virtual Machine objects.
 * By creating a new `Relationship` specifying additional targets for Policy association. This can be, for example, used to associate Policy with an Interface object.
-    * The use of a Relationship _may_ limit furture integrations with parsing or templating.
+    * The use of a Relationship _may_ limit future integrations with parsing or templating.
 
 Although policies can be created without any rules it is recommended to create the required underlying objects first before moving to the Policy definitions. [Creation Order](./models.md#creation-order) provides an ordered list of steps for creating and assigning, objects, needed for Policy creation.
 
-
-
 # Example
-This example is using the same data that is loaded and used in unittesting of the plugin. To load the data for testing in a development environment `invoke testdata` will populate this information. If you are not using the local development environment you are still in luck. The invoke command is actually wrapping `nautobot-server create_test_firewall_data`. This management command is available to any environment that has this plugin installed and listed in `PLUGINS` in the `nautobot_config.py`.
+
+This example uses the same data that is loaded and used in unittesting of the plugin. To load the data for testing in a development environment use the `invoke testdata` command to populate this information. If you are not using the local development environment you are still in luck. The invoke command is wrapping `nautobot-server create_test_firewall_data`. This management command is available to any environment with this plugin installed and listed in `PLUGINS` in the `nautobot_config.py`.
 
 ## API
+
 All firewall models are built with the use of both the REST API & GraphQL API available to the end user.
 
 ### GraphQL
@@ -204,6 +205,7 @@ All firewall models are built with the use of both the REST API & GraphQL API av
 ```
 
 ### REST
+
 When using the REST GET method to `/api/plugins/firewall/policy/<uuid>/` below is an example output.
 
 #### Response
