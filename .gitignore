@@ -300,3 +300,6 @@ creds.env
 
 # Invoke overrides
 invoke.yml
+
+# MKDocs Build
+nautobot_firewall_models/static/nautobot_firewall_models/docs

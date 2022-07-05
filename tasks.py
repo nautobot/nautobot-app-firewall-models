@@ -38,7 +38,7 @@ namespace = Collection("nautobot_firewall_models")
 namespace.configure(
     {
         "nautobot_firewall_models": {
-            "nautobot_ver": "1.3.1",
+            "nautobot_ver": "1.3.5",
             "project_name": "nautobot_firewall_models",
             "python_ver": "3.8",
             "local": False,
@@ -355,6 +355,14 @@ def unittest_coverage(context):
     run_command(context, command)
 
 
+@task
+def check_docs(context):
+    """Build and test docs."""
+    command = "mkdocs build --no-directory-urls --strict"
+
+    run_command(context, command)
+
+
 @task(
     help={
         "failfast": "fail as soon as a single test fails don't run the entire test suite",
@@ -377,6 +385,8 @@ def tests(context, failfast=False):
     pydocstyle(context)
     print("Running pylint...")
     pylint(context)
+    print("Running mkdocs...")
+    check_docs(context)
     print("Running unit tests...")
     unittest(context, failfast=failfast)
     print("All tests have passed!")
