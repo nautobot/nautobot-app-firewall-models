@@ -2,7 +2,7 @@
 
 A Policy models set of security rules permitting or blocking data packets.
 
-Policy is defined as a collection of Policy Rules. Policies are assigned to Device and Dynamic Groups.
+Policy is defined as a collection of Policy Rules. Policies are assigned to Devices and Dynamic Groups.
 
 You can think of a policy as roughly corresponding to access lists or policies on security appliances.
 

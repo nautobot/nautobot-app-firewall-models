@@ -2,7 +2,7 @@
 
 Allows for creating a weighted value affecting how a Policy is assigned to a Dynamic Group.
 
-This model is not directly exposed to the user but is exposed through the Policy object and the weight is set via the Policy detail view.
+This model is not directly exposed to the user but can be accessed via the Policy object, and the weight value is set in the Policy detail view.
 
 ## Attributes
 

@@ -4,9 +4,9 @@ This plugin follows hierarchical approach to the modeling of the firewall object
 
 Child objects associated to their parents via many-to-many relationship can be deleted only once the parent object is gone. This prevents accidental changes to firewall policies.
 
-For example, this would apply to an IP Address object used in an Address Object, which in turn is one of the descendants of a Policy object. That IP Address could NOT be deleted until of the below happened:
+For example, this would apply to an IP Address object used in an Address Object, which in turn is one of the descendants of a Policy object. That IP Address could NOT be deleted until one of the below happened:
 
-* The relationships between IP Address and the Address Object is removed
+* The relationship between IP Address and the Address Object is removed
 * The Address Object is deleted
 
 To reiterate, this acts as a protection mechanism to prevent unintentional object deletions.
@@ -24,9 +24,7 @@ All the data models introduced by the Firewall plugin support the following Naut
 
 The below diagram shows hierarchy of the models, and how they relate to one another. Policy model is at the top of the hierarchy; it has no parents. Every other model is in the child-parent relationship with the preceding model, moving from left to right.
 
-<p align="center">
-  <img src="./images/datamodel.png" class="center">
-</p>
+![Model Hierarchy](images/datamodel.png "Model Hierarchy")
 
 ## Creation Order
 

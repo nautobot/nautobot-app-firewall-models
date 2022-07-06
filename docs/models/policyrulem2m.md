@@ -2,7 +2,7 @@
 
 Allows for creating an index value that is only relevant to the relationship, this allows for a Policy Rule to potentially be used multiple times across multiple Policies.
 
-This model is not directly exposed to the user but is exposed through the Policy object and the index is set via the Policy detail view.
+This model is not directly exposed to the user but can be accessed via the Policy object, and the index value is set in the Policy detail view.
 
 ## Attributes
 

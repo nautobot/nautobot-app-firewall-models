@@ -1,7 +1,7 @@
 ---
 dev_addr: "127.0.0.1:8001"
 edit_uri: "edit/main/nautobot-plugin-firewall-model/docs"
-site_name: "NautobotFirewallModels Documentation"
+site_name: "Nautobot Firewall Models Documentation"
 site_url: "https://nautobot-plugin-firewall-model.readthedocs.io/"
 site_dir: nautobot_firewall_models/static/nautobot_firewall_models/docs
 repo_url: "https://github.com/networktocode-llc/nautobot-plugin-firewall-model"
@@ -21,4 +21,7 @@ plugins:
     - include-markdown
 nav:
   - Introduction: "index.md"
+  - Usage: "usage.md"
+  - Examples: "example.md"
+  - Development Environment: "development.md"
   - Models: "models.md"

@@ -2,7 +2,7 @@
 
 Service Object represents a single destination service.
 
-For well-known ports, it is best to use the port name as the name of the object. For example, a service called `HTTP` should be TCP 80. A non-standard service 8898 serving HTTP traffic could be called `HTTP-8898` or `HTTP-SomeDescriptorForService`.
+For well-known ports, it is best to use the port name as the name of the object. For example, a service called `HTTP` should map to TCP port 80. A non-standard service on port 8898 serving HTTP traffic could be called `HTTP-8898` or `HTTP-SomeDescriptorForService`.
 
 ## Attributes
 
