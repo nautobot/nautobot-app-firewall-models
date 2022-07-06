@@ -1,8 +1,10 @@
-# Example
+# Examples
 
-This example is using the same data that is used in unittesting of the plugin. To load the data for testing in a development environment use the `invoke testdata` command. If you are not using the local development environment you are still in luck. The invoke command is actually wrapping `nautobot-server create_test_firewall_data`. This management command is available to any environment that has this plugin installed and listed in `PLUGINS` in the `nautobot_config.py`.
+These examples are based on the same data used in unittesting of the plugin. To load the data for testing in a development environment use the `invoke testdata` command.
 
-## API
+If you are not using the local development environment you are still in luck. The invoke command is actually wrapping `nautobot-server create_test_firewall_data`. This management command is available to any environment that has this plugin installed and listed in `PLUGINS` in the `nautobot_config.py`.
+
+## Using API
 
 All firewall models are built with the use of both the REST API and GraphQL API available to the end user.
 

@@ -4,9 +4,9 @@ This plugin follows hierarchical approach to the modeling of the firewall object
 
 Child objects associated to their parents via many-to-many relationship can be deleted only once the parent object is gone. This prevents accidental changes to firewall policies.
 
-For example, this would apply to an IP Address object used in an Address Object, which in turn is one of the descendants of a Policy object. That IP Address could NOT be deleted until of the below happened:
+For example, this would apply to an IP Address object used in an Address Object, which in turn is one of the descendants of a Policy object. That IP Address could NOT be deleted until one of the below happened:
 
-* The relationships between IP Address and the Address Object is removed
+* The relationship between IP Address and the Address Object is removed
 * The Address Object is deleted
 
 To reiterate, this acts as a protection mechanism to prevent unintentional object deletions.
@@ -24,9 +24,7 @@ All the data models introduced by the Firewall plugin support the following Naut
 
 The below diagram shows hierarchy of the models, and how they relate to one another. Policy model is at the top of the hierarchy; it has no parents. Every other model is in the child-parent relationship with the preceding model, moving from left to right.
 
-<p align="center">
-  <img src="./images/datamodel.png" class="center">
-</p>
+![Model Hierarchy](images/datamodel.png "Model Hierarchy")
 
 ## Creation Order
 
@@ -52,7 +50,7 @@ This plugin uses [custom models to model many-to-many](https://docs.djangoprojec
 
 A Policy models set of security rules permitting or blocking data packets.
 
-Policy is defined as a collection of Policy Rules. Policies are assigned to Device and Dynamic Groups.
+Policy is defined as a collection of Policy Rules. Policies are assigned to Devices and Dynamic Groups.
 
 You can think of a policy as roughly corresponding to access lists or policies on security appliances.
 
@@ -83,7 +81,7 @@ Extended IP access list Virtual-Access1.1#1
 
 Allows for creating an index value that is only relevant to the relationship, this allows for a Policy Rule to potentially be used multiple times across multiple Policies.
 
-This model is not directly exposed to the user but is exposed through the Policy object and the index is set via the Policy detail view.
+This model is not directly exposed to the user but can be accessed via the Policy object, and the index value is set in the Policy detail view.
 
 #### Attributes
 
@@ -100,7 +98,7 @@ This model is not directly exposed to the user but is exposed through the Policy
 
 Allows for creating a weighted value affecting how a Policy is assigned to a Device.
 
-This model is not directly exposed to the user but is exposed through the Policy object and the weight is set via the Policy detail view.
+This model is not directly exposed to the user but can be accessed via the Policy object, and the weight value is set in the Policy detail view.
 
 #### Attributes
 
@@ -115,7 +113,7 @@ This model is not directly exposed to the user but is exposed through the Policy
 
 Allows for creating a weighted value affecting how a Policy is assigned to a Dynamic Group.
 
-This model is not directly exposed to the user but is exposed through the Policy object and the weight is set via the Policy detail view.
+This model is not directly exposed to the user but can be accessed via the Policy object, and the weight value is set in the Policy detail view.
 
 #### Attributes
 
@@ -162,7 +160,7 @@ Example line in an access list that would translate to a Policy Rule:
 
 Service Object represents a single destination service.
 
-For well-known ports, it is best to use the port name as the name of the object. For example, a service called `HTTP` should be TCP 80. A non-standard service 8898 serving HTTP traffic could be called `HTTP-8898` or `HTTP-SomeDescriptorForService`.
+For well-known ports, it is best to use the port name as the name of the object. For example, a service called `HTTP` should map to TCP port 80. A non-standard service serving HTTP traffic on port 8898 could be called `HTTP-8898` or `HTTP-SomeDescriptorForService`.
 
 #### Attributes
 
@@ -245,7 +243,7 @@ Fully qualified domain name, can be used on some firewalls in place of a static 
 * Description (optional, string)
 * IP Addresses (M2M to IPAddress)
     * Not required
-    * Should be used if a firewall needs to tie a FQDN to an IP instead of on process time
+    * Should be used if a firewall needs to tie a FQDN to an IP instead of on process time <--- Clarify this sentence
 * Status (FK to Status)
 
 ### IPRange
