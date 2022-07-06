@@ -33,13 +33,6 @@ Models provided by this plugin have a `status` attribute and the default `status
 
 Use the `default_status` plugin configuration setting to change the default value for the `status` attribute.
 
-The value assigned to `default_status` must match the slug of an existing Nautobot Status object. That Status object must have all of the Firewall Models listed in the Content Type associations. See examples below on selecting the Content Type(s) when creating/editing a Status object and the pre-built `Active` Status with firewall content types added.
-
-<p align="center">
-  <img src="./docs/images/custom-status.png" class="center">
-  <img src="./docs/images/existing-status.png" class="center">
-</p>
-
 ```python
 PLUGINS_CONFIG = {
     "nautobot_firewall_models": {
@@ -48,12 +41,15 @@ PLUGINS_CONFIG = {
 }
 ```
 
+The value assigned to `default_status` must match the slug of an existing Nautobot Status object. That Status object must have all of the Firewall Models listed in the Content Type associations. See examples below on selecting the Content Type(s) when creating/editing a Status object and the pre-built `Active` Status with firewall content types added.
+
+![Custom Status](docs/images/custom-status.png "Custom Status")
+![Existing Status](docs/images/existing-status.png "Existing Status")
+
 ## Screenshots
 
-<p align="center">
-  <img src="./docs/images/navmenu.png" class="center">
-  <img src="./docs/images/policy.png" class="center">
-</p>
+![Navigation Menu](docs/images/navmenu.png "Navigation Menu")
+![Policy View](docs/images/policy.png "Policy View")
 
 ## Documentation
 
