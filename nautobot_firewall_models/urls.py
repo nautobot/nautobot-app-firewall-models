@@ -1,6 +1,8 @@
 """Django urlpatterns declaration for nautobot_firewall_models plugin."""
 
+from django.templatetags.static import static
 from django.urls import path
+from django.views.generic import RedirectView
 from nautobot.extras.views import ObjectChangeLogView
 
 from nautobot_firewall_models import models
@@ -282,5 +284,10 @@ urlpatterns = [
         ObjectChangeLogView.as_view(),
         name="policy_changelog",
         kwargs={"model": models.Policy},
+    ),
+    path(
+        "docs/",
+        RedirectView.as_view(url=static("nautobot_firewall_models/docs/index.html")),
+        name="docs",
     ),
 ]
