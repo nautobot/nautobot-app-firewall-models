@@ -6,20 +6,20 @@ services:
     env_file:
       - "dev.env"
       - "creds.env"
+    # ports:
+    #   - "5432:5432"
     volumes:
       - "postgres_data:/var/lib/postgresql/data"
-    ports:
-      - "5432:5432"
   redis:
     image: "redis:6-alpine"
     command:
       - "sh"
       - "-c"  # this is to evaluate the $REDIS_PASSWORD from the env
       - "redis-server --appendonly yes --requirepass $$REDIS_PASSWORD"
+    # ports:
+    #   - "6379:6379"
     env_file:
       - "dev.env"
       - "creds.env"
-    ports:
-      - "6379:6379"
 volumes:
   postgres_data: {}
