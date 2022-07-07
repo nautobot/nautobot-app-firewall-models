@@ -172,13 +172,6 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
-    def test_service_object_str(self):
-        """testing str of service object."""
-        svc = ServiceObject.objects.first()
-        svc.ip_protocol = "TCP"
-
-        self.assertEqual(str(svc), svc.name)
-
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass

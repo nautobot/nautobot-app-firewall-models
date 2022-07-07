@@ -87,7 +87,7 @@ class TestModels(TestCase):
         self.assertEqual(protocol.description, "")
         self.assertEqual(protocol.name, "HTTPS")
         self.assertEqual(protocol.port, "8443")
-        self.assertEqual(str(protocol), "HTTPS")
+        self.assertEqual(str(protocol), "HTTPS (TCP/8443)")
 
     def test_create_protocol_all_fields(self):
         """Creates a protocol with all fields."""
@@ -102,7 +102,7 @@ class TestModels(TestCase):
         self.assertEqual(protocol.description, "Encrypted HTTP traffic")
         self.assertEqual(protocol.name, "HTTPS")
         self.assertEqual(protocol.port, "8443")
-        self.assertEqual(str(protocol), "HTTPS")
+        self.assertEqual(str(protocol), "HTTPS (TCP/8443)")
 
     def test_create_service_group_only_required(self):
         """Creates a service group with only required fields."""

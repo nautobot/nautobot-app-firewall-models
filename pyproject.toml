@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "nautobot-firewall-models"
-version = "0.1.0"
+version = "0.1.0-beta.0"
 description = "Nautobot plugin to model firewall objects."
 authors = ["Network to Code, LLC <info@networktocode.com>"]
 license = "Apache-2.0"
 readme = "README.md"
-homepage = "https://github.com/networktocode-llc/nautobot-plugin-firewall-model"
-repository = "https://github.com/networktocode-llc/nautobot-plugin-firewall-model"
+homepage = "https://github.com/nautobot/nautobot-plugin-firewall-models"
+repository = "https://github.com/nautobot/nautobot-plugin-firewall-models"
 keywords = ["nautobot", "nautobot-plugin"]
 include = [
     "LICENSE",

@@ -420,7 +420,9 @@ class ServiceObject(PrimaryModel):
 
     def __str__(self):
         """Stringify instance."""
-        return self.name
+        if self.port:
+            return f"{self.name} ({self.ip_protocol}/{self.port})"
+        return f"{self.name} ({self.ip_protocol})"
 
     def save(self, *args, **kwargs):
         """Overload save to call full_clean to ensure validators run."""
@@ -533,9 +535,22 @@ class PolicyRule(PrimaryModel):
 
     def __str__(self):
         """Stringify instance."""
-        if self.request_id:
+        if self.request_id and self.name:
             return f"{self.name} - {self.request_id}"
-        return self.name
+        if self.name:
+            return self.name
+        if self.source_user or self.source_user_group:
+            return (
+                f"Source {self.source_address}/{self.source_address_group} -"
+                f" Destination {self.destination_address}/{self.destination_address_group} -"
+                f" Service {self.service}/{self.service_group} -"
+                f" User {self.source_user}/{self.source_user_group}"
+            )
+        return (
+            f"Source {self.source_address}/{self.source_address_group} -"
+            f" Destination {self.destination_address}/{self.destination_address_group} -"
+            f" Service {self.service}/{self.service_group}"
+        )
 
 
 @extras_features(
