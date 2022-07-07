@@ -27,6 +27,8 @@ from nautobot_firewall_models import models, fields, choices
 class IPRangeFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
     """Filter form to filter searches."""
 
+    field_order = ["q", "start_address", "end_address", "vrf"]
+
     model = models.IPRange
     q = forms.CharField(
         required=False,
@@ -68,6 +70,8 @@ class IPRangeBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm)
 class FQDNFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
     """Filter form to filter searches."""
 
+    field_order = ["q", "name"]
+
     model = models.FQDN
     q = forms.CharField(
         required=False,
@@ -104,6 +108,8 @@ class FQDNBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
 
 class AddressObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
     """Filter form to filter searches."""
+
+    field_order = ["q", "name"]
 
     model = models.AddressObject
     q = forms.CharField(
@@ -148,6 +154,8 @@ class AddressObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEdi
 class AddressObjectGroupFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
     """Filter form to filter searches."""
 
+    field_order = ["q", "name"]
+
     model = models.AddressObjectGroup
     q = forms.CharField(
         required=False,
@@ -187,6 +195,8 @@ class AddressObjectGroupBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, Bu
 
 class ServiceObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
     """Filter form to filter searches."""
+
+    field_order = ["q", "name"]
 
     model = models.ServiceObject
     q = forms.CharField(
@@ -233,6 +243,8 @@ class ServiceObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEdi
 class ServiceObjectGroupFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
     """Filter form to filter searches."""
 
+    field_order = ["q", "name"]
+
     model = models.ServiceObjectGroup
     q = forms.CharField(
         required=False,
@@ -273,12 +285,15 @@ class ServiceObjectGroupBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, Bu
 class UserObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
     """Filter form to filter searches."""
 
+    field_order = ["q", "username", "name"]
+
     model = models.UserObject
     q = forms.CharField(
         required=False,
         label="Search",
         help_text="Search within Name or Description.",
     )
+    name = forms.CharField(required=False, label="Name")
     username = forms.CharField(required=False, label="Username")
 
 
@@ -314,6 +329,8 @@ class UserObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditFo
 
 class UserObjectGroupFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
     """Filter form to filter searches."""
+
+    field_order = ["q", "name"]
 
     model = models.UserObjectGroup
     q = forms.CharField(
@@ -354,6 +371,8 @@ class UserObjectGroupBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkE
 
 class ZoneFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
     """Filter form to filter searches."""
+
+    field_order = ["q", "name"]
 
     model = models.Zone
     q = forms.CharField(
@@ -399,13 +418,15 @@ class ZoneBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
 class PolicyRuleFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
     """Filter form to filter searches."""
 
+    field_order = ["q", "name"]
+
     model = models.PolicyRule
     q = forms.CharField(
         required=False,
         label="Search",
         help_text="Search within Name or Description.",
     )
-    name = forms.CharField(required=False, label="name")
+    name = forms.CharField(required=False, label="Name")
     tag = TagFilterField(models.PolicyRule)
 
 
@@ -487,6 +508,8 @@ class PolicyRuleBulkEditForm(BootstrapMixin, AddRemoveTagsForm, StatusBulkEditFo
 class PolicyFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm, TenancyFilterForm):
     """Filter form to filter searches."""
 
+    field_order = ["q", "name", "assigned_devices", "assigned_dynamic_groups"]
+
     model = models.Policy
     q = forms.CharField(
         required=False,
@@ -495,6 +518,7 @@ class PolicyFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterF
     )
     name = forms.CharField(required=False, label="Name")
     assigned_devices = DynamicModelChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_dynamic_groups = DynamicModelChoiceField(queryset=DynamicGroup.objects.all(), required=False)
 
 
 class PolicyForm(BootstrapMixin, forms.ModelForm, TenancyForm):

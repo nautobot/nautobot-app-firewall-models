@@ -1,12 +1,29 @@
 """Filtering for Firewall Model Plugin."""
 
+from django.db.models import Q
+from django_filters import CharFilter, FilterSet
 from nautobot.extras.filters import StatusModelFilterSetMixin, NautobotFilterSet
 from nautobot.utilities.filters import TagFilter
 
 from nautobot_firewall_models import models
 
 
-class IPRangeFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
+class NameDescriptionSearchFilter(FilterSet):
+    """A base class for adding the search method to models which only expose the `name` and `description` fields."""
+
+    q = CharFilter(
+        method="search",
+        label="Search",
+    )
+
+    def search(self, queryset, name, value):  # pylint: disable=unused-argument, no-self-use
+        """Construct Q filter for filterset."""
+        if not value.strip():
+            return queryset
+        return queryset.filter(Q(name__icontains=value) | Q(description__icontains=value))
+
+
+class IPRangeFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
     """Filter for IPRange."""
 
     class Meta:
@@ -18,7 +35,7 @@ class IPRangeFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
         fields = ["id", "vrf", "size", "description"]
 
 
-class FQDNFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
+class FQDNFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
     """Filter for FQDN."""
 
     class Meta:
@@ -29,7 +46,7 @@ class FQDNFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
         fields = ["id", "name", "description"]
 
 
-class AddressObjectFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
+class AddressObjectFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
     """Filter for AddressObject."""
 
     class Meta:
@@ -40,7 +57,7 @@ class AddressObjectFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
         fields = ["id", "name", "ip_address", "prefix", "ip_range", "fqdn", "description"]
 
 
-class AddressObjectGroupFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
+class AddressObjectGroupFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
     """Filter for AddressObjectGroup."""
 
     class Meta:
@@ -51,7 +68,7 @@ class AddressObjectGroupFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
         fields = ["id", "name", "address_objects", "description"]
 
 
-class ServiceObjectFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
+class ServiceObjectFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
     """Filter for ServiceObject."""
 
     class Meta:
@@ -62,7 +79,7 @@ class ServiceObjectFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
         fields = ["id", "name", "ip_protocol", "port", "description"]
 
 
-class ServiceObjectGroupFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
+class ServiceObjectGroupFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
     """Filter for ServiceObjectGroup."""
 
     class Meta:
@@ -73,7 +90,7 @@ class ServiceObjectGroupFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
         fields = ["id", "name", "service_objects", "description"]
 
 
-class UserObjectFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
+class UserObjectFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
     """Filter for UserObject."""
 
     class Meta:
@@ -83,7 +100,7 @@ class UserObjectFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
         fields = ["id", "name", "username"]
 
 
-class UserObjectGroupFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
+class UserObjectGroupFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
     """Filter for UserObjectGroup."""
 
     class Meta:
@@ -93,7 +110,7 @@ class UserObjectGroupFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
         fields = ["id", "name", "user_objects", "description"]
 
 
-class ZoneFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
+class ZoneFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
     """Filter for Zone."""
 
     class Meta:
@@ -110,14 +127,27 @@ class PolicyRuleFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
 
     tag = TagFilter()
 
+    q = CharFilter(
+        method="search",
+        label="Search",
+    )
+
+    def search(self, queryset, name, value):  # pylint: disable=unused-argument, no-self-use
+        """Construct Q filter for filterset."""
+        if not value.strip():
+            return queryset
+        return queryset.filter(
+            Q(name__icontains=value) | Q(description__icontains=value) | Q(request_id__icontains=value)
+        )
+
     class Meta:
         """Meta attributes for filter."""
 
         model = models.PolicyRule
-        fields = ["id", "action", "log"]
+        fields = ["id", "action", "log", "request_id"]
 
 
-class PolicyFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
+class PolicyFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
     """Filter for Policy."""
 
     class Meta:
