@@ -25,6 +25,7 @@ class NautobotFirewallModelsConfig(PluginConfig):
     max_version = "1.9999"
     default_settings = {}
     caching_config = {"*": {"timeout": 0}}
+    docs_view_name = "plugins:nautobot_firewall_models:docs"
 
 
 config = NautobotFirewallModelsConfig  # pylint:disable=invalid-name
