@@ -103,6 +103,8 @@ jobs:
             PYTHON_VER=${{ matrix.python-version }}
       - name: "Copy credentials"
         run: "cp development/creds.example.env development/creds.env"
+      - name: "DEBUG"
+        run: "docker image ls"
       - name: "Linting: pylint"
         run: "poetry run invoke pylint"
   unittest:
