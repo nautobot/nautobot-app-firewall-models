@@ -53,7 +53,7 @@ The value assigned to `default_status` must match the slug of an existing Nautob
 
 ## Documentation
 
-Documentation is hosted on ReadTheDocs at [Nautobot Firewall Models Plugin](https://nautobot-plugin-firewall-model.readthedocs.io/).
+Documentation is hosted on ReadTheDocs at [Nautobot Firewall Models Plugin](https://nautobot-plugin-firewall-models.readthedocs.io/).
 
 ## Contributing
 
