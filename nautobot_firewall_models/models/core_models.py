@@ -539,18 +539,7 @@ class PolicyRule(PrimaryModel):
             return f"{self.name} - {self.request_id}"
         if self.name:
             return self.name
-        if self.source_user or self.source_user_group:
-            return (
-                f"Source {self.source_address}/{self.source_address_group} -"
-                f" Destination {self.destination_address}/{self.destination_address_group} -"
-                f" Service {self.service}/{self.service_group} -"
-                f" User {self.source_user}/{self.source_user_group}"
-            )
-        return (
-            f"Source {self.source_address}/{self.source_address_group} -"
-            f" Destination {self.destination_address}/{self.destination_address_group} -"
-            f" Service {self.service}/{self.service_group}"
-        )
+        return self.id
 
 
 @extras_features(
