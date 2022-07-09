@@ -13,4 +13,5 @@ def get_default_status():
 
 
 def model_to_json(obj):
+    """Convenience method to convert object to json."""
     return json.loads(JSONRenderer().render(serialize_object_v2(obj)))
