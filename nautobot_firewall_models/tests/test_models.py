@@ -4,10 +4,10 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from nautobot.ipam.models import VRF
 from nautobot.extras.models import Status
-from .fixtures import create_env
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
+from .fixtures import create_env
 
 class TestModels(TestCase):
     """Test models."""
