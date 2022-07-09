@@ -7,6 +7,10 @@ from nautobot.extras.forms import (
     StatusFilterFormMixin,
     StatusBulkEditFormMixin,
     CustomFieldFilterForm,
+    CustomFieldBulkEditForm,
+    CustomFieldModelCSVForm,
+    CustomFieldModelForm,
+    RelationshipModelForm,
 )
 from nautobot.extras.models import Tag, DynamicGroup
 from nautobot.ipam.models import VRF, Prefix, IPAddress
@@ -430,7 +434,7 @@ class PolicyRuleFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFil
     tag = TagFilterField(models.PolicyRule)
 
 
-class PolicyRuleForm(BootstrapMixin, forms.ModelForm):
+class PolicyRuleForm(BootstrapMixin, CustomFieldModelForm):
     """PolicyRule creation/edit form."""
 
     name = forms.CharField(required=False, label="Name")
@@ -469,7 +473,7 @@ class PolicyRuleForm(BootstrapMixin, forms.ModelForm):
         """Meta attributes."""
 
         model = models.PolicyRule
-        fields = [
+        fields = (
             # pylint: disable=duplicate-code
             "name",
             "source_user",
@@ -488,7 +492,7 @@ class PolicyRuleForm(BootstrapMixin, forms.ModelForm):
             "tags",
             "request_id",
             "description",
-        ]
+        )
 
 
 # TODO: Refactor
@@ -561,3 +565,53 @@ class PolicyBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
         nullable_fields = [
             "description",
         ]
+
+
+# CapircaPolicy
+
+
+class CapircaPolicyForm(BootstrapMixin, CustomFieldModelForm, RelationshipModelForm):
+    """Filter Form for CapircaPolicy instances."""
+
+    device = DynamicModelChoiceField(queryset=Device.objects.all())
+
+    class Meta:
+        """Boilerplate form Meta data for compliance rule."""
+
+        model = models.CapircaPolicy
+        fields = (
+            "device",
+            "pol",
+            "net",
+            "svc",
+            "cfg",
+        )
+
+
+class CapircaPolicyFilterForm(BootstrapMixin, CustomFieldFilterForm):
+    """Form for CapircaPolicy instances."""
+
+    model = models.CapircaPolicy
+
+    q = forms.CharField(required=False, label="Search")
+
+
+class CapircaPolicyBulkEditForm(BootstrapMixin, AddRemoveTagsForm, CustomFieldBulkEditForm):
+    """BulkEdit form for CapircaPolicy instances."""
+
+    pk = forms.ModelMultipleChoiceField(queryset=models.CapircaPolicy.objects.all(), widget=forms.MultipleHiddenInput)
+
+    class Meta:
+        """Boilerplate form Meta data for CapircaPolicy."""
+
+        nullable_fields = []
+
+
+class CapircaPolicyCSVForm(CustomFieldModelCSVForm):
+    """CSV Form for CapircaPolicy instances."""
+
+    class Meta:
+        """Boilerplate form Meta data for CapircaPolicy."""
+
+        model = models.CapircaPolicy
+        fields = models.CapircaPolicy.csv_headers

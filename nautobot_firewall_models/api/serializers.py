@@ -379,3 +379,17 @@ class PolicyDeepSerializer(PolicySerializer):
     """Overload for create & update views."""
 
     policy_rules = PolicyRuleM2MDeepNestedSerializer(many=True, required=False, source="policyrulem2m_set")
+
+
+class CapircaPolicySerializer(TaggedObjectSerializer, CustomFieldModelSerializer, ValidatedModelSerializer):
+    """CapircaPolicy Serializer."""
+
+    url = serializers.HyperlinkedIdentityField(
+        view_name="plugins-api:nautobot_firewall_models-api:capircapolicy-detail"
+    )
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.CapircaPolicy
+        fields = "__all__"

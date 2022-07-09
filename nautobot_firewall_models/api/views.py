@@ -99,3 +99,11 @@ class PolicyViewSet(ModelViewSet):
         if self.action == "retrieve" and is_truthy(self.request.GET.get("deep", False)):
             self.serializer_class = serializers.PolicyDeepSerializer
         return super().get_serializer_class()
+
+
+class CapircaPolicyViewSet(ModelViewSet):
+    """CapircaPolicy viewset."""
+
+    queryset = models.CapircaPolicy.objects.all()
+    serializer_class = serializers.CapircaPolicySerializer
+    filterset_class = filters.CapircaPolicyFilterSet

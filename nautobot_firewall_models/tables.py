@@ -1,4 +1,4 @@
-"""Tables for Firewall models."""
+"""Tables Views for Firewall Models."""
 
 import django_tables2 as tables
 from nautobot.extras.tables import StatusTableMixin
@@ -180,3 +180,18 @@ class PolicyTable(StatusTableMixin, BaseTable):
 
         model = models.Policy
         fields = ("pk", "name", "description", "policy_rules", "assigned_devices", "assigned_dynamic_groups", "status")
+
+
+class CapircaPolicyTable(BaseTable):
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    device = tables.TemplateColumn(
+        template_code="""<a href="{% url 'plugins:nautobot_firewall_models:capircapolicy' pk=record.pk  %}" <strong>{{ record.device }}</strong></a> """
+    )
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.CapircaPolicy
+        fields = ("pk", "device")

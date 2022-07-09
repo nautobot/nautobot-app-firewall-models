@@ -1,4 +1,4 @@
-"""Views for Firewall models."""
+"""FQDN Views."""
 
 from nautobot.core.views import generic
 
