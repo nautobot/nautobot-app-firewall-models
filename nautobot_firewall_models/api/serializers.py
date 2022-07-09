@@ -1,24 +1,17 @@
 """API serializers for firewall models."""
 
-from nautobot.core.api import ValidatedModelSerializer, SerializedPKRelatedField
-from nautobot.dcim.models import Device
-from nautobot.extras.api.customfields import CustomFieldModelSerializer
-from nautobot.extras.api.serializers import (
-    StatusModelSerializerMixin,
-    TaggedObjectSerializer,
-)
-from nautobot.extras.models import DynamicGroup
 from rest_framework import serializers
 
-from nautobot.ipam.api.nested_serializers import (
-    NestedIPAddressSerializer,
-    NestedPrefixSerializer,
-)
+from nautobot.core.api import ValidatedModelSerializer, SerializedPKRelatedField
 from nautobot.dcim.api.nested_serializers import NestedInterfaceSerializer
-from nautobot_firewall_models import models
-
+from nautobot.dcim.models import Device, Interface
+from nautobot.extras.api.customfields import CustomFieldModelSerializer
+from nautobot.extras.api.serializers import StatusModelSerializerMixin, TaggedObjectSerializer
+from nautobot.extras.models import DynamicGroup
+from nautobot.ipam.api.nested_serializers import NestedIPAddressSerializer, NestedPrefixSerializer
 from nautobot.ipam.models import IPAddress
-from nautobot.dcim.models import Interface
+
+from nautobot_firewall_models import models
 
 
 class IPRangeSerializer(

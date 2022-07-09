@@ -9,6 +9,7 @@ from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard
 
 from .fixtures import create_env
 
+
 class TestModels(TestCase):
     """Test models."""
 
