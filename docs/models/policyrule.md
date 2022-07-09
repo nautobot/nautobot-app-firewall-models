@@ -2,6 +2,8 @@
 
 Represents a single security rule in a Policy.
 
+It is recommended to use a descriptive name to best identify a PolicyRule, otherwise the string representation of the PolicyRule if the UUID for the instance.
+
 ## Attributes
 
 * Name (optional, string)

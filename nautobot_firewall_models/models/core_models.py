@@ -539,7 +539,7 @@ class PolicyRule(PrimaryModel):
             return f"{self.name} - {self.request_id}"
         if self.name:
             return self.name
-        return self.id
+        return str(self.id)
 
 
 @extras_features(
