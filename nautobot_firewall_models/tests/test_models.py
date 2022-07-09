@@ -184,7 +184,7 @@ class TestModels(TestCase):
 
 
 class TestServiceObject(TestCase):
-    """I hate writing docs strings easter egg."""
+    """Test ServiceObjects."""
 
     def test_service_port(self):
         """Test single port."""
