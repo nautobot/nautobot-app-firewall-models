@@ -1,6 +1,7 @@
 """API views for firewall models."""
 
 from nautobot.core.api.views import ModelViewSet
+from nautobot.core.settings_funcs import is_truthy
 
 from nautobot_firewall_models import filters, models
 from nautobot_firewall_models.api import serializers
@@ -92,3 +93,9 @@ class PolicyViewSet(ModelViewSet):
     queryset = models.Policy.objects.all()
     serializer_class = serializers.PolicySerializer
     filterset_class = filters.PolicyFilterSet
+
+    def get_serializer_class(self):
+        """Overload for the ability to expand nested objects on retrieve view."""
+        if self.action == "retrieve" and is_truthy(self.request.GET.get("deep", False)):
+            self.serializer_class = serializers.PolicyDeepSerializer
+        return super().get_serializer_class()
