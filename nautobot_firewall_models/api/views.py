@@ -92,3 +92,13 @@ class PolicyViewSet(ModelViewSet):
     queryset = models.Policy.objects.all()
     serializer_class = serializers.PolicySerializer
     filterset_class = filters.PolicyFilterSet
+
+    def create(self, request, *args, **kwargs):
+        """Overload for creating object with create serializer."""
+        self.serializer_class = serializers.PolicyCreateSerializer
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        """Overload for updating object with create serializer."""
+        self.serializer_class = serializers.PolicyCreateSerializer
+        return super().update(request, *args, **kwargs)
