@@ -246,7 +246,6 @@ class PolicyRuleM2MNestedSerializer(serializers.ModelSerializer):
         fields = ["rule", "index"]
 
 
-
 class PolicyRuleM2MDeepNestedSerializer(PolicyRuleM2MNestedSerializer):
     """Overload for retrieve views."""
 
@@ -374,7 +373,6 @@ class PolicySerializer(
         attrs.pop("policydynamicgroupm2m_set", None)
         super().validate(attrs)
         return data
-
 
 
 class PolicyDeepSerializer(PolicySerializer):
