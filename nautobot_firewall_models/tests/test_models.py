@@ -7,6 +7,8 @@ from nautobot.extras.models import Status
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
+from .fixtures import create_env
+
 
 class TestModels(TestCase):
     """Test models."""
@@ -184,7 +186,7 @@ class TestModels(TestCase):
 
 
 class TestServiceObject(TestCase):
-    """I hate writing docs strings easter egg."""
+    """Test ServiceObjects."""
 
     def test_service_port(self):
         """Test single port."""
@@ -222,3 +224,61 @@ class TestServiceObject(TestCase):
             ServiceObject.objects.create(
                 name="HTTP", port="8080-8088-999", ip_protocol="TCP", status=Status.objects.get(name="Active")
             )
+
+
+class TestPolicyRuleModels(TestCase):
+    """Test the PolicyRule model."""
+
+    def setUp(self) -> None:
+        """Create the data."""
+        create_env()
+
+    def test_policyrule_rule_details(self):
+        """Test method rule_details on PolicyRule model."""
+        rule_details = PolicyRule.objects.first().rule_details()
+        self.assertEqual(rule_details["log"], False)
+        # sample a few keys to ensure they are in there, more complete test in to_json test
+        keys = ["rule", "source_address_group", "destination_address_group", "action"]
+        self.assertTrue(set(keys).issubset(rule_details.keys()))
+
+    def test_policyrule_to_json(self):
+        """Test method to_json on PolicyRule model."""
+        json_details = PolicyRule.objects.all()[2].to_json()
+        self.assertEqual(json_details["display"], "Policy Rule 1 - req1")
+        self.assertEqual(json_details["source_user"][0]["display"], "user1")
+        self.assertEqual(json_details["source_user_group"][0]["user_objects"][0]["name"], "User 1")
+        self.assertEqual(json_details["source_address"][0]["ip_range"]["display"], "192.168.0.11-192.168.0.20")
+        self.assertEqual(
+            json_details["source_address_group"][0]["address_objects"][1]["ip_address"]["display"], "10.0.0.1/32"
+        )
+        self.assertEqual(json_details["service"][0]["name"], "PGSQL")
+        self.assertEqual(json_details["service"][0]["port"], "5432")
+
+
+class TestPolicyModels(TestCase):
+    """Test the Policy model."""
+
+    def setUp(self) -> None:
+        """Create the data."""
+        create_env()
+
+    def test_policy_policy_details(self):
+        """Test method policy_details on Policy model."""
+        policy_details = Policy.objects.first().policy_details()[0]
+        self.assertEqual(policy_details["log"], True)
+        # sample a few keys to ensure they are in there, more complete test in to_json test
+        keys = ["rule", "source_address_group", "destination_address_group", "action"]
+        self.assertTrue(set(keys).issubset(policy_details.keys()))
+
+    def test_policy_to_json(self):
+        """Test method to_json on Policy model."""
+        json_details = Policy.objects.all()[2].to_json()["policy_rules"][2]["rule"]
+        self.assertEqual(json_details["display"], "Policy Rule 3 - req3")
+        self.assertEqual(json_details["source_user"][0]["display"], "user1")
+        self.assertEqual(json_details["source_user_group"][0]["user_objects"][0]["name"], "User 1")
+        self.assertEqual(json_details["source_address"][0]["ip_range"]["display"], "192.168.0.11-192.168.0.20")
+        self.assertEqual(
+            json_details["source_address_group"][0]["address_objects"][1]["ip_address"]["display"], "10.0.0.1/32"
+        )
+        self.assertEqual(json_details["service"][0]["name"], "FTP")
+        self.assertEqual(json_details["service"][0]["port"], "20-21")

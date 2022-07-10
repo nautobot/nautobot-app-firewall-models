@@ -113,7 +113,21 @@ jobs:
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10"]
         db-backend: ["postgresql"]
-        nautobot-version: ["1.3.3", "stable"]
+        nautobot-version: ["latest"]
+        # The include is a method to limit the amount of jobs ran. This essentially
+        # means that in addition to standard postgres and stable, also the lowest
+        # supported version and with mysql
+        include:
+          - python-version: "3.10"
+            db-backend: "postgresql"
+            nautobot-version: "1.3.3"
+            # TODO: Include the following, once mysql is working on CI
+            #   - python-version: "3.7"
+            #     db-backend: "mysql"
+            #     nautobot-version: "1.3.3"
+            #   - python-version: "3.10"
+            #     db-backend: "mysql"
+            #     nautobot-version: "stable"
     runs-on: "ubuntu-20.04"
     env:
       INVOKE_NAUTOBOT_FIREWALL_MODELS_PYTHON_VER: "${{ matrix.python-version }}"
@@ -142,6 +156,9 @@ jobs:
             PYTHON_VER=${{ matrix.python-version }}
       - name: "Copy credentials"
         run: "cp development/creds.example.env development/creds.env"
+      - name: "Use Mysql invoke settings when needed"
+        run: "cp invoke.mysql.yml invoke.yml"
+        if: "${{ matrix.db-backend == 'mysql' }}"
       - name: "Run Tests"
         run: "poetry run invoke unittest"
   publish_gh:
