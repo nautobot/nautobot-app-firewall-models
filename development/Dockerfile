@@ -28,7 +28,7 @@ COPY poetry.lock pyproject.toml /tmp/install/
 # with the one in the poetry.lock
 # Redifine NAUTOBOT_VER as a build arg as initial is defined outside FROM.
 ARG NAUTOBOT_VER="1.3.1"
-RUN poetry add nautobot@${NAUTOBOT_VER}
+RUN poetry add nautobot@$NAUTOBOT_VER
 
 # --no-root declares not to install the project package since we're wanting to take advantage of caching dependency installation
 # and the project is copied in and installed after this step
