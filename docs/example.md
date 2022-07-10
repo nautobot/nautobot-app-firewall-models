@@ -199,7 +199,7 @@ Example GraphQL query showing how to get instances for each of the models provid
 
 ### REST
 
-Below is an example response to the REST API GET request for a Policy object at `/api/plugins/firewall/policy/<uuid>/`.
+Below is an example response to the REST API GET request for a Policy object at `/api/plugins/firewall/policy/<uuid>/`. The detail API view for a Policy Object accepts in `deep=True` IF you would like to see a nested representation of all nested objects, this query param is not available on the list API view. Use this feature with caution as the query time for large sets of data can be substatial along with the size of the JSON payload.
 
 #### Response
 

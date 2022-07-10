@@ -236,7 +236,7 @@ class PolicyRuleSerializer(
         fields = "__all__"
 
 
-class PolicyRuleM2MCreateSerializer(serializers.ModelSerializer):
+class PolicyRuleM2MNestedSerializer(serializers.ModelSerializer):
     """PolicyRuleM2M NestedSerializer for create & update views."""
 
     class Meta:
@@ -246,10 +246,10 @@ class PolicyRuleM2MCreateSerializer(serializers.ModelSerializer):
         fields = ["rule", "index"]
 
 
-class PolicyRuleM2MNestedSerializer(PolicyRuleM2MCreateSerializer):
+class PolicyRuleM2MDeepNestedSerializer(PolicyRuleM2MNestedSerializer):
     """Overload for retrieve views."""
 
-    rule = PolicyRuleSerializer()
+    rule = PolicyRuleSerializer(read_only=True)
 
 
 class PolicyDeviceM2MNestedSerializer(serializers.ModelSerializer):
@@ -375,7 +375,7 @@ class PolicySerializer(
         return data
 
 
-class PolicyCreateSerializer(PolicySerializer):
+class PolicyDeepSerializer(PolicySerializer):
     """Overload for create & update views."""
 
-    policy_rules = PolicyRuleM2MCreateSerializer(many=True, required=False, source="policyrulem2m_set")
+    policy_rules = PolicyRuleM2MDeepNestedSerializer(many=True, required=False, source="policyrulem2m_set")
