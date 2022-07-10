@@ -4,14 +4,30 @@ from rest_framework import serializers
 
 from nautobot.core.api import ValidatedModelSerializer, SerializedPKRelatedField
 from nautobot.dcim.api.nested_serializers import NestedInterfaceSerializer
-from nautobot.dcim.models import Device, Interface
+from nautobot.dcim.models import Device
 from nautobot.extras.api.customfields import CustomFieldModelSerializer
-from nautobot.extras.api.serializers import StatusModelSerializerMixin, TaggedObjectSerializer
-from nautobot.extras.models import DynamicGroup
-from nautobot.ipam.api.nested_serializers import NestedIPAddressSerializer, NestedPrefixSerializer
+from nautobot.extras.api.fields import StatusSerializerField
+from nautobot.extras.api.serializers import (
+    StatusModelSerializerMixin as _StatusModelSerializerMixin,
+    TaggedObjectSerializer,
+)
+from nautobot.extras.models import DynamicGroup, Status
 from nautobot.ipam.models import IPAddress
+from nautobot.ipam.api.nested_serializers import NestedIPAddressSerializer, NestedPrefixSerializer
+
 
 from nautobot_firewall_models import models
+from nautobot_firewall_models.api import nested_serializers
+
+
+class StatusModelSerializerMixin(_StatusModelSerializerMixin):  # pylint: disable=abstract-method
+    """Overloaded mixing to set status to optional.
+
+    Args:
+        _StatusModelSerializerMixin (obj): Mixin to aid in working with Status object relationships.
+    """
+
+    status = StatusSerializerField(queryset=Status.objects.all(), required=False)
 
 
 class IPRangeSerializer(
@@ -19,6 +35,7 @@ class IPRangeSerializer(
 ):
     """IPRange Serializer."""
 
+    url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:iprange-detail")
     start_address = serializers.CharField()
     end_address = serializers.CharField()
 
@@ -34,11 +51,9 @@ class FQDNSerializer(
 ):
     """FQDN Serializer."""
 
+    url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:fqdn-detail")
     ip_addresses = SerializedPKRelatedField(
-        queryset=IPAddress.objects.all(),
-        serializer=NestedIPAddressSerializer,
-        required=False,
-        many=True,
+        queryset=IPAddress.objects.all(), serializer=NestedIPAddressSerializer, required=False, many=True
     )
 
     class Meta:
@@ -53,10 +68,13 @@ class AddressObjectSerializer(
 ):
     """AddressObject Serializer."""
 
-    ip_range = IPRangeSerializer()
-    fqdn = FQDNSerializer()
-    ip_address = NestedIPAddressSerializer(read_only=True)
-    prefix = NestedPrefixSerializer(read_only=True)
+    url = serializers.HyperlinkedIdentityField(
+        view_name="plugins-api:nautobot_firewall_models-api:addressobject-detail"
+    )
+    ip_range = nested_serializers.NestedIPRangeSerializer(required=False)
+    fqdn = nested_serializers.NestedFQDNSerializer(required=False)
+    ip_address = NestedIPAddressSerializer(required=False)
+    prefix = NestedPrefixSerializer(required=False)
 
     class Meta:
         """Meta attributes."""
@@ -70,11 +88,11 @@ class AddressObjectGroupSerializer(
 ):
     """AddressObjectGroup Serializer."""
 
+    url = serializers.HyperlinkedIdentityField(
+        view_name="plugins-api:nautobot_firewall_models-api:addressobjectgroup-detail"
+    )
     address_objects = SerializedPKRelatedField(
-        queryset=models.AddressObject.objects.all(),
-        serializer=AddressObjectSerializer,
-        required=False,
-        many=True,
+        queryset=models.AddressObject.objects.all(), serializer=AddressObjectSerializer, required=False, many=True
     )
 
     class Meta:
@@ -89,6 +107,10 @@ class ServiceObjectSerializer(
 ):
     """ServiceObject Serializer."""
 
+    url = serializers.HyperlinkedIdentityField(
+        view_name="plugins-api:nautobot_firewall_models-api:serviceobject-detail"
+    )
+
     class Meta:
         """Meta attributes."""
 
@@ -101,11 +123,11 @@ class ServiceObjectGroupSerializer(
 ):
     """ServiceObjectGroup Serializer."""
 
+    url = serializers.HyperlinkedIdentityField(
+        view_name="plugins-api:nautobot_firewall_models-api:serviceobjectgroup-detail"
+    )
     service_objects = SerializedPKRelatedField(
-        queryset=models.ServiceObject.objects.all(),
-        serializer=ServiceObjectSerializer,
-        required=False,
-        many=True,
+        queryset=models.ServiceObject.objects.all(), serializer=ServiceObjectSerializer, required=False, many=True
     )
 
     ServiceObjectSerializer()
@@ -122,6 +144,8 @@ class UserObjectSerializer(
 ):
     """UserObject Serializer."""
 
+    url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:userobject-detail")
+
     class Meta:
         """Meta attributes."""
 
@@ -134,11 +158,11 @@ class UserObjectGroupSerializer(
 ):
     """UserObjectGroup Serializer."""
 
+    url = serializers.HyperlinkedIdentityField(
+        view_name="plugins-api:nautobot_firewall_models-api:userobjectgroup-detail"
+    )
     user_objects = SerializedPKRelatedField(
-        queryset=models.UserObject.objects.all(),
-        serializer=UserObjectSerializer,
-        required=False,
-        many=True,
+        queryset=models.UserObject.objects.all(), serializer=UserObjectSerializer, required=False, many=True
     )
 
     class Meta:
@@ -153,12 +177,8 @@ class ZoneSerializer(
 ):
     """Zone Serializer."""
 
-    interfaces = SerializedPKRelatedField(
-        queryset=Interface.objects.all(),
-        serializer=NestedInterfaceSerializer,
-        required=False,
-        many=True,
-    )
+    url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:zone-detail")
+    interfaces = NestedInterfaceSerializer(required=False, many=True)
 
     class Meta:
         """Meta attributes."""
@@ -172,23 +192,15 @@ class PolicyRuleSerializer(
 ):
     """PolicyRule Serializer."""
 
+    url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:policyrule-detail")
     source_user = SerializedPKRelatedField(
-        queryset=models.UserObject.objects.all(),
-        serializer=UserObjectSerializer,
-        required=False,
-        many=True,
+        queryset=models.UserObject.objects.all(), serializer=UserObjectSerializer, required=False, many=True
     )
     source_user_group = SerializedPKRelatedField(
-        queryset=models.UserObjectGroup.objects.all(),
-        serializer=UserObjectGroupSerializer,
-        required=False,
-        many=True,
+        queryset=models.UserObjectGroup.objects.all(), serializer=UserObjectGroupSerializer, required=False, many=True
     )
     source_address = SerializedPKRelatedField(
-        queryset=models.AddressObject.objects.all(),
-        serializer=AddressObjectSerializer,
-        required=False,
-        many=True,
+        queryset=models.AddressObject.objects.all(), serializer=AddressObjectSerializer, required=False, many=True
     )
     source_address_group = SerializedPKRelatedField(
         queryset=models.AddressObjectGroup.objects.all(),
@@ -196,12 +208,9 @@ class PolicyRuleSerializer(
         required=False,
         many=True,
     )
-    source_zone = ZoneSerializer()
+    source_zone = ZoneSerializer(required=False)
     destination_address = SerializedPKRelatedField(
-        queryset=models.AddressObject.objects.all(),
-        serializer=AddressObjectSerializer,
-        required=False,
-        many=True,
+        queryset=models.AddressObject.objects.all(), serializer=AddressObjectSerializer, required=False, many=True
     )
     destination_address_group = SerializedPKRelatedField(
         queryset=models.AddressObjectGroup.objects.all(),
@@ -209,15 +218,12 @@ class PolicyRuleSerializer(
         required=False,
         many=True,
     )
-    destination_zone = ZoneSerializer()
+    destination_zone = ZoneSerializer(required=False)
     service = SerializedPKRelatedField(
-        queryset=models.ServiceObject.objects.all(),
-        serializer=ServiceObjectSerializer,
-        required=False,
-        many=True,
+        queryset=models.ServiceObject.objects.all(), serializer=ServiceObjectSerializer, required=False, many=True
     )
     service_group = SerializedPKRelatedField(
-        queryset=models.ServiceObject.objects.all(),
+        queryset=models.ServiceObjectGroup.objects.all(),
         serializer=ServiceObjectGroupSerializer,
         required=False,
         many=True,
@@ -230,16 +236,20 @@ class PolicyRuleSerializer(
         fields = "__all__"
 
 
-class PolicyRuleM2MNestedSerializer(serializers.ModelSerializer):
-    """PolicyRuleM2M NestedSerializer."""
-
-    rule = PolicyRuleSerializer()
+class PolicyRuleM2MCreateSerializer(serializers.ModelSerializer):
+    """PolicyRuleM2M NestedSerializer for create & update views."""
 
     class Meta:
         """Meta attributes."""
 
         model = models.PolicyRuleM2M
         fields = ["rule", "index"]
+
+
+class PolicyRuleM2MNestedSerializer(PolicyRuleM2MCreateSerializer):
+    """Overload for retrieve views."""
+
+    rule = PolicyRuleSerializer()
 
 
 class PolicyDeviceM2MNestedSerializer(serializers.ModelSerializer):
@@ -267,6 +277,7 @@ class PolicySerializer(
 ):
     """Policy Serializer."""
 
+    url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:policy-detail")
     policy_rules = PolicyRuleM2MNestedSerializer(many=True, required=False, source="policyrulem2m_set")
     assigned_devices = PolicyDeviceM2MNestedSerializer(many=True, required=False, source="policydevicem2m_set")
     assigned_dynamic_groups = PolicyDynamicGroupM2MNestedSerializer(
@@ -362,3 +373,9 @@ class PolicySerializer(
         attrs.pop("policydynamicgroupm2m_set", None)
         super().validate(attrs)
         return data
+
+
+class PolicyCreateSerializer(PolicySerializer):
+    """Overload for create & update views."""
+
+    policy_rules = PolicyRuleM2MCreateSerializer(many=True, required=False, source="policyrulem2m_set")

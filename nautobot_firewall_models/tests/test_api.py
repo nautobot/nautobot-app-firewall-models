@@ -1,7 +1,6 @@
 """Unit tests for API views."""
 # flake8: noqa: F403,405
 from unittest import skip
-from nautobot.extras.models.statuses import Status
 from nautobot.utilities.testing import APIViewTestCases
 from nautobot.ipam.models import Prefix
 
@@ -18,10 +17,10 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"start_address": "10.0.0.1", "end_address": "10.0.0.3", "status": status},
-            {"start_address": "10.0.0.4", "end_address": "10.0.0.10", "status": status},
+            {"start_address": "10.0.0.1", "end_address": "10.0.0.3"},
+            {"start_address": "10.0.0.4", "end_address": "10.0.0.10"},
         ]
         create_ip_range()
 
@@ -39,10 +38,10 @@ class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"name": "test.local", "status": status},
-            {"name": "sub.test.local", "status": status},
+            {"name": "test.local"},
+            {"name": "sub.test.local"},
         ]
         create_fqdn()
 
@@ -63,11 +62,10 @@ class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
         create_env()
         ip_range = models.IPRange.objects.first()
         prefix = Prefix.objects.first()
-        status = Status.objects.get(slug="active").id
 
         cls.create_data = [
-            {"name": "obj1", "ip_range": ip_range.id, "status": status},
-            {"name": "obj2", "prefix": prefix.id, "status": status},
+            {"name": "obj1", "ip_range": ip_range.id},
+            {"name": "obj2", "prefix": prefix.id},
         ]
 
     @skip("Not implemented")
@@ -94,10 +92,10 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         addr_obj = models.AddressObject.objects.first()
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"name": "test1", "address_objects": [addr_obj.id], "status": status},
-            {"name": "test2", "address_objects": [addr_obj.id], "status": status},
+            {"name": "test1", "address_objects": [addr_obj.id]},
+            {"name": "test2", "address_objects": [addr_obj.id]},
         ]
 
     @skip("Not implemented")
@@ -135,10 +133,10 @@ class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"name": "HTTP", "port": "8088", "status": status, "ip_protocol": "TCP"},
-            {"name": "HTTP", "port": "8080-8088", "status": status, "ip_protocol": "TCP"},
+            {"name": "HTTP", "port": "8088", "ip_protocol": "TCP"},
+            {"name": "HTTP", "port": "8080-8088", "ip_protocol": "TCP"},
         ]
         create_env()
 
@@ -166,10 +164,10 @@ class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         svc_obj = models.ServiceObject.objects.first()
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"name": "test1", "service_objects": [svc_obj.id], "status": status},
-            {"name": "test2", "service_objects": [svc_obj.id], "status": status},
+            {"name": "test1", "service_objects": [svc_obj.id]},
+            {"name": "test2", "service_objects": [svc_obj.id]},
         ]
 
     @skip("Not implemented")
@@ -206,10 +204,10 @@ class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"username": "test1", "name": "Foo", "status": status},
-            {"username": "test2", "name": "Bar", "status": status},
+            {"username": "test1", "name": "Foo"},
+            {"username": "test2", "name": "Bar"},
         ]
         create_env()
 
@@ -237,10 +235,10 @@ class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         user = models.UserObject.objects.first()
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"name": "test1", "user_objects": [user.id], "status": status},
-            {"name": "test2", "user_objects": [user.id], "status": status},
+            {"name": "test1", "user_objects": [user.id]},
+            {"name": "test2", "user_objects": [user.id]},
         ]
 
     @skip("Not implemented")
@@ -277,10 +275,10 @@ class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"name": "trust", "status": status},
-            {"name": "untrust", "status": status},
+            {"name": "trust"},
+            {"name": "untrust"},
         ]
         create_env()
 
@@ -311,7 +309,7 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
         src_usr = models.UserObject.objects.first()
         src_addr = models.AddressObject.objects.first()
         dest_addr = models.AddressObject.objects.last()
-        status = Status.objects.get(slug="active").id
+
         svc = models.ServiceObject.objects.first()
         cls.create_data = [
             {
@@ -323,7 +321,6 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
                 "log": True,
                 "service": [svc.id],
                 "name": "test rule",
-                "status": status,
             },
             {
                 "source_user": [src_usr.id],
@@ -333,7 +330,6 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
                 "log": False,
                 "service": [svc.id],
                 "name": "test rule",
-                "status": status,
             },
         ]
 
@@ -360,10 +356,10 @@ class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         pol_rule = models.PolicyRule.objects.first()
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"name": "test 1", "policy_rules": [{"rule": pol_rule.id}], "status": status},
-            {"name": "test 2", "policy_rules": [{"rule": pol_rule.id}], "description": "Test desc", "status": status},
+            {"name": "test 1", "policy_rules": [{"rule": pol_rule.id}]},
+            {"name": "test 2", "policy_rules": [{"rule": pol_rule.id}], "description": "Test desc"},
         ]
 
     @skip("Not implemented")
