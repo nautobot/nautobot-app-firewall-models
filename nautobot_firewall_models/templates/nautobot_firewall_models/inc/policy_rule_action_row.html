@@ -1,0 +1,9 @@
+{% load helpers %}
+
+{% if action == 'allow' %}
+  <span class="text-success"><i title="Allow" class="mdi mdi-checkbox-marked-circle"></i></span>
+{% elif action == 'deny' %}
+  <span class="text-danger"><i title="Deny" class="mdi mdi-close-circle"></i></span>
+{% else %}
+  {{ action|placeholder }}
+{% endif %}
