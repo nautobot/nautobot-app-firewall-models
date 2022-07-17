@@ -172,6 +172,14 @@ class AddressObject(PrimaryModel):
         ordering = ["name"]
         verbose_name_plural = "Address Objects"
 
+    def get_address_info(self):
+        """Method to Return the actual AddressObject type."""
+        keys = ["ip_range", "fqdn", "prefix", "ip_address"]
+        for key in keys:
+            if getattr(self, key):
+                return (key, getattr(self, key))
+        return (None, None)
+
     def get_absolute_url(self):
         """Return detail view URL."""
         return reverse("plugins:nautobot_firewall_models:addressobject", args=[self.pk])

@@ -1,0 +1,16 @@
+{% load helpers %}
+
+{% if user_group %}
+  {% for i in user_group %}
+    <i title="User Group Object" class="mdi mdi-account-multiple"></i> <a href="{{ i.get_absolute_url }}" title="{% for user_obj in i.user_objects.all %}{{ user_obj }}&#013;{% endfor %}">{{ i|placeholder }}</a><br/>
+  {% endfor %}
+{% else %}
+  {{ None|placeholder }}
+{% endif %}
+{% if user %}
+  {% for i in user %}
+    <i title="User Object" class="mdi mdi-account"></i> <a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>
+  {% endfor %}
+{% else %}
+  {{ None|placeholder }}
+{% endif %}

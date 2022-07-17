@@ -1,0 +1,16 @@
+{% load helpers %}
+
+{% if service_group %}
+  {% for i in service_group %}
+    <i title="Service Group Object" class="mdi mdi-folder-cog"></i> <a href="{{ i.get_absolute_url }}" title="{% for svc_obj in i.service_objects.all %}{{ svc_obj }}&#013;{% endfor %}">{{ i|placeholder }}</a><br/>
+  {% endfor %}
+{% else %}
+  {{ None|placeholder }}
+{% endif %}
+{% if service %}
+  {% for i in service %}
+    <i title="Service Object" class="mdi mdi-cog"></i> <a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>
+  {% endfor %}
+{% else %}
+  {{ None|placeholder }}
+{% endif %}
