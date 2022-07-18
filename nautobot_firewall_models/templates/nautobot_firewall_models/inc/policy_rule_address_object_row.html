@@ -1,7 +1,7 @@
 {% load helpers %}
 {% if address_group %}
   {% for i in address_group %}
-    <i title="Address Group Object" class="mdi mdi-folder-table"> <a href="{{ i.get_absolute_url }}" title="{% for addr_obj in i.address_objects.all %}{{ addr_obj }} -> {{ addr_obj.get_address_info.0 }}:{{ addr_obj.get_address_info.1 }}&#013;{% endfor %}">{{ i|placeholder }}</a><br/>
+    <i title="Address Group Object" class="mdi mdi-folder-table"> <a href="{{ i.get_absolute_url }}" title="{% for addr_obj in i.address_objects.all %}{{ addr_obj }} → {{ addr_obj.get_address_info.0 }}:{{ addr_obj.get_address_info.1 }}&#013;{% endfor %}">{{ i|placeholder }}</a><br/>
   {% endfor %}
 {% else %}
   {{ None|placeholder }}

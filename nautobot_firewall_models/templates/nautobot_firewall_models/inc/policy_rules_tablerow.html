@@ -1,6 +1,6 @@
 {% load helpers %}
 <tr>
-    <td><a href="{{ m2m.rule.get_absolute_url }}">{% if m2m.index %}{{ m2m.index }}{% else %}No Index Set{% endif %}</a></td>
+    <td><a href="{{ m2m.rule.get_absolute_url }}" title="{{ m2m.rule.name }}">{{ m2m.index|placeholder|ljust:5 }} → {{ m2m.rule.name|placeholder }}</a></td>
     {% if m2m.rule.action == "remark" %}
         <td colspan="6" style="text-align: center;"><strong>{{ m2m.rule }}</strong></td>
     {% else %}
