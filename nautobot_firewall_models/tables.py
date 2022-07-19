@@ -1,4 +1,4 @@
-"""Tables Views for Firewall Models."""
+"""Table Views for Firewall Models."""
 
 import django_tables2 as tables
 from nautobot.extras.tables import StatusTableMixin
