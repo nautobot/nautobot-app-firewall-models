@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.1.0-beta.3 - 2022-07-19
+
+### Changed
+- #68 Update Policy Rules Expanded to be more intuitive
+- #69 Change to use arrow in UI elements
+
+### Added
+- #63 Capirca Integration
 ## v0.1.0-beta.2 - 2022-07-10
 
 ### Changed
