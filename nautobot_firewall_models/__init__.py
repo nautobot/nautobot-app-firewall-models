@@ -23,7 +23,7 @@ class NautobotFirewallModelsConfig(PluginConfig):
     required_settings = []
     min_version = "1.3.0"
     max_version = "1.9999"
-    default_settings = {}
+    default_settings = {"capirca_remark_pass": True, "capirca_os_map": {}, "allowed_status": ["active"]}
     caching_config = {"*": {"timeout": 0}}
     docs_view_name = "plugins:nautobot_firewall_models:docs"
 

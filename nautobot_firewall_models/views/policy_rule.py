@@ -1,4 +1,4 @@
-"""Views for Firewall models."""
+"""Policy Rule Object Views."""
 
 from nautobot.core.views import generic
 

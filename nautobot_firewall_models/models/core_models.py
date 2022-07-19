@@ -1,4 +1,5 @@
 """Models for the Firewall plugin."""
+# pylint: disable=duplicate-code
 
 from django.core.exceptions import ValidationError
 from django.db import models

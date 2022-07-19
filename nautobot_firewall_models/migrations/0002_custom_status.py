@@ -24,15 +24,6 @@ def create_default_objects(apps, schema_editor):
         services = yaml.safe_load(f)
     status = apps.get_model("extras.Status").objects.get(slug="active")
 
-    apps.get_model("nautobot_firewall_models.AddressObjectGroup").objects.create(
-        name="ANY", status=status, description="Used to signify ANY AddressObject."
-    )
-    apps.get_model("nautobot_firewall_models.UserObjectGroup").objects.create(
-        name="ANY", status=status, description="Used to signify ANY UserObject."
-    )
-    apps.get_model("nautobot_firewall_models.ServiceObjectGroup").objects.create(
-        name="ANY", status=status, description="Used to signify ANY ServiceObject."
-    )
     for i in services:
         apps.get_model("nautobot_firewall_models.ServiceObject").objects.create(status=status, **i)
 

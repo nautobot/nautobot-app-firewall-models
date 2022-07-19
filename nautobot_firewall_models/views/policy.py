@@ -1,4 +1,4 @@
-"""Views for Firewall models."""
+"""Policy Object Views."""
 
 from django.shortcuts import reverse, redirect
 from django.views.generic.edit import CreateView

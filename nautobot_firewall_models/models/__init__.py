@@ -33,10 +33,15 @@ from .through_models import (
     ZoneVRFM2M,
 )
 
+from .capirca_models import (
+    CapircaPolicy,
+)
+
 __all__ = (
     "AddressObject",
     "AddressObjectGroup",
     "AddressObjectGroupM2M",
+    "CapircaPolicy",
     "DestAddrGroupM2M",
     "DestAddrM2M",
     "FQDN",
