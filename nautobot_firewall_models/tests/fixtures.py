@@ -1,8 +1,8 @@
 """Create basic objects for use in test class setup."""
 # flake8: noqa: F403,405
 from django.contrib.contenttypes.models import ContentType
-from nautobot.dcim.models import Device, DeviceRole, DeviceType, Manufacturer, Site
-from nautobot.extras.models import DynamicGroup
+from nautobot.dcim.models import Device, DeviceRole, DeviceType, Manufacturer, Platform, Site
+from nautobot.extras.models import DynamicGroup, Job
 from nautobot.extras.models.statuses import Status
 from nautobot.ipam.models import Prefix, VRF
 from nautobot.ipam.models import IPAddress as IPAddr
@@ -121,10 +121,6 @@ def create_env():
     pol_rule3.service_group.set([svc_grp1, svc_grp2, svc_grp3])
     pol_rule4 = PolicyRule.objects.create(name="END OF ACCESS LIST", action="remark", log=False, request_id="req4")
     pol_rule5 = PolicyRule.objects.create(name="DENY ALL", action="deny", log=False, request_id="req5")
-    pol_rule5.service_group.set([ServiceObjectGroup.objects.get(name="ANY")])
-    pol_rule5.source_address_group.set([AddressObjectGroup.objects.get(name="ANY")])
-    pol_rule5.destination_address_group.set([AddressObjectGroup.objects.get(name="ANY")])
-    pol_rule5.source_user_group.set([UserObjectGroup.objects.get(name="ANY")])
     tenant_group = TenantGroup.objects.create(name="ABC Holding Corp", slug="abc-holding-corp")
     tenant1 = Tenant.objects.create(name="ABC LLC", slug="abc-llc", group=tenant_group)
     tenant2 = Tenant.objects.create(name="XYZ LLC", slug="xyz-llc")
@@ -141,14 +137,28 @@ def create_env():
     PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule5, index=100)
     site1 = Site.objects.create(name="DFW", slug="dfw")
     site2 = Site.objects.create(name="HOU", slug="hou")
-    manufacturer = Manufacturer.objects.create(name="Juniper", slug="juniper")
-    dev_type = DeviceType.objects.create(manufacturer=manufacturer, model="SRX300", slug="srx300")
+    jun_manufacturer = Manufacturer.objects.create(name="Juniper", slug="juniper")
+    jun_platform = Platform.objects.create(name="Juniper", slug="srx")
+    jun_dev_type = DeviceType.objects.create(manufacturer=jun_manufacturer, model="SRX300", slug="srx300")
+    palo_manufacturer = Manufacturer.objects.create(name="Palo Alto", slug="paloalto")
+    palo_platform = Platform.objects.create(name="Palo Alto", slug="paloalto")
+    palo_dev_type = DeviceType.objects.create(manufacturer=palo_manufacturer, model="PA-3020", slug="pa3020")
     dev_role = DeviceRole.objects.create(name="WAN", slug="wan")
     dev1 = Device.objects.create(
-        name="DFW-WAN00", device_role=dev_role, device_type=dev_type, site=site1, status=status
+        name="DFW-WAN00",
+        device_role=dev_role,
+        device_type=jun_dev_type,
+        site=site1,
+        status=status,
+        platform=jun_platform,
     )
     dev2 = Device.objects.create(
-        name="HOU-WAN00", device_role=dev_role, device_type=dev_type, site=site2, status=status
+        name="HOU-WAN00",
+        device_role=dev_role,
+        device_type=palo_dev_type,
+        site=site2,
+        status=status,
+        platform=palo_platform,
     )
     dynamic_group = DynamicGroup.objects.create(
         name="North Texas", slug="north-texas", content_type=ContentType.objects.get_for_model(Device)
@@ -159,3 +169,42 @@ def create_env():
     PolicyDeviceM2M.objects.create(policy=pol2, device=dev1, weight=200)
     PolicyDeviceM2M.objects.create(policy=pol1, device=dev2)
     PolicyDynamicGroupM2M.objects.create(policy=pol3, dynamic_group=dynamic_group, weight=1000)
+
+
+def create_capirca_env():
+    """Create objects that are Capirca Ready."""  # pylint: disable=too-many-locals, too-many-statements
+    create_env()
+    status = Status.objects.get(slug="active")
+    zoneall = Zone.objects.create(name="all", status=status)
+
+    pol_rule1 = PolicyRule.objects.get(name="Policy Rule 1")
+    pol_rule1.source_zone = Zone.objects.get(name="DMZ")
+    pol_rule1.destination_zone = Zone.objects.get(name="WAN")
+    pol_rule1.validated_save()
+
+    pol_rule4 = PolicyRule.objects.get(name="END OF ACCESS LIST")
+    pol_rule4.source_zone = zoneall
+    pol_rule4.destination_zone = zoneall
+    pol_rule4.validated_save()
+
+    pol_rule5 = PolicyRule.objects.get(name="DENY ALL")
+    pol_rule5.source_zone = zoneall
+    pol_rule5.destination_zone = zoneall
+    pol_rule5.validated_save()
+
+    ip_address = IPAddr.objects.create(address="10.0.0.100")
+    prefix = Prefix.objects.create(network="10.1.0.0", prefix_length=24)
+
+    addr_obj1 = AddressObject.objects.get(name="data")
+    addr_obj1.ip_range = None
+    addr_obj1.ip_address = ip_address
+    addr_obj1.validated_save()
+
+    addr_obj4 = AddressObject.objects.get(name="server")
+    addr_obj4.fqdn = None
+    addr_obj4.prefix = prefix
+    addr_obj4.validated_save()
+
+    job = Job.objects.get(name="Generate FW Config via Capirca.")
+    job.enabled = True
+    job.validated_save()

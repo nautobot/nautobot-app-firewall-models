@@ -3,7 +3,7 @@
 {% load plugins %}
 {% block content %}
     <div class="tab-content">
-        <div id="main" role="tabpanel" class="tab-pane {% if not active_tab and not request.GET.tab or request.GET.tab == "main" %}active{% else %}fade{% endif %}">
+        <div id="main" role="tabpanel" class="tab-pane {% if not active_tab and not request.GET.tab or request.GET.tab == 'main' %}active{% else %}fade{% endif %}">
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default">

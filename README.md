@@ -37,6 +37,13 @@ Use the `default_status` plugin configuration setting to change the default valu
 PLUGINS_CONFIG = {
     "nautobot_firewall_models": {
         "default_status": "active"
+        "allowed_status": ["active"], # default shown, `[]` allows all
+        "capirca_remark_pass": True,
+        "capirca_os_map": {
+            "cisco_ios": "cisco",
+            "arista_eos": "arista",
+        },
+        # "custom_capirca": "my.custom.func", # provides ability to overide capirca logic
     }
 }
 ```

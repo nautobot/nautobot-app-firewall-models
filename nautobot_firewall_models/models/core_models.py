@@ -1,4 +1,5 @@
 """Models for the Firewall plugin."""
+# pylint: disable=duplicate-code
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -171,6 +172,14 @@ class AddressObject(PrimaryModel):
 
         ordering = ["name"]
         verbose_name_plural = "Address Objects"
+
+    def get_address_info(self):
+        """Method to Return the actual AddressObject type."""
+        keys = ["ip_range", "fqdn", "prefix", "ip_address"]
+        for key in keys:
+            if getattr(self, key):
+                return (key, getattr(self, key))
+        return (None, None)
 
     def get_absolute_url(self):
         """Return detail view URL."""

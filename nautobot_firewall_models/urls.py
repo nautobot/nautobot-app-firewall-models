@@ -18,6 +18,7 @@ from nautobot_firewall_models.views import (
     user_object_group,
     policy_rule,
     policy,
+    capirca_policy,
 )
 
 urlpatterns = [
@@ -284,6 +285,27 @@ urlpatterns = [
         ObjectChangeLogView.as_view(),
         name="policy_changelog",
         kwargs={"model": models.Policy},
+    ),
+    path("capirca-policy/", capirca_policy.CapircaPolicyListView.as_view(), name="capircapolicy_list"),
+    path(
+        "capirca-policy/delete/", capirca_policy.CapircaPolicyBulkDeleteView.as_view(), name="capircapolicy_bulk_delete"
+    ),
+    path("capirca-policy/<uuid:pk>", capirca_policy.CapircaPolicyView.as_view(), name="capircapolicy"),
+    path(
+        "capirca-policy/<uuid:pk>/delete/",
+        capirca_policy.CapircaPolicyDeleteView.as_view(),
+        name="capircapolicy_delete",
+    ),
+    path(
+        "capirca-policy/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="capircapolicy_changelog",
+        kwargs={"model": models.CapircaPolicy},
+    ),
+    path(
+        "capirca-policy/devicedetail/<uuid:pk>",
+        capirca_policy.CapircaPolicyDeviceView.as_view(),
+        name="capircapolicy_devicedetail",
     ),
     path(
         "docs/",

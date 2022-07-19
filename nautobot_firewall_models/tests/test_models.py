@@ -2,12 +2,13 @@
 # flake8: noqa: F403,405
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from nautobot.ipam.models import VRF
+from nautobot.dcim.models import Device
 from nautobot.extras.models import Status
+from nautobot.ipam.models import VRF
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
-from .fixtures import create_env
+from .fixtures import create_capirca_env, create_env
 
 
 class TestModels(TestCase):
@@ -282,3 +283,22 @@ class TestPolicyModels(TestCase):
         )
         self.assertEqual(json_details["service"][0]["name"], "FTP")
         self.assertEqual(json_details["service"][0]["port"], "20-21")
+
+
+class TestCapircaModels(TestCase):
+    """Test the Capirca model."""
+
+    def setUp(self) -> None:
+        """Create the data."""
+        create_capirca_env()
+
+    def test_capirca_creates_model(self):
+        """Test method to create model."""
+        device_obj = Device.objects.get(name="DFW-WAN00")
+        cap_obj = CapircaPolicy.objects.create(device=device_obj)
+        svc = "PGSQL = 5432/tcp"
+        self.assertIn(svc, cap_obj.svc)
+        net = "data = 10.0.0.100/32"
+        self.assertIn(net, cap_obj.net)
+        pol = "target:: srx from-zone all to-zone all"
+        self.assertIn(pol, cap_obj.pol)
