@@ -50,13 +50,13 @@ PLUGINS_CONFIG = {
 
 The value assigned to `default_status` must match the slug of an existing Nautobot Status object. That Status object must have all of the Firewall Models listed in the Content Type associations. See examples below on selecting the Content Type(s) when creating/editing a Status object and the pre-built `Active` Status with firewall content types added.
 
-![Custom Status](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/main/docs/images/custom-status.png "Custom Status")
-![Existing Status](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/main/docs/images/existing-status.png "Existing Status")
+![Custom Status](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/develop/docs/images/custom-status.png "Custom Status")
+![Existing Status](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/develop/docs/images/existing-status.png "Existing Status")
 
 ## Screenshots
 
-![Navigation Menu](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/main/docs/images/navmenu.png "Navigation Menu")
-![Policy View](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/main/docs/images/policy.png "Policy View")
+![Navigation Menu](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/develop/docs/images/navmenu.png "Navigation Menu")
+![Policy View](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/develop/docs/images/policy.png "Policy View")
 
 ## Documentation
 
