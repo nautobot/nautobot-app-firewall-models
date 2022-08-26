@@ -215,25 +215,25 @@ class PolicyToCapirca:
             rule_svc = []
             rule_svc_group = []
             rule_protocol = []
-            for source_address in rule["source_address"]:
+            for source_address in rule["source_addresses"]:
                 rule_src_addr.append(self._format_data(source_address, "address"))
 
-            for source_address_group in rule["source_address_group"]:
+            for source_address_group in rule["source_address_groups"]:
                 rule_src_addr_group.append(self._format_data(source_address_group, "address-group"))
 
-            for destination_address in rule["destination_address"]:
+            for destination_address in rule["destination_addresses"]:
                 rule_dst_addr.append(self._format_data(destination_address, "address"))
-            for destination_address_group in rule["destination_address_group"]:
+            for destination_address_group in rule["destination_address_groups"]:
                 rule_dst_addr_group.append(self._format_data(destination_address_group, "address-group"))
 
-            for service in rule["service"]:
+            for service in rule["destination_services"]:
                 name = self._format_data(service, "service")
                 rule_svc.append(name)
                 # If service is empty, will get key error
                 if name:
                     rule_protocol.append(self.service_protocol[name][0])
 
-            for service_group in rule["service_group"]:
+            for service_group in rule["destination_service_groups"]:
                 name = self._format_data(service_group, "service-group")
                 rule_svc_group.append(name)
                 # If service group is empty, will get key error
@@ -276,20 +276,26 @@ class PolicyToCapirca:
             # This checks if an item existed on the source, but all source, destinations, or services
             # were remove, which would most likely happen when madde inactive
             self._check_for_empty(
-                "source_address",
-                rule["source_address"],
-                rule["source_address_group"],
+                "source_addresses",
+                rule["source_addresses"],
+                rule["source_address_groups"],
                 rule_src_addr,
                 rule_src_addr_group,
             )
             self._check_for_empty(
                 "destination_address",
-                rule["destination_address"],
-                rule["destination_address_group"],
+                rule["destination_addresses"],
+                rule["destination_address_groups"],
                 rule_dst_addr,
                 rule_dst_addr_group,
             )
-            self._check_for_empty("service", rule["service"], rule["service_group"], rule_svc, rule_svc_group)
+            self._check_for_empty(
+                "destination_services",
+                rule["destination_services"],
+                rule["destination_service_groups"],
+                rule_svc,
+                rule_svc_group,
+            )
 
             rule_details = {
                 "rule-name": rule["rule"].name,

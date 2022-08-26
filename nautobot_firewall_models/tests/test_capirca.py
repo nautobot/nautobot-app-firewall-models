@@ -46,13 +46,13 @@ ip access-list extended 150
 exit
 """
 
-NETWORKS2 = """addr-group1 = data
+NETWORKS2 = """addr-group1 = printer
               voice
-addr-group3 = data
+addr-group3 = printer
               server
               storage
               voice
-data = 10.0.0.100/32
+printer = 10.0.0.100/32
 server = 10.1.0.0/24
 storage = 10.0.0.0/24
 voice = 10.0.0.1/32"""
@@ -74,7 +74,7 @@ term Policy-Rule-1 {
   logging:: true
   protocol:: tcp
   source-address:: addr-group1
-  source-address:: data
+  source-address:: printer
 }
 
 header {
@@ -112,7 +112,7 @@ term Policy-Rule-1 {
   logging:: true
   protocol:: tcp
   source-address:: addr-group1
-  source-address:: data
+  source-address:: printer
 }
 
 header {
@@ -132,7 +132,7 @@ term Policy-Rule-2 {
   protocol:: tcp
   source-address:: addr-group1
   source-address:: addr-group2
-  source-address:: data
+  source-address:: printer
   source-address:: voice
 }
 
@@ -145,7 +145,7 @@ term Policy-Rule-3 {
   comment:: "req3"
   destination-address:: addr-group3
   destination-address:: server
-  destination-port:: FTP
+  destination-port:: DNS
   destination-port:: PGSQL
   destination-port:: SSH
   destination-port:: svc-group1
@@ -155,7 +155,7 @@ term Policy-Rule-3 {
   protocol:: tcp
   source-address:: addr-group1
   source-address:: addr-group2
-  source-address:: data
+  source-address:: printer
   source-address:: storage
   source-address:: voice
 }
@@ -174,7 +174,7 @@ term Policy-Rule-1 {
   logging:: true
   protocol:: tcp
   source-address:: addr-group1
-  source-address:: data
+  source-address:: printer
 }
 
 header {
@@ -191,7 +191,7 @@ term Policy-Rule-1 {
   logging:: true
   protocol:: tcp
   source-address:: addr-group1
-  source-address:: data
+  source-address:: printer
 }
 
 header {
@@ -211,7 +211,7 @@ term Policy-Rule-2 {
   protocol:: tcp
   source-address:: addr-group1
   source-address:: addr-group2
-  source-address:: data
+  source-address:: printer
   source-address:: voice
 }
 """
@@ -219,7 +219,7 @@ term Policy-Rule-2 {
 POLICY_DATA = [
     {
         "rule-name": "Policy Rule 1",
-        "source-address": ["data"],
+        "source-address": ["printer"],
         "source-group-address": ["addr group1"],
         "from-zone": "DMZ",
         "destination-address": ["server"],
@@ -286,7 +286,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
             name="Test", action="deny", log=False, request_id="req6", source_zone=zoneall, destination_zone=zoneall
         )
         self.pol1 = Policy.objects.get(name="Policy 1")
-        PolicyRuleM2M.objects.create(policy=self.pol1, rule=self.pol_rule6, index=110)
+        PolicyRuleM2M.objects.create(policy=self.pol1, rule=self.pol_rule6)
         self.addr_obj4 = AddressObject.objects.get(name="server")
         self.ip_address = IPAddress.objects.create(address="10.0.0.101")
         self.addr_obj5 = AddressObject.objects.create(name="test-name", ip_address=self.ip_address, status=self.active)
@@ -302,7 +302,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
     def test_address_skip(self):
         """Check that address objects are found with status active and not found when other."""
 
-        self.pol_rule6.source_address.set([self.addr_obj4, self.addr_obj5])
+        self.pol_rule6.source_addresses.set([self.addr_obj4, self.addr_obj5])
         self.pol_rule6.validated_save()
         _, networkdata, _ = PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
         self.assertIn("test-name", networkdata)
@@ -312,11 +312,11 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         _, networkdata, _ = PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
         self.assertNotIn("test-name", networkdata)
 
-        self.pol_rule6.source_address.clear()
+        self.pol_rule6.source_addresses.clear()
         self.addr_obj5.status = self.active
         self.addr_obj5.validated_save()
 
-        self.pol_rule6.destination_address.set([self.addr_obj4, self.addr_obj5])
+        self.pol_rule6.destination_addresses.set([self.addr_obj4, self.addr_obj5])
         self.pol_rule6.validated_save()
         _, networkdata, _ = PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
         self.assertIn("test-name", networkdata)
@@ -328,13 +328,13 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
 
     def test_address_empty(self):
         """Check that when all address objects are removed, it fails."""
-        self.pol_rule6.source_address.set([self.addr_obj5])
+        self.pol_rule6.source_addresses.set([self.addr_obj5])
         self.addr_obj5.status = self.decomm
         self.addr_obj5.validated_save()
         with self.assertRaises(ValidationError):
             PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
-        self.pol_rule6.source_address.clear()
-        self.pol_rule6.destination_address.set([self.addr_obj5])
+        self.pol_rule6.source_addresses.clear()
+        self.pol_rule6.destination_addresses.set([self.addr_obj5])
         with self.assertRaises(ValidationError):
             PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
 
@@ -345,7 +345,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         self.addr_obj5.ip_address = None
         self.addr_obj5.fqdn = fqdn1
         self.addr_obj5.validated_save()
-        self.pol_rule6.source_address.set([self.addr_obj5])
+        self.pol_rule6.source_addresses.set([self.addr_obj5])
         with self.assertRaises(ValidationError):
             PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
 
@@ -355,14 +355,14 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         self.addr_obj5.ip_address = None
         self.addr_obj5.ip_range = iprange1
         self.addr_obj5.validated_save()
-        self.pol_rule6.source_address.set([self.addr_obj5])
+        self.pol_rule6.source_addresses.set([self.addr_obj5])
         with self.assertRaises(ValidationError):
             PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
 
     def test_address_group_skip(self):
         """Check that address group objects are found with status active and not found when other."""
 
-        self.pol_rule6.source_address_group.set([self.addr_grp3, self.addr_grp4])
+        self.pol_rule6.source_address_groups.set([self.addr_grp3, self.addr_grp4])
         self.pol_rule6.validated_save()
         _, networkdata, _ = PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
         self.assertIn("test-group", networkdata)
@@ -372,11 +372,11 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         _, networkdata, _ = PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
         self.assertNotIn("test-group", networkdata)
 
-        self.pol_rule6.source_address_group.clear()
+        self.pol_rule6.source_address_groups.clear()
         self.addr_grp4.status = self.active
         self.addr_grp4.validated_save()
 
-        self.pol_rule6.destination_address_group.set([self.addr_grp3, self.addr_grp4])
+        self.pol_rule6.destination_address_groups.set([self.addr_grp3, self.addr_grp4])
         self.pol_rule6.validated_save()
         _, networkdata, _ = PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
         self.assertIn("test-group", networkdata)
@@ -388,22 +388,22 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
 
     def test_address_group_empty(self):
         """Check that when all address group objects are removed, it fails."""
-        self.pol_rule6.source_address_group.set([self.addr_grp4])
+        self.pol_rule6.source_address_groups.set([self.addr_grp4])
         self.addr_grp4.status = self.decomm
         self.addr_grp4.validated_save()
         with self.assertRaises(ValidationError):
             PolicyToCapirca(self.dev_slug, self.pol1).validate_policy_data()
-        self.pol_rule6.source_address.set([self.addr_obj5])
+        self.pol_rule6.source_addresses.set([self.addr_obj5])
         self.pol_rule6.validated_save()
         obj = PolicyToCapirca(self.dev_slug, self.pol1)
         obj.validate_policy_data()
         self.assertIn("test-name", obj.address)
-        self.pol_rule6.destination_address_group.clear()
-        self.pol_rule6.destination_address_group.set([self.addr_grp4])
+        self.pol_rule6.destination_address_groups.clear()
+        self.pol_rule6.destination_address_groups.set([self.addr_grp4])
         self.pol_rule6.validated_save()
         with self.assertRaises(ValidationError):
             PolicyToCapirca(self.dev_slug, self.pol1).validate_policy_data()
-        self.pol_rule6.destination_address.set([self.addr_obj5])
+        self.pol_rule6.destination_addresses.set([self.addr_obj5])
         self.pol_rule6.validated_save()
         obj = PolicyToCapirca(self.dev_slug, self.pol1)
         obj.validate_policy_data()
@@ -415,13 +415,13 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         addr_obj6 = AddressObject.objects.create(name="test-name6", ip_address=ip_address6, status=self.decomm)
         addr_grp6 = AddressObjectGroup.objects.create(name="test-group6", status=self.active)
         addr_grp6.address_objects.set([addr_obj6])
-        self.pol_rule6.source_address_group.set([addr_grp6])
+        self.pol_rule6.source_address_groups.set([addr_grp6])
         self.pol_rule6.validated_save()
         with self.assertRaises(ValidationError):
             PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
 
-        self.pol_rule6.source_address_group.clear()
-        self.pol_rule6.destination_address_group.set([addr_grp6])
+        self.pol_rule6.source_address_groups.clear()
+        self.pol_rule6.destination_address_groups.set([addr_grp6])
         self.pol_rule6.validated_save()
         with self.assertRaises(ValidationError):
             PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
@@ -429,7 +429,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
     def test_svcs_skip(self):
         """Check that service objects are found with status active and not found when other."""
         svc_obj2 = ServiceObject.objects.get(name="SSH")
-        self.pol_rule6.service.set([self.svc_obj4, svc_obj2])
+        self.pol_rule6.destination_services.set([self.svc_obj4, svc_obj2])
         self.pol_rule6.validated_save()
         _, _, servicedata = PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
         self.assertIn("test-service", servicedata)
@@ -441,7 +441,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
 
     def test_svcs_skip_empty(self):
         """Check that when all service objects are removed, it fails."""
-        self.pol_rule6.service.set([self.svc_obj4])
+        self.pol_rule6.destination_services.set([self.svc_obj4])
         self.svc_obj4.status = self.decomm
         self.svc_obj4.validated_save()
         with self.assertRaises(ValidationError):
@@ -450,7 +450,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
     def test_svcs_group_skip(self):
         """Check that service objects are found with status active and not found when other."""
         svc_grp1 = ServiceObjectGroup.objects.get(name="svc group1")
-        self.pol_rule6.service_group.set([self.svc_grp4, svc_grp1])
+        self.pol_rule6.destination_service_groups.set([self.svc_grp4, svc_grp1])
         self.pol_rule6.validated_save()
         _, _, servicedata = PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
         self.assertIn("test-service-group", servicedata)
@@ -462,7 +462,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
 
     def test_svcs_group_skip_empty(self):
         """Check that when all service objects are removed, it fails."""
-        self.pol_rule6.service_group.set([self.svc_grp4])
+        self.pol_rule6.destination_service_groups.set([self.svc_grp4])
         self.svc_grp4.status = self.decomm
         self.svc_grp4.validated_save()
         with self.assertRaises(ValidationError):
@@ -472,12 +472,12 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         """Check that a service group whose members are all inactive gets cleared."""
         self.svc_obj4.status = self.decomm
         self.svc_obj4.validated_save()
-        self.pol_rule6.service_group.set([self.svc_grp4])
+        self.pol_rule6.destination_service_groups.set([self.svc_grp4])
         self.pol_rule6.validated_save()
         with self.assertRaises(ValidationError):
             PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
         svc_obj2 = ServiceObject.objects.get(name="SSH")
-        self.pol_rule6.service.set([svc_obj2])
+        self.pol_rule6.destination_services.set([svc_obj2])
         self.pol_rule6.validated_save()
         cap_obj = PolicyToCapirca(self.dev_slug, self.pol1)
         cap_obj.validate_policy_data()
@@ -486,7 +486,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
     def test_svcs_ip_protocol_not_expected(self):
         """Check that you cannot mix and match tcp/udp that have ports with other protocols."""
         svc_obj5 = ServiceObject.objects.create(name="ICMP", ip_protocol="ICMP", status=self.active)
-        self.pol_rule6.service.set([self.svc_obj4, svc_obj5])
+        self.pol_rule6.destination_services.set([self.svc_obj4, svc_obj5])
         self.pol_rule6.validated_save()
         with self.assertRaises(ValidationError):
             PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
@@ -495,7 +495,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         """Check that you can mix and match tcp/udp with other protocols, as long as no port."""
         svc_obj5 = ServiceObject.objects.create(name="ICMP", ip_protocol="ICMP", status=self.active)
         svc_obj6 = ServiceObject.objects.create(name="TCP", ip_protocol="TCP", status=self.active)
-        self.pol_rule6.service.set([svc_obj5, svc_obj6])
+        self.pol_rule6.destination_services.set([svc_obj5, svc_obj6])
         self.pol_rule6.validated_save()
         pol, _, _ = PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
         self.assertEqual(len(pol[1]["terms"]["destination-port"]), 0)
@@ -504,7 +504,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
     def test_policy_skip(self):
         """Check that policy rules are found with status active and not found when other."""
         pol_rule5 = PolicyRule.objects.get(name="DENY ALL")
-        PolicyRuleM2M.objects.create(policy=self.pol1, rule=pol_rule5, index=120)
+        PolicyRuleM2M.objects.create(policy=self.pol1, rule=pol_rule5)
         pol, _, _ = PolicyToCapirca(self.dev_slug, self.pol1).validate_capirca_data()
         self.assertIn("Test", [i["rule-name"] for i in pol])
 

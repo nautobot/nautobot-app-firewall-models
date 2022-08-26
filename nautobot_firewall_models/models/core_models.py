@@ -500,28 +500,38 @@ class PolicyRule(PrimaryModel):
 
     name = models.CharField(max_length=100)
     tags = TaggableManager(through=TaggedItem)
-    source_user = models.ManyToManyField(to=UserObject, through="SrcUserM2M", related_name="policy_rules")
-    source_user_group = models.ManyToManyField(
+    source_users = models.ManyToManyField(to=UserObject, through="SrcUserM2M", related_name="policy_rules")
+    source_user_groups = models.ManyToManyField(
         to=UserObjectGroup, through="SrcUserGroupM2M", related_name="policy_rules"
     )
-    source_address = models.ManyToManyField(to=AddressObject, through="SrcAddrM2M", related_name="source_policy_rules")
-    source_address_group = models.ManyToManyField(
+    source_addresses = models.ManyToManyField(
+        to=AddressObject, through="SrcAddrM2M", related_name="source_policy_rules"
+    )
+    source_address_groups = models.ManyToManyField(
         to=AddressObjectGroup, through="SrcAddrGroupM2M", related_name="source_policy_rules"
     )
     source_zone = models.ForeignKey(
         to=Zone, null=True, blank=True, on_delete=models.SET_NULL, related_name="source_policy_rules"
     )
-    destination_address = models.ManyToManyField(
+    source_services = models.ManyToManyField(to=ServiceObject, through="SrcSvcM2M", related_name="source_policy_rules")
+    source_service_groups = models.ManyToManyField(
+        to=ServiceObjectGroup, through="SrcSvcGroupM2M", related_name="source_policy_rules"
+    )
+    destination_addresses = models.ManyToManyField(
         to=AddressObject, through="DestAddrM2M", related_name="destination_policy_rules"
     )
-    destination_address_group = models.ManyToManyField(
+    destination_address_groups = models.ManyToManyField(
         to=AddressObjectGroup, through="DestAddrGroupM2M", related_name="destination_policy_rules"
     )
     destination_zone = models.ForeignKey(
         to=Zone, on_delete=models.SET_NULL, null=True, blank=True, related_name="destination_policy_rules"
     )
-    service = models.ManyToManyField(to=ServiceObject, through="SvcM2M", related_name="policy_rules")
-    service_group = models.ManyToManyField(to=ServiceObjectGroup, through="SvcGroupM2M", related_name="policy_rules")
+    destination_services = models.ManyToManyField(
+        to=ServiceObject, through="DestSvcM2M", related_name="destination_policy_rules"
+    )
+    destination_service_groups = models.ManyToManyField(
+        to=ServiceObjectGroup, through="DestSvcGroupM2M", related_name="destination_policy_rules"
+    )
     action = models.CharField(choices=choices.ACTION_CHOICES, max_length=20)
     log = models.BooleanField(default=False)
     status = StatusField(
@@ -531,6 +541,7 @@ class PolicyRule(PrimaryModel):
     )
     request_id = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=200, null=True, blank=True)
+    index = models.PositiveSmallIntegerField(null=True, blank=True)
 
     class Meta:
         """Meta class."""
@@ -546,18 +557,19 @@ class PolicyRule(PrimaryModel):
         """Convience method to convert to more consumable dictionary."""
         row = {}
         row["rule"] = self
-        row["source_address_group"] = self.source_address_group.all()
-        row["source_address"] = self.source_address.all()
-        row["source_user"] = self.source_user.all()
-        row["source_user_group"] = self.source_user_group.all()
+        row["source_address_groups"] = self.source_address_groups.all()
+        row["source_addresses"] = self.source_addresses.all()
+        row["source_users"] = self.source_users.all()
+        row["source_user_groupes"] = self.source_user_groups.all()
         row["source_zone"] = self.source_zone
+        row["source_services"] = self.source_services.all()
+        row["source_service_groups"] = self.source_service_groups.all()
 
-        row["destination_address_group"] = self.destination_address_group.all()
-        row["destination_address"] = self.destination_address.all()
+        row["destination_address_groups"] = self.destination_address_groups.all()
+        row["destination_addresses"] = self.destination_addresses.all()
         row["destination_zone"] = self.destination_zone
-
-        row["service"] = self.service.all()
-        row["service_group"] = self.service_group.all()
+        row["destination_services"] = self.destination_services.all()
+        row["destination_service_groups"] = self.destination_service_groups.all()
 
         row["action"] = self.action
         row["log"] = self.log

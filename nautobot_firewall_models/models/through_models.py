@@ -1,8 +1,6 @@
 """Set of through intermediate models."""
 
 from django.db import models
-from django.db.models import Q
-from django.db.models.constraints import UniqueConstraint
 from nautobot.core.models.generics import BaseModel
 
 
@@ -63,20 +61,10 @@ class PolicyDynamicGroupM2M(BaseModel):
 
 
 class PolicyRuleM2M(BaseModel):
-    """Through model to add index to the the Policy & PolicyRule relationship."""
+    """Custom through model to on_delete=models.PROTECT to prevent deleting associated PolicyRule if assigned to a Policy."""
 
     policy = models.ForeignKey("nautobot_firewall_models.Policy", on_delete=models.CASCADE)
     rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.PROTECT)
-    index = models.PositiveSmallIntegerField(null=True, blank=True)
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["index"]
-        constraints = [
-            UniqueConstraint(fields=["policy", "rule", "index"], name="unique_with_index"),
-            UniqueConstraint(fields=["policy", "rule"], name="unique_without_index", condition=Q(index=None)),
-        ]
 
 
 class ServiceObjectGroupM2M(BaseModel):
@@ -114,14 +102,28 @@ class SrcUserGroupM2M(BaseModel):
     pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
 
 
-class SvcM2M(BaseModel):
+class SrcSvcM2M(BaseModel):
     """Custom through model to on_delete=models.PROTECT to prevent deleting associated Service if assigned to a PolicyRule."""
 
     svc = models.ForeignKey("nautobot_firewall_models.ServiceObject", on_delete=models.PROTECT)
     pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
 
 
-class SvcGroupM2M(BaseModel):
+class SrcSvcGroupM2M(BaseModel):
+    """Custom through model to on_delete=models.PROTECT to prevent deleting associated ServiceGroup if assigned to a PolicyRule."""
+
+    svc_group = models.ForeignKey("nautobot_firewall_models.ServiceObjectGroup", on_delete=models.PROTECT)
+    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
+
+
+class DestSvcM2M(BaseModel):
+    """Custom through model to on_delete=models.PROTECT to prevent deleting associated Service if assigned to a PolicyRule."""
+
+    svc = models.ForeignKey("nautobot_firewall_models.ServiceObject", on_delete=models.PROTECT)
+    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
+
+
+class DestSvcGroupM2M(BaseModel):
     """Custom through model to on_delete=models.PROTECT to prevent deleting associated ServiceGroup if assigned to a PolicyRule."""
 
     svc_group = models.ForeignKey("nautobot_firewall_models.ServiceObjectGroup", on_delete=models.PROTECT)

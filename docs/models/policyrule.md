@@ -22,7 +22,12 @@ It is recommended to use a descriptive name to best identify a PolicyRule, other
 * Action (string, choice of deny drop allow)
 * Log (boolean)
 * Request ID (optional, string)
-    * Meant to represent an upstream request (e.g. an service request from an ITSM solution).
+  * Meant to represent an upstream request (e.g. an service request from an ITSM solution).
+* Index (optional, int)
+  * Sets the index of the PolicyRule in the Policy.
+  * Example `20 permit icmp host 1.1.1.1 any` would have an index of `20`.
+  * Set as optional for now, will be set to required at a later date with default as the highest value + 10.
+    * Uniqueness does not apply when not set.
 
 ## Examples
 

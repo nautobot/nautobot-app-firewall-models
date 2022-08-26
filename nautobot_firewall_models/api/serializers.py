@@ -10,6 +10,7 @@ from nautobot.extras.api.fields import StatusSerializerField
 from nautobot.extras.api.serializers import (
     StatusModelSerializerMixin as _StatusModelSerializerMixin,
     TaggedObjectSerializer,
+    NautobotModelSerializer,
 )
 from nautobot.extras.models import DynamicGroup, Status
 from nautobot.ipam.models import IPAddress
@@ -30,9 +31,7 @@ class StatusModelSerializerMixin(_StatusModelSerializerMixin):  # pylint: disabl
     status = StatusSerializerField(queryset=Status.objects.all(), required=False)
 
 
-class IPRangeSerializer(
-    TaggedObjectSerializer, StatusModelSerializerMixin, CustomFieldModelSerializer, ValidatedModelSerializer
-):
+class IPRangeSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, NautobotModelSerializer):
     """IPRange Serializer."""
 
     url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:iprange-detail")
@@ -46,9 +45,7 @@ class IPRangeSerializer(
         fields = "__all__"
 
 
-class FQDNSerializer(
-    TaggedObjectSerializer, StatusModelSerializerMixin, CustomFieldModelSerializer, ValidatedModelSerializer
-):
+class FQDNSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, NautobotModelSerializer):
     """FQDN Serializer."""
 
     url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:fqdn-detail")
@@ -63,9 +60,7 @@ class FQDNSerializer(
         fields = "__all__"
 
 
-class AddressObjectSerializer(
-    TaggedObjectSerializer, StatusModelSerializerMixin, CustomFieldModelSerializer, ValidatedModelSerializer
-):
+class AddressObjectSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, NautobotModelSerializer):
     """AddressObject Serializer."""
 
     url = serializers.HyperlinkedIdentityField(
@@ -83,9 +78,7 @@ class AddressObjectSerializer(
         fields = "__all__"
 
 
-class AddressObjectGroupSerializer(
-    TaggedObjectSerializer, StatusModelSerializerMixin, CustomFieldModelSerializer, ValidatedModelSerializer
-):
+class AddressObjectGroupSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, NautobotModelSerializer):
     """AddressObjectGroup Serializer."""
 
     url = serializers.HyperlinkedIdentityField(
@@ -102,9 +95,7 @@ class AddressObjectGroupSerializer(
         fields = "__all__"
 
 
-class ServiceObjectSerializer(
-    TaggedObjectSerializer, StatusModelSerializerMixin, CustomFieldModelSerializer, ValidatedModelSerializer
-):
+class ServiceObjectSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, NautobotModelSerializer):
     """ServiceObject Serializer."""
 
     url = serializers.HyperlinkedIdentityField(
@@ -118,9 +109,7 @@ class ServiceObjectSerializer(
         fields = "__all__"
 
 
-class ServiceObjectGroupSerializer(
-    TaggedObjectSerializer, StatusModelSerializerMixin, CustomFieldModelSerializer, ValidatedModelSerializer
-):
+class ServiceObjectGroupSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, NautobotModelSerializer):
     """ServiceObjectGroup Serializer."""
 
     url = serializers.HyperlinkedIdentityField(
@@ -139,9 +128,7 @@ class ServiceObjectGroupSerializer(
         fields = "__all__"
 
 
-class UserObjectSerializer(
-    TaggedObjectSerializer, StatusModelSerializerMixin, CustomFieldModelSerializer, ValidatedModelSerializer
-):
+class UserObjectSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, NautobotModelSerializer):
     """UserObject Serializer."""
 
     url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:userobject-detail")
@@ -153,9 +140,7 @@ class UserObjectSerializer(
         fields = "__all__"
 
 
-class UserObjectGroupSerializer(
-    TaggedObjectSerializer, StatusModelSerializerMixin, CustomFieldModelSerializer, ValidatedModelSerializer
-):
+class UserObjectGroupSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, NautobotModelSerializer):
     """UserObjectGroup Serializer."""
 
     url = serializers.HyperlinkedIdentityField(
@@ -172,9 +157,7 @@ class UserObjectGroupSerializer(
         fields = "__all__"
 
 
-class ZoneSerializer(
-    TaggedObjectSerializer, StatusModelSerializerMixin, CustomFieldModelSerializer, ValidatedModelSerializer
-):
+class ZoneSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, NautobotModelSerializer):
     """Zone Serializer."""
 
     url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:zone-detail")
@@ -187,42 +170,40 @@ class ZoneSerializer(
         fields = "__all__"
 
 
-class PolicyRuleSerializer(
-    TaggedObjectSerializer, StatusModelSerializerMixin, CustomFieldModelSerializer, ValidatedModelSerializer
-):
+class PolicyRuleSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, NautobotModelSerializer):
     """PolicyRule Serializer."""
 
     url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:policyrule-detail")
-    source_user = SerializedPKRelatedField(
+    source_users = SerializedPKRelatedField(
         queryset=models.UserObject.objects.all(), serializer=UserObjectSerializer, required=False, many=True
     )
-    source_user_group = SerializedPKRelatedField(
+    source_user_groups = SerializedPKRelatedField(
         queryset=models.UserObjectGroup.objects.all(), serializer=UserObjectGroupSerializer, required=False, many=True
     )
-    source_address = SerializedPKRelatedField(
+    source_addresses = SerializedPKRelatedField(
         queryset=models.AddressObject.objects.all(), serializer=AddressObjectSerializer, required=False, many=True
     )
-    source_address_group = SerializedPKRelatedField(
+    source_address_groups = SerializedPKRelatedField(
         queryset=models.AddressObjectGroup.objects.all(),
         serializer=AddressObjectGroupSerializer,
         required=False,
         many=True,
     )
     source_zone = ZoneSerializer(required=False)
-    destination_address = SerializedPKRelatedField(
+    destination_addresses = SerializedPKRelatedField(
         queryset=models.AddressObject.objects.all(), serializer=AddressObjectSerializer, required=False, many=True
     )
-    destination_address_group = SerializedPKRelatedField(
+    destination_address_groups = SerializedPKRelatedField(
         queryset=models.AddressObjectGroup.objects.all(),
         serializer=AddressObjectGroupSerializer,
         required=False,
         many=True,
     )
     destination_zone = ZoneSerializer(required=False)
-    service = SerializedPKRelatedField(
+    destination_services = SerializedPKRelatedField(
         queryset=models.ServiceObject.objects.all(), serializer=ServiceObjectSerializer, required=False, many=True
     )
-    service_group = SerializedPKRelatedField(
+    destination_service_groups = SerializedPKRelatedField(
         queryset=models.ServiceObjectGroup.objects.all(),
         serializer=ServiceObjectGroupSerializer,
         required=False,
@@ -243,7 +224,7 @@ class PolicyRuleM2MNestedSerializer(serializers.ModelSerializer):
         """Meta attributes."""
 
         model = models.PolicyRuleM2M
-        fields = ["rule", "index"]
+        fields = ["rule"]
 
 
 class PolicyRuleM2MDeepNestedSerializer(PolicyRuleM2MNestedSerializer):
@@ -272,13 +253,10 @@ class PolicyDynamicGroupM2MNestedSerializer(serializers.ModelSerializer):
         fields = ["dynamic_group", "weight"]
 
 
-class PolicySerializer(
-    TaggedObjectSerializer, StatusModelSerializerMixin, CustomFieldModelSerializer, ValidatedModelSerializer
-):
+class PolicySerializer(TaggedObjectSerializer, StatusModelSerializerMixin, NautobotModelSerializer):
     """Policy Serializer."""
 
     url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:policy-detail")
-    policy_rules = PolicyRuleM2MNestedSerializer(many=True, required=False, source="policyrulem2m_set")
     assigned_devices = PolicyDeviceM2MNestedSerializer(many=True, required=False, source="policydevicem2m_set")
     assigned_dynamic_groups = PolicyDynamicGroupM2MNestedSerializer(
         many=True, required=False, source="policydynamicgroupm2m_set"
@@ -292,13 +270,10 @@ class PolicySerializer(
 
     def create(self, validated_data):
         """Overload create to account for custom m2m field."""
-        policy_rules = validated_data.pop("policyrulem2m_set", None)
         assigned_devices = validated_data.pop("policydevicem2m_set", None)
         assigned_dynamic_groups = validated_data.pop("policydynamicgroupm2m_set", None)
         instance = super().create(validated_data)
 
-        if policy_rules is not None:
-            return self._save_policy_rules(instance, policy_rules)
         if assigned_devices is not None:
             return self._save_assigned_devices(instance, assigned_devices)
         if assigned_dynamic_groups is not None:
@@ -308,31 +283,15 @@ class PolicySerializer(
 
     def update(self, instance, validated_data):
         """Overload create to account for update m2m field."""
-        policy_rules = validated_data.pop("policyrulem2m_set", None)
         assigned_devices = validated_data.pop("policydevicem2m_set", None)
         assigned_dynamic_groups = validated_data.pop("policydynamicgroupm2m_set", None)
 
         instance = super().update(instance, validated_data)
 
-        if policy_rules is not None:
-            return self._save_policy_rules(instance, policy_rules)
         if assigned_devices is not None:
             return self._save_assigned_devices(instance, assigned_devices)
         if assigned_dynamic_groups is not None:
             return self._save_assigned_dynamic_groups(instance, assigned_dynamic_groups)
-
-        return instance
-
-    def _save_policy_rules(self, instance, policy_rules):
-        # pylint: disable=R0201
-        """Helper function for custom m2m field."""
-        instance.policy_rules.clear()
-        for p_r in policy_rules:
-            models.PolicyRuleM2M.objects.create(
-                rule=models.PolicyRule.objects.get(id=p_r["rule"].id),
-                index=p_r.get("index", None),
-                policy=instance,
-            )
 
         return instance
 
@@ -357,7 +316,7 @@ class PolicySerializer(
         for d_g in assigned_dynamic_groups:
             models.PolicyDynamicGroupM2M.objects.create(
                 dynamic_group=DynamicGroup.objects.get(id=d_g["dynamic_group"].id),
-                index=d_g.get("weight", None),
+                weight=d_g.get("weight", None),
                 policy=instance,
             )
 
@@ -368,7 +327,7 @@ class PolicySerializer(
         """Overload validate to pop field for custom m2m relationship."""
         # Remove custom fields data and tags (if any) prior to model validation
         attrs = data.copy()
-        attrs.pop("policyrulem2m_set", None)
+        # attrs.pop("policyrulem2m_set", None)
         attrs.pop("policydevicem2m_set", None)
         attrs.pop("policydynamicgroupm2m_set", None)
         super().validate(attrs)
@@ -378,7 +337,9 @@ class PolicySerializer(
 class PolicyDeepSerializer(PolicySerializer):
     """Overload for create & update views."""
 
-    policy_rules = PolicyRuleM2MDeepNestedSerializer(many=True, required=False, source="policyrulem2m_set")
+    policy_rules = SerializedPKRelatedField(
+        queryset=models.PolicyRule.objects.all(), serializer=PolicyRuleSerializer, required=False, many=True
+    )
 
 
 class CapircaPolicySerializer(TaggedObjectSerializer, CustomFieldModelSerializer, ValidatedModelSerializer):
