@@ -510,6 +510,7 @@ class PolicyRuleBulkEditForm(BootstrapMixin, TagsBulkEditFormMixin, StatusModelB
     pk = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), widget=forms.MultipleHiddenInput)
     action = forms.ChoiceField(choices=add_blank_choice(choices.ACTION_CHOICES), required=False)
     log = forms.BooleanField(required=False)
+    description = forms.CharField(required=False)
 
     class Meta:
         """Meta attributes."""
