@@ -327,7 +327,6 @@ class PolicySerializer(TaggedObjectSerializer, StatusModelSerializerMixin, Nauto
         """Overload validate to pop field for custom m2m relationship."""
         # Remove custom fields data and tags (if any) prior to model validation
         attrs = data.copy()
-        # attrs.pop("policyrulem2m_set", None)
         attrs.pop("policydevicem2m_set", None)
         attrs.pop("policydynamicgroupm2m_set", None)
         super().validate(attrs)
