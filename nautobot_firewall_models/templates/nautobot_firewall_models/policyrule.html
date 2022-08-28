@@ -70,3 +70,7 @@
         </div>
     </div>
 {% endblock %}
+{% block javascript %}
+    {{ block.super }}
+    <script>$("span[data-toggle='tooltip']").tooltip()</script>
+{% endblock %}

@@ -2,7 +2,7 @@
 <tr>
     <td><a href="{{ m2m.rule.get_absolute_url }}" title="{{ m2m.rule.name }}">{{ m2m.rule.index|placeholder|ljust:5 }} → {{ m2m.rule.name|placeholder }}</a></td>
     {% if m2m.rule.action == "remark" %}
-        <td colspan="6" style="text-align: center;"><strong>{{ m2m.rule }}</strong></td>
+        <td colspan="7" style="text-align: center;"><strong>{{ m2m.rule }}</strong></td>
     {% else %}
         <td>{% include './policy_rule_address_object_row.html' with address=m2m.rule.source_addresses.all address_group=m2m.rule.source_address_groups.all %}</td>
         <td>{% include './policy_rule_user_object_row.html' with user=m2m.rule.source_users.all user_group=m2m.rule.source_user_groups.all %}</td>

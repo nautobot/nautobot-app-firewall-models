@@ -1,15 +1,11 @@
 {% load helpers %}
-{% if address_group %}
+{% if address_group or address %}
   {% for i in address_group %}
     <i title="Address Group Object" class="mdi mdi-folder-table"> <a href="{{ i.get_absolute_url }}" title="{% for addr_obj in i.address_objects.all %}{{ addr_obj }} → {{ addr_obj.get_address_info.0 }}:{{ addr_obj.get_address_info.1 }}&#013;{% endfor %}">{{ i|placeholder }}</a><br/>
   {% endfor %}
-{% else %}
-  {{ None|placeholder }}
-{% endif %}
-{% if address %}
   {% for i in address %}
     <i title="Address Object" class="mdi mdi-laptop"></i> <a href="{{ i.get_absolute_url }}" title="{{ i.get_address_info.0 }}:{{ i.get_address_info.1 }}">{{ i|placeholder }}</a><br/>
   {% endfor %}
 {% else %}
-  {{ None|placeholder }}
+  <span title="No Address or AddressGroup set, implicit any" data-toggle="tooltip">ANY</span>
 {% endif %}

@@ -9,11 +9,15 @@
 ### Changed
 
 - #80 All plural attrs on PolicyRule are now represented in plural form (`source_user` is now `source_users` etc).
+- #80 Nav menu name from `Firewall` to `Security`.
+- #80 Styling on PolicyRule detail tables
 
 ### Added
 
 - #80 Support for Notes
 - #80 Source Service suport
+- #80 Security panel on homepage
+- #80 PolicyRule detail tables convert empty value to `ANY`
 
 ## v0.1.0-beta.3 - 2022-07-19
 

@@ -1,7 +1,8 @@
 {% load helpers %}
 <tr>
+    <td>{{ rule.index }}</td>
     {% if rule.action == "remark" %}
-        <td colspan="6" style="text-align: center;"><strong>{{ rule }}</strong></td>
+        <td colspan="7" style="text-align: center;"><strong>{{ rule }}</strong></td>
     {% else %}
         <td>{% include './policy_rule_address_object_row.html' with address=rule.source_addresses.all address_group=rule.source_address_groups.all %}</td>
         <td>{% include './policy_rule_user_object_row.html' with user=rule.source_users.all user_group=rule.source_user_groups.all %}</td>

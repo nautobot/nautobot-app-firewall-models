@@ -4,7 +4,7 @@ from nautobot.core.apps import NavMenuAddButton, NavMenuGroup, NavMenuItem, NavM
 
 menu_items = (
     NavMenuTab(
-        name="Firewall",
+        name="Security",
         # weight=150,
         groups=[
             NavMenuGroup(
