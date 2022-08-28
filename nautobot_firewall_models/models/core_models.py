@@ -546,7 +546,7 @@ class PolicyRule(PrimaryModel):
     class Meta:
         """Meta class."""
 
-        ordering = ["name"]
+        ordering = ["index"]
         verbose_name_plural = "Policy Rules"
 
     def get_absolute_url(self):

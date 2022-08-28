@@ -364,7 +364,7 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the PolicyRule viewsets."""
 
     model = PolicyRule
-    bulk_edit_data = {"log": True}
+    bulk_edit_data = {"description": "test update description"}
 
     @classmethod
     def setUpTestData(cls):

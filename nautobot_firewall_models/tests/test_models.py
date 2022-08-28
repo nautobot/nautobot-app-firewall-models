@@ -237,14 +237,14 @@ class TestPolicyRuleModels(TestCase):
     def test_policyrule_rule_details(self):
         """Test method rule_details on PolicyRule model."""
         rule_details = PolicyRule.objects.first().rule_details()
-        self.assertEqual(rule_details["log"], False)
+        self.assertEqual(rule_details["log"], True)
         # sample a few keys to ensure they are in there, more complete test in to_json test
         keys = ["rule", "source_address_groups", "destination_address_groups", "action"]
         self.assertTrue(set(keys).issubset(rule_details.keys()))
 
     def test_policyrule_to_json(self):
         """Test method to_json on PolicyRule model."""
-        json_details = PolicyRule.objects.all()[2].to_json()
+        json_details = PolicyRule.objects.first().to_json()
         self.assertEqual(json_details["display"], "Policy Rule 1 - req1")
         self.assertEqual(json_details["source_users"][0]["display"], "user1")
         self.assertEqual(json_details["source_user_groups"][0]["user_objects"][0]["name"], "User 1")
@@ -273,7 +273,7 @@ class TestPolicyModels(TestCase):
 
     def test_policy_to_json(self):
         """Test method to_json on Policy model."""
-        json_details = Policy.objects.all()[2].to_json()["policy_rules"][2]["rule"]
+        json_details = Policy.objects.all()[2].to_json()["policy_rules"][2]
         self.assertEqual(json_details["display"], "Policy Rule 3 - req3")
         self.assertEqual(json_details["source_users"][0]["display"], "user1")
         self.assertEqual(json_details["source_user_groups"][0]["user_objects"][0]["name"], "User 1")

@@ -53,6 +53,7 @@ def create_env():
     svc_obj1, _ = ServiceObject.objects.get_or_create(name="PGSQL", port="5432", ip_protocol="TCP", status=status)
     svc_obj2, _ = ServiceObject.objects.get_or_create(name="SSH", port="22", ip_protocol="TCP", status=status)
     svc_obj3, _ = ServiceObject.objects.get_or_create(name="DNS", port="53", ip_protocol="TCP", status=status)
+    src_svc, _ = ServiceObject.objects.get_or_create(name="Source HTTPS", port="443", ip_protocol="TCP", status=status)
     svc_grp1 = ServiceObjectGroup.objects.create(name="svc group1", status=status)
     svc_grp1.service_objects.set([svc_obj1])
     svc_grp2 = ServiceObjectGroup.objects.create(name="svc group2", status=status)
@@ -75,12 +76,13 @@ def create_env():
     Zone.objects.create(name="DMZ", status=status)
 
     pol_rule1 = PolicyRule.objects.create(
-        action="deny", log=True, name="Policy Rule 1", status=status, request_id="req1"
+        action="deny", log=True, name="Policy Rule 1", status=status, request_id="req1", index=10
     )
     pol_rule1.source_users.set([usr_obj1])
     pol_rule1.source_user_groups.set([usr_grp1])
     pol_rule1.source_addresses.set([addr_obj1])
     pol_rule1.source_address_groups.set([addr_grp1])
+    pol_rule1.source_services.set([src_svc])
     pol_rule1.destination_addresses.set([addr_obj4])
     pol_rule1.destination_address_groups.set([addr_grp3])
     pol_rule1.destination_services.set([svc_obj1])
@@ -93,6 +95,7 @@ def create_env():
         name="Policy Rule 2",
         status=status,
         request_id="req2",
+        index=20,
     )
     pol_rule2.source_users.set([usr_obj1, usr_obj2])
     pol_rule2.source_user_groups.set([usr_grp1, usr_grp2])
@@ -110,6 +113,7 @@ def create_env():
         name="Policy Rule 3",
         status=status,
         request_id="req3",
+        index=30,
     )
     pol_rule3.source_users.set([usr_obj1, usr_obj2, usr_obj3])
     pol_rule3.source_user_groups.set([usr_grp1, usr_grp2, usr_grp3])
@@ -119,8 +123,10 @@ def create_env():
     pol_rule3.destination_address_groups.set([addr_grp3])
     pol_rule3.destination_services.set([svc_obj1, svc_obj2, svc_obj3])
     pol_rule3.destination_service_groups.set([svc_grp1, svc_grp2, svc_grp3])
-    pol_rule4 = PolicyRule.objects.create(name="END OF ACCESS LIST", action="remark", log=False, request_id="req4")
-    pol_rule5 = PolicyRule.objects.create(name="DENY ALL", action="deny", log=False, request_id="req5")
+    pol_rule4 = PolicyRule.objects.create(
+        name="END OF ACCESS LIST", action="remark", log=False, request_id="req4", index=99
+    )
+    pol_rule5 = PolicyRule.objects.create(name="DENY ALL", action="deny", log=False, request_id="req5", index=100)
     tenant_group = TenantGroup.objects.create(name="ABC Holding Corp", slug="abc-holding-corp")
     tenant1 = Tenant.objects.create(name="ABC LLC", slug="abc-llc", group=tenant_group)
     tenant2 = Tenant.objects.create(name="XYZ LLC", slug="xyz-llc")

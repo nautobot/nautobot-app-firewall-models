@@ -58,6 +58,7 @@ storage = 10.0.0.0/24
 voice = 10.0.0.1/32"""
 
 SERVICES2 = """PGSQL = 5432/tcp
+Source-HTTPS = 443/tcp
 svc-group1 = PGSQL"""
 
 POLICY2 = """header {
@@ -75,6 +76,7 @@ term Policy-Rule-1 {
   protocol:: tcp
   source-address:: addr-group1
   source-address:: printer
+  source-port:: Source-HTTPS
 }
 
 header {
@@ -89,16 +91,6 @@ term Test {
 """
 
 POLICYALL = """header {
-  target:: srx from-zone all to-zone all
-}
-
-term DENY-ALL {
-  action:: deny
-  comment:: "req5"
-  logging:: disable
-}
-
-header {
   target:: srx from-zone DMZ to-zone WAN
 }
 
@@ -113,6 +105,7 @@ term Policy-Rule-1 {
   protocol:: tcp
   source-address:: addr-group1
   source-address:: printer
+  source-port:: Source-HTTPS
 }
 
 header {
@@ -161,20 +154,13 @@ term Policy-Rule-3 {
 }
 
 header {
-  target:: srx from-zone DMZ to-zone WAN
+  target:: srx from-zone all to-zone all
 }
 
-term Policy-Rule-1 {
+term DENY-ALL {
   action:: deny
-  comment:: "req1"
-  destination-address:: addr-group3
-  destination-address:: server
-  destination-port:: PGSQL
-  destination-port:: svc-group1
-  logging:: true
-  protocol:: tcp
-  source-address:: addr-group1
-  source-address:: printer
+  comment:: "req5"
+  logging:: disable
 }
 
 header {
@@ -192,6 +178,25 @@ term Policy-Rule-1 {
   protocol:: tcp
   source-address:: addr-group1
   source-address:: printer
+  source-port:: Source-HTTPS
+}
+
+header {
+  target:: srx from-zone DMZ to-zone WAN
+}
+
+term Policy-Rule-1 {
+  action:: deny
+  comment:: "req1"
+  destination-address:: addr-group3
+  destination-address:: server
+  destination-port:: PGSQL
+  destination-port:: svc-group1
+  logging:: true
+  protocol:: tcp
+  source-address:: addr-group1
+  source-address:: printer
+  source-port:: Source-HTTPS
 }
 
 header {
@@ -221,6 +226,8 @@ POLICY_DATA = [
         "rule-name": "Policy Rule 1",
         "source-address": ["printer"],
         "source-group-address": ["addr group1"],
+        "source-service": ["Source HTTPS"],
+        "source-group-service": [],
         "from-zone": "DMZ",
         "destination-address": ["server"],
         "destination-group-address": ["addr group3"],
@@ -237,6 +244,8 @@ POLICY_DATA = [
         "rule-name": "Test",
         "source-address": [],
         "source-group-address": [],
+        "source-service": [],
+        "source-group-service": [],
         "from-zone": "all",
         "destination-address": [],
         "destination-group-address": [],

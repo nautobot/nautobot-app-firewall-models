@@ -1,14 +1,19 @@
 # Changelog
 
-## v0.1.0-beta.4 - 2022-08-XX
+## v0.1.0-beta.4 - 2022-08-04
+
+### Removed
+
+- #80 Support for Nautobot < v1.4.0
 
 ### Changed
 
-- #XX Dropped support for Nautobot < v1.4.0
+- #80 All plural attrs on PolicyRule are now represented in plural form (`source_user` is now `source_users` etc).
 
 ### Added
 
-- #XX Added support for Notes
+- #80 Support for Notes
+- #80 Source Service suport
 
 ## v0.1.0-beta.3 - 2022-07-19
 
