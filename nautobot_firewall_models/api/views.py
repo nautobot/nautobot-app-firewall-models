@@ -2,12 +2,13 @@
 
 from nautobot.core.api.views import ModelViewSet
 from nautobot.core.settings_funcs import is_truthy
+from nautobot.extras.api.views import NautobotModelViewSet
 
 from nautobot_firewall_models import filters, models
 from nautobot_firewall_models.api import serializers
 
 
-class IPRangeViewSet(ModelViewSet):
+class IPRangeViewSet(NautobotModelViewSet):
     """IPRange viewset."""
 
     queryset = models.IPRange.objects.all()
@@ -15,7 +16,7 @@ class IPRangeViewSet(ModelViewSet):
     filterset_class = filters.IPRangeFilterSet
 
 
-class FQDNViewSet(ModelViewSet):
+class FQDNViewSet(NautobotModelViewSet):
     """FQDN viewset."""
 
     queryset = models.FQDN.objects.all()
@@ -23,7 +24,7 @@ class FQDNViewSet(ModelViewSet):
     filterset_class = filters.FQDNFilterSet
 
 
-class AddressObjectViewSet(ModelViewSet):
+class AddressObjectViewSet(NautobotModelViewSet):
     """AddressObject viewset."""
 
     queryset = models.AddressObject.objects.all()
@@ -31,7 +32,7 @@ class AddressObjectViewSet(ModelViewSet):
     filterset_class = filters.AddressObjectFilterSet
 
 
-class AddressObjectGroupViewSet(ModelViewSet):
+class AddressObjectGroupViewSet(NautobotModelViewSet):
     """AddressObjectGroup viewset."""
 
     queryset = models.AddressObjectGroup.objects.all()
@@ -39,7 +40,7 @@ class AddressObjectGroupViewSet(ModelViewSet):
     filterset_class = filters.AddressObjectGroupFilterSet
 
 
-class ServiceObjectViewSet(ModelViewSet):
+class ServiceObjectViewSet(NautobotModelViewSet):
     """ServiceObject viewset."""
 
     queryset = models.ServiceObject.objects.all()
@@ -47,7 +48,7 @@ class ServiceObjectViewSet(ModelViewSet):
     filterset_class = filters.ServiceObjectFilterSet
 
 
-class ServiceObjectGroupViewSet(ModelViewSet):
+class ServiceObjectGroupViewSet(NautobotModelViewSet):
     """ServiceObjectGroup viewset."""
 
     queryset = models.ServiceObjectGroup.objects.all()
@@ -55,7 +56,7 @@ class ServiceObjectGroupViewSet(ModelViewSet):
     filterset_class = filters.ServiceObjectGroupFilterSet
 
 
-class UserObjectViewSet(ModelViewSet):
+class UserObjectViewSet(NautobotModelViewSet):
     """UserObject viewset."""
 
     queryset = models.UserObject.objects.all()
@@ -63,7 +64,7 @@ class UserObjectViewSet(ModelViewSet):
     filterset_class = filters.UserObjectFilterSet
 
 
-class UserObjectGroupViewSet(ModelViewSet):
+class UserObjectGroupViewSet(NautobotModelViewSet):
     """UserObjectGroup viewset."""
 
     queryset = models.UserObjectGroup.objects.all()
@@ -71,7 +72,7 @@ class UserObjectGroupViewSet(ModelViewSet):
     filterset_class = filters.UserObjectGroupFilterSet
 
 
-class ZoneViewSet(ModelViewSet):
+class ZoneViewSet(NautobotModelViewSet):
     """Zone viewset."""
 
     queryset = models.Zone.objects.all()
@@ -79,7 +80,7 @@ class ZoneViewSet(ModelViewSet):
     filterset_class = filters.ZoneFilterSet
 
 
-class PolicyRuleViewSet(ModelViewSet):
+class PolicyRuleViewSet(NautobotModelViewSet):
     """PolicyRule viewset."""
 
     queryset = models.PolicyRule.objects.all()
@@ -87,7 +88,7 @@ class PolicyRuleViewSet(ModelViewSet):
     filterset_class = filters.PolicyRuleFilterSet
 
 
-class PolicyViewSet(ModelViewSet):
+class PolicyViewSet(NautobotModelViewSet):
     """Policy viewset."""
 
     queryset = models.Policy.objects.all()

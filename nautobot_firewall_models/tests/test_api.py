@@ -28,6 +28,10 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_list_objects_brief(self):
         pass
 
+    @skip("Not implemented")
+    def test_notes_url_on_object(self):
+        pass
+
 
 class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the Protocol viewsets."""
@@ -47,6 +51,10 @@ class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("Not implemented")
     def test_list_objects_brief(self):
+        pass
+
+    @skip("Not implemented")
+    def test_notes_url_on_object(self):
         pass
 
 
@@ -314,21 +322,21 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
         cls.create_data = [
             {
                 # pylint: disable=R0801
-                "source_user": [src_usr.id],
-                "source_address": [src_addr.id],
-                "destination_address": [dest_addr.id],
+                "source_users": [src_usr.id],
+                "source_addresses": [src_addr.id],
+                "destination_addresses": [dest_addr.id],
                 "action": "deny",
                 "log": True,
-                "service": [svc.id],
+                "destination_services": [svc.id],
                 "name": "test rule",
             },
             {
-                "source_user": [src_usr.id],
-                "source_address": [src_addr.id],
-                "destination_address": [dest_addr.id],
+                "source_users": [src_usr.id],
+                "source_addresses": [src_addr.id],
+                "destination_addresses": [dest_addr.id],
                 "action": "deny",
                 "log": False,
-                "service": [svc.id],
+                "destination_services": [svc.id],
                 "name": "test rule",
             },
         ]
@@ -358,8 +366,8 @@ class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
         pol_rule = models.PolicyRule.objects.first()
 
         cls.create_data = [
-            {"name": "test 1", "policy_rules": [{"rule": pol_rule.id}]},
-            {"name": "test 2", "policy_rules": [{"rule": pol_rule.id}], "description": "Test desc"},
+            {"name": "test 1", "policy_rules": [pol_rule.id]},
+            {"name": "test 2", "policy_rules": [pol_rule.id], "description": "Test desc"},
         ]
 
     @skip("Not implemented")

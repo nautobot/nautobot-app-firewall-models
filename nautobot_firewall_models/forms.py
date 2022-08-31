@@ -3,14 +3,14 @@
 from django import forms
 from nautobot.dcim.models import Interface, Device
 from nautobot.extras.forms import (
-    AddRemoveTagsForm,
-    StatusFilterFormMixin,
-    StatusBulkEditFormMixin,
-    CustomFieldFilterForm,
-    CustomFieldBulkEditForm,
+    TagsBulkEditFormMixin,
+    StatusModelFilterFormMixin,
+    StatusModelBulkEditFormMixin,
+    CustomFieldModelFilterFormMixin,
+    CustomFieldModelBulkEditFormMixin,
     CustomFieldModelCSVForm,
-    CustomFieldModelForm,
-    RelationshipModelForm,
+    CustomFieldModelFormMixin,
+    RelationshipModelFormMixin,
 )
 from nautobot.extras.models import Tag, DynamicGroup
 from nautobot.ipam.models import VRF, Prefix, IPAddress
@@ -28,7 +28,7 @@ from nautobot.utilities.forms import (
 from nautobot_firewall_models import models, fields, choices
 
 
-class IPRangeFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
+class IPRangeFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
     """Filter form to filter searches."""
 
     field_order = ["q", "start_address", "end_address", "vrf"]
@@ -44,7 +44,7 @@ class IPRangeFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilter
     vrf = DynamicModelChoiceField(queryset=VRF.objects.all(), label="VRF", required=False)
 
 
-class IPRangeForm(BootstrapMixin, fields.IPRangeFieldMixin, forms.ModelForm):
+class IPRangeForm(BootstrapMixin, fields.IPRangeFieldMixin, RelationshipModelFormMixin, forms.ModelForm):
     """IPRange creation/edit form."""
 
     vrf = DynamicModelChoiceField(queryset=VRF.objects.all(), label="VRF", required=False)
@@ -56,7 +56,7 @@ class IPRangeForm(BootstrapMixin, fields.IPRangeFieldMixin, forms.ModelForm):
         fields = ["vrf", "description", "status", "tags"]
 
 
-class IPRangeBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
+class IPRangeBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
     """IPRange bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.IPRange.objects.all(), widget=forms.MultipleHiddenInput)
@@ -71,7 +71,7 @@ class IPRangeBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm)
         nullable_fields = ["description", "vrf"]
 
 
-class FQDNFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
+class FQDNFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -85,7 +85,7 @@ class FQDNFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterFor
     name = forms.CharField(required=False, label="Name")
 
 
-class FQDNForm(BootstrapMixin, forms.ModelForm):
+class FQDNForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
     """FQDN creation/edit form."""
 
     ip_addresses = DynamicModelMultipleChoiceField(queryset=IPAddress.objects.all(), required=False)
@@ -97,7 +97,7 @@ class FQDNForm(BootstrapMixin, forms.ModelForm):
         fields = ["name", "description", "ip_addresses", "status", "tags"]
 
 
-class FQDNBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
+class FQDNBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
     """FQDN bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.FQDN.objects.all(), widget=forms.MultipleHiddenInput)
@@ -110,7 +110,7 @@ class FQDNBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
         nullable_fields = ["description", "ip_addresses"]
 
 
-class AddressObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
+class AddressObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -128,7 +128,7 @@ class AddressObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomField
     fqdn = DynamicModelChoiceField(queryset=models.FQDN.objects.all(), required=False, label="FQDN")
 
 
-class AddressObjectForm(BootstrapMixin, forms.ModelForm):
+class AddressObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
     """AddressObject creation/edit form."""
 
     ip_address = DynamicModelChoiceField(queryset=IPAddress.objects.all(), required=False, label="IP Address")
@@ -143,7 +143,7 @@ class AddressObjectForm(BootstrapMixin, forms.ModelForm):
         fields = ["name", "description", "fqdn", "ip_range", "ip_address", "prefix", "status", "tags"]
 
 
-class AddressObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
+class AddressObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
     """AddressObject bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.AddressObject.objects.all(), widget=forms.MultipleHiddenInput)
@@ -155,7 +155,7 @@ class AddressObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEdi
         nullable_fields = ["description", "fqdn", "ip_range", "ip_address", "prefix"]
 
 
-class AddressObjectGroupFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
+class AddressObjectGroupFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -169,7 +169,7 @@ class AddressObjectGroupFilterForm(BootstrapMixin, StatusFilterFormMixin, Custom
     name = forms.CharField(required=False, label="Name")
 
 
-class AddressObjectGroupForm(BootstrapMixin, forms.ModelForm):
+class AddressObjectGroupForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
     """AddressObjectGroup creation/edit form."""
 
     address_objects = DynamicModelMultipleChoiceField(queryset=models.AddressObject.objects.all())
@@ -181,7 +181,7 @@ class AddressObjectGroupForm(BootstrapMixin, forms.ModelForm):
         fields = ["name", "description", "address_objects", "status", "tags"]
 
 
-class AddressObjectGroupBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
+class AddressObjectGroupBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
     """AddressObjectGroup bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(
@@ -197,7 +197,7 @@ class AddressObjectGroupBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, Bu
         ]
 
 
-class ServiceObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
+class ServiceObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -213,7 +213,7 @@ class ServiceObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomField
     ip_protocol = forms.ChoiceField(choices=add_blank_choice(choices.IP_PROTOCOL_CHOICES), required=False)
 
 
-class ServiceObjectForm(BootstrapMixin, forms.ModelForm):
+class ServiceObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
     """ServiceObject creation/edit form."""
 
     port = forms.CharField(
@@ -228,7 +228,7 @@ class ServiceObjectForm(BootstrapMixin, forms.ModelForm):
         fields = ["name", "description", "port", "ip_protocol", "status", "tags"]
 
 
-class ServiceObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
+class ServiceObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
     """ServiceObject bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.ServiceObject.objects.all(), widget=forms.MultipleHiddenInput)
@@ -244,7 +244,7 @@ class ServiceObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEdi
         nullable_fields = ["description", "port"]
 
 
-class ServiceObjectGroupFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
+class ServiceObjectGroupFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -258,7 +258,7 @@ class ServiceObjectGroupFilterForm(BootstrapMixin, StatusFilterFormMixin, Custom
     name = forms.CharField(required=False, label="Name")
 
 
-class ServiceObjectGroupForm(BootstrapMixin, forms.ModelForm):
+class ServiceObjectGroupForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
     """ServiceObjectGroup creation/edit form."""
 
     service_objects = DynamicModelMultipleChoiceField(queryset=models.ServiceObject.objects.all(), required=False)
@@ -270,7 +270,7 @@ class ServiceObjectGroupForm(BootstrapMixin, forms.ModelForm):
         fields = ["name", "description", "service_objects", "status", "tags"]
 
 
-class ServiceObjectGroupBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
+class ServiceObjectGroupBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
     """ServiceObjectGroup bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(
@@ -286,7 +286,7 @@ class ServiceObjectGroupBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, Bu
         ]
 
 
-class UserObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
+class UserObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
     """Filter form to filter searches."""
 
     field_order = ["q", "username", "name"]
@@ -301,7 +301,7 @@ class UserObjectFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFil
     username = forms.CharField(required=False, label="Username")
 
 
-class UserObjectForm(BootstrapMixin, forms.ModelForm):
+class UserObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
     """UserObject creation/edit form."""
 
     username = forms.CharField(label="Username")
@@ -317,7 +317,7 @@ class UserObjectForm(BootstrapMixin, forms.ModelForm):
         fields = ["username", "name", "status", "tags"]
 
 
-class UserObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
+class UserObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
     """UserObject bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.UserObject.objects.all(), widget=forms.MultipleHiddenInput)
@@ -331,7 +331,7 @@ class UserObjectBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditFo
         ]
 
 
-class UserObjectGroupFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
+class UserObjectGroupFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -345,7 +345,7 @@ class UserObjectGroupFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFie
     name = forms.CharField(required=False, label="Name")
 
 
-class UserObjectGroupForm(BootstrapMixin, forms.ModelForm):
+class UserObjectGroupForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
     """UserObjectGroup creation/edit form."""
 
     user_objects = DynamicModelMultipleChoiceField(queryset=models.UserObject.objects.all(), required=False)
@@ -357,7 +357,7 @@ class UserObjectGroupForm(BootstrapMixin, forms.ModelForm):
         fields = ["name", "description", "user_objects", "status", "tags"]
 
 
-class UserObjectGroupBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
+class UserObjectGroupBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
     """UserObjectGroup bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(
@@ -373,7 +373,7 @@ class UserObjectGroupBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkE
         ]
 
 
-class ZoneFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
+class ZoneFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -389,7 +389,7 @@ class ZoneFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterFor
     interfaces = DynamicModelChoiceField(queryset=Interface.objects.all(), label="Interface")
 
 
-class ZoneForm(BootstrapMixin, forms.ModelForm):
+class ZoneForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
     """Zone creation/edit form."""
 
     vrfs = DynamicModelMultipleChoiceField(queryset=VRF.objects.all(), required=False, label="VRF")
@@ -405,7 +405,7 @@ class ZoneForm(BootstrapMixin, forms.ModelForm):
         fields = ["name", "description", "vrfs", "device", "interfaces", "status", "tags"]
 
 
-class ZoneBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
+class ZoneBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
     """Zone bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.Zone.objects.all(), widget=forms.MultipleHiddenInput)
@@ -419,7 +419,7 @@ class ZoneBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
         nullable_fields = ["description", "vrfs", "interfaces"]
 
 
-class PolicyRuleFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm):
+class PolicyRuleFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -434,37 +434,43 @@ class PolicyRuleFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFil
     tag = TagFilterField(models.PolicyRule)
 
 
-class PolicyRuleForm(BootstrapMixin, CustomFieldModelForm):
+class PolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipModelFormMixin):
     """PolicyRule creation/edit form."""
 
     name = forms.CharField(required=False, label="Name")
     tags = DynamicModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)
-    source_user = DynamicModelMultipleChoiceField(
+    source_users = DynamicModelMultipleChoiceField(
         queryset=models.UserObject.objects.all(), label="Source User Objects", required=False
     )
-    source_user_group = DynamicModelMultipleChoiceField(
+    source_user_groups = DynamicModelMultipleChoiceField(
         queryset=models.UserObjectGroup.objects.all(), label="Source User Object Groups", required=False
     )
-    source_address = DynamicModelMultipleChoiceField(
+    source_addresses = DynamicModelMultipleChoiceField(
         queryset=models.AddressObject.objects.all(), label="Source Address Objects", required=False
     )
-    source_address_group = DynamicModelMultipleChoiceField(
+    source_address_groups = DynamicModelMultipleChoiceField(
         queryset=models.AddressObjectGroup.objects.all(), label="Source Address Object Groups", required=False
     )
     source_zone = DynamicModelChoiceField(queryset=models.Zone.objects.all(), label="Source Zone", required=False)
-    destination_address = DynamicModelMultipleChoiceField(
+    source_services = DynamicModelMultipleChoiceField(
+        queryset=models.ServiceObject.objects.all(), label="Service Objects", required=False
+    )
+    source_service_groups = DynamicModelMultipleChoiceField(
+        queryset=models.ServiceObjectGroup.objects.all(), label="Service Object Groups", required=False
+    )
+    destination_addresses = DynamicModelMultipleChoiceField(
         queryset=models.AddressObject.objects.all(), label="Destination Address Objects", required=False
     )
-    destination_address_group = DynamicModelMultipleChoiceField(
+    destination_address_groups = DynamicModelMultipleChoiceField(
         queryset=models.AddressObjectGroup.objects.all(), label="Destination Address Object Groups", required=False
     )
     destination_zone = DynamicModelChoiceField(
         queryset=models.Zone.objects.all(), label="Destination Zone", required=False
     )
-    service = DynamicModelMultipleChoiceField(
+    destination_services = DynamicModelMultipleChoiceField(
         queryset=models.ServiceObject.objects.all(), label="Service Objects", required=False
     )
-    service_group = DynamicModelMultipleChoiceField(
+    destination_service_groups = DynamicModelMultipleChoiceField(
         queryset=models.ServiceObjectGroup.objects.all(), label="Service Object Groups", required=False
     )
     request_id = forms.CharField(required=False, label="Optional field for request ticket identifier.")
@@ -476,16 +482,18 @@ class PolicyRuleForm(BootstrapMixin, CustomFieldModelForm):
         fields = (
             # pylint: disable=duplicate-code
             "name",
-            "source_user",
-            "source_user_group",
-            "source_address",
-            "source_address_group",
+            "source_users",
+            "source_user_groups",
+            "source_addresses",
+            "source_address_groups",
             "source_zone",
-            "destination_address",
-            "destination_address_group",
+            "source_services",
+            "source_service_groups",
+            "destination_addresses",
+            "destination_address_groups",
             "destination_zone",
-            "service",
-            "service_group",
+            "destination_services",
+            "destination_service_groups",
             "action",
             "log",
             "status",
@@ -496,12 +504,13 @@ class PolicyRuleForm(BootstrapMixin, CustomFieldModelForm):
 
 
 # TODO: Refactor
-class PolicyRuleBulkEditForm(BootstrapMixin, AddRemoveTagsForm, StatusBulkEditFormMixin, BulkEditForm):
+class PolicyRuleBulkEditForm(BootstrapMixin, TagsBulkEditFormMixin, StatusModelBulkEditFormMixin, BulkEditForm):
     """PolicyRule bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), widget=forms.MultipleHiddenInput)
     action = forms.ChoiceField(choices=add_blank_choice(choices.ACTION_CHOICES), required=False)
     log = forms.BooleanField(required=False)
+    description = forms.CharField(required=False)
 
     class Meta:
         """Meta attributes."""
@@ -509,7 +518,7 @@ class PolicyRuleBulkEditForm(BootstrapMixin, AddRemoveTagsForm, StatusBulkEditFo
         nullable_fields = ["description", "tags"]
 
 
-class PolicyFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterForm, TenancyFilterForm):
+class PolicyFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin, TenancyFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name", "assigned_devices", "assigned_dynamic_groups"]
@@ -525,7 +534,7 @@ class PolicyFilterForm(BootstrapMixin, StatusFilterFormMixin, CustomFieldFilterF
     assigned_dynamic_groups = DynamicModelChoiceField(queryset=DynamicGroup.objects.all(), required=False)
 
 
-class PolicyForm(BootstrapMixin, forms.ModelForm, TenancyForm):
+class PolicyForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm, TenancyForm):
     """Policy creation/edit form."""
 
     assigned_devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
@@ -549,7 +558,7 @@ class PolicyForm(BootstrapMixin, forms.ModelForm, TenancyForm):
         ]
 
 
-class PolicyBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
+class PolicyBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
     """Policy bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.Policy.objects.all(), widget=forms.MultipleHiddenInput)
@@ -570,7 +579,7 @@ class PolicyBulkEditForm(BootstrapMixin, StatusBulkEditFormMixin, BulkEditForm):
 # CapircaPolicy
 
 
-class CapircaPolicyForm(BootstrapMixin, CustomFieldModelForm, RelationshipModelForm):
+class CapircaPolicyForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipModelFormMixin):
     """Filter Form for CapircaPolicy instances."""
 
     device = DynamicModelChoiceField(queryset=Device.objects.all())
@@ -588,7 +597,7 @@ class CapircaPolicyForm(BootstrapMixin, CustomFieldModelForm, RelationshipModelF
         )
 
 
-class CapircaPolicyFilterForm(BootstrapMixin, CustomFieldFilterForm):
+class CapircaPolicyFilterForm(BootstrapMixin, CustomFieldModelFilterFormMixin):
     """Form for CapircaPolicy instances."""
 
     model = models.CapircaPolicy
@@ -596,7 +605,7 @@ class CapircaPolicyFilterForm(BootstrapMixin, CustomFieldFilterForm):
     q = forms.CharField(required=False, label="Search")
 
 
-class CapircaPolicyBulkEditForm(BootstrapMixin, AddRemoveTagsForm, CustomFieldBulkEditForm):
+class CapircaPolicyBulkEditForm(BootstrapMixin, TagsBulkEditFormMixin, CustomFieldModelBulkEditFormMixin):
     """BulkEdit form for CapircaPolicy instances."""
 
     pk = forms.ModelMultipleChoiceField(queryset=models.CapircaPolicy.objects.all(), widget=forms.MultipleHiddenInput)

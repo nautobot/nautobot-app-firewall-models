@@ -156,6 +156,7 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
+        ServiceObject.objects.all().delete()
         status = Status.objects.get(slug="active").id
         cls.form_data = {"name": "HTTP", "port": "8088", "status": status, "ip_protocol": "TCP"}
         create_env()
@@ -363,7 +364,7 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the PolicyRule viewsets."""
 
     model = PolicyRule
-    bulk_edit_data = {"log": True}
+    bulk_edit_data = {"description": "test update description"}
 
     @classmethod
     def setUpTestData(cls):
@@ -376,9 +377,9 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         svc = ServiceObject.objects.first()
         cls.form_data = {
             # pylint: disable=R0801
-            "source_user": [src_usr.id],
-            "source_address": [src_addr.id],
-            "destination_address": [dest_addr.id],
+            "source_users": [src_usr.id],
+            "source_addresses": [src_addr.id],
+            "destination_addresses": [dest_addr.id],
             "action": "deny",
             "log": True,
             "service": [svc.id],

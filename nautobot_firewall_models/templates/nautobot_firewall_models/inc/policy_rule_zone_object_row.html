@@ -3,5 +3,5 @@
 {% if zone %}
   <i title="Zone Object" class="mdi mdi-flag"> <a href="{{ zone.get_absolute_url }}">{{ zone|placeholder }}</a><br/>
 {% else %}
-  {{ None|placeholder }}
+  <span title="No Zone set, implicit any" data-toggle="tooltip">ANY</span>
 {% endif %}
