@@ -1,4 +1,4 @@
-ARG NAUTOBOT_VER="1.3.1"
+ARG NAUTOBOT_VER="1.4.1"
 ARG PYTHON_VER=3.8
 
 FROM ghcr.io/nautobot/nautobot-dev:${NAUTOBOT_VER}-py${PYTHON_VER}
@@ -27,7 +27,7 @@ COPY poetry.lock pyproject.toml /tmp/install/
 # Otherwise Poetry will override the version in this container
 # with the one in the poetry.lock
 # Redifine NAUTOBOT_VER as a build arg as initial is defined outside FROM.
-ARG NAUTOBOT_VER="1.3.1"
+ARG NAUTOBOT_VER="1.4.1"
 RUN poetry add nautobot@$NAUTOBOT_VER
 
 # --no-root declares not to install the project package since we're wanting to take advantage of caching dependency installation

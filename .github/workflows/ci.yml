@@ -75,7 +75,7 @@ jobs:
       fail-fast: true
       matrix:
         python-version: ["3.7"]
-        nautobot-version: ["1.3.4"]
+        nautobot-version: ["1.4.1"]
     env:
       INVOKE_NAUTOBOT_FIREWALL_MODELS_PYTHON_VER: "${{ matrix.python-version }}"
       INVOKE_NAUTOBOT_FIREWALL_MODELS_NAUTOBOT_VER: "${{ matrix.nautobot-version }}"
@@ -120,14 +120,14 @@ jobs:
         include:
           - python-version: "3.10"
             db-backend: "postgresql"
-            nautobot-version: "1.3.3"
+            nautobot-version: "1.4.1"
             # TODO: Include the following, once mysql is working on CI
             #   - python-version: "3.7"
             #     db-backend: "mysql"
-            #     nautobot-version: "1.3.3"
+            #     nautobot-version: "1.4.1"
             #   - python-version: "3.10"
             #     db-backend: "mysql"
-            #     nautobot-version: "stable"
+            #     nautobot-version: "latest"
     runs-on: "ubuntu-20.04"
     env:
       INVOKE_NAUTOBOT_FIREWALL_MODELS_PYTHON_VER: "${{ matrix.python-version }}"

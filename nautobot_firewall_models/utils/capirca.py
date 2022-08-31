@@ -210,42 +210,63 @@ class PolicyToCapirca:
                 continue
             rule_src_addr = []
             rule_src_addr_group = []
+            rule_src_svc = []
+            rule_src_svc_group = []
             rule_dst_addr = []
             rule_dst_addr_group = []
-            rule_svc = []
-            rule_svc_group = []
+            rule_dst_svc = []
+            rule_dst_svc_group = []
             rule_protocol = []
-            for source_address in rule["source_address"]:
-                rule_src_addr.append(self._format_data(source_address, "address"))
 
-            for source_address_group in rule["source_address_group"]:
+            # Source
+            for source_address in rule["source_addresses"]:
+                rule_src_addr.append(self._format_data(source_address, "address"))
+            for source_address_group in rule["source_address_groups"]:
                 rule_src_addr_group.append(self._format_data(source_address_group, "address-group"))
 
-            for destination_address in rule["destination_address"]:
-                rule_dst_addr.append(self._format_data(destination_address, "address"))
-            for destination_address_group in rule["destination_address_group"]:
-                rule_dst_addr_group.append(self._format_data(destination_address_group, "address-group"))
-
-            for service in rule["service"]:
+            for service in rule["source_services"]:
                 name = self._format_data(service, "service")
-                rule_svc.append(name)
+                rule_src_svc.append(name)
                 # If service is empty, will get key error
                 if name:
                     rule_protocol.append(self.service_protocol[name][0])
 
-            for service_group in rule["service_group"]:
+            for service_group in rule["source_service_groups"]:
                 name = self._format_data(service_group, "service-group")
-                rule_svc_group.append(name)
+                rule_src_svc_group.append(name)
+                # If service group is empty, will get key error
+                if name:
+                    rule_protocol.extend(self.service_group_protocol[name])
+
+            # Destination
+            for destination_address in rule["destination_addresses"]:
+                rule_dst_addr.append(self._format_data(destination_address, "address"))
+            for destination_address_group in rule["destination_address_groups"]:
+                rule_dst_addr_group.append(self._format_data(destination_address_group, "address-group"))
+
+            for service in rule["destination_services"]:
+                name = self._format_data(service, "service")
+                rule_dst_svc.append(name)
+                # If service is empty, will get key error
+                if name:
+                    rule_protocol.append(self.service_protocol[name][0])
+
+            for service_group in rule["destination_service_groups"]:
+                name = self._format_data(service_group, "service-group")
+                rule_dst_svc_group.append(name)
                 # If service group is empty, will get key error
                 if name:
                     rule_protocol.extend(self.service_group_protocol[name])
 
             rule_src_addr = _clean_list(rule_src_addr, True)
             rule_src_addr_group = _clean_list(rule_src_addr_group, True)
+            rule_src_svc = _clean_list(rule_src_svc, True)
+            rule_src_svc_group = _clean_list(rule_src_svc_group, True)
+
             rule_dst_addr = _clean_list(rule_dst_addr, True)
             rule_dst_addr_group = _clean_list(rule_dst_addr_group, True)
-            rule_svc = _clean_list(rule_svc, True)
-            rule_svc_group = _clean_list(rule_svc_group, True)
+            rule_dst_svc = _clean_list(rule_dst_svc, True)
+            rule_dst_svc_group = _clean_list(rule_dst_svc_group, True)
             rule_protocol = _clean_list(rule_protocol, True)
 
             # Check if a group consists of only object that are not active, if no make inactive as well.
@@ -257,6 +278,14 @@ class PolicyToCapirca:
                     del self.address_group[name]
                     rule_src_addr_group.remove(name)
 
+            for name in rule_src_svc_group:
+                for service in self.service_group[name]:
+                    if self.service.get(service):
+                        break
+                else:
+                    del self.service_group[name]
+                    rule_src_svc_group.remove(name)
+
             for name in rule_dst_addr_group:
                 for address in self.address_group[name]:
                     if self.address.get(address):
@@ -265,42 +294,58 @@ class PolicyToCapirca:
                     del self.address_group[name]
                     rule_dst_addr_group.remove(name)
 
-            for name in rule_svc_group:
+            for name in rule_dst_svc_group:
                 for service in self.service_group[name]:
                     if self.service.get(service):
                         break
                 else:
                     del self.service_group[name]
-                    rule_svc_group.remove(name)
+                    rule_dst_svc_group.remove(name)
 
             # This checks if an item existed on the source, but all source, destinations, or services
             # were remove, which would most likely happen when madde inactive
             self._check_for_empty(
-                "source_address",
-                rule["source_address"],
-                rule["source_address_group"],
+                "source_addresses",
+                rule["source_addresses"],
+                rule["source_address_groups"],
                 rule_src_addr,
                 rule_src_addr_group,
             )
             self._check_for_empty(
+                "source_services",
+                rule["source_services"],
+                rule["source_service_groups"],
+                rule_src_svc,
+                rule_src_svc_group,
+            )
+
+            self._check_for_empty(
                 "destination_address",
-                rule["destination_address"],
-                rule["destination_address_group"],
+                rule["destination_addresses"],
+                rule["destination_address_groups"],
                 rule_dst_addr,
                 rule_dst_addr_group,
             )
-            self._check_for_empty("service", rule["service"], rule["service_group"], rule_svc, rule_svc_group)
+            self._check_for_empty(
+                "destination_services",
+                rule["destination_services"],
+                rule["destination_service_groups"],
+                rule_dst_svc,
+                rule_dst_svc_group,
+            )
 
             rule_details = {
                 "rule-name": rule["rule"].name,
                 "source-address": rule_src_addr,
                 "source-group-address": rule_src_addr_group,
+                "source-service": rule_src_svc,
+                "source-group-service": rule_src_svc_group,
                 "from-zone": rule["source_zone"].name,
                 "destination-address": rule_dst_addr,
                 "destination-group-address": rule_dst_addr_group,
                 "to-zone": rule["destination_zone"].name,
-                "destination-service": rule_svc,
-                "destination-group-service": rule_svc_group,
+                "destination-service": rule_dst_svc,
+                "destination-group-service": rule_dst_svc_group,
                 "protocol": rule_protocol,
                 "action": rule["action"],
                 "logging": rule["log"],
@@ -393,6 +438,16 @@ class PolicyToCapirca:
                     f"Rule: {rule_name}, the action `{pol['action']}` is not one of the support actions {str(ACTION_MAP.keys())} on rule."
                 )
             protocols = _list_slugify([i.lower() for i in pol["protocol"]])
+
+            _source_port = _list_slugify(pol["source-service"] + pol["source-group-service"])
+            source_port_values = {}
+            source_port = []
+            for item in _source_port:
+                if servicedata_ports.get(item):
+                    source_port_values[item] = servicedata_ports[item]
+                if servicedata.get(item):
+                    source_port.append(item)
+
             _destination_port = _list_slugify(pol["destination-service"] + pol["destination-group-service"])
             destination_port_values = {}
             destination_port = []
@@ -405,6 +460,7 @@ class PolicyToCapirca:
             rule_details = {"rule-name": rule_name, "headers": []}
             rule_details["terms"] = {
                 "source-address": _list_slugify(pol["source-address"] + pol["source-group-address"]),
+                "source-port": source_port,
                 "destination-address": _list_slugify(pol["destination-address"] + pol["destination-group-address"]),
                 "destination-port": destination_port,
                 "protocol": protocols,

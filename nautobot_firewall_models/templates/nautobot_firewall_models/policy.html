@@ -15,13 +15,6 @@
         </a>
     </li>
     {% if perms.nautobot_firewall_models.edit_policy %}
-        <li role="presentation"{% if request.GET.tab == 'edit-policy-rule-index' %} class="active"{% endif %}>
-            <a href="{{ object.get_absolute_url }}#edit-policy-rule-index" onclick="switch_tab(this.href)" aria-controls="advanced" role="tab" data-toggle="tab">
-                Edit Policy Rule Indexes
-            </a>
-        </li>
-    {% endif %}
-    {% if perms.nautobot_firewall_models.edit_policy %}
         <li role="presentation"{% if request.GET.tab == 'edit-policy-device-weight' %} class="active"{% endif %}>
             <a href="{{ object.get_absolute_url }}#edit-policy-device-weight" onclick="switch_tab(this.href)" aria-controls="advanced" role="tab" data-toggle="tab">
                 Edit Policy Weight On Assigned Device
@@ -122,10 +115,7 @@
             </div>
         </div>
         <div id="policy-rules" role="tabpanel" class="tab-pane {% if request.GET.tab == 'policy-rules' %}active{% else %}fade{% endif %}">
-            {% include 'nautobot_firewall_models/policy_expanded_rules.html' %}
-        </div>
-        <div id="edit-policy-rule-index" role="tabpanel" class="tab-pane {% if request.GET.tab == 'edit-policy-rule-index' %}active{% else %}fade{% endif %}">
-            {% include 'nautobot_firewall_models/assign_policy_rule_index.html' %}
+            {% include 'nautobot_firewall_models/inc/policy_expanded_rules.html' %}
         </div>
         <div id="edit-policy-device-weight" role="tabpanel" class="tab-pane {% if request.GET.tab == 'edit-policy-device-weight' %}active{% else %}fade{% endif %}">
             {% include 'nautobot_firewall_models/inc/policy_device_weight.html' %}
@@ -135,3 +125,7 @@
         </div>
     </div>
 {% endblock content %}
+{% block javascript %}
+    {{ block.super }}
+    <script>$("span[data-toggle='tooltip']").tooltip()</script>
+{% endblock %}
