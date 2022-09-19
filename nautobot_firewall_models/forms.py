@@ -577,6 +577,222 @@ class PolicyBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditF
         ]
 
 
+# NATPolicy
+
+
+class NATPolicyRuleFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+    """Filter form to filter searches."""
+
+    field_order = ["q", "name"]
+
+    model = models.PolicyRule
+    q = forms.CharField(
+        required=False,
+        label="Search",
+        help_text="Search within Name or Description.",
+    )
+    name = forms.CharField(required=False, label="Name")
+    tag = TagFilterField(models.PolicyRule)
+
+
+class NATPolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipModelFormMixin):
+    """NATPolicyRule creation/edit form."""
+
+    # Metadata
+    name = forms.CharField(required=False, label="Name")
+    tags = DynamicModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)
+    request_id = forms.CharField(required=False, label="Optional field for request ticket identifier.")
+
+    # Data that can not undergo a translation
+    source_users = DynamicModelMultipleChoiceField(
+        queryset=models.UserObject.objects.all(), label="Source User Objects", required=False
+    )
+    source_user_groups = DynamicModelMultipleChoiceField(
+        queryset=models.UserObjectGroup.objects.all(), label="Source User Object Groups", required=False
+    )
+    source_zone = DynamicModelChoiceField(queryset=models.Zone.objects.all(), label="Source Zone", required=False)
+    destination_zone = DynamicModelChoiceField(
+        queryset=models.Zone.objects.all(), label="Destination Zone", required=False
+    )
+
+    # Original source data
+    original_source_addresses = DynamicModelMultipleChoiceField(
+        queryset=models.AddressObject.objects.all(), label="Original Source Address Objects", required=False
+    )
+    original_source_address_groups = DynamicModelMultipleChoiceField(
+        queryset=models.AddressObjectGroup.objects.all(), label="Original Source Address Object Groups", required=False
+    )
+    original_source_services = DynamicModelMultipleChoiceField(
+        queryset=models.ServiceObject.objects.all(), label="Original Source Service Objects", required=False
+    )
+    original_source_service_groups = DynamicModelMultipleChoiceField(
+        queryset=models.ServiceObjectGroup.objects.all(), label="Original Source Service Object Groups", required=False
+    )
+
+    # Translated source data
+    translated_source_addresses = DynamicModelMultipleChoiceField(
+        queryset=models.AddressObject.objects.all(), label="Translated Source Address Objects", required=False
+    )
+    translated_source_address_groups = DynamicModelMultipleChoiceField(
+        queryset=models.AddressObjectGroup.objects.all(),
+        label="Translated Source Address Object Groups",
+        required=False,
+    )
+    translated_source_services = DynamicModelMultipleChoiceField(
+        queryset=models.ServiceObject.objects.all(), label="Translated Source Service Objects", required=False
+    )
+    translated_source_service_groups = DynamicModelMultipleChoiceField(
+        queryset=models.ServiceObjectGroup.objects.all(),
+        label="Translated Source Service Object Groups",
+        required=False,
+    )
+
+    # Original destination data
+    original_destination_addresses = DynamicModelMultipleChoiceField(
+        queryset=models.AddressObject.objects.all(), label="Original Destination Address Objects", required=False
+    )
+    original_destination_address_groups = DynamicModelMultipleChoiceField(
+        queryset=models.AddressObjectGroup.objects.all(),
+        label="Original Destination Address Object Groups",
+        required=False,
+    )
+    original_destination_services = DynamicModelMultipleChoiceField(
+        queryset=models.ServiceObject.objects.all(), label="Original Destination Service Objects", required=False
+    )
+    original_destination_service_groups = DynamicModelMultipleChoiceField(
+        queryset=models.ServiceObjectGroup.objects.all(),
+        label="Original Destination Service Object Groups",
+        required=False,
+    )
+
+    # Translated destination data
+    translated_destination_addresses = DynamicModelMultipleChoiceField(
+        queryset=models.AddressObject.objects.all(), label="Translated Destination Address Objects", required=False
+    )
+    translated_destination_address_groups = DynamicModelMultipleChoiceField(
+        queryset=models.AddressObjectGroup.objects.all(),
+        label="Translated Destination Address Object Groups",
+        required=False,
+    )
+    translated_destination_services = DynamicModelMultipleChoiceField(
+        queryset=models.ServiceObject.objects.all(), label="Translated Destination Service Objects", required=False
+    )
+    translated_destination_service_groups = DynamicModelMultipleChoiceField(
+        queryset=models.ServiceObjectGroup.objects.all(),
+        label="Translated Destination Service Object Groups",
+        required=False,
+    )
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.NATPolicyRule
+        fields = (
+            # pylint: disable=duplicate-code
+            "name",
+            "source_users",
+            "source_user_groups",
+            "source_zone",
+            "destination_zone",
+            "original_source_addresses",
+            "original_source_address_groups",
+            "original_source_services",
+            "original_source_service_groups",
+            "translated_source_addresses",
+            "translated_source_address_groups",
+            "translated_source_services",
+            "translated_source_service_groups",
+            "original_destination_addresses",
+            "original_destination_address_groups",
+            "original_destination_services",
+            "original_destination_service_groups",
+            "translated_original_destination_addresses",
+            "translated_original_destination_address_groups",
+            "translated_original_destination_services",
+            "translated_original_destination_service_groups",
+            "mode",
+            "log",
+            "status",
+            "tags",
+            "request_id",
+            "description",
+        )
+
+
+# TODO: Refactor
+class NATPolicyRuleBulkEditForm(PolicyRuleBulkEditForm):
+    """NATPolicyRule bulk edit form."""
+
+    pk = DynamicModelMultipleChoiceField(queryset=models.NATPolicyRule.objects.all(), widget=forms.MultipleHiddenInput)
+    log = forms.BooleanField(required=False)
+    description = forms.CharField(required=False)
+
+    class Meta:
+        """Meta attributes."""
+
+        nullable_fields = ["description", "tags"]
+
+
+class NATPolicyFilterForm(
+    BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin, TenancyFilterForm
+):
+    """Filter form to filter searches."""
+
+    field_order = ["q", "name", "assigned_devices", "assigned_dynamic_groups"]
+
+    model = models.NATPolicy
+    q = forms.CharField(
+        required=False,
+        label="Search",
+        help_text="Search within Name or Description.",
+    )
+    name = forms.CharField(required=False, label="Name")
+    assigned_devices = DynamicModelChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_dynamic_groups = DynamicModelChoiceField(queryset=DynamicGroup.objects.all(), required=False)
+
+
+class NATPolicyForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm, TenancyForm):
+    """NATPolicy creation/edit form."""
+
+    assigned_devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_dynamic_groups = DynamicModelMultipleChoiceField(queryset=DynamicGroup.objects.all(), required=False)
+    nat_policy_rules = DynamicModelMultipleChoiceField(queryset=models.NATPolicyRule.objects.all(), required=False)
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.NATPolicy
+        fields = [
+            "name",
+            "description",
+            "nat_policy_rules",
+            "status",
+            "assigned_devices",
+            "assigned_dynamic_groups",
+            "tenant_group",
+            "tenant",
+            "tags",
+        ]
+
+
+class NATPolicyBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+    """NATPolicy bulk edit form."""
+
+    pk = DynamicModelMultipleChoiceField(queryset=models.NATPolicy.objects.all(), widget=forms.MultipleHiddenInput)
+    description = forms.CharField(required=False)
+    assigned_devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_dynamic_groups = DynamicModelMultipleChoiceField(queryset=DynamicGroup.objects.all(), required=False)
+    policy_rules = DynamicModelMultipleChoiceField(queryset=models.NATPolicyRule.objects.all(), required=False)
+    tenant = DynamicModelChoiceField(queryset=Tenant.objects.all(), required=False)
+
+    class Meta:
+        """Meta attributes."""
+
+        nullable_fields = [
+            "description",
+        ]
+
+
 # CapircaPolicy
 
 

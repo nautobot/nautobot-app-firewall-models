@@ -149,6 +149,32 @@ class PolicyRuleFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
         fields = ["id", "action", "log", "request_id"]
 
 
+# TODO: Refactor to allow for better filtering, currently very limited.
+class NATPolicyRuleFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
+    """Filter for NATPolicyRule."""
+
+    tag = TagFilter()
+
+    q = CharFilter(
+        method="search",
+        label="Search",
+    )
+
+    def search(self, queryset, name, value):  # pylint: disable=unused-argument, no-self-use
+        """Construct Q filter for filterset."""
+        if not value.strip():
+            return queryset
+        return queryset.filter(
+            Q(name__icontains=value) | Q(description__icontains=value) | Q(request_id__icontains=value)
+        )
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.NATPolicyRule
+        fields = ["id", "action", "log", "request_id"]
+
+
 class PolicyFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
     """Filter for Policy."""
 
@@ -157,6 +183,16 @@ class PolicyFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, Na
 
         model = models.Policy
         fields = ["id", "name", "description", "policy_rules", "assigned_devices", "assigned_dynamic_groups"]
+
+
+class NATPolicyFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+    """Filter for NATPolicy."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.Policy
+        fields = ["id", "name", "description", "nat_policy_rules", "assigned_devices", "assigned_dynamic_groups"]
 
 
 class CapircaPolicyFilterSet(NautobotFilterSet):

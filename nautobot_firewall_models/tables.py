@@ -184,6 +184,72 @@ class PolicyTable(StatusTableMixin, BaseTable):
         fields = ("pk", "name", "description", "policy_rules", "assigned_devices", "assigned_dynamic_groups", "status")
 
 
+# TODO: refactor
+class NATPolicyRuleTable(StatusTableMixin, BaseTable):
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.LinkColumn()
+    actions = ButtonsColumn(models.PolicyRule, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.PolicyRule
+        fields = (
+            # pylint: disable=duplicate-code
+            "pk",
+            "name",
+            "source_users",
+            "source_user_groups",
+            "source_zone",
+            "destination_zone",
+            "original_source_addresses",
+            "original_source_address_groups",
+            "original_source_services",
+            "original_source_service_groups",
+            "translated_source_addresses",
+            "translated_source_address_groups",
+            "translated_source_services",
+            "translated_source_service_groups",
+            "original_destination_addresses",
+            "original_destination_address_groups",
+            "original_destination_services",
+            "original_destination_service_groups",
+            "translated_destination_addresses",
+            "translated_destination_address_groups",
+            "translated_destination_services",
+            "translated_destination_service_groups",
+            "mode",
+            "log",
+            "status",
+        )
+
+
+class NATPolicyTable(StatusTableMixin, BaseTable):
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.Column(linkify=True)
+    actions = ButtonsColumn(models.Policy, buttons=("edit", "delete"))
+    assigned_devices = tables.ManyToManyColumn(linkify_item=True)
+    assigned_dynamic_groups = tables.ManyToManyColumn(linkify_item=True)
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.Policy
+        fields = (
+            "pk",
+            "name",
+            "description",
+            "nat_policy_rules",
+            "assigned_devices",
+            "assigned_dynamic_groups",
+            "status",
+        )
+
+
 class CapircaPolicyTable(BaseTable):
     """Table for list view."""
 
