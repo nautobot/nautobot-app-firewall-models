@@ -453,10 +453,10 @@ class PolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipMode
     )
     source_zone = DynamicModelChoiceField(queryset=models.Zone.objects.all(), label="Source Zone", required=False)
     source_services = DynamicModelMultipleChoiceField(
-        queryset=models.ServiceObject.objects.all(), label="Service Objects", required=False
+        queryset=models.ServiceObject.objects.all(), label="Souce Service Objects", required=False
     )
     source_service_groups = DynamicModelMultipleChoiceField(
-        queryset=models.ServiceObjectGroup.objects.all(), label="Service Object Groups", required=False
+        queryset=models.ServiceObjectGroup.objects.all(), label="Source Service Object Groups", required=False
     )
     destination_addresses = DynamicModelMultipleChoiceField(
         queryset=models.AddressObject.objects.all(), label="Destination Address Objects", required=False
@@ -468,10 +468,10 @@ class PolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipMode
         queryset=models.Zone.objects.all(), label="Destination Zone", required=False
     )
     destination_services = DynamicModelMultipleChoiceField(
-        queryset=models.ServiceObject.objects.all(), label="Service Objects", required=False
+        queryset=models.ServiceObject.objects.all(), label="Destination Service Objects", required=False
     )
     destination_service_groups = DynamicModelMultipleChoiceField(
-        queryset=models.ServiceObjectGroup.objects.all(), label="Service Object Groups", required=False
+        queryset=models.ServiceObjectGroup.objects.all(), label="Destination Service Object Groups", required=False
     )
     request_id = forms.CharField(required=False, label="Optional field for request ticket identifier.")
 
@@ -482,6 +482,7 @@ class PolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipMode
         fields = (
             # pylint: disable=duplicate-code
             "name",
+            "index",
             "source_users",
             "source_user_groups",
             "source_addresses",
