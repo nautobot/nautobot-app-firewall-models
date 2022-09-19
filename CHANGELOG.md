@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.1 - 2022-09-18
+
+### Fixed
+
+- #84 Missing Index from PolicyRule form.
+- #84 Missing Source/Destination descriptors on Service/Service Group for PolicyRule form.
+
 ## v1.0.0 - 2022-08-27
 
 ### Removed

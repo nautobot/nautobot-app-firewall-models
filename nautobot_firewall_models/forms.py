@@ -453,7 +453,7 @@ class PolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipMode
     )
     source_zone = DynamicModelChoiceField(queryset=models.Zone.objects.all(), label="Source Zone", required=False)
     source_services = DynamicModelMultipleChoiceField(
-        queryset=models.ServiceObject.objects.all(), label="Souce Service Objects", required=False
+        queryset=models.ServiceObject.objects.all(), label="Source Service Objects", required=False
     )
     source_service_groups = DynamicModelMultipleChoiceField(
         queryset=models.ServiceObjectGroup.objects.all(), label="Source Service Object Groups", required=False
