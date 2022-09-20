@@ -163,6 +163,13 @@ class NATPolicyNATRuleM2M(BaseModel):
     nat_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.PROTECT)
 
 
+class NATPolicyRuleM2M(BaseModel):
+    """Custom through model to on_delete=models.PROTECT to prevent deleting associated NATPolicyRule if assigned to a NATPolicy."""
+
+    nat_policy = models.ForeignKey("nautobot_firewall_models.NATPolicy", on_delete=models.CASCADE)
+    nat_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.PROTECT)
+
+
 class NATPolicyDeviceM2M(BaseModel):
     """Through model to add weight to the NATPolicy & Device relationship."""
 
@@ -195,6 +202,13 @@ class NATSrcUserM2M(BaseModel):
     """Custom through model to on_delete=models.PROTECT to prevent deleting associated User if assigned to a NATPolicyRule."""
 
     user = models.ForeignKey("nautobot_firewall_models.UserObject", on_delete=models.PROTECT)
+    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
+
+
+class NATSrcUserGroupM2M(BaseModel):
+    """Custom through model to on_delete=models.PROTECT to prevent deleting associated UserGroup if assigned to a NATPolicyRule."""
+
+    user_group = models.ForeignKey("nautobot_firewall_models.UserObjectGroup", on_delete=models.PROTECT)
     nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
 
 

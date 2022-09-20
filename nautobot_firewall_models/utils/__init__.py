@@ -10,7 +10,7 @@ from nautobot.utilities.utils import serialize_object_v2
 def get_default_status():
     """Returns a default status value based on plugin config."""
     status_name = settings.PLUGINS_CONFIG.get("nautobot_firewall_models", {}).get("default_status", "active")
-    return Status.objects.get(slug=status_name)
+    return Status.objects.get(slug=status_name).pk
 
 
 def model_to_json(obj, cls=None):

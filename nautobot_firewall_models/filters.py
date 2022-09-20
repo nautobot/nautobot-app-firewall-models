@@ -172,7 +172,7 @@ class NATPolicyRuleFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.NATPolicyRule
-        fields = ["id", "action", "log", "request_id"]
+        fields = ["id", "mode", "log", "request_id"]
 
 
 class PolicyFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
@@ -191,7 +191,7 @@ class NATPolicyFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter,
     class Meta:
         """Meta attributes for filter."""
 
-        model = models.Policy
+        model = models.NATPolicy
         fields = ["id", "name", "description", "nat_policy_rules", "assigned_devices", "assigned_dynamic_groups"]
 
 

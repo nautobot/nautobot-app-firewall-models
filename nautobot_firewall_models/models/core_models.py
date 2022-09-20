@@ -683,7 +683,7 @@ class NATPolicyRule(PrimaryModel):
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
-        default=get_default_status,
+        default=get_default_status(),
     )
     request_id = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=200, null=True, blank=True)
@@ -698,7 +698,7 @@ class NATPolicyRule(PrimaryModel):
         to=Zone, null=True, blank=True, on_delete=models.SET_NULL, related_name="source_nat_policy_rules"
     )
     destination_zone = models.ForeignKey(
-        to=Zone, on_delete=models.SET_NULL, null=True, blank=True, related_name="destination_policy_rules"
+        to=Zone, on_delete=models.SET_NULL, null=True, blank=True, related_name="destination_nat_policy_rules"
     )
 
     # Original source data
@@ -734,7 +734,7 @@ class NATPolicyRule(PrimaryModel):
         to=AddressObject, through="NATOrigDestAddrM2M", related_name="original_destination_nat_policy_rules"
     )
     original_destination_address_groups = models.ManyToManyField(
-        to=AddressObjectGroup, through="NATOrigDestAddrGroupM2M", related_name="original_nat_destination_policy_rules"
+        to=AddressObjectGroup, through="NATOrigDestAddrGroupM2M", related_name="original_destination_nat_policy_rules"
     )
     original_destination_services = models.ManyToManyField(
         to=ServiceObject, through="NATOrigDestSvcM2M", related_name="original_destination_nat_policy_rules"
@@ -750,7 +750,7 @@ class NATPolicyRule(PrimaryModel):
     translated_destination_address_groups = models.ManyToManyField(
         to=AddressObjectGroup,
         through="NATTransDestAddrGroupM2M",
-        related_name="translated_nat_destination_policy_rules",
+        related_name="translated_destination_nat_policy_rules",
     )
     translated_destination_services = models.ManyToManyField(
         to=ServiceObject, through="NATTransDestSvcM2M", related_name="translated_destination_nat_policy_rules"
@@ -808,7 +808,7 @@ class NATPolicy(PrimaryModel):
         blank=True,
     )
     name = models.CharField(max_length=100, unique=True)
-    nat_policy_rules = models.ManyToManyField(to=PolicyRule, through="NATPolicyRuleM2M", related_name="nat_policies")
+    nat_policy_rules = models.ManyToManyField(to=NATPolicyRule, through="NATPolicyRuleM2M", related_name="nat_policies")
     assigned_devices = models.ManyToManyField(
         to="dcim.Device", through="NATPolicyDeviceM2M", related_name="nat_policies"
     )
@@ -847,7 +847,7 @@ class NATPolicy(PrimaryModel):
 
     def to_json(self):
         """Convenience method to convert to json."""
-        return model_to_json(self, "nautobot_firewall_models.api.serializers.NATPolicyDeepSerializer")
+        raise NotImplementedError()
 
     def __str__(self):
         """Stringify instance."""
