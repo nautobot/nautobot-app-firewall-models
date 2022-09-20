@@ -285,6 +285,19 @@ class TestPolicyModels(TestCase):
         self.assertEqual(json_details["destination_services"][0]["port"], "53")
 
 
+class TestNATPolicyRuleModels(TestCase):
+    """Test the NATPolicyRule model."""
+
+    def setUp(self) -> None:
+        """Create the data."""
+        create_env()
+
+    def test_natpolicyrule_rule_details(self):
+        """Test method rule_details on PolicyRule model."""
+        nat_policy_rule = NATPolicyRule.objects.first()
+        self.assertTrue(nat_policy_rule != None)
+
+
 class TestCapircaModels(TestCase):
     """Test the Capirca model."""
 

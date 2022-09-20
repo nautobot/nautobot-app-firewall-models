@@ -683,7 +683,7 @@ class NATPolicyRule(PrimaryModel):
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
-        default=get_default_status(),
+        default=get_default_status,
     )
     request_id = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=200, null=True, blank=True)

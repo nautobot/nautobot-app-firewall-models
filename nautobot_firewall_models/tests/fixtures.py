@@ -141,6 +141,26 @@ def create_env():
     PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule3)
     PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule4)
     PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule5)
+
+    # Nat policies
+    original_source_prefix = Prefix.objects.create(network="10.100.0.0", prefix_length=24)
+    original_source = AddressObject.objects.create(name="nat-original-source", prefix=original_source_prefix)
+    translated_source_prefix = Prefix.objects.create(network="10.200.0.0", prefix_length=24)
+    translated_source = AddressObject.objects.create(name="nat-translated-source", prefix=translated_source_prefix)
+    destination_prefix = Prefix.objects.create(network="192.168.0.0", prefix_length=24)
+    destination = AddressObject.objects.create(name="nat-destination", prefix=destination_prefix)
+
+    nat_policy_1 = NATPolicy.objects.create(name="NAT Policy 1")
+    nat_policy_rule_1_1 = NATPolicyRule.objects.create(
+        name="NAT Policy Rule 1.1",
+    )
+    nat_policy_rule_1_1.original_source_addresses.add(original_source)
+    nat_policy_rule_1_1.translated_source_addresses.add(translated_source)
+    nat_policy_rule_1_1.original_destination_addresses.add(destination)
+    nat_policy_rule_1_1.translated_destination_addresses.add(destination)
+    nat_policy_1.nat_policy_rules.set([nat_policy_rule_1_1])
+
+    # Mapping policies to devices
     site1 = Site.objects.create(name="DFW", slug="dfw")
     site2 = Site.objects.create(name="HOU", slug="hou")
     jun_manufacturer = Manufacturer.objects.create(name="Juniper", slug="juniper")
