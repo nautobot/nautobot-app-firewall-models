@@ -836,7 +836,7 @@ class NATPolicy(PrimaryModel):
 
     def get_absolute_url(self):
         """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:nat_policy", args=[self.pk])
+        return reverse("plugins:nautobot_firewall_models:natpolicy", args=[self.pk])
 
     def policy_details(self):
         """Convenience method to convert to a Python list of dictionaries."""

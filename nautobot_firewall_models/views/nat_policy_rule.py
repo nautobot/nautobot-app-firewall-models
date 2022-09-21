@@ -15,7 +15,7 @@ class NATPolicyRuleListView(generic.ObjectListView):
     action_buttons = ("add",)
 
 
-class NATPolicyRuleRuleView(generic.ObjectView):
+class NATPolicyRuleView(generic.ObjectView):
     """Detail view."""
 
     queryset = models.NATPolicyRule.objects.all()
@@ -38,7 +38,7 @@ class NATPolicyRuleBulkDeleteView(generic.BulkDeleteView):
     """View for deleting one or more NATPolicyRule records."""
 
     queryset = models.NATPolicyRule.objects.all()
-    table = tables.NATPolicyRuleRuleTable
+    table = tables.NATPolicyRuleTable
 
 
 class NATPolicyRuleBulkEditView(generic.BulkEditView):

@@ -7,4 +7,8 @@ IP_PROTOCOL_CHOICES = tuple((i, i) for i in PROTO_NAME_TO_NUM.keys())  # pylint:
 
 ACTION_CHOICES = (("allow", "allow"), ("deny", "deny"), ("drop", "drop"), ("remark", "remark"))
 
-MODE_CHOICES = ()  # TODO
+# TODO
+# Thoughts:
+# - Basic case of 1-to-1 swapping out the source or the destination address for another
+# - Pooled case of 1-to-1 swapping where there is no fixed mapping (needed?
+MODE_CHOICES = (("one-to-one", "one-to-one"), ("one-to-many", "one-to-many"), ("remark", "remark"))

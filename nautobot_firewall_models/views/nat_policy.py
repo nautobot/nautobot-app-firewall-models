@@ -20,20 +20,27 @@ class NATPolicyListView(generic.ObjectListView):
 class NATPolicyView(generic.ObjectView):
     """Detail view."""
 
-    # TODO: This is incorrect.
     queryset = models.NATPolicy.objects.all().prefetch_related(
-        "natpolicyrulem2m_set__rule__source_addresses",
-        "natpolicyrulem2m_set__rule__source_address_groups",
-        "natpolicyrulem2m_set__rule__source_users",
-        "natpolicyrulem2m_set__rule__source_user_groups",
-        "natpolicyrulem2m_set__rule__source_zone",
-        "natpolicyrulem2m_set__rule__source_services",
-        "natpolicyrulem2m_set__rule__source_service_groups",
-        "natpolicyrulem2m_set__rule__destination_zone",
-        "natpolicyrulem2m_set__rule__destination_addresses",
-        "natpolicyrulem2m_set__rule__destination_address_groups",
-        "natpolicyrulem2m_set__rule__destination_services",
-        "natpolicyrulem2m_set__rule__destination_service_groups",
+        "natpolicyrulem2m_set__nat_rule__source_users",
+        "natpolicyrulem2m_set__nat_rule__source_user_groups",
+        "natpolicyrulem2m_set__nat_rule__source_zone",
+        "natpolicyrulem2m_set__nat_rule__destination_zone",
+        "natpolicyrulem2m_set__nat_rule__original_source_addresses",
+        "natpolicyrulem2m_set__nat_rule__original_source_address_groups",
+        "natpolicyrulem2m_set__nat_rule__original_source_services",
+        "natpolicyrulem2m_set__nat_rule__original_source_service_groups",
+        "natpolicyrulem2m_set__nat_rule__translated_source_addresses",
+        "natpolicyrulem2m_set__nat_rule__translated_source_address_groups",
+        "natpolicyrulem2m_set__nat_rule__translated_source_services",
+        "natpolicyrulem2m_set__nat_rule__translated_source_service_groups",
+        "natpolicyrulem2m_set__nat_rule__original_destination_addresses",
+        "natpolicyrulem2m_set__nat_rule__original_destination_address_groups",
+        "natpolicyrulem2m_set__nat_rule__original_destination_services",
+        "natpolicyrulem2m_set__nat_rule__original_destination_service_groups",
+        "natpolicyrulem2m_set__nat_rule__translated_destination_addresses",
+        "natpolicyrulem2m_set__nat_rule__translated_destination_address_groups",
+        "natpolicyrulem2m_set__nat_rule__translated_destination_services",
+        "natpolicyrulem2m_set__nat_rule__translated_destination_service_groups",
     )
 
 

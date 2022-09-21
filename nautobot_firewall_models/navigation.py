@@ -159,6 +159,34 @@ menu_items = (
                 ],
             ),
             NavMenuGroup(
+                name="NAT Policy",
+                weight=200,
+                items=[
+                    NavMenuItem(
+                        link="plugins:nautobot_firewall_models:natpolicyrule_list",
+                        name="NAT Policy Rules",
+                        permissions=["nautobot_firewall_models.view_natpolicyrule"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_firewall_models:natpolicyrule_add",
+                                permissions=["nautobot_firewall_models.add_natpolicyrule"],
+                            ),
+                        ],
+                    ),
+                    NavMenuItem(
+                        link="plugins:nautobot_firewall_models:natpolicy_list",
+                        name="NAT Policies",
+                        permissions=["nautobot_firewall_models.view_natpolicy"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_firewall_models:natpolicy_add",
+                                permissions=["nautobot_firewall_models.add_natpolicy"],
+                            ),
+                        ],
+                    ),
+                ],
+            ),
+            NavMenuGroup(
                 name="Capirca",
                 weight=200,
                 items=[
