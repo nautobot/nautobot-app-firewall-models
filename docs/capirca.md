@@ -49,7 +49,7 @@ The process is to create a custom field, such as `ctd_pan-application`, this wil
 capirca_allow = ['ctd_pan-application', 'ctd_expiration']
 ```
 
-> Note: This is pseudo-code and is technically the custom_field called `capirca_allow` that has the dat `['ctd_pan-application', 'ctd_expiration']` in this example.
+> Note: This is pseudo-code and is technically the custom_field called `capirca_allow` that has the data `["ctd_pan-application", "ctd_expiration"]` in this example.
 
 As previously mentioned, there is only a small opinion that is applied from the translation between the model and Capirca. That being said, Capirca has an opinion on how rules and objects are deployed, and within this project there is no consideration for how that may not align with anyone's intention on how Capirca should work. All such considerations should be referred to the Capirca project. There is no intention to modify the output that Capirca creates **in any situation** within this plugin.
 
