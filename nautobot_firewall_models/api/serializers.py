@@ -18,7 +18,7 @@ from nautobot.ipam.api.nested_serializers import NestedIPAddressSerializer, Nest
 
 
 from nautobot_firewall_models import models
-from nautobot_firewall_models.api import nested_serializers
+from nautobot_firewall_models.api.nested_serializers import NestedFQDNSerializer, NestedIPRangeSerializer
 
 
 class StatusModelSerializerMixin(_StatusModelSerializerMixin):  # pylint: disable=abstract-method
@@ -66,8 +66,8 @@ class AddressObjectSerializer(TaggedObjectSerializer, StatusModelSerializerMixin
     url = serializers.HyperlinkedIdentityField(
         view_name="plugins-api:nautobot_firewall_models-api:addressobject-detail"
     )
-    ip_range = nested_serializers.NestedIPRangeSerializer(required=False)
-    fqdn = nested_serializers.NestedFQDNSerializer(required=False)
+    ip_range = NestedIPRangeSerializer(required=False)
+    fqdn = NestedFQDNSerializer(required=False)
     ip_address = NestedIPAddressSerializer(required=False)
     prefix = NestedPrefixSerializer(required=False)
 
