@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.0.1 - 2022-09-22
+
+### Fixed
+
+- #87 NestedWritabeSerializer fix for schema generation on VarBinaryField
+- #88 Docs fix
+- #89 Ressolve ordering when viewing PolicyRules via a Policy view.
+
 ## v1.0.1 - 2022-09-18
 
 ### Fixed
