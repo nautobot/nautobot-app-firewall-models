@@ -102,6 +102,28 @@ class PolicyViewSet(NautobotModelViewSet):
         return super().get_serializer_class()
 
 
+class NATPolicyRuleViewSet(NautobotModelViewSet):
+    """NATPolicyRule viewset."""
+
+    queryset = models.NATPolicyRule.objects.all()
+    serializer_class = serializers.NATPolicyRuleSerializer
+    filterset_class = filters.NATPolicyRuleFilterSet
+
+
+class NATPolicyViewSet(NautobotModelViewSet):
+    """NATPolicy viewset."""
+
+    queryset = models.NATPolicy.objects.all()
+    serializer_class = serializers.NATPolicySerializer
+    filterset_class = filters.NATPolicyFilterSet
+
+    def get_serializer_class(self):
+        """Overload for the ability to expand nested objects on retrieve view."""
+        if self.action == "retrieve" and is_truthy(self.request.GET.get("deep", False)):
+            self.serializer_class = serializers.PolicyDeepSerializer
+        return super().get_serializer_class()
+
+
 class CapircaPolicyViewSet(ModelViewSet):
     """CapircaPolicy viewset."""
 

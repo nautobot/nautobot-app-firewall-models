@@ -12,7 +12,10 @@ class DevicePolicies(PluginTemplateExtension):  # pylint: disable=abstract-metho
         """Add content to the right side of the Devices detail view."""
         return self.render(
             "nautobot_firewall_models/inc/device_policies.html",
-            extra_context={"policies": self.context["object"].policydevicem2m_set.all()},
+            extra_context={
+                "policies": self.context["object"].policydevicem2m_set.all(),
+                "nat_policies": self.context["object"].natpolicydevicem2m_set.all()
+            },
         )
 
 

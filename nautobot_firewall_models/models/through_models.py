@@ -322,3 +322,4 @@ class NATTransDestSvcGroupM2M(BaseModel):
 
     svc_group = models.ForeignKey("nautobot_firewall_models.ServiceObjectGroup", on_delete=models.PROTECT)
     nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
+

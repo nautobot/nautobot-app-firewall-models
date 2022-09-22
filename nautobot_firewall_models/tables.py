@@ -190,12 +190,12 @@ class NATPolicyRuleTable(StatusTableMixin, BaseTable):
 
     pk = ToggleColumn()
     name = tables.LinkColumn()
-    actions = ButtonsColumn(models.PolicyRule, buttons=("edit", "delete"))
+    actions = ButtonsColumn(models.NATPolicyRule, buttons=("edit", "delete"))
 
     class Meta(BaseTable.Meta):
         """Meta attributes."""
 
-        model = models.PolicyRule
+        model = models.NATPolicyRule
         fields = (
             # pylint: disable=duplicate-code
             "pk",
@@ -231,14 +231,14 @@ class NATPolicyTable(StatusTableMixin, BaseTable):
 
     pk = ToggleColumn()
     name = tables.Column(linkify=True)
-    actions = ButtonsColumn(models.Policy, buttons=("edit", "delete"))
+    actions = ButtonsColumn(models.NATPolicy, buttons=("edit", "delete"))
     assigned_devices = tables.ManyToManyColumn(linkify_item=True)
     assigned_dynamic_groups = tables.ManyToManyColumn(linkify_item=True)
 
     class Meta(BaseTable.Meta):
         """Meta attributes."""
 
-        model = models.Policy
+        model = models.NATPolicy
         fields = (
             "pk",
             "name",
