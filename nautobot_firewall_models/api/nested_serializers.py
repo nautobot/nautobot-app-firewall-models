@@ -1,6 +1,6 @@
 """Nested serializers."""
 from nautobot.core.api import WritableNestedSerializer
-from rest_framework.serializers import HyperlinkedIdentityField
+from rest_framework.serializers import CharField, HyperlinkedIdentityField
 
 from nautobot_firewall_models import models
 
@@ -21,6 +21,8 @@ class NestedIPRangeSerializer(WritableNestedSerializer):
     """Nested serializer for IPRange."""
 
     url = HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:fqdn-detail")
+    start_address = CharField()
+    end_address = CharField()
 
     class Meta:
         """Meta attributes."""

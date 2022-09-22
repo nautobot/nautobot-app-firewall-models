@@ -66,6 +66,11 @@ class PolicyRuleM2M(BaseModel):
     policy = models.ForeignKey("nautobot_firewall_models.Policy", on_delete=models.CASCADE)
     rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.PROTECT)
 
+    class Meta:
+        """Meta class."""
+
+        ordering = ["rule__index"]
+
 
 class ServiceObjectGroupM2M(BaseModel):
     """Custom through model to on_delete=models.PROTECT to prevent deleting associated ServiceGroup if assigned to a PolicyRule."""
