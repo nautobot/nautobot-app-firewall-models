@@ -41,7 +41,10 @@ class DynamicGroupPolicies(PluginTemplateExtension):  # pylint: disable=abstract
         """Add content to the right side of the Devices detail view."""
         return self.render(
             "nautobot_firewall_models/inc/dynamic_group_policies.html",
-            extra_context={"policies": self.context["object"].policydynamicgroupm2m_set.all()},
+            extra_context={
+                "policies": self.context["object"].policydynamicgroupm2m_set.all(),
+                "nat_policies": self.context["object"].natpolicydynamicgroupm2m_set.all()
+            },
         )
 
 
