@@ -68,7 +68,7 @@ class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
-        ip_range = models.IPRange.objects.first()
+        models.IPRange.objects.first()
         prefix = Prefix.objects.first()
 
         cls.create_data = [
@@ -78,7 +78,7 @@ class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
             # received 400: {
             # '__all__': [ErrorDetail(string='192.168.0.1-192.168.0.10 - 192.168.0.0/24 - ', code='invalid')]
             # }
-            #{"name": "obj1", "ip_range": ip_range.id},
+            # {"name": "obj1", "ip_range": ip_range.id},
             {"name": "obj2", "prefix": prefix.id},
         ]
 

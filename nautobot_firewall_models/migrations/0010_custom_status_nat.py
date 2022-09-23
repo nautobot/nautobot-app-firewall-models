@@ -1,8 +1,6 @@
 # Copied on 2022-09-23 10:57
-import os
 
 from django.db import migrations
-import yaml
 
 
 def create_status(apps, schedma_editor):
@@ -14,7 +12,10 @@ def create_status(apps, schedma_editor):
 
     statuses = ["active", "staged", "decommissioned"]
     ContentType = apps.get_model("contenttypes.ContentType")
-    relevant_models = [apps.get_model(model) for model in ["nautobot_firewall_models.NATPolicy", "nautobot_firewall_models.NATPolicyRule"]]
+    relevant_models = [
+        apps.get_model(model)
+        for model in ["nautobot_firewall_models.NATPolicy", "nautobot_firewall_models.NATPolicyRule"]
+    ]
     for i in statuses:
         status = apps.get_model("extras.Status").objects.get(slug=i)
         for model in relevant_models:
