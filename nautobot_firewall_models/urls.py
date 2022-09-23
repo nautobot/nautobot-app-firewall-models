@@ -353,10 +353,18 @@ urlpatterns = [
     path("nat-policy-rule/", nat_policy_rule.NATPolicyRuleListView.as_view(), name="natpolicyrule_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
     path("nat-policy-rule/add/", nat_policy_rule.NATPolicyRuleEditView.as_view(), name="natpolicyrule_add"),
-    path("nat-policy-rule/delete/", nat_policy_rule.NATPolicyRuleBulkDeleteView.as_view(), name="natpolicyrule_bulk_delete"),
+    path(
+        "nat-policy-rule/delete/",
+        nat_policy_rule.NATPolicyRuleBulkDeleteView.as_view(),
+        name="natpolicyrule_bulk_delete",
+    ),
     path("nat-policy-rule/edit/", nat_policy_rule.NATPolicyRuleBulkEditView.as_view(), name="natpolicyrule_bulk_edit"),
     path("nat-policy-rule/<uuid:pk>/", nat_policy_rule.NATPolicyRuleView.as_view(), name="natpolicyrule"),
-    path("nat-policy-rule/<uuid:pk>/delete/", nat_policy_rule.NATPolicyRuleDeleteView.as_view(), name="natpolicyrule_delete"),
+    path(
+        "nat-policy-rule/<uuid:pk>/delete/",
+        nat_policy_rule.NATPolicyRuleDeleteView.as_view(),
+        name="natpolicyrule_delete",
+    ),
     path("nat-policy-rule/<uuid:pk>/edit/", nat_policy_rule.NATPolicyRuleEditView.as_view(), name="natpolicyrule_edit"),
     path(
         "nat-policy-rule/<uuid:pk>/changelog/",

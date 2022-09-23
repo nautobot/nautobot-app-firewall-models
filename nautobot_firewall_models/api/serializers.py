@@ -344,7 +344,9 @@ class PolicyDeepSerializer(PolicySerializer):
 class NATPolicyRuleSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, NautobotModelSerializer):
     """PolicyRule Serializer."""
 
-    url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:natpolicyrule-detail")
+    url = serializers.HyperlinkedIdentityField(
+        view_name="plugins-api:nautobot_firewall_models-api:natpolicyrule-detail"
+    )
     source_users = SerializedPKRelatedField(
         queryset=models.UserObject.objects.all(), serializer=UserObjectSerializer, required=False, many=True
     )
