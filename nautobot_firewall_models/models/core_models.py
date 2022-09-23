@@ -198,10 +198,13 @@ class AddressObject(PrimaryModel):
         """Overloads to validate attr for form verification."""
         address_types = ["fqdn", "ip_range", "ip_address", "prefix"]
         address_count = 0
+        error = ""
         for i in address_types:
             if hasattr(self, i) and getattr(self, i) is not None:
+                error += str(getattr(self, i)) + " - "
                 address_count += 1
         if address_count != 1:
+            raise ValidationError(error)
             raise ValidationError(f"Must specify only one address from type {address_types}, {address_count} found.")
 
         super().clean(*args, **kwargs)
