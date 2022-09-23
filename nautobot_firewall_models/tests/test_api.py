@@ -450,3 +450,45 @@ class NATPolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects(self):
         pass
+
+
+class NATPolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
+    """Test the Policy viewsets."""
+
+    model = models.NATPolicy
+    bulk_update_data = {"description": "test update description"}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        create_env()
+        nat_pol_rule = models.NATPolicyRule.objects.first()
+
+        cls.create_data = [
+            {"name": "test 1", "nat_policy_rules": [nat_pol_rule.id]},
+            {"name": "test 2", "nat_policy_rules": [nat_pol_rule.id], "description": "Test desc"},
+        ]
+
+    @skip("Not implemented")
+    def test_list_objects_brief(self):
+        pass
+
+    def test_create_object(self):
+        self.validation_excluded_fields = ["nat_policy_rules"]
+        return super().test_create_object()
+
+    def test_update_object(self):
+        self.validation_excluded_fields = ["nat_policy_rules"]
+        return super().test_update_object()
+
+    def test_bulk_create_objects(self):
+        self.validation_excluded_fields = ["nat_policy_rules"]
+        return super().test_bulk_create_objects()
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
+        pass
