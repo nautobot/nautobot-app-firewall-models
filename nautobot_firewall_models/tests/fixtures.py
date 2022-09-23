@@ -158,7 +158,7 @@ def create_env():
 
     nat_policy_1 = NATPolicy.objects.create(name="NAT Policy 1")
     nat_policy_2 = NATPolicy.objects.create(name="NAT Policy 2")
-    NATPolicy.objects.create(name="NAT Policy 3")
+    nat_policy_3 = NATPolicy.objects.create(name="NAT Policy 3")
     nat_policy_rule_1_1 = NATPolicyRule.objects.create(
         name="NAT Policy Rule 1.1", log=True, request_id="req1", mode="one-to-one"
     )
@@ -224,6 +224,10 @@ def create_env():
     PolicyDeviceM2M.objects.create(policy=pol2, device=dev1, weight=200)
     PolicyDeviceM2M.objects.create(policy=pol1, device=dev2)
     PolicyDynamicGroupM2M.objects.create(policy=pol3, dynamic_group=dynamic_group, weight=1000)
+    NATPolicyDeviceM2M.objects.create(nat_policy=nat_policy_1, device=dev1, weight=150)
+    NATPolicyDeviceM2M.objects.create(nat_policy=nat_policy_2, device=dev1, weight=200)
+    NATPolicyDeviceM2M.objects.create(nat_policy=nat_policy_1, device=dev2)
+    NATPolicyDynamicGroupM2M.objects.create(nat_policy=nat_policy_3, dynamic_group=dynamic_group, weight=1000)
 
 
 def create_capirca_env():
