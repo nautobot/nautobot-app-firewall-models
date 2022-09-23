@@ -300,8 +300,8 @@ class TestNATPolicyRuleModels(TestCase):
         keys = ["rule", "original_source_address_groups", "translated_destination_address_groups", "mode"]
         self.assertTrue(set(keys).issubset(rule_details.keys()))
 
-    def test_policyrule_to_json(self):
-        """Test method to_json on PolicyRule model."""
+    def test_natpolicyrule_to_json(self):
+        """Test method to_json on NATPolicyRule model."""
         json_details = NATPolicyRule.objects.first().to_json()
         self.assertEqual(json_details["display"], "NAT Policy Rule 1.1 - req1")
         self.assertEqual(json_details["source_users"][0]["display"], "user1")
