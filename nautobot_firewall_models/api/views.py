@@ -120,7 +120,7 @@ class NATPolicyViewSet(NautobotModelViewSet):
     def get_serializer_class(self):
         """Overload for the ability to expand nested objects on retrieve view."""
         if self.action == "retrieve" and is_truthy(self.request.GET.get("deep", False)):
-            self.serializer_class = serializers.PolicyDeepSerializer
+            self.serializer_class = serializers.NATPolicyDeepSerializer
         return super().get_serializer_class()
 
 

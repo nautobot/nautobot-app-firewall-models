@@ -16,14 +16,14 @@
     </li>
     {% if perms.nautobot_firewall_models.edit_nat_policy %}
         <li role="presentation"{% if request.GET.tab == 'edit-nat-policy-device-weight' %} class="active"{% endif %}>
-            <a href="{{ object.get_absolute_url }}#edit-nat-policy-device-weight" onclick="switch_tab(this.href)" aria-controls="advanced" role="tab" data-toggle="tab">
+            <a href="{{ object.get_absolute_url }}#edit-policy-device-weight" onclick="switch_tab(this.href)" aria-controls="advanced" role="tab" data-toggle="tab">
                 Edit NAT Policy Weight On Assigned Device
             </a>
         </li>
     {% endif %}
     {% if perms.nautobot_firewall_models.edit_nat_policy %}
         <li role="presentation"{% if request.GET.tab == 'edit-nat-policy-dynamic-group-weight' %} class="active"{% endif %}>
-            <a href="{{ object.get_absolute_url }}#edit-nat-policy-dynamic-group-weight" onclick="switch_tab(this.href)" aria-controls="advanced" role="tab" data-toggle="tab">
+            <a href="{{ object.get_absolute_url }}#edit-policy-dynamic-group-weight" onclick="switch_tab(this.href)" aria-controls="advanced" role="tab" data-toggle="tab">
                 Edit NAT Policy Weight On Assigned Dynamic Group
             </a>
         </li>

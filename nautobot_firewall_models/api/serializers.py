@@ -444,7 +444,7 @@ class NATPolicyRuleSerializer(TaggedObjectSerializer, StatusModelSerializerMixin
 
 
 class NATPolicyRuleM2MNestedSerializer(serializers.ModelSerializer):
-    """PolicyRuleM2M NestedSerializer for create & update views."""
+    """NATPolicyRuleM2M NestedSerializer for create & update views."""
 
     class Meta:
         """Meta attributes."""
@@ -460,7 +460,7 @@ class NATPolicyRuleM2MDeepNestedSerializer(NATPolicyRuleM2MNestedSerializer):
 
 
 class NATPolicyDeviceM2MNestedSerializer(serializers.ModelSerializer):
-    """PolicyDeviceM2M NestedSerializer."""
+    """NATPolicyDeviceM2M NestedSerializer."""
 
     class Meta:
         """Meta attributes."""
@@ -470,7 +470,7 @@ class NATPolicyDeviceM2MNestedSerializer(serializers.ModelSerializer):
 
 
 class NATPolicyDynamicGroupM2MNestedSerializer(serializers.ModelSerializer):
-    """PolicyDynamicGroupM2M NestedSerializer."""
+    """NATPolicyDynamicGroupM2M NestedSerializer."""
 
     class Meta:
         """Meta attributes."""
@@ -480,7 +480,7 @@ class NATPolicyDynamicGroupM2MNestedSerializer(serializers.ModelSerializer):
 
 
 class NATPolicySerializer(TaggedObjectSerializer, StatusModelSerializerMixin, NautobotModelSerializer):
-    """Policy Serializer."""
+    """NATPolicy Serializer."""
 
     url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:natpolicy-detail")
     assigned_devices = NATPolicyDeviceM2MNestedSerializer(many=True, required=False, source="natpolicydevicem2m_set")

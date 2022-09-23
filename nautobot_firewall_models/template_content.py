@@ -14,7 +14,6 @@ class DevicePolicies(PluginTemplateExtension):  # pylint: disable=abstract-metho
             "nautobot_firewall_models/inc/device_policies.html",
             extra_context={
                 "policies": self.context["object"].policydevicem2m_set.all(),
-                "nat_policies": self.context["object"].natpolicydevicem2m_set.all(),
             },
         )
 
