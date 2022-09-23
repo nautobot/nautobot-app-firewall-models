@@ -143,6 +143,8 @@ def create_env():
     PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule5)
 
     # Nat policies
+    nat_orig_dest_service, _ = ServiceObject.objects.get_or_create(name="HTTP", port="80", ip_protocol="TCP", status=status)
+    nat_trans_dest_service, _ = ServiceObject.objects.get_or_create(name="HTTP (alt)", port="8080", ip_protocol="TCP", status=status)
     original_source_prefix = Prefix.objects.create(network="10.100.0.0", prefix_length=24)
     original_source = AddressObject.objects.create(name="nat-original-source", prefix=original_source_prefix)
     translated_source_prefix = Prefix.objects.create(network="10.200.0.0", prefix_length=24)
@@ -153,11 +155,17 @@ def create_env():
     nat_policy_1 = NATPolicy.objects.create(name="NAT Policy 1")
     nat_policy_rule_1_1 = NATPolicyRule.objects.create(
         name="NAT Policy Rule 1.1",
+        log=True,
+        request_id="req1"
     )
+    nat_policy_rule_1_1.source_users.add(usr_obj1)
+    nat_policy_rule_1_1.source_user_groups.add(usr_grp1)
     nat_policy_rule_1_1.original_source_addresses.add(original_source)
     nat_policy_rule_1_1.translated_source_addresses.add(translated_source)
     nat_policy_rule_1_1.original_destination_addresses.add(destination)
     nat_policy_rule_1_1.translated_destination_addresses.add(destination)
+    nat_policy_rule_1_1.original_destination_services.add(nat_orig_dest_service)
+    nat_policy_rule_1_1.translated_destination_services.add(nat_trans_dest_service)
     nat_policy_1.nat_policy_rules.set([nat_policy_rule_1_1])
 
     # Mapping policies to devices

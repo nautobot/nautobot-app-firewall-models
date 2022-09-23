@@ -293,9 +293,23 @@ class TestNATPolicyRuleModels(TestCase):
         create_env()
 
     def test_natpolicyrule_rule_details(self):
-        """Test method rule_details on PolicyRule model."""
-        nat_policy_rule = NATPolicyRule.objects.first()
-        self.assertTrue(nat_policy_rule != None)
+        """Test method rule_details on NATPolicyRule model."""
+        rule_details = NATPolicyRule.objects.first().rule_details()
+        self.assertEqual(rule_details["log"], True)
+        # sample a few keys to ensure they are in there, more complete test in to_json test
+        keys = ["rule", "original_source_address_groups", "translated_destination_address_groups", "mode"]
+        self.assertTrue(set(keys).issubset(rule_details.keys()))
+
+    def test_policyrule_to_json(self):
+        """Test method to_json on PolicyRule model."""
+        json_details = NATPolicyRule.objects.first().to_json()
+        self.assertEqual(json_details["display"], "NAT Policy Rule 1.1 - req1")
+        self.assertEqual(json_details["source_users"][0]["display"], "user1")
+        self.assertEqual(json_details["source_user_groups"][0]["user_objects"][0]["name"], "User 1")
+        self.assertEqual(json_details["original_source_addresses"][0]["prefix"]["display"], "10.100.0.0/24")
+        self.assertEqual(json_details["translated_source_addresses"][0]["prefix"]["display"], "10.200.0.0/24")
+        self.assertEqual(json_details["original_destination_services"][0]["port"], "80")
+        self.assertEqual(json_details["translated_destination_services"][0]["port"], "8080")
 
 
 class TestCapircaModels(TestCase):

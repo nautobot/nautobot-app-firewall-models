@@ -771,7 +771,38 @@ class NATPolicyRule(PrimaryModel):
 
     def rule_details(self):
         """Convenience method to convert to more consumable dictionary."""
-        raise NotImplementedError()
+        row = {}
+        row["rule"] = self
+        row["source_users"] = self.source_users.all()
+        row["source_user_groups"] = self.source_user_groups.all()
+        row["source_zone"] = self.source_zone
+        row["destination_zone"] = self.destination_zone
+
+        row["original_source_address_groups"] = self.original_source_address_groups.all()
+        row["original_source_addresses"] = self.original_source_addresses.all()
+        row["original_source_services"] = self.original_source_services.all()
+        row["original_source_service_groups"] = self.original_source_service_groups.all()
+
+        row["translated_source_address_groups"] = self.translated_source_address_groups.all()
+        row["translated_source_addresses"] = self.translated_source_addresses.all()
+        row["translated_source_services"] = self.translated_source_services.all()
+        row["translated_source_service_groups"] = self.translated_source_service_groups.all()
+
+        row["original_destination_address_groups"] = self.original_destination_address_groups.all()
+        row["original_destination_addresses"] = self.original_destination_addresses.all()
+        row["original_destination_services"] = self.original_destination_services.all()
+        row["original_destination_service_groups"] = self.original_destination_service_groups.all()
+
+        row["translated_destination_address_groups"] = self.translated_destination_address_groups.all()
+        row["translated_destination_addresses"] = self.translated_destination_addresses.all()
+        row["translated_destination_services"] = self.translated_destination_services.all()
+        row["translated_destination_service_groups"] = self.translated_destination_service_groups.all()
+
+        row["mode"] = self.mode
+        row["log"] = self.log
+        row["status"] = self.status
+        row["request_id"] = self.request_id
+        return row
 
     def to_json(self):
         """Convenience method to convert to json."""
