@@ -2,7 +2,7 @@
 <tr>
     <td><a href="{{ nat_rule.get_absolute_url }}" title="{{ nat_rule.name }}">{{ nat_rule.index|placeholder|ljust:5 }}</a></td>
     {% if nat_rule.mode == "remark" %}
-        <td colspan="7" style="text-align: center;"><strong>{{ nat_rule }}</strong></td>
+        <td colspan="11" style="text-align: center;"><strong>{{ nat_rule }}</strong></td>
     {% else %}
         <td>{% include './policy_rule_address_object_row.html' with address=nat_rule.original_source_addresses.all address_group=nat_rule.original_source_address_groups.all %}</td>
         <td>{% include './policy_rule_address_object_row.html' with address=nat_rule.translated_source_addresses.all address_group=nat_rule.translated_source_address_groups.all %}</td>
