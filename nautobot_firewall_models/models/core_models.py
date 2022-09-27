@@ -871,10 +871,7 @@ class NATPolicy(PrimaryModel):
 
     def policy_details(self):
         """Convenience method to convert to a Python list of dictionaries."""
-        data = []
-        for nat_policy_rule in self.nat_policy_rules.all():
-            data.append(nat_policy_rule.rule_details())
-        return data
+        return [rule.rule_details for rule in self.nat_policy_rules.all()]
 
     def to_json(self):
         """Convenience method to convert to json."""
