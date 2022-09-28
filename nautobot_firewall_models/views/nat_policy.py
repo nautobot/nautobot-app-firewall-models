@@ -2,25 +2,34 @@
 
 from django.shortcuts import reverse, redirect
 from django.views.generic.edit import CreateView
-from nautobot.core.views import generic
+from nautobot.core.views import mixins
 
-from nautobot_firewall_models import filters, forms, models, tables
-
-
-class NATPolicyListView(generic.ObjectListView):
-    """List view."""
-
-    queryset = models.NATPolicy.objects.all()
-    filterset = filters.NATPolicyFilterSet
-    filterset_form = forms.NATPolicyFilterForm
-    table = tables.NATPolicyTable
-    action_buttons = ("add",)
+from nautobot_firewall_models import models
+from nautobot_firewall_models.api.serializers import NATPolicySerializer
+from nautobot_firewall_models.filters import NATPolicyFilterSet
+from nautobot_firewall_models.forms import NATPolicyBulkEditForm, NATPolicyFilterForm, NATPolicyForm
+from nautobot_firewall_models.models import NATPolicy
+from nautobot_firewall_models.tables import NATPolicyTable
 
 
-class NATPolicyView(generic.ObjectView):
-    """Detail view."""
+class NATPolicyUIViewSet(
+    mixins.ObjectDetailViewMixin,
+    mixins.ObjectListViewMixin,
+    mixins.ObjectEditViewMixin,
+    mixins.ObjectDestroyViewMixin,
+    mixins.ObjectBulkDestroyViewMixin,
+    mixins.ObjectBulkUpdateViewMixin,
+):
+    """ViewSet for the NATPolicy model."""
 
-    queryset = models.NATPolicy.objects.all().prefetch_related(
+    bulk_update_form_class = NATPolicyBulkEditForm
+    filterset_class = NATPolicyFilterSet
+    filterset_form_class = NATPolicyFilterForm
+    form_class = NATPolicyForm
+    queryset = NATPolicy.objects.all()
+    serializer_class = NATPolicySerializer
+    table_class = NATPolicyTable
+    prefetch_related = [
         "natpolicyrulem2m_set__nat_rule__source_users",
         "natpolicyrulem2m_set__nat_rule__source_user_groups",
         "natpolicyrulem2m_set__nat_rule__source_zone",
@@ -41,7 +50,10 @@ class NATPolicyView(generic.ObjectView):
         "natpolicyrulem2m_set__nat_rule__translated_destination_address_groups",
         "natpolicyrulem2m_set__nat_rule__translated_destination_services",
         "natpolicyrulem2m_set__nat_rule__translated_destination_service_groups",
-    )
+    ]
+    action_buttons = ("add",)
+
+    lookup_field = "pk"
 
 
 class NATPolicyDynamicGroupWeight(CreateView):
@@ -76,32 +88,3 @@ class NATPolicyDeviceWeight(CreateView):
             m2m.weight = weight[0]
             m2m.validated_save()
         return redirect(reverse("plugins:nautobot_firewall_models:nat_policy", kwargs={"pk": pk}))
-
-
-class NATPolicyDeleteView(generic.ObjectDeleteView):
-    """Delete view."""
-
-    queryset = models.NATPolicy.objects.all()
-
-
-class NATPolicyEditView(generic.ObjectEditView):
-    """Edit view."""
-
-    queryset = models.NATPolicy.objects.all()
-    model_form = forms.NATPolicyForm
-
-
-class NATPolicyBulkDeleteView(generic.BulkDeleteView):
-    """View for deleting one or more Policy records."""
-
-    queryset = models.NATPolicy.objects.all()
-    table = tables.NATPolicyTable
-
-
-class NATPolicyBulkEditView(generic.BulkEditView):
-    """View for editing one or more Policy records."""
-
-    queryset = models.NATPolicy.objects.all()
-    filterset = filters.NATPolicyFilterSet
-    table = tables.NATPolicyTable
-    form = forms.NATPolicyBulkEditForm

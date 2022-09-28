@@ -1,50 +1,31 @@
 """NAT Policy Rule Object Views."""
 
-from nautobot.core.views import generic
+from nautobot.core.views import mixins
 
-from nautobot_firewall_models import filters, forms, models, tables
+from nautobot_firewall_models.api.serializers import NATPolicyRuleSerializer
+from nautobot_firewall_models.filters import NATPolicyRuleFilterSet
+from nautobot_firewall_models.forms import NATPolicyRuleBulkEditForm, NATPolicyRuleFilterForm, NATPolicyRuleForm
+from nautobot_firewall_models.models import NATPolicyRule
+from nautobot_firewall_models.tables import NATPolicyRuleTable
 
 
-class NATPolicyRuleListView(generic.ObjectListView):
-    """List view."""
+class NATPolicyRuleUIViewSet(
+    mixins.ObjectDetailViewMixin,
+    mixins.ObjectListViewMixin,
+    mixins.ObjectEditViewMixin,
+    mixins.ObjectDestroyViewMixin,
+    mixins.ObjectBulkDestroyViewMixin,
+    mixins.ObjectBulkUpdateViewMixin,
+):
+    """ViewSet for the NATPolicyRule model."""
 
-    queryset = models.NATPolicyRule.objects.all()
-    filterset = filters.NATPolicyRuleFilterSet
-    filterset_form = forms.NATPolicyRuleFilterForm
-    table = tables.NATPolicyRuleTable
+    bulk_update_form_class = NATPolicyRuleBulkEditForm
+    filterset_class = NATPolicyRuleFilterSet
+    filterset_form_class = NATPolicyRuleFilterForm
+    form_class = NATPolicyRuleForm
+    queryset = NATPolicyRule.objects.all()
+    serializer_class = NATPolicyRuleSerializer
+    table_class = NATPolicyRuleTable
     action_buttons = ("add",)
 
-
-class NATPolicyRuleView(generic.ObjectView):
-    """Detail view."""
-
-    queryset = models.NATPolicyRule.objects.all()
-
-
-class NATPolicyRuleDeleteView(generic.ObjectDeleteView):
-    """Delete view."""
-
-    queryset = models.NATPolicyRule.objects.all()
-
-
-class NATPolicyRuleEditView(generic.ObjectEditView):
-    """Edit view."""
-
-    queryset = models.NATPolicyRule.objects.all()
-    model_form = forms.NATPolicyRuleForm
-
-
-class NATPolicyRuleBulkDeleteView(generic.BulkDeleteView):
-    """View for deleting one or more NATPolicyRule records."""
-
-    queryset = models.NATPolicyRule.objects.all()
-    table = tables.NATPolicyRuleTable
-
-
-class NATPolicyRuleBulkEditView(generic.BulkEditView):
-    """View for editing one or more NATPolicyRule records."""
-
-    queryset = models.NATPolicyRule.objects.all()
-    filterset = filters.NATPolicyRuleFilterSet
-    table = tables.NATPolicyRuleTable
-    form = forms.NATPolicyRuleBulkEditForm
+    lookup_field = "pk"

@@ -3,6 +3,7 @@
 from django.templatetags.static import static
 from django.urls import path
 from django.views.generic import RedirectView
+from nautobot.core.views.routers import NautobotUIViewSetRouter
 from nautobot.extras.views import ObjectChangeLogView, ObjectNotesView
 
 from nautobot_firewall_models import models
@@ -18,10 +19,15 @@ from nautobot_firewall_models.views import (
     user_object_group,
     policy_rule,
     policy,
-    nat_policy_rule,
     nat_policy,
     capirca_policy,
 )
+from nautobot_firewall_models.views.nat_policy import NATPolicyUIViewSet
+from nautobot_firewall_models.views.nat_policy_rule import NATPolicyRuleUIViewSet
+
+router = NautobotUIViewSetRouter()
+router.register("nat-policy", NATPolicyUIViewSet)
+router.register("nat-policy-rule", NATPolicyRuleUIViewSet)
 
 urlpatterns = [
     # FQDN URLs
@@ -350,22 +356,6 @@ urlpatterns = [
         kwargs={"model": models.Policy},
     ),
     # NATPolicyRule URLs
-    path("nat-policy-rule/", nat_policy_rule.NATPolicyRuleListView.as_view(), name="natpolicyrule_list"),
-    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("nat-policy-rule/add/", nat_policy_rule.NATPolicyRuleEditView.as_view(), name="natpolicyrule_add"),
-    path(
-        "nat-policy-rule/delete/",
-        nat_policy_rule.NATPolicyRuleBulkDeleteView.as_view(),
-        name="natpolicyrule_bulk_delete",
-    ),
-    path("nat-policy-rule/edit/", nat_policy_rule.NATPolicyRuleBulkEditView.as_view(), name="natpolicyrule_bulk_edit"),
-    path("nat-policy-rule/<uuid:pk>/", nat_policy_rule.NATPolicyRuleView.as_view(), name="natpolicyrule"),
-    path(
-        "nat-policy-rule/<uuid:pk>/delete/",
-        nat_policy_rule.NATPolicyRuleDeleteView.as_view(),
-        name="natpolicyrule_delete",
-    ),
-    path("nat-policy-rule/<uuid:pk>/edit/", nat_policy_rule.NATPolicyRuleEditView.as_view(), name="natpolicyrule_edit"),
     path(
         "nat-policy-rule/<uuid:pk>/changelog/",
         ObjectChangeLogView.as_view(),
@@ -378,25 +368,7 @@ urlpatterns = [
         name="natpolicyrule_notes",
         kwargs={"model": models.NATPolicyRule},
     ),
-    # NAT Policy URLs
-    path("nat-policy/", nat_policy.NATPolicyListView.as_view(), name="natpolicy_list"),
-    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
-    path("nat-policy/add/", nat_policy.NATPolicyEditView.as_view(), name="natpolicy_add"),
-    path("nat-policy/delete/", nat_policy.NATPolicyBulkDeleteView.as_view(), name="natpolicy_bulk_delete"),
-    path("nat-policy/edit/", nat_policy.NATPolicyBulkEditView.as_view(), name="natpolicy_bulk_edit"),
-    path("nat-policy/<uuid:pk>/", nat_policy.NATPolicyView.as_view(), name="natpolicy"),
-    path(
-        "nat-policy/<uuid:pk>/dynamic-groups/",
-        nat_policy.NATPolicyDynamicGroupWeight.as_view(),
-        name="natpolicy_set_dynamic_group_weight",
-    ),
-    path(
-        "nat-policy/<uuid:pk>/devices/",
-        nat_policy.NATPolicyDeviceWeight.as_view(),
-        name="natpolicy_set_device_weight",
-    ),
-    path("nat-policy/<uuid:pk>/delete/", nat_policy.NATPolicyDeleteView.as_view(), name="natpolicy_delete"),
-    path("nat-policy/<uuid:pk>/edit/", nat_policy.NATPolicyEditView.as_view(), name="natpolicy_edit"),
+    # NATPolicy urls
     path(
         "nat-policy/<uuid:pk>/changelog/",
         ObjectChangeLogView.as_view(),
@@ -408,6 +380,16 @@ urlpatterns = [
         ObjectNotesView.as_view(),
         name="natpolicy_notes",
         kwargs={"model": models.NATPolicy},
+    ),
+    path(
+        "nat-policy/<uuid:pk>/dynamic-groups/",
+        nat_policy.NATPolicyDynamicGroupWeight.as_view(),
+        name="natpolicy_set_dynamic_group_weight",
+    ),
+    path(
+        "nat-policy/<uuid:pk>/devices/",
+        nat_policy.NATPolicyDeviceWeight.as_view(),
+        name="natpolicy_set_device_weight",
     ),
     path("capirca-policy/", capirca_policy.CapircaPolicyListView.as_view(), name="capircapolicy_list"),
     path(
@@ -436,3 +418,4 @@ urlpatterns = [
         name="docs",
     ),
 ]
+urlpatterns += router.urls
