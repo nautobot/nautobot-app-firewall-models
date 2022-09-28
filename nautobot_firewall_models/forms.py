@@ -585,14 +585,14 @@ class NATPolicyRuleFilterForm(BootstrapMixin, StatusModelFilterFormMixin, Custom
 
     field_order = ["q", "name"]
 
-    model = models.PolicyRule
+    model = models.NATPolicyRule
     q = forms.CharField(
         required=False,
         label="Search",
         help_text="Search within Name or Description.",
     )
     name = forms.CharField(required=False, label="Name")
-    tag = TagFilterField(models.PolicyRule)
+    tag = TagFilterField(models.NATPolicyRule)
 
 
 class NATPolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipModelFormMixin):
