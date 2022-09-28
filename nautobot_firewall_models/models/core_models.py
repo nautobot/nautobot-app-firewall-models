@@ -871,11 +871,11 @@ class NATPolicy(PrimaryModel):
 
     def policy_details(self):
         """Convenience method to convert to a Python list of dictionaries."""
-        return [rule.rule_details for rule in self.nat_policy_rules.all()]
+        return [rule.rule_details() for rule in self.nat_policy_rules.all()]
 
     def to_json(self):
         """Convenience method to convert to json."""
-        raise NotImplementedError()
+        return model_to_json(self)
 
     def __str__(self):
         """Stringify instance."""
