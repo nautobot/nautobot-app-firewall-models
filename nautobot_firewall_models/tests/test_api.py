@@ -68,18 +68,12 @@ class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
-        models.IPRange.objects.first()
+        ip_range = models.IPRange.objects.first()
         prefix = Prefix.objects.first()
 
         cls.create_data = [
-            # TODO(lk): For some reason this tests breaks when I uncomment this, but this only happens after my NAT
-            # changes. This confuses me, because I didn't change anything about the way that AddressObjects are handled.
-            # AssertionError: 400 not found in [200] : Expected HTTP status(es) [200];
-            # received 400: {
-            # '__all__': [ErrorDetail(string='192.168.0.1-192.168.0.10 - 192.168.0.0/24 - ', code='invalid')]
-            # }
-            # {"name": "obj1", "ip_range": ip_range.id},
             {"name": "obj2", "prefix": prefix.id},
+            {"name": "obj1", "ip_range": ip_range.id},
         ]
 
     @skip("Not implemented")
