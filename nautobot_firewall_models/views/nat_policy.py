@@ -55,6 +55,10 @@ class NATPolicyUIViewSet(
 
     lookup_field = "pk"
 
+    def _process_bulk_create_form(self, form):
+        """Bulk creating (CSV import) is not supported."""
+        raise NotImplementedError()
+
 
 class NATPolicyDynamicGroupWeight(CreateView):
     """View to set weight on a DynamicGroup/NATPolicy relationship."""

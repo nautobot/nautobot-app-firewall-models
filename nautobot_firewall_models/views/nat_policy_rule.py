@@ -29,3 +29,7 @@ class NATPolicyRuleUIViewSet(
     action_buttons = ("add",)
 
     lookup_field = "pk"
+
+    def _process_bulk_create_form(self, form):
+        """Bulk creating (CSV import) is not supported."""
+        raise NotImplementedError()

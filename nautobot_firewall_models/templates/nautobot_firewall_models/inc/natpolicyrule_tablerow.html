@@ -2,24 +2,22 @@
 <tr>
     <td><a href="{{ nat_rule.get_absolute_url }}" title="{{ nat_rule.name }}">{{ nat_rule.index|placeholder|ljust:5 }}</a></td>
     {% if nat_rule.mode == "remark" %}
-        <td colspan="11" style="text-align: center;"><strong>{{ nat_rule }}</strong></td>
+        <td colspan="13" style="text-align: center;"><strong>{{ nat_rule }}</strong></td>
     {% else %}
-        <td>{% include './policy_rule_address_object_row.html' with address=nat_rule.original_source_addresses.all address_group=nat_rule.original_source_address_groups.all %}</td>
-        <td>{% include './policy_rule_address_object_row.html' with address=nat_rule.translated_source_addresses.all address_group=nat_rule.translated_source_address_groups.all %}</td>
-        <td>{% include './policy_rule_user_object_row.html' with user=nat_rule.source_users.all user_group=m2m.nat_rule.source_user_groups.all %}</td>
+        <td>{% include './policy_rule_address_object_row.html' with nat=True address=nat_rule.original_source_addresses.all address_group=nat_rule.original_source_address_groups.all %}</td>
+        <td>{% include './policy_rule_service_object_row.html' with nat=True service=nat_rule.original_source_services.all service_group=nat_rule.original_source_service_groups.all %}</td>
+        <td>{% include './policy_rule_address_object_row.html' with nat=True address=nat_rule.original_destination_addresses.all address_group=nat_rule.original_destination_address_groups.all %}</td>
+        <td>{% include './policy_rule_service_object_row.html' with nat=True service=nat_rule.original_destination_services.all service_group=nat_rule.original_destination_service_groups.all %}</td>
+        <td>{% include './policy_rule_address_object_row.html' with nat=True address=nat_rule.translated_source_addresses.all address_group=nat_rule.translated_source_address_groups.all %}</td>
+        <td>{% include './policy_rule_service_object_row.html' with nat=True service=nat_rule.translated_source_services.all service_group=nat_rule.translated_source_service_groups.all %}</td>
+        <td>{% include './policy_rule_address_object_row.html' with nat=True address=nat_rule.translated_destination_addresses.all address_group=nat_rule.translated_destination_address_groups.all %}</td>
+        <td>{% include './policy_rule_service_object_row.html' with nat=True service=nat_rule.translated_destination_services.all service_group=nat_rule.translated_destination_service_groups.all %}</td>
         <td>{% include './policy_rule_zone_object_row.html' with zone=nat_rule.source_zone %}</td>
-        <td>{% include './policy_rule_service_object_row.html' with service=nat_rule.original_source_services.all service_group=nat_rule.original_source_service_groups.all %}</td>
-        <td>{% include './policy_rule_service_object_row.html' with service=nat_rule.translated_source_services.all service_group=nat_rule.translated_source_service_groups.all %}</td>
-        <td>{% include './policy_rule_address_object_row.html' with address=nat_rule.original_destination_addresses.all address_group=nat_rule.original_destination_address_groups.all %}</td>
-        <td>{% include './policy_rule_address_object_row.html' with address=nat_rule.translated_destination_addresses.all address_group=nat_rule.translated_destination_address_groups.all %}</td>
         <td>{% include './policy_rule_zone_object_row.html' with zone=nat_rule.destination_zone %}</td>
-        <td>{% include './policy_rule_service_object_row.html' with service=nat_rule.original_destination_services.all service_group=nat_rule.original_destination_service_groups.all %}</td>
-        <td>{% include './policy_rule_service_object_row.html' with service=nat_rule.translated_destination_services.all service_group=nat_rule.translated_destination_service_groups.all %}</td>
+        <td>
+            {% if nat_rule.log %}
+                <span class="text-success"><i class="mdi mdi-check-bold"></i></span>{% else %}<span class="text-danger"><i class="mdi mdi-close-thick"></i></span>
+            {% endif %}
+        </td>
     {% endif %}
-    <td>{% include './nat_policy_rule_mode_row.html' with mode=nat_rule.mode %}</td>
-    <td>
-        {% if nat_rule.log %}
-            <span class="text-success"><i class="mdi mdi-check-bold"></i></span>{% else %}<span class="text-danger"><i class="mdi mdi-close-thick"></i></span>
-        {% endif %}
-    </td>
 </tr>
