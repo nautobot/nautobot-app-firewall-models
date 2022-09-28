@@ -36,7 +36,7 @@ layout = (
                 name="NAT Policy Rules",
                 model=NATPolicyRule,
                 weight=200,
-                link="plugins:nautobot_firewall_models:policyrule_list",
+                link="plugins:nautobot_firewall_models:natpolicyrule_list",
                 description="NAT Policies",
                 permissions=["nautobot_firewall_models.view_natpolicyrule"],
             ),
