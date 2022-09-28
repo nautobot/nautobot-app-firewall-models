@@ -434,6 +434,7 @@ class NATPolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
             },
         ]
 
+    @skip("not implemented")
     def test_list_objects_brief(self):
         pass
 
