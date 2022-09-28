@@ -670,7 +670,7 @@ class Policy(PrimaryModel):
 )
 class NATPolicyRule(PrimaryModel):
     """
-    A NATPolicyRule is the equivalent of a single in a firewall policy or access list.
+    A NATPolicyRule is the equivalent of a single rule in a NAT policy or access list.
 
     NAT policies are typically made up of several individual rules.
     """
