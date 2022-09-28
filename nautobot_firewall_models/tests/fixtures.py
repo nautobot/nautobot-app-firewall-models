@@ -159,11 +159,7 @@ def create_env():
     nat_policy_1 = NATPolicy.objects.create(name="NAT Policy 1")
     nat_policy_2 = NATPolicy.objects.create(name="NAT Policy 2")
     nat_policy_3 = NATPolicy.objects.create(name="NAT Policy 3")
-    nat_policy_rule_1_1 = NATPolicyRule.objects.create(
-        name="NAT Policy Rule 1.1", log=True, request_id="req1", mode="one-to-one"
-    )
-    nat_policy_rule_1_1.source_users.add(usr_obj1)
-    nat_policy_rule_1_1.source_user_groups.add(usr_grp1)
+    nat_policy_rule_1_1 = NATPolicyRule.objects.create(name="NAT Policy Rule 1.1", log=True, request_id="req1")
     nat_policy_rule_1_1.original_source_addresses.add(original_source)
     nat_policy_rule_1_1.translated_source_addresses.add(translated_source)
     nat_policy_rule_1_1.original_destination_addresses.add(destination)
@@ -174,15 +170,12 @@ def create_env():
 
     nat_policy_rule_1_2 = NATPolicyRule.objects.create(
         name="END OF NAT POLICY",
-        log=True,
         request_id="req2",
-        mode="remark",
+        remark=True,
     )
     nat_policy_1.nat_policy_rules.add(nat_policy_rule_1_2)
 
-    nat_policy_rule_2_1 = NATPolicyRule.objects.create(
-        name="NAT Policy Rule 2.1", log=True, request_id="req3", mode="one-to-many"
-    )
+    nat_policy_rule_2_1 = NATPolicyRule.objects.create(name="NAT Policy Rule 2.1", log=True, request_id="req3")
     nat_policy_rule_2_1.original_source_addresses.add(addr_obj1)
     nat_policy_rule_2_1.translated_source_addresses.add(translated_source)
     nat_policy_rule_2_1.original_destination_addresses.add(destination)

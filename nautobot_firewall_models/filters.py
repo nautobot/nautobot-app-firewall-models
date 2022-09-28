@@ -172,7 +172,7 @@ class NATPolicyRuleFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.NATPolicyRule
-        fields = ["id", "mode", "log", "request_id"]
+        fields = ["id", "remark", "log", "request_id"]
 
 
 class PolicyFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):

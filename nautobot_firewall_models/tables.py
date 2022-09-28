@@ -200,8 +200,6 @@ class NATPolicyRuleTable(StatusTableMixin, BaseTable):
             # pylint: disable=duplicate-code
             "pk",
             "name",
-            "source_users",
-            "source_user_groups",
             "source_zone",
             "destination_zone",
             "original_source_addresses",
@@ -220,7 +218,7 @@ class NATPolicyRuleTable(StatusTableMixin, BaseTable):
             "translated_destination_address_groups",
             "translated_destination_services",
             "translated_destination_service_groups",
-            "mode",
+            "remark",
             "log",
             "status",
         )

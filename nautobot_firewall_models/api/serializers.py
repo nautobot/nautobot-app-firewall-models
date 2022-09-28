@@ -347,12 +347,6 @@ class NATPolicyRuleSerializer(TaggedObjectSerializer, StatusModelSerializerMixin
     url = serializers.HyperlinkedIdentityField(
         view_name="plugins-api:nautobot_firewall_models-api:natpolicyrule-detail"
     )
-    source_users = SerializedPKRelatedField(
-        queryset=models.UserObject.objects.all(), serializer=UserObjectSerializer, required=False, many=True
-    )
-    source_user_groups = SerializedPKRelatedField(
-        queryset=models.UserObjectGroup.objects.all(), serializer=UserObjectGroupSerializer, required=False, many=True
-    )
     source_zone = ZoneSerializer(required=False)
     destination_zone = ZoneSerializer(required=False)
 

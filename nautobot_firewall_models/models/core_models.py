@@ -678,7 +678,7 @@ class NATPolicyRule(PrimaryModel):
     # Metadata
     name = models.CharField(max_length=100)
     tags = TaggableManager(through=TaggedItem)
-    mode = models.CharField(choices=choices.MODE_CHOICES, max_length=20)
+    remark = models.BooleanField(default=False)
     log = models.BooleanField(default=False)
     status = StatusField(
         on_delete=models.PROTECT,
@@ -690,10 +690,6 @@ class NATPolicyRule(PrimaryModel):
     index = models.PositiveSmallIntegerField(null=True, blank=True)
 
     # Data that can not undergo a translation
-    source_users = models.ManyToManyField(to=UserObject, through="NATSrcUserM2M", related_name="nat_policy_rules")
-    source_user_groups = models.ManyToManyField(
-        to=UserObjectGroup, through="NATSrcUserGroupM2M", related_name="nat_policy_rules"
-    )
     source_zone = models.ForeignKey(
         to=Zone, null=True, blank=True, on_delete=models.SET_NULL, related_name="source_nat_policy_rules"
     )
@@ -773,8 +769,6 @@ class NATPolicyRule(PrimaryModel):
         """Convenience method to convert to more consumable dictionary."""
         row = {}
         row["rule"] = self
-        row["source_users"] = self.source_users.all()
-        row["source_user_groups"] = self.source_user_groups.all()
         row["source_zone"] = self.source_zone
         row["destination_zone"] = self.destination_zone
 
@@ -798,7 +792,7 @@ class NATPolicyRule(PrimaryModel):
         row["translated_destination_services"] = self.translated_destination_services.all()
         row["translated_destination_service_groups"] = self.translated_destination_service_groups.all()
 
-        row["mode"] = self.mode
+        row["remark"] = self.remark
         row["log"] = self.log
         row["status"] = self.status
         row["request_id"] = self.request_id

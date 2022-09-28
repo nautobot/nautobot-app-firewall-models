@@ -1,7 +1,7 @@
 {% load helpers %}
 <tr>
     <td><a href="{{ nat_rule.get_absolute_url }}" title="{{ nat_rule.name }}">{{ nat_rule.index|placeholder|ljust:5 }}</a></td>
-    {% if nat_rule.mode == "remark" %}
+    {% if nat_rule.remark %}
         <td colspan="13" style="text-align: center;"><strong>{{ nat_rule }}</strong></td>
     {% else %}
         <td>{% include './policy_rule_address_object_row.html' with nat=True address=nat_rule.original_source_addresses.all address_group=nat_rule.original_source_address_groups.all %}</td>

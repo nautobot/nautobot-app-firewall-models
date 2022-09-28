@@ -297,15 +297,13 @@ class TestNATPolicyRuleModels(TestCase):
         rule_details = NATPolicyRule.objects.first().rule_details()
         self.assertEqual(rule_details["log"], True)
         # sample a few keys to ensure they are in there, more complete test in to_json test
-        keys = ["rule", "original_source_address_groups", "translated_destination_address_groups", "mode"]
+        keys = ["rule", "original_source_address_groups", "translated_destination_address_groups", "remark"]
         self.assertTrue(set(keys).issubset(rule_details.keys()))
 
     def test_natpolicyrule_to_json(self):
         """Test method to_json on NATPolicyRule model."""
         json_details = NATPolicyRule.objects.first().to_json()
         self.assertEqual(json_details["display"], "NAT Policy Rule 1.1 - req1")
-        self.assertEqual(json_details["source_users"][0]["display"], "user1")
-        self.assertEqual(json_details["source_user_groups"][0]["user_objects"][0]["name"], "User 1")
         self.assertEqual(json_details["original_source_addresses"][0]["prefix"]["display"], "10.100.0.0/24")
         self.assertEqual(json_details["translated_source_addresses"][0]["prefix"]["display"], "10.200.0.0/24")
         self.assertEqual(json_details["original_destination_services"][0]["port"], "80")
@@ -324,15 +322,13 @@ class TestNATPolicyModels(TestCase):
         policy_details = NATPolicy.objects.first().policy_details()[0]
         self.assertEqual(policy_details["log"], True)
         # sample a few keys to ensure they are in there, more complete test in to_json test
-        keys = ["rule", "original_source_address_groups", "original_destination_address_groups", "mode"]
+        keys = ["rule", "original_source_address_groups", "original_destination_address_groups", "remark"]
         self.assertTrue(set(keys).issubset(policy_details.keys()))
 
     def test_policy_to_json(self):
         """Test method to_json on Policy model."""
         json_details = NATPolicyRule.objects.first().to_json()
         self.assertEqual(json_details["display"], "NAT Policy Rule 1.1 - req1")
-        self.assertEqual(json_details["source_users"][0]["display"], "user1")
-        self.assertEqual(json_details["source_user_groups"][0]["user_objects"][0]["name"], "User 1")
         self.assertEqual(json_details["original_source_addresses"][0]["prefix"]["display"], "10.100.0.0/24")
         self.assertEqual(json_details["translated_source_addresses"][0]["prefix"]["display"], "10.200.0.0/24")
         self.assertEqual(json_details["original_destination_services"][0]["port"], "80")

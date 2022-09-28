@@ -604,12 +604,6 @@ class NATPolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipM
     request_id = forms.CharField(required=False, label="Optional field for request ticket identifier.")
 
     # Data that can not undergo a translation
-    source_users = DynamicModelMultipleChoiceField(
-        queryset=models.UserObject.objects.all(), label="Source User Objects", required=False
-    )
-    source_user_groups = DynamicModelMultipleChoiceField(
-        queryset=models.UserObjectGroup.objects.all(), label="Source User Object Groups", required=False
-    )
     source_zone = DynamicModelChoiceField(queryset=models.Zone.objects.all(), label="Source Zone", required=False)
     destination_zone = DynamicModelChoiceField(
         queryset=models.Zone.objects.all(), label="Destination Zone", required=False
@@ -690,8 +684,6 @@ class NATPolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipM
         fields = (
             # pylint: disable=duplicate-code
             "name",
-            "source_users",
-            "source_user_groups",
             "source_zone",
             "destination_zone",
             "original_source_addresses",
@@ -710,7 +702,7 @@ class NATPolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipM
             "translated_destination_address_groups",
             "translated_destination_services",
             "translated_destination_service_groups",
-            "mode",
+            "remark",
             "log",
             "status",
             "tags",

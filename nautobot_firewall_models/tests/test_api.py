@@ -406,34 +406,28 @@ class NATPolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     model = models.NATPolicyRule
     bulk_update_data = {"log": False}
-    choices_fields = ["mode"]
 
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
-        src_usr = models.UserObject.objects.first()
         src_addr = models.AddressObject.objects.first()
         dest_addr = models.AddressObject.objects.last()
 
         svc = models.ServiceObject.objects.first()
         cls.create_data = [
             {
-                "source_users": [src_usr.id],
                 "original_source_addresses": [src_addr.id],
                 "original_destination_addresses": [dest_addr.id],
                 "translated_destination_addresses": [src_addr.id],
-                "mode": "one-to-one",
                 "log": True,
                 "original_destination_services": [svc.id],
                 "name": "test rule",
             },
             {
-                "source_users": [src_usr.id],
                 "original_source_addresses": [src_addr.id],
                 "original_destination_addresses": [dest_addr.id],
                 "translated_destination_addresses": [src_addr.id],
-                "mode": "one-to-one",
                 "log": False,
                 "original_destination_services": [svc.id],
                 "name": "test rule",
