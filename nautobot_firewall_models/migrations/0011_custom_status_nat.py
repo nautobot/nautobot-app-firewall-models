@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("extras", "0033_add__optimized_indexing"),
-        ("nautobot_firewall_models", "0009_nat_policy"),
+        ("nautobot_firewall_models", "0010_nat_policy"),
     ]
 
     operations = [

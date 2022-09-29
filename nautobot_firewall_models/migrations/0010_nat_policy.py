@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         ("extras", "0047_enforce_custom_field_slug"),
         ("tenancy", "0002_auto_slug"),
         ("dcim", "0014_location_status_data_migration"),
-        ("nautobot_firewall_models", "0008_renaming_part3"),
+        ("nautobot_firewall_models", "0009_proper_ordering_on_through"),
     ]
 
     operations = [
