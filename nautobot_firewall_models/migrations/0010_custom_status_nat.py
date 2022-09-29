@@ -3,7 +3,7 @@
 from django.db import migrations
 
 
-def create_status(apps, schedma_editor):
+def create_nat_status(apps, schedma_editor):
     """Initial subset of statuses for the NAT models.
 
     This was added along with 0009_nat_policy in order to associate the same set of statuses with the new NAT models
@@ -31,5 +31,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(code=create_status),
+        migrations.RunPython(code=create_nat_status),
     ]
