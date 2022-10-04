@@ -27,7 +27,7 @@ layout = (
             HomePageItem(
                 name="NAT Policies",
                 model=NATPolicy,
-                weight=100,
+                weight=300,
                 link="plugins:nautobot_firewall_models:natpolicy_list",
                 description="NAT Policies",
                 permissions=["nautobot_firewall_models.view_natpolicy"],
@@ -35,7 +35,7 @@ layout = (
             HomePageItem(
                 name="NAT Policy Rules",
                 model=NATPolicyRule,
-                weight=200,
+                weight=400,
                 link="plugins:nautobot_firewall_models:natpolicyrule_list",
                 description="NAT Policies",
                 permissions=["nautobot_firewall_models.view_natpolicyrule"],
