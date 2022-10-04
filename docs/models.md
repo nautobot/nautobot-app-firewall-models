@@ -127,6 +127,6 @@ This plugin uses [custom models to model many-to-many](https://docs.djangoprojec
 %}
 
 {%
-    include-markdown "./models/natpolicyruledynamicgroupm2m.md"
+    include-markdown "./models/natpolicydynamicgroupm2m.md"
     heading-offset=2
 %}
