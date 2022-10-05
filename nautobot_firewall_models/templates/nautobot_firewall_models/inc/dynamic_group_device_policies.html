@@ -1,6 +1,6 @@
 {% block content %}
 <div class="panel panel-default">
-    <div class="panel-heading"><strong>Firewall Policies via Dynamic Groups</strong></div>
+    <div class="panel-heading"><strong>Security Policies via Dynamic Groups</strong></div>
     {% if not dynamic_groups %}
     <div class="panel-body">
         <span class="text-muted">None</span>
@@ -10,6 +10,7 @@
         <tr>
             <th>Policy</th>
             <th>Weight</th>
+            <th>Type</th>
         </tr>
         <tbody>
             {% for group in dynamic_groups %}
@@ -20,6 +21,22 @@
                         </td>
                         <td>
                             {{ m2m.weight }}
+                        </td>
+                        <td>
+                            Firewall
+                        </td>
+                    </tr>
+                {% endfor %}
+                {% for m2m in group.natpolicydynamicgroupm2m_set.all %}
+                    <tr>
+                        <td>
+                            <a href="{{ m2m.policy.get_absolute_url }}">{{ m2m.nat_policy }}</a> via <a href="{{ m2m.dynamic_group.get_absolute_url }}">{{ m2m.dynamic_group }}</a>
+                        </td>
+                        <td>
+                            {{ m2m.weight }}
+                        </td>
+                        <td>
+                            NAT
                         </td>
                     </tr>
                 {% endfor %}
