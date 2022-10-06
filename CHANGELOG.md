@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.1.0 - 2022-10-04
+
+### Fixed
+
+- #93 Updated Capirca Documentation syntax
+- #95 Updated CI to cancel previous run on new commit to same branch
+
+### Added
+
+- #92 Initial Addition of NAT models
+
 ## v1.0.2 - 2022-09-22
 
 ### Fixed
