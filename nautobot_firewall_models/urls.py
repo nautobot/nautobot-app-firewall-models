@@ -3,6 +3,7 @@
 from django.templatetags.static import static
 from django.urls import path
 from django.views.generic import RedirectView
+from nautobot.core.views.routers import NautobotUIViewSetRouter
 from nautobot.extras.views import ObjectChangeLogView, ObjectNotesView
 
 from nautobot_firewall_models import models
@@ -18,8 +19,15 @@ from nautobot_firewall_models.views import (
     user_object_group,
     policy_rule,
     policy,
+    nat_policy,
     capirca_policy,
 )
+from nautobot_firewall_models.views.nat_policy import NATPolicyUIViewSet
+from nautobot_firewall_models.views.nat_policy_rule import NATPolicyRuleUIViewSet
+
+router = NautobotUIViewSetRouter()
+router.register("nat-policy", NATPolicyUIViewSet)
+router.register("nat-policy-rule", NATPolicyRuleUIViewSet)
 
 urlpatterns = [
     # FQDN URLs
@@ -347,6 +355,42 @@ urlpatterns = [
         name="policy_notes",
         kwargs={"model": models.Policy},
     ),
+    # NATPolicyRule URLs
+    path(
+        "nat-policy-rule/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="natpolicyrule_changelog",
+        kwargs={"model": models.NATPolicyRule},
+    ),
+    path(
+        "nat-policy-rule/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="natpolicyrule_notes",
+        kwargs={"model": models.NATPolicyRule},
+    ),
+    # NATPolicy urls
+    path(
+        "nat-policy/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="natpolicy_changelog",
+        kwargs={"model": models.NATPolicy},
+    ),
+    path(
+        "nat-policy/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="natpolicy_notes",
+        kwargs={"model": models.NATPolicy},
+    ),
+    path(
+        "nat-policy/<uuid:pk>/dynamic-groups/",
+        nat_policy.NATPolicyDynamicGroupWeight.as_view(),
+        name="natpolicy_set_dynamic_group_weight",
+    ),
+    path(
+        "nat-policy/<uuid:pk>/devices/",
+        nat_policy.NATPolicyDeviceWeight.as_view(),
+        name="natpolicy_set_device_weight",
+    ),
     path("capirca-policy/", capirca_policy.CapircaPolicyListView.as_view(), name="capircapolicy_list"),
     path(
         "capirca-policy/delete/", capirca_policy.CapircaPolicyBulkDeleteView.as_view(), name="capircapolicy_bulk_delete"
@@ -374,3 +418,4 @@ urlpatterns = [
         name="docs",
     ),
 ]
+urlpatterns += router.urls

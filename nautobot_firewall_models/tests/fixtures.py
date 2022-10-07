@@ -141,6 +141,48 @@ def create_env():
     PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule3)
     PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule4)
     PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule5)
+
+    # Nat policies
+    nat_orig_dest_service, _ = ServiceObject.objects.get_or_create(
+        name="HTTP", port="80", ip_protocol="TCP", status=status
+    )
+    nat_trans_dest_service, _ = ServiceObject.objects.get_or_create(
+        name="HTTP (alt)", port="8080", ip_protocol="TCP", status=status
+    )
+    original_source_prefix = Prefix.objects.create(network="10.100.0.0", prefix_length=24)
+    original_source = AddressObject.objects.create(name="nat-original-source", prefix=original_source_prefix)
+    translated_source_prefix = Prefix.objects.create(network="10.200.0.0", prefix_length=24)
+    translated_source = AddressObject.objects.create(name="nat-translated-source", prefix=translated_source_prefix)
+    destination_prefix = Prefix.objects.create(network="192.168.0.0", prefix_length=24)
+    destination = AddressObject.objects.create(name="nat-destination", prefix=destination_prefix)
+
+    nat_policy_1 = NATPolicy.objects.create(name="NAT Policy 1")
+    nat_policy_2 = NATPolicy.objects.create(name="NAT Policy 2")
+    nat_policy_3 = NATPolicy.objects.create(name="NAT Policy 3")
+    nat_policy_rule_1_1 = NATPolicyRule.objects.create(name="NAT Policy Rule 1.1", log=True, request_id="req1")
+    nat_policy_rule_1_1.original_source_addresses.add(original_source)
+    nat_policy_rule_1_1.translated_source_addresses.add(translated_source)
+    nat_policy_rule_1_1.original_destination_addresses.add(destination)
+    nat_policy_rule_1_1.translated_destination_addresses.add(destination)
+    nat_policy_rule_1_1.original_destination_services.add(nat_orig_dest_service)
+    nat_policy_rule_1_1.translated_destination_services.add(nat_trans_dest_service)
+    nat_policy_1.nat_policy_rules.add(nat_policy_rule_1_1)
+
+    nat_policy_rule_1_2 = NATPolicyRule.objects.create(
+        name="END OF NAT POLICY",
+        request_id="req2",
+        remark=True,
+    )
+    nat_policy_1.nat_policy_rules.add(nat_policy_rule_1_2)
+
+    nat_policy_rule_2_1 = NATPolicyRule.objects.create(name="NAT Policy Rule 2.1", log=True, request_id="req3")
+    nat_policy_rule_2_1.original_source_addresses.add(addr_obj1)
+    nat_policy_rule_2_1.translated_source_addresses.add(translated_source)
+    nat_policy_rule_2_1.original_destination_addresses.add(destination)
+    nat_policy_rule_2_1.original_destination_services.add(nat_orig_dest_service)
+    nat_policy_2.nat_policy_rules.add(nat_policy_rule_2_1)
+
+    # Mapping policies to devices
     site1 = Site.objects.create(name="DFW", slug="dfw")
     site2 = Site.objects.create(name="HOU", slug="hou")
     jun_manufacturer = Manufacturer.objects.create(name="Juniper", slug="juniper")
@@ -175,6 +217,10 @@ def create_env():
     PolicyDeviceM2M.objects.create(policy=pol2, device=dev1, weight=200)
     PolicyDeviceM2M.objects.create(policy=pol1, device=dev2)
     PolicyDynamicGroupM2M.objects.create(policy=pol3, dynamic_group=dynamic_group, weight=1000)
+    NATPolicyDeviceM2M.objects.create(nat_policy=nat_policy_1, device=dev1, weight=150)
+    NATPolicyDeviceM2M.objects.create(nat_policy=nat_policy_2, device=dev1, weight=200)
+    NATPolicyDeviceM2M.objects.create(nat_policy=nat_policy_1, device=dev2)
+    NATPolicyDynamicGroupM2M.objects.create(nat_policy=nat_policy_3, dynamic_group=dynamic_group, weight=1000)
 
 
 def create_capirca_env():

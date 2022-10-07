@@ -1,6 +1,10 @@
 # Nautobot Firewall Models Plugin
 
-A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to model layer 4 firewall policies and/or extended access control lists.
+A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to model any of the following:
+
+- Layer 4 firewall policies
+- Extended access control lists
+- NAT policies
 
 Future development will include the ability to onboard an existing access list from a device and the ability to generate device configuration.
 

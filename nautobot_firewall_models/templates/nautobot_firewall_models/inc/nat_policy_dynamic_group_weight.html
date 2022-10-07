@@ -1,0 +1,38 @@
+{% load helpers %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>Assign NAT Policy Weight to Dynamic Group</strong>
+            </div>
+            {% if object.natpolicydynamicgroupm2m_set.all %}
+                <form action="{% url 'plugins:nautobot_firewall_models:natpolicy_set_dynamic_group_weight' pk=object.id %}" method="post" enctype="multipart/form-data" class="form form-horizontal">
+                    {% csrf_token %}
+                    <table class="table table-hover panel-body">
+                        <tr>
+                            <th>Weight</th>
+                            <th>Dynamic Group</th>
+                        </tr>
+                        <tbody>
+                            {% for m2m in object.natpolicydynamicgroupm2m_set.all %}
+                                <tr>
+                                    <td>
+                                        <input name="{{ m2m.dynamic_group.id }}" value="{{ m2m.weight }}"></input>
+                                    </td>
+                                    <td>
+                                        {{ m2m.dynamic_group }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            {% else %}
+                <div class="panel-body">
+                    <span class="text-muted">No Dynamic Groups assigned</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

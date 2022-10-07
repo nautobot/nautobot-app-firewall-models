@@ -7,5 +7,5 @@
     <i title="Address Object" class="mdi mdi-laptop"></i> <a href="{{ i.get_absolute_url }}" title="{{ i.get_address_info.0 }}:{{ i.get_address_info.1 }}">{{ i|placeholder }}</a><br/>
   {% endfor %}
 {% else %}
-  <span title="No Address or AddressGroup set{% if not nat %}, implicit any{% endif %}" data-toggle="tooltip">{% if nat %}—{% else %}ANY{% endif %}</span>
+  <span title="No Address or AddressGroup set, implicit any" data-toggle="tooltip">ANY</span>
 {% endif %}

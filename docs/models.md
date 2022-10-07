@@ -110,3 +110,23 @@ This plugin uses [custom models to model many-to-many](https://docs.djangoprojec
     include-markdown "./models/zone.md"
     heading-offset=2
 %}
+
+{%
+    include-markdown "./models/natpolicy.md"
+    heading-offset=2
+%}
+
+{%
+    include-markdown "./models/natpolicyrule.md"
+    heading-offset=2
+%}
+
+{%
+    include-markdown "./models/natpolicydevicem2m.md"
+    heading-offset=2
+%}
+
+{%
+    include-markdown "./models/natpolicydynamicgroupm2m.md"
+    heading-offset=2
+%}
