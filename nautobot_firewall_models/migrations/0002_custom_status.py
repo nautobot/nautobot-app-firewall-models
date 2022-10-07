@@ -18,6 +18,7 @@ def create_status(apps, schema_editor):
                 ct = ContentType.objects.get_for_model(model)
                 status.content_types.add(ct)
 
+
 def reverse_create_status(apps, schema_editor):
     """Reverse adding firewall models to status content_types."""
 
@@ -41,6 +42,7 @@ def create_default_objects(apps, schema_editor):
     for i in services:
         apps.get_model("nautobot_firewall_models.ServiceObject").objects.create(status=status, **i)
 
+
 def reverse_create_default_objects(apps, schema_editor):
     """Removes commonly used objects."""
     defaults = os.path.join(os.path.dirname(__file__), "services.yml")
@@ -54,6 +56,7 @@ def reverse_create_default_objects(apps, schema_editor):
             service.delete()
         except ObjectDoesNotExist:
             continue
+
 
 class Migration(migrations.Migration):
 

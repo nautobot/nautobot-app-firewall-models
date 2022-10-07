@@ -22,6 +22,7 @@ def create_nat_status(apps, schema_editor):
             ct = ContentType.objects.get_for_model(model)
             status.content_types.add(ct)
 
+
 def remove_nat_status(apps, schema_editor):
     """Remove status content_type for NAT models.
 
@@ -40,6 +41,7 @@ def remove_nat_status(apps, schema_editor):
         for model in relevant_models:
             ct = ContentType.objects.get_for_model(model)
             status.content_types.remove(ct)
+
 
 class Migration(migrations.Migration):
 
