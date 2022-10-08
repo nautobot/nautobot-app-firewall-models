@@ -3,7 +3,7 @@ from django.db import migrations
 from django.db.models import Count
 
 
-def move_index(apps, schedma_editor):
+def move_index(apps, schema_editor):
     """Custom migration for moving index to the PolicyRule."""
     # Get models to work with
     PolicyRuleM2M = apps.get_model("nautobot_firewall_models.PolicyRuleM2M")
@@ -51,5 +51,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(code=move_index),
+        # TODO Provide Code to Reverse the move_index function
+        migrations.RunPython(code=move_index, reverse_code=migrations.RunPython.noop),
     ]

@@ -2,10 +2,11 @@
 import os
 
 from django.db import migrations
+from django.core.exceptions import ObjectDoesNotExist
 import yaml
 
 
-def create_status(apps, schedma_editor):
+def create_status(apps, schema_editor):
     """Initial subset of statuses."""
 
     statuses = ["active", "staged", "decommissioned"]
@@ -13,8 +14,22 @@ def create_status(apps, schedma_editor):
     for i in statuses:
         status = apps.get_model("extras.Status").objects.get(slug=i)
         for model in apps.app_configs["nautobot_firewall_models"].get_models():
-            ct = ContentType.objects.get_for_model(model)
-            status.content_types.add(ct)
+            if hasattr(model, "status"):
+                ct = ContentType.objects.get_for_model(model)
+                status.content_types.add(ct)
+
+
+def reverse_create_status(apps, schema_editor):
+    """Reverse adding firewall models to status content_types."""
+
+    statuses = ["active", "staged", "decommissioned"]
+    ContentType = apps.get_model("contenttypes.ContentType")
+    for i in statuses:
+        status = apps.get_model("extras.Status").objects.get(slug=i)
+        for model in apps.app_configs["nautobot_firewall_models"].get_models():
+            if hasattr(model, "status"):
+                ct = ContentType.objects.get_for_model(model)
+                status.content_types.remove(ct)
 
 
 def create_default_objects(apps, schema_editor):
@@ -28,6 +43,21 @@ def create_default_objects(apps, schema_editor):
         apps.get_model("nautobot_firewall_models.ServiceObject").objects.create(status=status, **i)
 
 
+def reverse_create_default_objects(apps, schema_editor):
+    """Removes commonly used objects."""
+    defaults = os.path.join(os.path.dirname(__file__), "services.yml")
+    with open(defaults, "r") as f:
+        services = yaml.safe_load(f)
+    status = apps.get_model("extras.Status").objects.get(slug="active")
+
+    for i in services:
+        try:
+            service = apps.get_model("nautobot_firewall_models.ServiceObject").objects.get(status=status, **i)
+            service.delete()
+        except ObjectDoesNotExist:
+            continue
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -36,6 +66,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(code=create_status),
-        migrations.RunPython(code=create_default_objects),
+        migrations.RunPython(code=create_status, reverse_code=reverse_create_status),
+        migrations.RunPython(code=create_default_objects, reverse_code=reverse_create_default_objects),
     ]
