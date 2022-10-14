@@ -11,6 +11,8 @@ keywords = ["nautobot", "nautobot-plugin"]
 include = [
     "LICENSE",
     "README.md",
+    # Poetry by default will exclude files that are in .gitignore
+    "nautobot_firewall_models/static/nautobot_firewall_models/docs/**/*",
 ]
 packages = [
     { include = "nautobot_firewall_models" },
