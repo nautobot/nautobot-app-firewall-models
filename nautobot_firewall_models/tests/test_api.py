@@ -12,6 +12,7 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the IPRange viewsets."""
 
     model = models.IPRange
+    brief_fields = ["display", "end_address", "id", "start_address", "url"]
     bulk_update_data = {"description": "test update description"}
 
     @classmethod
@@ -25,10 +26,6 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
         create_ip_range()
 
     @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-    @skip("Not implemented")
     def test_notes_url_on_object(self):
         pass
 
@@ -37,6 +34,7 @@ class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the Protocol viewsets."""
 
     model = models.FQDN
+    brief_fields = ["display", "id", "name", "url"]
     bulk_update_data = {"description": "test update description"}
 
     @classmethod
@@ -48,10 +46,6 @@ class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"name": "sub.test.local"},
         ]
         create_fqdn()
-
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
 
     @skip("Not implemented")
     def test_notes_url_on_object(self):
