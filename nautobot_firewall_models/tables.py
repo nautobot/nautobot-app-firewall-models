@@ -163,6 +163,27 @@ class PolicyRuleTable(StatusTableMixin, BaseTable):
             "destination_services",
             "destination_service_groups",
             "action",
+            "description",
+            "request_id",
+            "log",
+            "status",
+        )
+        default_columns = (
+            "pk",
+            "name",
+            "source_users",
+            "source_user_groups",
+            "source_addresses",
+            "source_address_groups",
+            "source_zone",
+            "source_services",
+            "source_service_groups",
+            "destination_addresses",
+            "destination_address_groups",
+            "destination_zone",
+            "destination_services",
+            "destination_service_groups",
+            "action",
             "log",
             "status",
         )
@@ -197,6 +218,34 @@ class NATPolicyRuleTable(StatusTableMixin, BaseTable):
 
         model = models.NATPolicyRule
         fields = (
+            # pylint: disable=duplicate-code
+            "pk",
+            "name",
+            "source_zone",
+            "destination_zone",
+            "original_source_addresses",
+            "original_source_address_groups",
+            "original_source_services",
+            "original_source_service_groups",
+            "translated_source_addresses",
+            "translated_source_address_groups",
+            "translated_source_services",
+            "translated_source_service_groups",
+            "original_destination_addresses",
+            "original_destination_address_groups",
+            "original_destination_services",
+            "original_destination_service_groups",
+            "translated_destination_addresses",
+            "translated_destination_address_groups",
+            "translated_destination_services",
+            "translated_destination_service_groups",
+            "remark",
+            "request_id",
+            "description",
+            "log",
+            "status",
+        )
+        default_columns = (
             # pylint: disable=duplicate-code
             "pk",
             "name",
