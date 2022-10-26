@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.1.1 - 2022-10-26
+
+### Fixed
+
+- #99 Remove creation of extraneous status content types during migrations
+- #100 Force Poetry to package the static documentation
+
+### Added
+
+- #103 Add request_id and description as available fields for the rule tables
+
+### Changed
+
+- #104 Enable brief endpoint API testing for supported models
+
 ## v1.1.0 - 2022-10-04
 
 ### Fixed
