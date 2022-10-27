@@ -543,6 +543,24 @@ class PolicyRule(PrimaryModel):
     description = models.CharField(max_length=200, null=True, blank=True)
     index = models.PositiveSmallIntegerField(null=True, blank=True)
 
+    clone_fields = [
+        "source_users",
+        "source_user_groups",
+        "source_addresses",
+        "source_address_groups",
+        "source_zone",
+        "source_services",
+        "source_service_groups",
+        "destination_addresses",
+        "destination_address_groups",
+        "destination_zone",
+        "destination_services",
+        "destination_service_groups",
+        "action",
+        "log",
+        "status",
+    ]
+
     class Meta:
         """Meta class."""
 
@@ -754,6 +772,30 @@ class NATPolicyRule(PrimaryModel):
     translated_destination_service_groups = models.ManyToManyField(
         to=ServiceObjectGroup, through="NATTransDestSvcGroupM2M", related_name="translated_destination_nat_policy_rules"
     )
+
+    clone_fields = [
+        "destination_zone",
+        "source_zone",
+        "original_source_addresses",
+        "original_source_address_groups",
+        "original_source_services",
+        "original_source_service_groups",
+        "original_destination_addresses",
+        "original_destination_address_groups",
+        "original_destination_services",
+        "original_destination_service_groups",
+        "translated_source_addresses",
+        "translated_source_address_groups",
+        "translated_source_services",
+        "translated_source_service_groups",
+        "translated_destination_addresses",
+        "translated_destination_address_groups",
+        "translated_destination_services",
+        "translated_destination_service_groups",
+        "remark",
+        "log",
+        "status",
+    ]
 
     class Meta:
         """Meta class."""
