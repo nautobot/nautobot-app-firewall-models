@@ -1,10 +1,10 @@
 ---
 dev_addr: "127.0.0.1:8001"
-edit_uri: "edit/main/nautobot-plugin-firewall-model/docs"
+edit_uri: "edit/main/docs"
 site_name: "Nautobot Firewall Models Documentation"
-site_url: "https://nautobot-plugin-firewall-model.readthedocs.io/"
+site_url: "https://nautobot-plugin-firewall-models.readthedocs.io/"
 site_dir: nautobot_firewall_models/static/nautobot_firewall_models/docs
-repo_url: "https://github.com/networktocode-llc/nautobot-plugin-firewall-model"
+repo_url: "https://github.com/nautobot/nautobot-plugin-firewall-models"
 theme:
   name: "readthedocs"
   navigation_depth: 4
