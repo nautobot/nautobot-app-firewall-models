@@ -82,6 +82,10 @@ class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_bulk_delete_objects(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
 
 class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the AddressObjectGroup viewsets."""
@@ -110,6 +114,10 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
     def test_create_object(self):
@@ -154,6 +162,10 @@ class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_bulk_delete_objects(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
 
 class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the ServiceGroup viewsets."""
@@ -182,6 +194,10 @@ class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
     def test_create_object(self):
@@ -225,6 +241,10 @@ class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_bulk_delete_objects(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
 
 class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the UserGroup viewsets."""
@@ -253,6 +273,10 @@ class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
     def test_create_object(self):
@@ -294,6 +318,10 @@ class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -346,6 +374,10 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_bulk_delete_objects(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
 
 class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the Policy viewsets."""
@@ -386,6 +418,10 @@ class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -434,6 +470,10 @@ class NATPolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_bulk_delete_objects(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
 
 class NATPolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the Policy viewsets."""
@@ -474,4 +514,8 @@ class NATPolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass

@@ -33,6 +33,14 @@ class IPRangeUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
 
 class FQDNUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the Protocol viewsets."""
@@ -57,6 +65,14 @@ class FQDNUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -87,6 +103,10 @@ class AddressObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -101,6 +121,10 @@ class AddressObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -130,6 +154,10 @@ class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -144,6 +172,10 @@ class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -173,6 +205,10 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -187,6 +223,10 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -216,6 +256,10 @@ class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -230,6 +274,10 @@ class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -258,6 +306,10 @@ class UserObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -272,6 +324,10 @@ class UserObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -301,6 +357,10 @@ class UserObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -315,6 +375,10 @@ class UserObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -343,6 +407,10 @@ class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -357,6 +425,10 @@ class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -399,6 +471,10 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -413,6 +489,10 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -447,6 +527,10 @@ class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -461,4 +545,8 @@ class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
