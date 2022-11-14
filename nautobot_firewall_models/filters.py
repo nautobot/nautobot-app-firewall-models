@@ -70,6 +70,28 @@ class AddressObjectGroupFilterSet(StatusModelFilterSetMixin, NameDescriptionSear
         fields = ["id", "name", "address_objects", "description"]
 
 
+class ApplicationObjectFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+    """Filter for ApplicationObject."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.ApplicationObject
+
+        fields = ["id", "name", "description", "category", "subcategory", "risk", "description"]
+
+
+class ApplicationObjectGroupFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+    """Filter for ApplicationObjectGroup."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.ApplicationObjectGroup
+
+        fields = ["id", "name", "application_objects", "description"]
+
+
 class ServiceObjectFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
     """Filter for ServiceObject."""
 

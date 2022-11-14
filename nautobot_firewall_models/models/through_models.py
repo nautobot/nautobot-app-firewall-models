@@ -11,6 +11,13 @@ class AddressObjectGroupM2M(BaseModel):
     address_group = models.ForeignKey("nautobot_firewall_models.AddressObjectGroup", on_delete=models.CASCADE)
 
 
+class ApplicationObjectGroupM2M(BaseModel):
+    """Custom through model to on_delete=models.PROTECT to prevent deleting associated ApplicationObject if assigned to a ApplicationObjectGroup."""
+
+    application = models.ForeignKey("nautobot_firewall_models.ApplicationObject", on_delete=models.PROTECT)
+    application_group = models.ForeignKey("nautobot_firewall_models.ApplicationObjectGroup", on_delete=models.CASCADE)
+
+
 class DestAddrGroupM2M(BaseModel):
     """Custom through model to on_delete=models.PROTECT to prevent deleting associated destination Address if assigned to a PolicyRule."""
 

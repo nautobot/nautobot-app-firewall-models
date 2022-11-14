@@ -1,0 +1,52 @@
+{% extends 'generic/object_detail.html' %}
+{% load helpers %}
+
+{% block content_left_page %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Application Object</strong>
+        </div>
+        <table class="table table-hover panel-body attr-table">
+            <tr>
+                <td>Name</td>
+                <td>{{ object.name|placeholder }}</td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td>{{ object.description|placeholder }}</td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td><span class="label" style="color: {{ object.status.color|fgcolor }}; background-color: #{{ object.status.color }}">{{ object.get_status_display }}</span></td>
+            </tr>
+            <tr>
+                <td>Category</td>
+                <td>{{ object.category|placeholder }}</td>
+            </tr>
+            <tr>
+                <td>Sub-Category</td>
+                <td>{{ object.subcategory|placeholder }}</td>
+            </tr>
+            <tr>
+                <td>Technology</td>
+                <td>{{ object.technology|placeholder }}</td>
+            </tr>
+            <tr>
+                <td>Risk</td>
+                <td>{{ object.risk|placeholder }}</td>
+            </tr>
+            <tr>
+                <td>Default Type</td>
+                <td>{{ object.default_type|placeholder }}</td>
+            </tr>
+            <tr>
+                <td>Default IP Protocol</td>
+                <td>{{ object.default_ip_protocol|placeholder }}</td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td><span class="label" style="color: {{ object.status.color|fgcolor }}; background-color: #{{ object.status.color }}">{{ object.get_status_display }}</span></td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

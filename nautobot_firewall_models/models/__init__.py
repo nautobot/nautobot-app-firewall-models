@@ -3,6 +3,8 @@
 from .core_models import (
     AddressObject,
     AddressObjectGroup,
+    ApplicationObject,
+    ApplicationObjectGroup,
     FQDN,
     IPRange,
     NATPolicy,
@@ -17,6 +19,7 @@ from .core_models import (
 )
 from .through_models import (
     AddressObjectGroupM2M,
+    ApplicationObjectGroupM2M,
     DestAddrGroupM2M,
     DestAddrM2M,
     DestSvcGroupM2M,
@@ -64,6 +67,9 @@ __all__ = (
     "AddressObject",
     "AddressObjectGroup",
     "AddressObjectGroupM2M",
+    "ApplicationObject",
+    "ApplicationObjectGroup",
+    "ApplicationObjectGroupM2M",
     "CapircaPolicy",
     "DestAddrGroupM2M",
     "DestAddrM2M",

@@ -64,6 +64,34 @@ class AddressObjectGroupTable(StatusTableMixin, BaseTable):
         fields = ("pk", "name", "description", "address_objects", "status")
 
 
+class ApplicationObjectTable(StatusTableMixin, BaseTable):
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.Column(linkify=True)
+    actions = ButtonsColumn(models.ApplicationObject, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.ApplicationObject
+        fields = ("pk", "name", "description", "category", "subcategory", "technology", "risk", "default_type")
+
+
+class ApplicationObjectGroupTable(StatusTableMixin, BaseTable):
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.Column(linkify=True)
+    actions = ButtonsColumn(models.ApplicationObjectGroup, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.ApplicationObjectGroup
+        fields = ("pk", "name", "description", "application_objects")
+
+
 class ServiceObjectTable(StatusTableMixin, BaseTable):
     """Table for list view."""
 

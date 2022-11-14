@@ -197,6 +197,121 @@ class AddressObjectGroupBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixi
         ]
 
 
+class ApplicationObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+    """Filter form to filter searches."""
+
+    field_order = ["q", "name"]
+
+    model = models.ApplicationObject
+    q = forms.CharField(
+        required=False,
+        label="Search",
+        help_text="Search within Name or Description.",
+    )
+    name = forms.CharField(required=False, label="Name")
+    category = DynamicModelChoiceField(queryset=models.ApplicationObject.objects.all(), required=False, label="Category")
+
+
+class ApplicationObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
+    """ApplicationObject creation/edit form."""
+
+    description = forms.CharField(
+        help_text="Description of the application object.",
+        required=False,
+    )
+    category = forms.CharField(
+        help_text="Category of application.",
+        required=False,
+    )
+    subcategory = forms.CharField(
+        help_text="Sub-category of application.",
+        required=False,
+    )
+    technology = forms.CharField(
+        help_text="Type of application technology.",
+        required=False,
+    )
+    risk = forms.IntegerField(
+        help_text="Assessed risk of the application.",
+        required=False,
+    )
+    default_type = forms.CharField(
+        help_text="Default type, i.e. port or app-id.",
+        required=False,
+    )
+    name = forms.CharField(
+        help_text="Name descriptor for an application object type.",
+    )
+    default_ip_protocol = forms.CharField(
+        help_text="Default IP protocol.",
+        required=False,
+    )
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.ApplicationObject
+        fields = ["name", "risk"]
+
+
+class ApplicationObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+    """ApplicationObject bulk edit form."""
+
+    pk = DynamicModelMultipleChoiceField(queryset=models.ApplicationObject.objects.all(), widget=forms.MultipleHiddenInput)
+    description = forms.CharField(required=False)
+    risk = forms.IntegerField(required=False)
+    technology = forms.CharField(required=False)
+    category = forms.CharField(required=False)
+    subcategory = forms.CharField(required=False)
+
+    class Meta:
+        """Meta attributes."""
+
+        nullable_fields = ["description", "default_ip_protocol", "default_type", "technology", "category", "subcategory"]
+
+
+class ApplicationObjectGroupFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+    """Filter form to filter searches."""
+
+    field_order = ["q", "name"]
+
+    model = models.ApplicationObjectGroup
+    q = forms.CharField(
+        required=False,
+        label="Search",
+        help_text="Search within Name or Description.",
+    )
+    name = forms.CharField(required=False, label="Name")
+
+
+class ApplicationObjectGroupForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
+    """ApplicationObjectGroup creation/edit form."""
+
+    application_objects = DynamicModelMultipleChoiceField(queryset=models.ApplicationObject.objects.all())
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.ApplicationObjectGroup
+        fields = ["name", "description", "application_objects", "status", "tags"]
+
+
+class ApplicationObjectGroupBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+    """ApplicationObjectGroup bulk edit form."""
+
+    pk = DynamicModelMultipleChoiceField(
+        queryset=models.ApplicationObjectGroup.objects.all(), widget=forms.MultipleHiddenInput
+    )
+    description = forms.CharField(required=False)
+
+    class Meta:
+        """Meta attributes."""
+
+        nullable_fields = [
+            "description",
+        ]
+
+
 class ServiceObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
     """Filter form to filter searches."""
 
