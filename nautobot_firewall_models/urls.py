@@ -13,6 +13,8 @@ from nautobot_firewall_models.views import (
     zone,
     address_object,
     address_object_group,
+    application_object,
+    application_object_group,
     service_object,
     service_object_group,
     user_object,
@@ -147,6 +149,94 @@ urlpatterns = [
         ObjectNotesView.as_view(),
         name="addressobjectgroup_notes",
         kwargs={"model": models.AddressObjectGroup},
+    ),
+    # ApplicationObject URLs
+    path("application-object/", application_object.ApplicationObjectListView.as_view(), name="applicationobject_list"),
+    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
+    path(
+        "application-object/add/", application_object.ApplicationObjectEditView.as_view(), name="applicationobject_add"
+    ),
+    path(
+        "application-object/delete/",
+        application_object.ApplicationObjectBulkDeleteView.as_view(),
+        name="applicationobject_bulk_delete",
+    ),
+    path(
+        "application-object/edit/",
+        application_object.ApplicationObjectBulkEditView.as_view(),
+        name="applicationobject_bulk_edit",
+    ),
+    path("application-object/<uuid:pk>/", application_object.ApplicationObjectView.as_view(), name="applicationobject"),
+    path(
+        "application-object/<uuid:pk>/delete/",
+        application_object.ApplicationObjectDeleteView.as_view(),
+        name="applicationobject_delete",
+    ),
+    path(
+        "application-object/<uuid:pk>/edit/",
+        application_object.ApplicationObjectEditView.as_view(),
+        name="applicationobject_edit",
+    ),
+    path(
+        "application-object/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="applicationobject_changelog",
+        kwargs={"model": models.ApplicationObject},
+    ),
+    path(
+        "application-object/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="applicationobject_notes",
+        kwargs={"model": models.ApplicationObject},
+    ),
+    # ApplicationObjectGroup URLs
+    path(
+        "application-object-group/",
+        application_object_group.ApplicationObjectGroupListView.as_view(),
+        name="applicationobjectgroup_list",
+    ),
+    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
+    path(
+        "application-object-group/add/",
+        application_object_group.ApplicationObjectGroupEditView.as_view(),
+        name="applicationobjectgroup_add",
+    ),
+    path(
+        "application-object-group/delete/",
+        application_object_group.ApplicationObjectGroupBulkDeleteView.as_view(),
+        name="applicationobjectgroup_bulk_delete",
+    ),
+    path(
+        "application-object-group/edit/",
+        application_object_group.ApplicationObjectGroupBulkEditView.as_view(),
+        name="applicationobjectgroup_bulk_edit",
+    ),
+    path(
+        "application-object-group/<uuid:pk>/",
+        application_object_group.ApplicationObjectGroupView.as_view(),
+        name="applicationobjectgroup",
+    ),
+    path(
+        "application-object-group/<uuid:pk>/delete/",
+        application_object_group.ApplicationObjectGroupDeleteView.as_view(),
+        name="applicationobjectgroup_delete",
+    ),
+    path(
+        "application-object-group/<uuid:pk>/edit/",
+        application_object_group.ApplicationObjectGroupEditView.as_view(),
+        name="applicationobjectgroup_edit",
+    ),
+    path(
+        "application-group/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="applicationobjectgroup_changelog",
+        kwargs={"model": models.ApplicationObjectGroup},
+    ),
+    path(
+        "application-group/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="applicationobjectgroup_notes",
+        kwargs={"model": models.ApplicationObjectGroup},
     ),
     # ServiceObject URLs
     path("service-object/", service_object.ServiceObjectListView.as_view(), name="serviceobject_list"),

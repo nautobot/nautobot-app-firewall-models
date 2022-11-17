@@ -8,6 +8,8 @@ from nautobot_firewall_models.api import views
 router = OrderedDefaultRouter()
 router.register("address-object", views.AddressObjectViewSet)
 router.register("address-object-group", views.AddressObjectGroupViewSet)
+router.register("application-object", views.ApplicationObjectViewSet)
+router.register("application-object-group", views.ApplicationObjectGroupViewSet)
 router.register("capirca-policy", views.CapircaPolicyViewSet)
 router.register("fqdn", views.FQDNViewSet)
 router.register("ip-range", views.IPRangeViewSet)

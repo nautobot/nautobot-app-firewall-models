@@ -1,5 +1,5 @@
 """Models for the Firewall plugin."""
-# pylint: disable=duplicate-code
+# pylint: disable=duplicate-code, too-many-lines
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -250,6 +250,110 @@ class AddressObjectGroup(PrimaryModel):
     def get_absolute_url(self):
         """Return detail view URL."""
         return reverse("plugins:nautobot_firewall_models:addressobjectgroup", args=[self.pk])
+
+    def __str__(self):
+        """Stringify instance."""
+        return self.name
+
+
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class ApplicationObject(PrimaryModel):
+    """Intermediate model to aggregate underlying application items, to allow for easier management."""
+
+    description = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+    category = models.CharField(max_length=48, blank=True, help_text="Category of application.")
+    subcategory = models.CharField(max_length=48, blank=True, help_text="Sub-category of application.")
+    technology = models.CharField(max_length=48, blank=True, help_text="Type of application technology.")
+    risk = models.PositiveIntegerField(blank=True, help_text="Assessed risk of the application.")
+    default_type = models.CharField(max_length=48, blank=True, help_text="Default type, i.e. port or app-id.")
+    name = models.CharField(max_length=100, unique=True, help_text="Name descriptor for an application object type.")
+    default_ip_protocol = models.CharField(
+        max_length=48, blank=True, help_text="Name descriptor for an application object type."
+    )
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["name"]
+        verbose_name_plural = "Application Objects"
+
+    def get_application_info(self):
+        """Method to Return the actual ApplicationObject type."""
+        keys = ["description", "category", "subcategory", "name"]
+        for key in keys:
+            if getattr(self, key):
+                return (key, getattr(self, key))
+        return (None, None)
+
+    def get_absolute_url(self):
+        """Return detail view URL."""
+        return reverse("plugins:nautobot_firewall_models:applicationobject", args=[self.pk])
+
+    def __str__(self):
+        """Stringify instance."""
+        return self.name
+
+    def save(self, *args, **kwargs):
+        """Overloads to enforce clear."""
+        self.clean()
+        super().save(*args, **kwargs)
+
+    @property
+    def application(self):  # pylint: disable=inconsistent-return-statements
+        """Returns the assigned application object."""
+        for i in ["description", "category", "subcategory", "name"]:
+            if getattr(self, i):
+                return getattr(self, i)
+
+
+@extras_features(
+    "custom_fields",
+    "custom_links",
+    "custom_validators",
+    "export_templates",
+    "graphql",
+    "relationships",
+    "statuses",
+    "webhooks",
+)
+class ApplicationObjectGroup(PrimaryModel):
+    """Groups together ApplicationObjects to better mimic grouping sets of application objects that have a some commonality."""
+
+    description = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+    name = models.CharField(max_length=100, unique=True, help_text="Name descriptor for a group application objects.")
+    application_objects = models.ManyToManyField(
+        to=ApplicationObject, blank=True, through="ApplicationObjectGroupM2M", related_name="application_object_groups"
+    )
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
+    )
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["name"]
+        verbose_name_plural = "Application Object Groups"
+
+    def get_absolute_url(self):
+        """Return detail view URL."""
+        return reverse("plugins:nautobot_firewall_models:applicationobjectgroup", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""

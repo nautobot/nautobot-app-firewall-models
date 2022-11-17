@@ -40,6 +40,22 @@ class AddressObjectGroupViewSet(NautobotModelViewSet):
     filterset_class = filters.AddressObjectGroupFilterSet
 
 
+class ApplicationObjectViewSet(NautobotModelViewSet):
+    """ApplicationObject viewset."""
+
+    queryset = models.ApplicationObject.objects.all()
+    serializer_class = serializers.ApplicationObjectSerializer
+    filterset_class = filters.ApplicationObjectFilterSet
+
+
+class ApplicationObjectGroupViewSet(NautobotModelViewSet):
+    """ApplicationObjectGroup viewset."""
+
+    queryset = models.ApplicationObjectGroup.objects.all()
+    serializer_class = serializers.ApplicationObjectGroupSerializer
+    filterset_class = filters.ApplicationObjectGroupFilterSet
+
+
 class ServiceObjectViewSet(NautobotModelViewSet):
     """ServiceObject viewset."""
 
