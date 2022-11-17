@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.3 - 2022-11-16
+
+### Fixed
+
+- #114 Resolved issues with status filters & deep=True method on Policy detail API view
+
 ## v1.1.2 - 2022-11-12
 
 ### Added
