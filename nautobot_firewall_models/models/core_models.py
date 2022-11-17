@@ -1,5 +1,5 @@
 """Models for the Firewall plugin."""
-# pylint: disable=duplicate-code
+# pylint: disable=duplicate-code, too-many-lines
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -273,39 +273,14 @@ class ApplicationObject(PrimaryModel):
         max_length=200,
         blank=True,
     )
-    category = models.CharField(
-        max_length=48,
-        blank=True,
-        help_text="Category of application."
-    )
-    subcategory = models.CharField(
-        max_length=48,
-        blank=True,
-        help_text="Sub-category of application."
-    )
-    technology = models.CharField(
-        max_length=48,
-        blank=True,
-        help_text="Type of application technology."
-    )
-    risk = models.PositiveIntegerField(
-        blank=True,
-        help_text="Assessed risk of the application."
-    )
-    default_type = models.CharField(
-        max_length=48,
-        blank=True,
-        help_text="Default type, i.e. port or app-id."
-    )
-    name = models.CharField(
-        max_length=100,
-        unique=True,
-        help_text="Name descriptor for an application object type."
-    )
+    category = models.CharField(max_length=48, blank=True, help_text="Category of application.")
+    subcategory = models.CharField(max_length=48, blank=True, help_text="Sub-category of application.")
+    technology = models.CharField(max_length=48, blank=True, help_text="Type of application technology.")
+    risk = models.PositiveIntegerField(blank=True, help_text="Assessed risk of the application.")
+    default_type = models.CharField(max_length=48, blank=True, help_text="Default type, i.e. port or app-id.")
+    name = models.CharField(max_length=100, unique=True, help_text="Name descriptor for an application object type.")
     default_ip_protocol = models.CharField(
-        max_length=48,
-        blank=True,
-        help_text="Name descriptor for an application object type."
+        max_length=48, blank=True, help_text="Name descriptor for an application object type."
     )
 
     class Meta:

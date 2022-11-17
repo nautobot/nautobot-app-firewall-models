@@ -2,20 +2,27 @@
 
 import django_filters
 from django.db.models import Q
-from django_filters import CharFilter, FilterSet
+from django_filters import CharFilter
+from django_filters.filterset import FilterSet
 from nautobot.dcim.models import Device
-from nautobot.extras.filters import StatusModelFilterSetMixin, NautobotFilterSet
+from nautobot.extras.filters import NautobotFilterSet
+from nautobot.extras.models import Status
 from nautobot.utilities.filters import TagFilter
 
 from nautobot_firewall_models import models
 
 
-class NameDescriptionSearchFilter(FilterSet):
+class BaseFilterSet(FilterSet):
     """A base class for adding the search method to models which only expose the `name` and `description` fields."""
 
     q = CharFilter(
         method="search",
         label="Search",
+    )
+    status = django_filters.ModelMultipleChoiceFilter(
+        field_name="status__slug",
+        to_field_name="slug",
+        queryset=Status.objects.all(),
     )
 
     def search(self, queryset, name, value):  # pylint: disable=unused-argument, no-self-use
@@ -25,7 +32,7 @@ class NameDescriptionSearchFilter(FilterSet):
         return queryset.filter(Q(name__icontains=value) | Q(description__icontains=value))
 
 
-class IPRangeFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+class IPRangeFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for IPRange."""
 
     class Meta:
@@ -37,7 +44,7 @@ class IPRangeFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, N
         fields = ["id", "vrf", "size", "description"]
 
 
-class FQDNFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+class FQDNFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for FQDN."""
 
     class Meta:
@@ -48,7 +55,7 @@ class FQDNFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, Naut
         fields = ["id", "name", "description"]
 
 
-class AddressObjectFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+class AddressObjectFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for AddressObject."""
 
     class Meta:
@@ -59,7 +66,7 @@ class AddressObjectFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFil
         fields = ["id", "name", "ip_address", "prefix", "ip_range", "fqdn", "description"]
 
 
-class AddressObjectGroupFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+class AddressObjectGroupFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for AddressObjectGroup."""
 
     class Meta:
@@ -70,7 +77,7 @@ class AddressObjectGroupFilterSet(StatusModelFilterSetMixin, NameDescriptionSear
         fields = ["id", "name", "address_objects", "description"]
 
 
-class ApplicationObjectFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+class ApplicationObjectFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for ApplicationObject."""
 
     class Meta:
@@ -81,7 +88,7 @@ class ApplicationObjectFilterSet(StatusModelFilterSetMixin, NameDescriptionSearc
         fields = ["id", "name", "description", "category", "subcategory", "risk", "description"]
 
 
-class ApplicationObjectGroupFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+class ApplicationObjectGroupFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for ApplicationObjectGroup."""
 
     class Meta:
@@ -92,7 +99,7 @@ class ApplicationObjectGroupFilterSet(StatusModelFilterSetMixin, NameDescription
         fields = ["id", "name", "application_objects", "description"]
 
 
-class ServiceObjectFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+class ServiceObjectFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for ServiceObject."""
 
     class Meta:
@@ -103,7 +110,7 @@ class ServiceObjectFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFil
         fields = ["id", "name", "ip_protocol", "port", "description"]
 
 
-class ServiceObjectGroupFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+class ServiceObjectGroupFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for ServiceObjectGroup."""
 
     class Meta:
@@ -114,7 +121,7 @@ class ServiceObjectGroupFilterSet(StatusModelFilterSetMixin, NameDescriptionSear
         fields = ["id", "name", "service_objects", "description"]
 
 
-class UserObjectFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+class UserObjectFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for UserObject."""
 
     class Meta:
@@ -124,7 +131,7 @@ class UserObjectFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter
         fields = ["id", "name", "username"]
 
 
-class UserObjectGroupFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+class UserObjectGroupFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for UserObjectGroup."""
 
     class Meta:
@@ -134,7 +141,7 @@ class UserObjectGroupFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchF
         fields = ["id", "name", "user_objects", "description"]
 
 
-class ZoneFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+class ZoneFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for Zone."""
 
     class Meta:
@@ -146,7 +153,7 @@ class ZoneFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, Naut
 
 
 # TODO: Refactor to allow for better filtering, currently very limited.
-class PolicyRuleFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
+class PolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for PolicyRule."""
 
     tag = TagFilter()
@@ -172,7 +179,7 @@ class PolicyRuleFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
 
 
 # TODO: Refactor to allow for better filtering, currently very limited.
-class NATPolicyRuleFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
+class NATPolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for NATPolicyRule."""
 
     tag = TagFilter()
@@ -197,7 +204,7 @@ class NATPolicyRuleFilterSet(StatusModelFilterSetMixin, NautobotFilterSet):
         fields = ["id", "remark", "log", "request_id"]
 
 
-class PolicyFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+class PolicyFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for Policy."""
 
     class Meta:
@@ -206,8 +213,13 @@ class PolicyFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, Na
         model = models.Policy
         fields = ["id", "name", "description", "policy_rules", "assigned_devices", "assigned_dynamic_groups"]
 
+    def __init__(self, data=None, queryset=None, *, request=None, prefix=None):
+        """Overload init to allow for deep=True on detail API call."""
+        super().__init__(data, queryset, request=request, prefix=prefix)
+        self.data.pop("deep", None)
 
-class NATPolicyFilterSet(StatusModelFilterSetMixin, NameDescriptionSearchFilter, NautobotFilterSet):
+
+class NATPolicyFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for NATPolicy."""
 
     class Meta:

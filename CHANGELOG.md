@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.1.3 - 2022-11-16
+
+### Fixed
+
+- #114 Resolved issues with status filters & deep=True method on Policy detail API view
+
+## v1.1.2 - 2022-11-12
+
+### Added
+
+- #108 Enable cloning for PolicyRule and NATPolicyRule models
+- #110 Add support for port lists on ServiceObject
+
+### Fixed
+
+- #109 Resolved incorrect links in mkdocs.yml
+
 ## v1.1.1 - 2022-10-26
 
 ### Fixed

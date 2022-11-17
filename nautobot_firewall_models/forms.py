@@ -209,7 +209,9 @@ class ApplicationObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, Cu
         help_text="Search within Name or Description.",
     )
     name = forms.CharField(required=False, label="Name")
-    category = DynamicModelChoiceField(queryset=models.ApplicationObject.objects.all(), required=False, label="Category")
+    category = DynamicModelChoiceField(
+        queryset=models.ApplicationObject.objects.all(), required=False, label="Category"
+    )
 
 
 class ApplicationObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
@@ -257,7 +259,9 @@ class ApplicationObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.Mo
 class ApplicationObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
     """ApplicationObject bulk edit form."""
 
-    pk = DynamicModelMultipleChoiceField(queryset=models.ApplicationObject.objects.all(), widget=forms.MultipleHiddenInput)
+    pk = DynamicModelMultipleChoiceField(
+        queryset=models.ApplicationObject.objects.all(), widget=forms.MultipleHiddenInput
+    )
     description = forms.CharField(required=False)
     risk = forms.IntegerField(required=False)
     technology = forms.CharField(required=False)
@@ -267,7 +271,14 @@ class ApplicationObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin
     class Meta:
         """Meta attributes."""
 
-        nullable_fields = ["description", "default_ip_protocol", "default_type", "technology", "category", "subcategory"]
+        nullable_fields = [
+            "description",
+            "default_ip_protocol",
+            "default_type",
+            "technology",
+            "category",
+            "subcategory",
+        ]
 
 
 class ApplicationObjectGroupFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):

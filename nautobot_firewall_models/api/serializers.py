@@ -18,7 +18,11 @@ from nautobot.ipam.api.nested_serializers import NestedIPAddressSerializer, Nest
 
 
 from nautobot_firewall_models import models
-from nautobot_firewall_models.api.nested_serializers import NestedFQDNSerializer, NestedIPRangeSerializer, NestedApplicationSerializer
+from nautobot_firewall_models.api.nested_serializers import (
+    NestedFQDNSerializer,
+    NestedIPRangeSerializer,
+    # NestedApplicationSerializer,
+)
 
 
 class StatusModelSerializerMixin(_StatusModelSerializerMixin):  # pylint: disable=abstract-method
@@ -116,7 +120,10 @@ class ApplicationObjectGroupSerializer(TaggedObjectSerializer, StatusModelSerial
         view_name="plugins-api:nautobot_firewall_models-api:applicationobject-detail"
     )
     application_objects = SerializedPKRelatedField(
-        queryset=models.ApplicationObject.objects.all(), serializer=ApplicationObjectSerializer, required=False, many=True
+        queryset=models.ApplicationObject.objects.all(),
+        serializer=ApplicationObjectSerializer,
+        required=False,
+        many=True,
     )
 
     class Meta:
