@@ -25,6 +25,20 @@ class DestAddrGroupM2M(BaseModel):
     pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
 
 
+class ApplicationM2M(BaseModel):
+    """Custom through model to on_delete=models.PROTECT to prevent deleting associated destination ApplicationObject if assigned to a PolicyRule."""
+
+    app = models.ForeignKey("nautobot_firewall_models.ApplicationObject", on_delete=models.PROTECT)
+    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
+
+
+class ApplicationGroupM2M(BaseModel):
+    """Custom through model to on_delete=models.PROTECT to prevent deleting associated destination ApplicationObjectGroup if assigned to a PolicyRule."""
+
+    app_group = models.ForeignKey("nautobot_firewall_models.ApplicationObjectGroup", on_delete=models.PROTECT)
+    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
+
+
 class DestAddrM2M(BaseModel):
     """Custom through model to on_delete=models.PROTECT to prevent deleting associated destination AddressGroup if assigned to a PolicyRule."""
 

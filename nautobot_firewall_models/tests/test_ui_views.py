@@ -179,6 +179,108 @@ class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         pass
 
 
+class ApplicationObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+    """Test the ApplicationObject viewsets."""
+
+    model = ApplicationObject
+    bulk_edit_data = {"description": "test update description"}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        create_env()
+
+        status = Status.objects.get(slug="active").id
+        cls.form_data = {"name": "obj1", "risk": 1, "status": status}
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_constrained_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+
+class ApplicationObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+    """Test the ApplicationObjectGroup viewsets."""
+
+    model = ApplicationObjectGroup
+    bulk_edit_data = {"description": "test update description"}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        create_env()
+        status = Status.objects.get(slug="active").id
+        app_obj = ApplicationObject.objects.first()
+        cls.form_data = {"name": "test1", "application_objects": [app_obj.id], "status": status}
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_constrained_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+
 class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the ServiceObject viewsets."""
 

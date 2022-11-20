@@ -247,6 +247,18 @@ class PolicyRuleSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, N
         required=False,
         many=True,
     )
+    applications = SerializedPKRelatedField(
+        queryset=models.ApplicationObject.objects.all(),
+        serializer=ApplicationObjectSerializer,
+        required=False,
+        many=True,
+    )
+    application_groups = SerializedPKRelatedField(
+        queryset=models.ApplicationObjectGroup.objects.all(),
+        serializer=ApplicationObjectGroupSerializer,
+        required=False,
+        many=True,
+    )
 
     class Meta:
         """Meta attributes."""

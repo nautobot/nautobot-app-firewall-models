@@ -217,43 +217,21 @@ class ApplicationObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, Cu
 class ApplicationObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
     """ApplicationObject creation/edit form."""
 
-    description = forms.CharField(
-        help_text="Description of the application object.",
-        required=False,
-    )
-    category = forms.CharField(
-        help_text="Category of application.",
-        required=False,
-    )
-    subcategory = forms.CharField(
-        help_text="Sub-category of application.",
-        required=False,
-    )
-    technology = forms.CharField(
-        help_text="Type of application technology.",
-        required=False,
-    )
-    risk = forms.IntegerField(
-        help_text="Assessed risk of the application.",
-        required=False,
-    )
-    default_type = forms.CharField(
-        help_text="Default type, i.e. port or app-id.",
-        required=False,
-    )
-    name = forms.CharField(
-        help_text="Name descriptor for an application object type.",
-    )
-    default_ip_protocol = forms.CharField(
-        help_text="Default IP protocol.",
-        required=False,
-    )
-
     class Meta:
         """Meta attributes."""
 
         model = models.ApplicationObject
-        fields = ["name", "risk"]
+        fields = [
+            "name",
+            "description",
+            "category",
+            "subcategory",
+            "technology",
+            "risk",
+            "default_type",
+            "default_ip_protocol",
+            "status",
+        ]
 
 
 class ApplicationObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
@@ -599,6 +577,14 @@ class PolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipMode
     destination_service_groups = DynamicModelMultipleChoiceField(
         queryset=models.ServiceObjectGroup.objects.all(), label="Destination Service Object Groups", required=False
     )
+    applications = DynamicModelMultipleChoiceField(
+        queryset=models.ApplicationObject.objects.all(), label="Destination Application Objects", required=False
+    )
+    application_groups = DynamicModelMultipleChoiceField(
+        queryset=models.ApplicationObjectGroup.objects.all(),
+        label="Destination Application Object Groups",
+        required=False,
+    )
     request_id = forms.CharField(required=False, label="Optional field for request ticket identifier.")
 
     class Meta:
@@ -621,6 +607,8 @@ class PolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipMode
             "destination_zone",
             "destination_services",
             "destination_service_groups",
+            "applications",
+            "application_groups",
             "action",
             "log",
             "status",

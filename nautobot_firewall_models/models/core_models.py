@@ -282,6 +282,11 @@ class ApplicationObject(PrimaryModel):
     default_ip_protocol = models.CharField(
         max_length=48, blank=True, help_text="Name descriptor for an application object type."
     )
+    status = StatusField(
+        on_delete=models.PROTECT,
+        related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
+        default=get_default_status,
+    )
 
     class Meta:
         """Meta class."""
@@ -642,6 +647,10 @@ class PolicyRule(PrimaryModel):
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
         default=get_default_status,
+    )
+    applications = models.ManyToManyField(to=ApplicationObject, through="ApplicationM2M", related_name="policy_rules")
+    application_groups = models.ManyToManyField(
+        to=ApplicationObjectGroup, through="ApplicationGroupM2M", related_name="policy_rules"
     )
     request_id = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=200, null=True, blank=True)

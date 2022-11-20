@@ -52,6 +52,73 @@ class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
         pass
 
 
+class ApplicationObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
+    """Test the ApplicationObject viewsets."""
+
+    model = models.ApplicationObject
+    bulk_update_data = {"description": "test update description"}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        create_env()
+
+        cls.create_data = [
+            {"name": "obj2", "risk": 1},
+            {"name": "obj1", "risk": 1},
+        ]
+
+    @skip("Not implemented")
+    def test_list_objects_brief(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+
+class ApplicationObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
+    """Test the ApplicationObjectGroup viewsets."""
+
+    model = models.ApplicationObjectGroup
+    bulk_update_data = {"description": "test update description"}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        create_env()
+        app_obj = models.ApplicationObject.objects.first()
+
+        cls.create_data = [
+            {"name": "test1", "application_objects": [app_obj.id]},
+            {"name": "test2", "application_objects": [app_obj.id]},
+        ]
+
+    @skip("Not implemented")
+    def test_list_objects_brief(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+
 class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the AddressObject viewsets."""
 
