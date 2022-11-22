@@ -8,7 +8,7 @@ For well-known ports, it is best to use the port name as the name of the object.
 
 * Name (string)
 * Description (optional, string)
-* Port (optional, int OR int range)
+* Port (optional, int OR int range OR comma delimited list of int or int range)
     * Must be specified as a valid layer 4 port OR port range (e.g. 80 OR 8080-8088).
 * IP Protocol (string, choice field)
     * IANA protocols (e.g. TCP UDP ICMP)

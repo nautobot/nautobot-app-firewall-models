@@ -5,7 +5,7 @@ from nautobot.extras.jobs import Job, MultiObjectVar
 
 from nautobot.dcim.models import Device
 from nautobot_firewall_models.models import CapircaPolicy
-from nautobot_firewall_models.models.core_models import Policy
+from nautobot_firewall_models.models import Policy
 
 LOGGER = logging.getLogger(__name__)
 

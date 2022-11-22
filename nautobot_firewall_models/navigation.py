@@ -58,8 +58,8 @@ menu_items = (
                 ],
             ),
             NavMenuGroup(
-                name="Application",
-                weight=100,
+                name="Service",
+                weight=200,
                 items=[
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:applicationobject_list",
@@ -83,12 +83,6 @@ menu_items = (
                             ),
                         ],
                     ),
-                ],
-            ),
-            NavMenuGroup(
-                name="Service",
-                weight=200,
-                items=[
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:serviceobject_list",
                         name="Service Objects",

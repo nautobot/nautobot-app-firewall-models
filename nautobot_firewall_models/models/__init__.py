@@ -1,30 +1,19 @@
 """Load models."""
 
-from .core_models import (
+from .address import (
     AddressObject,
     AddressObjectGroup,
-    ApplicationObject,
-    ApplicationObjectGroup,
+    AddressObjectGroupM2M,
     FQDN,
+    FQDNIPAddressM2M,
     IPRange,
+)
+from .capirca_policy import (
+    CapircaPolicy,
+)
+from .nat_policy import (
     NATPolicy,
     NATPolicyRule,
-    Policy,
-    PolicyRule,
-    ServiceObject,
-    ServiceObjectGroup,
-    UserObject,
-    UserObjectGroup,
-    Zone,
-)
-from .through_models import (
-    AddressObjectGroupM2M,
-    ApplicationObjectGroupM2M,
-    DestAddrGroupM2M,
-    DestAddrM2M,
-    DestSvcGroupM2M,
-    DestSvcM2M,
-    FQDNIPAddressM2M,
     NATOrigDestAddrGroupM2M,
     NATOrigDestAddrM2M,
     NATOrigDestSvcGroupM2M,
@@ -44,23 +33,37 @@ from .through_models import (
     NATTransSrcAddrM2M,
     NATTransSrcSvcGroupM2M,
     NATTransSrcSvcM2M,
-    PolicyRuleM2M,
+)
+from .security_policy import (
+    DestAddrGroupM2M,
+    DestAddrM2M,
+    DestSvcGroupM2M,
+    DestSvcM2M,
+    Policy,
     PolicyDeviceM2M,
     PolicyDynamicGroupM2M,
-    ServiceObjectGroupM2M,
+    PolicyRule,
+    PolicyRuleM2M,
     SrcAddrGroupM2M,
     SrcAddrM2M,
     SrcUserGroupM2M,
     SrcUserM2M,
     SrcSvcGroupM2M,
     SrcSvcM2M,
-    UserObjectGroupM2M,
+)
+from .service import (
+    ApplicationObject,
+    ApplicationObjectGroup,
+    ApplicationObjectGroupM2M,
+    ServiceObject,
+    ServiceObjectGroup,
+    ServiceObjectGroupM2M,
+)
+from .user import UserObject, UserObjectGroup, UserObjectGroupM2M
+from .zone import (
+    Zone,
     ZoneInterfaceM2M,
     ZoneVRFM2M,
-)
-
-from .capirca_models import (
-    CapircaPolicy,
 )
 
 __all__ = (
