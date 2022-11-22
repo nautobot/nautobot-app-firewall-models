@@ -197,6 +197,110 @@ class AddressObjectGroupBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixi
         ]
 
 
+class ApplicationObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+    """Filter form to filter searches."""
+
+    field_order = ["q", "name"]
+
+    model = models.ApplicationObject
+    q = forms.CharField(
+        required=False,
+        label="Search",
+        help_text="Search within Name or Description.",
+    )
+    name = forms.CharField(required=False, label="Name")
+    category = DynamicModelChoiceField(
+        queryset=models.ApplicationObject.objects.all(), required=False, label="Category"
+    )
+
+
+class ApplicationObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
+    """ApplicationObject creation/edit form."""
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.ApplicationObject
+        fields = [
+            "name",
+            "description",
+            "category",
+            "subcategory",
+            "technology",
+            "risk",
+            "default_type",
+            "default_ip_protocol",
+            "status",
+        ]
+
+
+class ApplicationObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+    """ApplicationObject bulk edit form."""
+
+    pk = DynamicModelMultipleChoiceField(
+        queryset=models.ApplicationObject.objects.all(), widget=forms.MultipleHiddenInput
+    )
+    description = forms.CharField(required=False)
+    risk = forms.IntegerField(required=False)
+    technology = forms.CharField(required=False)
+    category = forms.CharField(required=False)
+    subcategory = forms.CharField(required=False)
+
+    class Meta:
+        """Meta attributes."""
+
+        nullable_fields = [
+            "description",
+            "default_ip_protocol",
+            "default_type",
+            "technology",
+            "category",
+            "subcategory",
+        ]
+
+
+class ApplicationObjectGroupFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+    """Filter form to filter searches."""
+
+    field_order = ["q", "name"]
+
+    model = models.ApplicationObjectGroup
+    q = forms.CharField(
+        required=False,
+        label="Search",
+        help_text="Search within Name or Description.",
+    )
+    name = forms.CharField(required=False, label="Name")
+
+
+class ApplicationObjectGroupForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
+    """ApplicationObjectGroup creation/edit form."""
+
+    application_objects = DynamicModelMultipleChoiceField(queryset=models.ApplicationObject.objects.all())
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.ApplicationObjectGroup
+        fields = ["name", "description", "application_objects", "status", "tags"]
+
+
+class ApplicationObjectGroupBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+    """ApplicationObjectGroup bulk edit form."""
+
+    pk = DynamicModelMultipleChoiceField(
+        queryset=models.ApplicationObjectGroup.objects.all(), widget=forms.MultipleHiddenInput
+    )
+    description = forms.CharField(required=False)
+
+    class Meta:
+        """Meta attributes."""
+
+        nullable_fields = [
+            "description",
+        ]
+
+
 class ServiceObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
     """Filter form to filter searches."""
 
@@ -473,6 +577,14 @@ class PolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipMode
     destination_service_groups = DynamicModelMultipleChoiceField(
         queryset=models.ServiceObjectGroup.objects.all(), label="Destination Service Object Groups", required=False
     )
+    applications = DynamicModelMultipleChoiceField(
+        queryset=models.ApplicationObject.objects.all(), label="Destination Application Objects", required=False
+    )
+    application_groups = DynamicModelMultipleChoiceField(
+        queryset=models.ApplicationObjectGroup.objects.all(),
+        label="Destination Application Object Groups",
+        required=False,
+    )
     request_id = forms.CharField(required=False, label="Optional field for request ticket identifier.")
 
     class Meta:
@@ -495,6 +607,8 @@ class PolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipMode
             "destination_zone",
             "destination_services",
             "destination_service_groups",
+            "applications",
+            "application_groups",
             "action",
             "log",
             "status",

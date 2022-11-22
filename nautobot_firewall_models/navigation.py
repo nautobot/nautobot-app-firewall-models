@@ -62,6 +62,28 @@ menu_items = (
                 weight=200,
                 items=[
                     NavMenuItem(
+                        link="plugins:nautobot_firewall_models:applicationobject_list",
+                        name="Applications",
+                        permissions=["nautobot_firewall_models.view_applicationobject"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_firewall_models:applicationobject_add",
+                                permissions=["nautobot_firewall_models.add_applicationobject"],
+                            ),
+                        ],
+                    ),
+                    NavMenuItem(
+                        link="plugins:nautobot_firewall_models:applicationobjectgroup_list",
+                        name="Application Groups",
+                        permissions=["nautobot_firewall_models.view_applicationobjectgroup"],
+                        buttons=[
+                            NavMenuAddButton(
+                                link="plugins:nautobot_firewall_models:applicationobjectgroup_add",
+                                permissions=["nautobot_firewall_models.add_applicationobjectgroup"],
+                            ),
+                        ],
+                    ),
+                    NavMenuItem(
                         link="plugins:nautobot_firewall_models:serviceobject_list",
                         name="Service Objects",
                         permissions=["nautobot_firewall_models.view_serviceobject"],
