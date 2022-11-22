@@ -61,6 +61,7 @@ class IPRange(PrimaryModel):
         """Meta class."""
 
         ordering = ["start_address"]
+        verbose_name = "IP Range"
         verbose_name_plural = "IP Ranges"
         constraints = [
             UniqueConstraint(fields=["start_address", "end_address", "vrf"], name="unique_with_vrf"),

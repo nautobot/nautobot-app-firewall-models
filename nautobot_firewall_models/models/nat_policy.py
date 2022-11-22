@@ -180,6 +180,7 @@ class NATPolicyRule(PrimaryModel):
         """Meta class."""
 
         ordering = ["index"]
+        verbose_name = "NAT Policy Rule"
         verbose_name_plural = "NAT Policy Rules"
 
     def get_absolute_url(self):
@@ -278,6 +279,7 @@ class NATPolicy(PrimaryModel):
         """Meta class."""
 
         ordering = ["name"]
+        verbose_name = "NAT Policy"
         verbose_name_plural = "NAT Policies"
 
     def get_absolute_url(self):

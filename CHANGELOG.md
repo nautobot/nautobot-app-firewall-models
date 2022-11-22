@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.2.0-alpha.0 - 2022-11-22
+
+### Added
+
+- #108 Application & ApplicationGroup support
+
+### Fixed
+
+- #117 Resolved `main` tab not loading on initial load of Policy & PolicyRule detail page
+
+### Changed
+
+- #117 Reorganized `models/` folder to improve developer experience
+
 ## v1.1.3 - 2022-11-16
 
 ### Fixed
