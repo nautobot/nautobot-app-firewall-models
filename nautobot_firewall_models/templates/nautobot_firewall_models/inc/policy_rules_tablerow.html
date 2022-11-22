@@ -2,7 +2,7 @@
 <tr>
     <td><a href="{{ m2m.rule.get_absolute_url }}" title="{{ m2m.rule.name }}">{{ m2m.rule.index|placeholder|ljust:5 }} → {{ m2m.rule.name|placeholder }}</a></td>
     {% if m2m.rule.action == "remark" %}
-        <td colspan="7" style="text-align: center;"><strong>{{ m2m.rule }}</strong></td>
+        <td colspan="8" style="text-align: center;"><strong>{{ m2m.rule }}</strong></td>
     {% else %}
         <td>{% include './policy_rule_address_object_row.html' with address=m2m.rule.source_addresses.all address_group=m2m.rule.source_address_groups.all %}</td>
         <td>{% include './policy_rule_user_object_row.html' with user=m2m.rule.source_users.all user_group=m2m.rule.source_user_groups.all %}</td>
@@ -11,6 +11,7 @@
         <td>{% include './policy_rule_address_object_row.html' with address=m2m.rule.destination_addresses.all address_group=m2m.rule.destination_address_groups.all %}</td>
         <td>{% include './policy_rule_zone_object_row.html' with zone=m2m.rule.destination_zone %}</td>
         <td>{% include './policy_rule_service_object_row.html' with service=m2m.rule.destination_services.all service_group=m2m.rule.destination_service_groups.all %}</td>
+        <td>{% include './policy_rule_application_object_row.html' with application=m2m.rule.applications.all application_group=m2m.rule.application_groups.all %}</td>
     {% endif %}
     <td>{% include './policy_rule_action_row.html' with action=m2m.rule.action %}</td>
     <td>

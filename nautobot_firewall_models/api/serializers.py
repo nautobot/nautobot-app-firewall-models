@@ -18,7 +18,11 @@ from nautobot.ipam.api.nested_serializers import NestedIPAddressSerializer, Nest
 
 
 from nautobot_firewall_models import models
-from nautobot_firewall_models.api.nested_serializers import NestedFQDNSerializer, NestedIPRangeSerializer
+from nautobot_firewall_models.api.nested_serializers import (
+    NestedFQDNSerializer,
+    NestedIPRangeSerializer,
+    # NestedApplicationSerializer,
+)
 
 
 class StatusModelSerializerMixin(_StatusModelSerializerMixin):  # pylint: disable=abstract-method
@@ -92,6 +96,40 @@ class AddressObjectGroupSerializer(TaggedObjectSerializer, StatusModelSerializer
         """Meta attributes."""
 
         model = models.AddressObjectGroup
+        fields = "__all__"
+
+
+class ApplicationObjectSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, NautobotModelSerializer):
+    """ApplicationObject Serializer."""
+
+    url = serializers.HyperlinkedIdentityField(
+        view_name="plugins-api:nautobot_firewall_models-api:applicationobject-detail"
+    )
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.ApplicationObject
+        fields = "__all__"
+
+
+class ApplicationObjectGroupSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, NautobotModelSerializer):
+    """ApplicationObjectGroup Serializer."""
+
+    url = serializers.HyperlinkedIdentityField(
+        view_name="plugins-api:nautobot_firewall_models-api:applicationobject-detail"
+    )
+    application_objects = SerializedPKRelatedField(
+        queryset=models.ApplicationObject.objects.all(),
+        serializer=ApplicationObjectSerializer,
+        required=False,
+        many=True,
+    )
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.ApplicationObjectGroup
         fields = "__all__"
 
 
@@ -206,6 +244,18 @@ class PolicyRuleSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, N
     destination_service_groups = SerializedPKRelatedField(
         queryset=models.ServiceObjectGroup.objects.all(),
         serializer=ServiceObjectGroupSerializer,
+        required=False,
+        many=True,
+    )
+    applications = SerializedPKRelatedField(
+        queryset=models.ApplicationObject.objects.all(),
+        serializer=ApplicationObjectSerializer,
+        required=False,
+        many=True,
+    )
+    application_groups = SerializedPKRelatedField(
+        queryset=models.ApplicationObjectGroup.objects.all(),
+        serializer=ApplicationObjectGroupSerializer,
         required=False,
         many=True,
     )

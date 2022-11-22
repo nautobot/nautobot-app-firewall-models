@@ -97,6 +97,16 @@ This plugin uses [custom models to model many-to-many](https://docs.djangoprojec
 %}
 
 {%
+    include-markdown "./models/applicationobject.md"
+    heading-offset=2
+%}
+
+{%
+    include-markdown "./models/applicationobjectgroup.md"
+    heading-offset=2
+%}
+
+{%
     include-markdown "./models/fqdn.md"
     heading-offset=2
 %}

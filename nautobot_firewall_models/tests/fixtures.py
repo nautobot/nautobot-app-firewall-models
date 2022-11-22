@@ -75,6 +75,40 @@ def create_env():
     zone2 = Zone.objects.create(name="LAN", status=status)
     Zone.objects.create(name="DMZ", status=status)
 
+    app1 = ApplicationObject.objects.create(
+        name="app1",
+        category="web",
+        subcategory="streaming",
+        default_type="443",
+        default_ip_protocol="TCP",
+        status=status,
+        risk=3,
+    )
+    app2 = ApplicationObject.objects.create(
+        name="app2",
+        category="web",
+        subcategory="streaming",
+        default_type="443",
+        default_ip_protocol="TCP",
+        status=status,
+        risk=2,
+    )
+    app3 = ApplicationObject.objects.create(
+        name="app3",
+        category="web",
+        subcategory="streaming",
+        default_type="443",
+        default_ip_protocol="TCP",
+        status=status,
+        risk=1,
+    )
+    app_grp1 = ApplicationObjectGroup.objects.create(name="streaming")
+    app_grp1.application_objects.set([app1])
+    app_grp2 = ApplicationObjectGroup.objects.create(name="gaming")
+    app_grp2.application_objects.set([app3, app2])
+    app_grp3 = ApplicationObjectGroup.objects.create(name="news")
+    app_grp3.application_objects.set([app1, app2, app3])
+
     pol_rule1 = PolicyRule.objects.create(
         action="deny", log=True, name="Policy Rule 1", status=status, request_id="req1", index=10
     )
@@ -87,6 +121,8 @@ def create_env():
     pol_rule1.destination_address_groups.set([addr_grp3])
     pol_rule1.destination_services.set([svc_obj1])
     pol_rule1.destination_service_groups.set([svc_grp1])
+    pol_rule1.applications.set([app1])
+    pol_rule1.application_groups.set([app_grp1])
     pol_rule2 = PolicyRule.objects.create(
         source_zone=zone1,
         destination_zone=zone2,
@@ -105,6 +141,8 @@ def create_env():
     pol_rule2.destination_address_groups.set([addr_grp3])
     pol_rule2.destination_services.set([svc_obj1, svc_obj2])
     pol_rule2.destination_service_groups.set([svc_grp1, svc_grp2])
+    pol_rule2.applications.set([app2])
+    pol_rule2.application_groups.set([app_grp2])
     pol_rule3 = PolicyRule.objects.create(
         source_zone=zone1,
         destination_zone=zone2,
@@ -123,6 +161,8 @@ def create_env():
     pol_rule3.destination_address_groups.set([addr_grp3])
     pol_rule3.destination_services.set([svc_obj1, svc_obj2, svc_obj3])
     pol_rule3.destination_service_groups.set([svc_grp1, svc_grp2, svc_grp3])
+    pol_rule3.applications.set([app2, app3])
+    pol_rule3.application_groups.set([app_grp1, app_grp2, app_grp3])
     pol_rule4 = PolicyRule.objects.create(
         name="END OF ACCESS LIST", action="remark", log=False, request_id="req4", index=99
     )
