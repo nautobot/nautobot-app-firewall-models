@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.0-alpha.1 - 2022-11-25
+
+### Changed
+
+- #108 Changed Application & Application Group migrations to allow null values.
+
 ## v1.2.0-alpha.0 - 2022-11-22
 
 ### Added
