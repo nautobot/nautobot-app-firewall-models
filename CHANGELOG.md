@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.0-alpha.2 - 2022-12-07
+
+### Fixed
+
+- #120 Resolved inconsistent forms.
+
 ## v1.2.0-alpha.1 - 2022-11-25
 
 ### Changed

@@ -1,15 +1,15 @@
 """Models for the Capirca Configurations."""
 # pylint: disable=duplicate-code
 import logging
+
 from django.db import models
 from django.urls import reverse
 from django.utils.module_loading import import_string
-
-from nautobot.extras.utils import extras_features
 from nautobot.core.models.generics import PrimaryModel
+from nautobot.extras.utils import extras_features
 
-from nautobot_firewall_models.utils.capirca import DevicePolicyToCapirca
 from nautobot_firewall_models.constants import PLUGIN_CFG
+from nautobot_firewall_models.utils.capirca import DevicePolicyToCapirca
 
 LOGGER = logging.getLogger(__name__)
 
