@@ -41,6 +41,14 @@ class IPRangeUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
+        pass
+
 
 class FQDNUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the Protocol viewsets."""
@@ -73,6 +81,14 @@ class FQDNUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
         pass
 
 
@@ -127,6 +143,14 @@ class AddressObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
+        pass
+
 
 class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the AddressObjectGroup viewsets."""
@@ -176,6 +200,14 @@ class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
         pass
 
 
@@ -229,6 +261,14 @@ class ApplicationObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
+        pass
+
 
 class ApplicationObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the ApplicationObjectGroup viewsets."""
@@ -278,6 +318,14 @@ class ApplicationObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
         pass
 
 
@@ -331,6 +379,14 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
+        pass
+
 
 class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the ServiceGroup viewsets."""
@@ -382,6 +438,14 @@ class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
+        pass
+
 
 class UserObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the User viewsets."""
@@ -430,6 +494,14 @@ class UserObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
         pass
 
 
@@ -483,6 +555,14 @@ class UserObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
+        pass
+
 
 class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the Zone viewsets."""
@@ -531,6 +611,14 @@ class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
         pass
 
 
@@ -597,6 +685,14 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
+        pass
+
 
 class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the Policy viewsets."""
@@ -651,4 +747,12 @@ class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
         pass
