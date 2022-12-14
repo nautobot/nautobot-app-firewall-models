@@ -26,8 +26,6 @@ More screenshots can be found in the [Using the App](https://docs.nautobot.com/p
 
 ## Try it out!
 
-> Developer Note: Only keep this section if appropriate. Update link to correct sandbox.
-
 This App is installed in the Nautobot Community Sandbox found over at [demo.nautobot.com](https://demo.nautobot.com/)!
 
 > For a full list of all the available always-on sandbox environments, head over to the main page on [networktocode.com](https://www.networktocode.com/nautobot/sandbox-environments/).

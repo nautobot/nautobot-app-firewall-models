@@ -17,14 +17,12 @@ Future development will include the ability to onboard an existing access list f
 
 ## Audience (User Personas) - Who should use this App?
 
-!!! warning "Developer Note - Remove Me!"
-    Who is this meant for/ who is the common user of this app?
+This app will allow network and security engineers to model policies that drive their network and security automation. Even better, the firewall models are built to take a vendor-agnostic approach; the models are robust to provide maximum flexibility.
 
 ## Authors and Maintainers
 
-!!! warning "Developer Note - Remove Me!"
-    Add the team and/or the main individuals maintaining this project. Include historical maintainers as well.
+Jeremy White @whitej6
 
 ## Nautobot Features Used
 
-To view the models that are added to Nautobot please see the dedicated [models](models.md) page.
+To view the models that are added to Nautobot please see the dedicated [models](../dev/models.md) page.

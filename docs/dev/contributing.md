@@ -1,8 +1,5 @@
 # Contributing to the App
 
-!!! warning "Developer Note - Remove Me!"
-    Information on how to contribute fixes, functionality, or documentation changes back to the project.
-
 The project is packaged with a light [development environment](dev_environment.md) based on `docker-compose` to help with the local development of the project and to run tests.
 
 The project is following Network to Code software development guidelines and is leveraging the following:
