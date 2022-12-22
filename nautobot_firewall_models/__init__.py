@@ -15,10 +15,10 @@ class NautobotFirewallModelsConfig(PluginConfig):
     """Plugin configuration for the nautobot_firewall_models plugin."""
 
     name = "nautobot_firewall_models"
-    verbose_name = "Nautobot Plugin Firewall Model"
+    verbose_name = "Firewall & Security Models"
     version = __version__
     author = "Network to Code, LLC"
-    description = "Nautobot plugin to model firewall objects.."
+    description = "Nautobot App to model firewall and security objects. Allows users to model policies in a vendor-neutral manner and use that data to drive network security automation."
     base_url = "firewall"
     required_settings = []
     min_version = "1.4.0"
