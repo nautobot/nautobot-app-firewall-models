@@ -215,7 +215,7 @@ class ApplicationObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the ApplicationObject viewsets."""
 
     model = ApplicationObject
-    bulk_edit_data = {"description": "test update description"}
+    bulk_edit_data = {"description": "bulk test update description"}
 
     @classmethod
     def setUpTestData(cls):
@@ -626,7 +626,7 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the PolicyRule viewsets."""
 
     model = PolicyRule
-    bulk_edit_data = {"description": "test update description"}
+    bulk_edit_data = {"description": "bulk test update description"}
 
     @classmethod
     def setUpTestData(cls):
