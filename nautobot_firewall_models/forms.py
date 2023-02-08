@@ -1,34 +1,31 @@
 """Forms for the Firewall plugin."""
 
 from django import forms
-from nautobot.dcim.models import Interface, Device
+from nautobot.dcim.models import Device, Interface
 from nautobot.extras.forms import (
-    TagsBulkEditFormMixin,
-    StatusModelFilterFormMixin,
-    StatusModelBulkEditFormMixin,
-    CustomFieldModelFilterFormMixin,
-    CustomFieldModelBulkEditFormMixin,
     CustomFieldModelCSVForm,
-    CustomFieldModelFormMixin,
-    RelationshipModelFormMixin,
+    LocalContextFilterForm,
+    LocalContextModelBulkEditForm,
+    LocalContextModelForm,
+    NautobotBulkEditForm,
+    NautobotFilterForm,
+    NautobotModelForm,
 )
-from nautobot.extras.models import Tag, DynamicGroup
-from nautobot.ipam.models import VRF, Prefix, IPAddress
+from nautobot.extras.models import DynamicGroup, Tag
+from nautobot.ipam.models import VRF, IPAddress, Prefix
 from nautobot.tenancy.forms import TenancyFilterForm, TenancyForm
 from nautobot.tenancy.models import Tenant
 from nautobot.utilities.forms import (
-    BootstrapMixin,
-    BulkEditForm,
     DynamicModelChoiceField,
     DynamicModelMultipleChoiceField,
     TagFilterField,
     add_blank_choice,
 )
 
-from nautobot_firewall_models import models, fields, choices
+from nautobot_firewall_models import choices, fields, models
 
 
-class IPRangeFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+class IPRangeFilterForm(LocalContextFilterForm, NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "start_address", "end_address", "vrf"]
@@ -44,7 +41,7 @@ class IPRangeFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldM
     vrf = DynamicModelChoiceField(queryset=VRF.objects.all(), label="VRF", required=False)
 
 
-class IPRangeForm(BootstrapMixin, fields.IPRangeFieldMixin, RelationshipModelFormMixin, forms.ModelForm):
+class IPRangeForm(fields.IPRangeFieldMixin, LocalContextModelForm, NautobotModelForm):
     """IPRange creation/edit form."""
 
     vrf = DynamicModelChoiceField(queryset=VRF.objects.all(), label="VRF", required=False)
@@ -56,7 +53,7 @@ class IPRangeForm(BootstrapMixin, fields.IPRangeFieldMixin, RelationshipModelFor
         fields = ["vrf", "description", "status", "tags"]
 
 
-class IPRangeBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+class IPRangeBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     """IPRange bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.IPRange.objects.all(), widget=forms.MultipleHiddenInput)
@@ -71,7 +68,7 @@ class IPRangeBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEdit
         nullable_fields = ["description", "vrf"]
 
 
-class FQDNFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+class FQDNFilterForm(LocalContextFilterForm, NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -85,7 +82,7 @@ class FQDNFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldMode
     name = forms.CharField(required=False, label="Name")
 
 
-class FQDNForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
+class FQDNForm(LocalContextModelForm, NautobotModelForm):
     """FQDN creation/edit form."""
 
     ip_addresses = DynamicModelMultipleChoiceField(queryset=IPAddress.objects.all(), required=False)
@@ -97,7 +94,7 @@ class FQDNForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
         fields = ["name", "description", "ip_addresses", "status", "tags"]
 
 
-class FQDNBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+class FQDNBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     """FQDN bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.FQDN.objects.all(), widget=forms.MultipleHiddenInput)
@@ -110,7 +107,7 @@ class FQDNBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditFor
         nullable_fields = ["description", "ip_addresses"]
 
 
-class AddressObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+class AddressObjectFilterForm(LocalContextFilterForm, NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -128,7 +125,7 @@ class AddressObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, Custom
     fqdn = DynamicModelChoiceField(queryset=models.FQDN.objects.all(), required=False, label="FQDN")
 
 
-class AddressObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
+class AddressObjectForm(LocalContextModelForm, NautobotModelForm):
     """AddressObject creation/edit form."""
 
     ip_address = DynamicModelChoiceField(queryset=IPAddress.objects.all(), required=False, label="IP Address")
@@ -143,7 +140,7 @@ class AddressObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelF
         fields = ["name", "description", "fqdn", "ip_range", "ip_address", "prefix", "status", "tags"]
 
 
-class AddressObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+class AddressObjectBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     """AddressObject bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.AddressObject.objects.all(), widget=forms.MultipleHiddenInput)
@@ -155,7 +152,7 @@ class AddressObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, Bu
         nullable_fields = ["description", "fqdn", "ip_range", "ip_address", "prefix"]
 
 
-class AddressObjectGroupFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+class AddressObjectGroupFilterForm(LocalContextFilterForm, NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -169,7 +166,7 @@ class AddressObjectGroupFilterForm(BootstrapMixin, StatusModelFilterFormMixin, C
     name = forms.CharField(required=False, label="Name")
 
 
-class AddressObjectGroupForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
+class AddressObjectGroupForm(LocalContextModelForm, NautobotModelForm):
     """AddressObjectGroup creation/edit form."""
 
     address_objects = DynamicModelMultipleChoiceField(queryset=models.AddressObject.objects.all())
@@ -181,7 +178,7 @@ class AddressObjectGroupForm(BootstrapMixin, RelationshipModelFormMixin, forms.M
         fields = ["name", "description", "address_objects", "status", "tags"]
 
 
-class AddressObjectGroupBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+class AddressObjectGroupBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     """AddressObjectGroup bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(
@@ -197,7 +194,7 @@ class AddressObjectGroupBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixi
         ]
 
 
-class ApplicationObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+class ApplicationObjectFilterForm(LocalContextFilterForm, NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -214,7 +211,7 @@ class ApplicationObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, Cu
     )
 
 
-class ApplicationObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
+class ApplicationObjectForm(LocalContextModelForm, NautobotModelForm):
     """ApplicationObject creation/edit form."""
 
     class Meta:
@@ -234,7 +231,7 @@ class ApplicationObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.Mo
         ]
 
 
-class ApplicationObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+class ApplicationObjectBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     """ApplicationObject bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(
@@ -259,7 +256,7 @@ class ApplicationObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin
         ]
 
 
-class ApplicationObjectGroupFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+class ApplicationObjectGroupFilterForm(LocalContextFilterForm, NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -273,7 +270,7 @@ class ApplicationObjectGroupFilterForm(BootstrapMixin, StatusModelFilterFormMixi
     name = forms.CharField(required=False, label="Name")
 
 
-class ApplicationObjectGroupForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
+class ApplicationObjectGroupForm(LocalContextModelForm, NautobotModelForm):
     """ApplicationObjectGroup creation/edit form."""
 
     application_objects = DynamicModelMultipleChoiceField(queryset=models.ApplicationObject.objects.all())
@@ -285,7 +282,7 @@ class ApplicationObjectGroupForm(BootstrapMixin, RelationshipModelFormMixin, for
         fields = ["name", "description", "application_objects", "status", "tags"]
 
 
-class ApplicationObjectGroupBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+class ApplicationObjectGroupBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     """ApplicationObjectGroup bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(
@@ -301,7 +298,7 @@ class ApplicationObjectGroupBulkEditForm(BootstrapMixin, StatusModelBulkEditForm
         ]
 
 
-class ServiceObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+class ServiceObjectFilterForm(LocalContextFilterForm, NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -317,7 +314,7 @@ class ServiceObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, Custom
     ip_protocol = forms.ChoiceField(choices=add_blank_choice(choices.IP_PROTOCOL_CHOICES), required=False)
 
 
-class ServiceObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
+class ServiceObjectForm(LocalContextModelForm, NautobotModelForm):
     """ServiceObject creation/edit form."""
 
     port = forms.CharField(
@@ -332,7 +329,7 @@ class ServiceObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelF
         fields = ["name", "description", "port", "ip_protocol", "status", "tags"]
 
 
-class ServiceObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+class ServiceObjectBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     """ServiceObject bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.ServiceObject.objects.all(), widget=forms.MultipleHiddenInput)
@@ -348,7 +345,7 @@ class ServiceObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, Bu
         nullable_fields = ["description", "port"]
 
 
-class ServiceObjectGroupFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+class ServiceObjectGroupFilterForm(LocalContextFilterForm, NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -362,7 +359,7 @@ class ServiceObjectGroupFilterForm(BootstrapMixin, StatusModelFilterFormMixin, C
     name = forms.CharField(required=False, label="Name")
 
 
-class ServiceObjectGroupForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
+class ServiceObjectGroupForm(LocalContextModelForm, NautobotModelForm):
     """ServiceObjectGroup creation/edit form."""
 
     service_objects = DynamicModelMultipleChoiceField(queryset=models.ServiceObject.objects.all(), required=False)
@@ -374,7 +371,7 @@ class ServiceObjectGroupForm(BootstrapMixin, RelationshipModelFormMixin, forms.M
         fields = ["name", "description", "service_objects", "status", "tags"]
 
 
-class ServiceObjectGroupBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+class ServiceObjectGroupBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     """ServiceObjectGroup bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(
@@ -390,7 +387,7 @@ class ServiceObjectGroupBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixi
         ]
 
 
-class UserObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+class UserObjectFilterForm(LocalContextFilterForm, NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "username", "name"]
@@ -405,7 +402,7 @@ class UserObjectFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFie
     username = forms.CharField(required=False, label="Username")
 
 
-class UserObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
+class UserObjectForm(LocalContextModelForm, NautobotModelForm):
     """UserObject creation/edit form."""
 
     username = forms.CharField(label="Username")
@@ -421,7 +418,7 @@ class UserObjectForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm
         fields = ["username", "name", "status", "tags"]
 
 
-class UserObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+class UserObjectBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     """UserObject bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.UserObject.objects.all(), widget=forms.MultipleHiddenInput)
@@ -435,7 +432,7 @@ class UserObjectBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkE
         ]
 
 
-class UserObjectGroupFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+class UserObjectGroupFilterForm(LocalContextFilterForm, NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -449,7 +446,7 @@ class UserObjectGroupFilterForm(BootstrapMixin, StatusModelFilterFormMixin, Cust
     name = forms.CharField(required=False, label="Name")
 
 
-class UserObjectGroupForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
+class UserObjectGroupForm(LocalContextModelForm, NautobotModelForm):
     """UserObjectGroup creation/edit form."""
 
     user_objects = DynamicModelMultipleChoiceField(queryset=models.UserObject.objects.all(), required=False)
@@ -461,7 +458,7 @@ class UserObjectGroupForm(BootstrapMixin, RelationshipModelFormMixin, forms.Mode
         fields = ["name", "description", "user_objects", "status", "tags"]
 
 
-class UserObjectGroupBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+class UserObjectGroupBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     """UserObjectGroup bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(
@@ -477,7 +474,7 @@ class UserObjectGroupBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, 
         ]
 
 
-class ZoneFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+class ZoneFilterForm(LocalContextFilterForm, NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -493,7 +490,7 @@ class ZoneFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldMode
     interfaces = DynamicModelChoiceField(queryset=Interface.objects.all(), label="Interface")
 
 
-class ZoneForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
+class ZoneForm(LocalContextModelForm, NautobotModelForm):
     """Zone creation/edit form."""
 
     vrfs = DynamicModelMultipleChoiceField(queryset=VRF.objects.all(), required=False, label="VRF")
@@ -509,7 +506,7 @@ class ZoneForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm):
         fields = ["name", "description", "vrfs", "device", "interfaces", "status", "tags"]
 
 
-class ZoneBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+class ZoneBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     """Zone bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.Zone.objects.all(), widget=forms.MultipleHiddenInput)
@@ -523,7 +520,7 @@ class ZoneBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditFor
         nullable_fields = ["description", "vrfs", "interfaces"]
 
 
-class PolicyRuleFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+class PolicyRuleFilterForm(LocalContextFilterForm, NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -538,7 +535,7 @@ class PolicyRuleFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFie
     tag = TagFilterField(models.PolicyRule)
 
 
-class PolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipModelFormMixin):
+class PolicyRuleForm(LocalContextModelForm, NautobotModelForm):
     """PolicyRule creation/edit form."""
 
     name = forms.CharField(required=False, label="Name")
@@ -619,7 +616,7 @@ class PolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipMode
 
 
 # TODO: Refactor
-class PolicyRuleBulkEditForm(BootstrapMixin, TagsBulkEditFormMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+class PolicyRuleBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     """PolicyRule bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), widget=forms.MultipleHiddenInput)
@@ -633,7 +630,7 @@ class PolicyRuleBulkEditForm(BootstrapMixin, TagsBulkEditFormMixin, StatusModelB
         nullable_fields = ["description", "tags"]
 
 
-class PolicyFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin, TenancyFilterForm):
+class PolicyFilterForm(LocalContextFilterForm, NautobotFilterForm, TenancyFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name", "assigned_devices", "assigned_dynamic_groups"]
@@ -649,7 +646,7 @@ class PolicyFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldMo
     assigned_dynamic_groups = DynamicModelChoiceField(queryset=DynamicGroup.objects.all(), required=False)
 
 
-class PolicyForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm, TenancyForm):
+class PolicyForm(LocalContextModelForm, NautobotModelForm, TenancyForm):
     """Policy creation/edit form."""
 
     assigned_devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
@@ -673,7 +670,7 @@ class PolicyForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm, Te
         ]
 
 
-class PolicyBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+class PolicyBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     """Policy bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.Policy.objects.all(), widget=forms.MultipleHiddenInput)
@@ -694,7 +691,7 @@ class PolicyBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditF
 # NATPolicy
 
 
-class NATPolicyRuleFilterForm(BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin):
+class NATPolicyRuleFilterForm(LocalContextFilterForm, NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -709,7 +706,7 @@ class NATPolicyRuleFilterForm(BootstrapMixin, StatusModelFilterFormMixin, Custom
     tag = TagFilterField(models.NATPolicyRule)
 
 
-class NATPolicyRuleForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipModelFormMixin):
+class NATPolicyRuleForm(LocalContextModelForm, NautobotModelForm):
     """NATPolicyRule creation/edit form."""
 
     # Metadata
@@ -839,9 +836,7 @@ class NATPolicyRuleBulkEditForm(PolicyRuleBulkEditForm):
         nullable_fields = ["description", "tags"]
 
 
-class NATPolicyFilterForm(
-    BootstrapMixin, StatusModelFilterFormMixin, CustomFieldModelFilterFormMixin, TenancyFilterForm
-):
+class NATPolicyFilterForm(NautobotFilterForm, TenancyFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name", "assigned_devices", "assigned_dynamic_groups"]
@@ -857,7 +852,7 @@ class NATPolicyFilterForm(
     assigned_dynamic_groups = DynamicModelChoiceField(queryset=DynamicGroup.objects.all(), required=False)
 
 
-class NATPolicyForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm, TenancyForm):
+class NATPolicyForm(LocalContextModelForm, NautobotModelForm, TenancyForm):
     """NATPolicy creation/edit form."""
 
     assigned_devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
@@ -881,7 +876,7 @@ class NATPolicyForm(BootstrapMixin, RelationshipModelFormMixin, forms.ModelForm,
         ]
 
 
-class NATPolicyBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEditForm):
+class NATPolicyBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     """NATPolicy bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.NATPolicy.objects.all(), widget=forms.MultipleHiddenInput)
@@ -902,7 +897,7 @@ class NATPolicyBulkEditForm(BootstrapMixin, StatusModelBulkEditFormMixin, BulkEd
 # CapircaPolicy
 
 
-class CapircaPolicyForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipModelFormMixin):
+class CapircaPolicyForm(LocalContextModelForm, NautobotModelForm):
     """Filter Form for CapircaPolicy instances."""
 
     device = DynamicModelChoiceField(queryset=Device.objects.all())
@@ -920,7 +915,7 @@ class CapircaPolicyForm(BootstrapMixin, CustomFieldModelFormMixin, RelationshipM
         )
 
 
-class CapircaPolicyFilterForm(BootstrapMixin, CustomFieldModelFilterFormMixin):
+class CapircaPolicyFilterForm(LocalContextFilterForm, NautobotFilterForm):
     """Form for CapircaPolicy instances."""
 
     model = models.CapircaPolicy
@@ -928,7 +923,7 @@ class CapircaPolicyFilterForm(BootstrapMixin, CustomFieldModelFilterFormMixin):
     q = forms.CharField(required=False, label="Search")
 
 
-class CapircaPolicyBulkEditForm(BootstrapMixin, TagsBulkEditFormMixin, CustomFieldModelBulkEditFormMixin):
+class CapircaPolicyBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     """BulkEdit form for CapircaPolicy instances."""
 
     pk = forms.ModelMultipleChoiceField(queryset=models.CapircaPolicy.objects.all(), widget=forms.MultipleHiddenInput)

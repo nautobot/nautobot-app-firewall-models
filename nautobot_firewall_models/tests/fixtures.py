@@ -83,6 +83,7 @@ def create_env():
         default_ip_protocol="TCP",
         status=status,
         risk=3,
+        description="some description",
     )
     app2 = ApplicationObject.objects.create(
         name="app2",
@@ -92,6 +93,7 @@ def create_env():
         default_ip_protocol="TCP",
         status=status,
         risk=2,
+        description="some description",
     )
     app3 = ApplicationObject.objects.create(
         name="app3",
@@ -101,16 +103,23 @@ def create_env():
         default_ip_protocol="TCP",
         status=status,
         risk=1,
+        description="some description",
     )
-    app_grp1 = ApplicationObjectGroup.objects.create(name="streaming")
+    app_grp1 = ApplicationObjectGroup.objects.create(name="streaming", description="some description")
     app_grp1.application_objects.set([app1])
-    app_grp2 = ApplicationObjectGroup.objects.create(name="gaming")
+    app_grp2 = ApplicationObjectGroup.objects.create(name="gaming", description="some description")
     app_grp2.application_objects.set([app3, app2])
-    app_grp3 = ApplicationObjectGroup.objects.create(name="news")
+    app_grp3 = ApplicationObjectGroup.objects.create(name="news", description="some description")
     app_grp3.application_objects.set([app1, app2, app3])
 
     pol_rule1 = PolicyRule.objects.create(
-        action="deny", log=True, name="Policy Rule 1", status=status, request_id="req1", index=10
+        action="deny",
+        log=True,
+        name="Policy Rule 1",
+        status=status,
+        request_id="req1",
+        index=10,
+        description="some description",
     )
     pol_rule1.source_users.set([usr_obj1])
     pol_rule1.source_user_groups.set([usr_grp1])
@@ -132,6 +141,7 @@ def create_env():
         status=status,
         request_id="req2",
         index=20,
+        description="some description",
     )
     pol_rule2.source_users.set([usr_obj1, usr_obj2])
     pol_rule2.source_user_groups.set([usr_grp1, usr_grp2])
@@ -152,6 +162,7 @@ def create_env():
         status=status,
         request_id="req3",
         index=30,
+        description="some description",
     )
     pol_rule3.source_users.set([usr_obj1, usr_obj2, usr_obj3])
     pol_rule3.source_user_groups.set([usr_grp1, usr_grp2, usr_grp3])
