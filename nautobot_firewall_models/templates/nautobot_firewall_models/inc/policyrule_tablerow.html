@@ -1,19 +1,22 @@
 {% load helpers %}
 <tr>
+    <td>{{ rule.index }}</td>
     {% if rule.action == "remark" %}
-        <td colspan="10" style="text-align: center;"><strong>{{ rule }}</strong></td>
+        <td colspan="8" style="text-align: center;"><strong>{{ rule }}</strong></td>
     {% else %}
-        <td>{% if rule.source_address_group.all %}{% for i in rule.source_address_group.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-        <td>{% if rule.source_address.all %}{% for i in rule.source_address.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-        <td>{% if rule.source_user_group.all %}{% for i in rule.source_user_group.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-        <td>{% if rule.source_user.all %}{% for i in rule.source_user.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-        <td>{% if rule.source_zone %}<a href="{{ rule.source_zone.get_absolute_url }}">{{ rule.source_zone|placeholder }}</a><br/>{% else %}{{ None|placeholder }}{% endif %}</td>
-        <td>{% if rule.destination_address_group.all %}{% for i in rule.destination_address_group.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-        <td>{% if rule.destination_address.all %}{% for i in rule.destination_address.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-        <td>{% if rule.destination_zone %}<a href="{{ rule.destination_zone.get_absolute_url }}">{{ rule.destination_zone|placeholder }}</a><br/>{% else %}{{ None|placeholder }}{% endif %}</td>
-        <td>{% if rule.service_group.all %}{% for i in rule.service_group.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
-        <td>{% if rule.service.all %}{% for i in rule.service.all %}<a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>{% endfor %}{% else %}{{ None|placeholder }}{% endif %}</td>
+        <td>{% include './policy_rule_address_object_row.html' with address=rule.source_addresses.all address_group=rule.source_address_groups.all %}</td>
+        <td>{% include './policy_rule_user_object_row.html' with user=rule.source_users.all user_group=rule.source_user_groups.all %}</td>
+        <td>{% include './policy_rule_zone_object_row.html' with zone=rule.source_zone %}</td>
+        <td>{% include './policy_rule_service_object_row.html' with service=rule.source_services.all service_group=rule.source_service_groups.all %}</td>
+        <td>{% include './policy_rule_address_object_row.html' with address=rule.destination_addresses.all address_group=rule.destination_address_groups.all %}</td>
+        <td>{% include './policy_rule_zone_object_row.html' with zone=rule.destination_zone %}</td>
+        <td>{% include './policy_rule_service_object_row.html' with service=rule.destination_services.all service_group=rule.destination_service_groups.all %}</td>
+        <td>{% include './policy_rule_application_object_row.html' with application=rule.applications.all application_group=rule.application_groups.all %}</td>
     {% endif %}
-    <td>{{ rule.action|placeholder }}</td>
-    <td>{% if rule.log %}<span class="text-success"><i class="mdi mdi-check-bold"></i></span>{% else %}<span class="text-danger"><i class="mdi mdi-close-thick"></i></span>{% endif %}</td>
+    <td>{% include './policy_rule_action_row.html' with action=rule.action %}</td>
+    <td>
+        {% if rule.log %}
+            <span class="text-success"><i class="mdi mdi-check-bold"></i></span>{% else %}<span class="text-danger"><i class="mdi mdi-close-thick"></i></span>
+        {% endif %}
+    </td>
 </tr>

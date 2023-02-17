@@ -1,12 +1,14 @@
 """API views for firewall models."""
 
 from nautobot.core.api.views import ModelViewSet
+from nautobot.core.settings_funcs import is_truthy
+from nautobot.extras.api.views import NautobotModelViewSet
 
 from nautobot_firewall_models import filters, models
 from nautobot_firewall_models.api import serializers
 
 
-class IPRangeViewSet(ModelViewSet):
+class IPRangeViewSet(NautobotModelViewSet):
     """IPRange viewset."""
 
     queryset = models.IPRange.objects.all()
@@ -14,7 +16,7 @@ class IPRangeViewSet(ModelViewSet):
     filterset_class = filters.IPRangeFilterSet
 
 
-class FQDNViewSet(ModelViewSet):
+class FQDNViewSet(NautobotModelViewSet):
     """FQDN viewset."""
 
     queryset = models.FQDN.objects.all()
@@ -22,7 +24,7 @@ class FQDNViewSet(ModelViewSet):
     filterset_class = filters.FQDNFilterSet
 
 
-class AddressObjectViewSet(ModelViewSet):
+class AddressObjectViewSet(NautobotModelViewSet):
     """AddressObject viewset."""
 
     queryset = models.AddressObject.objects.all()
@@ -30,7 +32,7 @@ class AddressObjectViewSet(ModelViewSet):
     filterset_class = filters.AddressObjectFilterSet
 
 
-class AddressObjectGroupViewSet(ModelViewSet):
+class AddressObjectGroupViewSet(NautobotModelViewSet):
     """AddressObjectGroup viewset."""
 
     queryset = models.AddressObjectGroup.objects.all()
@@ -38,7 +40,23 @@ class AddressObjectGroupViewSet(ModelViewSet):
     filterset_class = filters.AddressObjectGroupFilterSet
 
 
-class ServiceObjectViewSet(ModelViewSet):
+class ApplicationObjectViewSet(NautobotModelViewSet):
+    """ApplicationObject viewset."""
+
+    queryset = models.ApplicationObject.objects.all()
+    serializer_class = serializers.ApplicationObjectSerializer
+    filterset_class = filters.ApplicationObjectFilterSet
+
+
+class ApplicationObjectGroupViewSet(NautobotModelViewSet):
+    """ApplicationObjectGroup viewset."""
+
+    queryset = models.ApplicationObjectGroup.objects.all()
+    serializer_class = serializers.ApplicationObjectGroupSerializer
+    filterset_class = filters.ApplicationObjectGroupFilterSet
+
+
+class ServiceObjectViewSet(NautobotModelViewSet):
     """ServiceObject viewset."""
 
     queryset = models.ServiceObject.objects.all()
@@ -46,7 +64,7 @@ class ServiceObjectViewSet(ModelViewSet):
     filterset_class = filters.ServiceObjectFilterSet
 
 
-class ServiceObjectGroupViewSet(ModelViewSet):
+class ServiceObjectGroupViewSet(NautobotModelViewSet):
     """ServiceObjectGroup viewset."""
 
     queryset = models.ServiceObjectGroup.objects.all()
@@ -54,7 +72,7 @@ class ServiceObjectGroupViewSet(ModelViewSet):
     filterset_class = filters.ServiceObjectGroupFilterSet
 
 
-class UserObjectViewSet(ModelViewSet):
+class UserObjectViewSet(NautobotModelViewSet):
     """UserObject viewset."""
 
     queryset = models.UserObject.objects.all()
@@ -62,7 +80,7 @@ class UserObjectViewSet(ModelViewSet):
     filterset_class = filters.UserObjectFilterSet
 
 
-class UserObjectGroupViewSet(ModelViewSet):
+class UserObjectGroupViewSet(NautobotModelViewSet):
     """UserObjectGroup viewset."""
 
     queryset = models.UserObjectGroup.objects.all()
@@ -70,7 +88,7 @@ class UserObjectGroupViewSet(ModelViewSet):
     filterset_class = filters.UserObjectGroupFilterSet
 
 
-class ZoneViewSet(ModelViewSet):
+class ZoneViewSet(NautobotModelViewSet):
     """Zone viewset."""
 
     queryset = models.Zone.objects.all()
@@ -78,7 +96,7 @@ class ZoneViewSet(ModelViewSet):
     filterset_class = filters.ZoneFilterSet
 
 
-class PolicyRuleViewSet(ModelViewSet):
+class PolicyRuleViewSet(NautobotModelViewSet):
     """PolicyRule viewset."""
 
     queryset = models.PolicyRule.objects.all()
@@ -86,9 +104,45 @@ class PolicyRuleViewSet(ModelViewSet):
     filterset_class = filters.PolicyRuleFilterSet
 
 
-class PolicyViewSet(ModelViewSet):
+class PolicyViewSet(NautobotModelViewSet):
     """Policy viewset."""
 
     queryset = models.Policy.objects.all()
     serializer_class = serializers.PolicySerializer
     filterset_class = filters.PolicyFilterSet
+
+    def get_serializer_class(self):
+        """Overload for the ability to expand nested objects on retrieve view."""
+        if self.action == "retrieve" and is_truthy(self.request.GET.get("deep", False)):
+            self.serializer_class = serializers.PolicyDeepSerializer
+        return super().get_serializer_class()
+
+
+class NATPolicyRuleViewSet(NautobotModelViewSet):
+    """NATPolicyRule viewset."""
+
+    queryset = models.NATPolicyRule.objects.all()
+    serializer_class = serializers.NATPolicyRuleSerializer
+    filterset_class = filters.NATPolicyRuleFilterSet
+
+
+class NATPolicyViewSet(NautobotModelViewSet):
+    """NATPolicy viewset."""
+
+    queryset = models.NATPolicy.objects.all()
+    serializer_class = serializers.NATPolicySerializer
+    filterset_class = filters.NATPolicyFilterSet
+
+    def get_serializer_class(self):
+        """Overload for the ability to expand nested objects on retrieve view."""
+        if self.action == "retrieve" and is_truthy(self.request.GET.get("deep", False)):
+            self.serializer_class = serializers.NATPolicyDeepSerializer
+        return super().get_serializer_class()
+
+
+class CapircaPolicyViewSet(ModelViewSet):
+    """CapircaPolicy viewset."""
+
+    queryset = models.CapircaPolicy.objects.all()
+    serializer_class = serializers.CapircaPolicySerializer
+    filterset_class = filters.CapircaPolicyFilterSet

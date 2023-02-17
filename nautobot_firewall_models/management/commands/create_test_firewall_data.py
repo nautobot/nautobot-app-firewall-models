@@ -3,7 +3,7 @@
 from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError
 
-from nautobot_firewall_models.tests.fixtures import create_env
+from nautobot_firewall_models.tests.fixtures import create_capirca_env
 
 
 class Command(BaseCommand):
@@ -13,7 +13,7 @@ class Command(BaseCommand):
         """Publish command to bootstrap dummy data."""
         self.stdout.write("Attempting to populate dummy data.")
         try:
-            create_env()
+            create_capirca_env()
             self.stdout.write(self.style.SUCCESS("Successfully populated dummy data!"))
         except IntegrityError:
             self.stdout.write(

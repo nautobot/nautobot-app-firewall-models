@@ -38,7 +38,7 @@ namespace = Collection("nautobot_firewall_models")
 namespace.configure(
     {
         "nautobot_firewall_models": {
-            "nautobot_ver": "1.3.5",
+            "nautobot_ver": "1.4.1",
             "project_name": "nautobot_firewall_models",
             "python_ver": "3.8",
             "local": False,
@@ -356,7 +356,7 @@ def yamllint(context):
 @task
 def check_migrations(context):
     """Check for missing migrations."""
-    command = "nautobot-server --config=nautobot/core/tests/nautobot_config.py makemigrations --dry-run --check"
+    command = "nautobot-server makemigrations --dry-run --check"
 
     run_command(context, command)
 

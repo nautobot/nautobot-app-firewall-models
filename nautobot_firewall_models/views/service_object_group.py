@@ -1,4 +1,4 @@
-"""Views for Firewall models."""
+"""Service Group Object Views."""
 
 from nautobot.core.views import generic
 

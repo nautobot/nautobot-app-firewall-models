@@ -3,7 +3,8 @@
 from django.templatetags.static import static
 from django.urls import path
 from django.views.generic import RedirectView
-from nautobot.extras.views import ObjectChangeLogView
+from nautobot.core.views.routers import NautobotUIViewSetRouter
+from nautobot.extras.views import ObjectChangeLogView, ObjectNotesView
 
 from nautobot_firewall_models import models
 from nautobot_firewall_models.views import (
@@ -12,13 +13,23 @@ from nautobot_firewall_models.views import (
     zone,
     address_object,
     address_object_group,
+    application_object,
+    application_object_group,
     service_object,
     service_object_group,
     user_object,
     user_object_group,
     policy_rule,
     policy,
+    nat_policy,
+    capirca_policy,
 )
+from nautobot_firewall_models.views.nat_policy import NATPolicyUIViewSet
+from nautobot_firewall_models.views.nat_policy_rule import NATPolicyRuleUIViewSet
+
+router = NautobotUIViewSetRouter()
+router.register("nat-policy", NATPolicyUIViewSet)
+router.register("nat-policy-rule", NATPolicyRuleUIViewSet)
 
 urlpatterns = [
     # FQDN URLs
@@ -36,6 +47,12 @@ urlpatterns = [
         name="fqdn_changelog",
         kwargs={"model": models.FQDN},
     ),
+    path(
+        "fqdn/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="fqdn_notes",
+        kwargs={"model": models.FQDN},
+    ),
     # IPRange URLs
     path("ip-range/", iprange.IPRangeListView.as_view(), name="iprange_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
@@ -49,6 +66,12 @@ urlpatterns = [
         "ip-range/<uuid:pk>/changelog/",
         ObjectChangeLogView.as_view(),
         name="iprange_changelog",
+        kwargs={"model": models.IPRange},
+    ),
+    path(
+        "ip-range/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="iprange_notes",
         kwargs={"model": models.IPRange},
     ),
     # AddressObject URLs
@@ -70,6 +93,12 @@ urlpatterns = [
         "address-object/<uuid:pk>/changelog/",
         ObjectChangeLogView.as_view(),
         name="addressobject_changelog",
+        kwargs={"model": models.AddressObject},
+    ),
+    path(
+        "address-object/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="addressobject_notes",
         kwargs={"model": models.AddressObject},
     ),
     # AddressObjectGroup URLs
@@ -115,6 +144,100 @@ urlpatterns = [
         name="addressobjectgroup_changelog",
         kwargs={"model": models.AddressObjectGroup},
     ),
+    path(
+        "address-group/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="addressobjectgroup_notes",
+        kwargs={"model": models.AddressObjectGroup},
+    ),
+    # ApplicationObject URLs
+    path("application-object/", application_object.ApplicationObjectListView.as_view(), name="applicationobject_list"),
+    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
+    path(
+        "application-object/add/", application_object.ApplicationObjectEditView.as_view(), name="applicationobject_add"
+    ),
+    path(
+        "application-object/delete/",
+        application_object.ApplicationObjectBulkDeleteView.as_view(),
+        name="applicationobject_bulk_delete",
+    ),
+    path(
+        "application-object/edit/",
+        application_object.ApplicationObjectBulkEditView.as_view(),
+        name="applicationobject_bulk_edit",
+    ),
+    path("application-object/<uuid:pk>/", application_object.ApplicationObjectView.as_view(), name="applicationobject"),
+    path(
+        "application-object/<uuid:pk>/delete/",
+        application_object.ApplicationObjectDeleteView.as_view(),
+        name="applicationobject_delete",
+    ),
+    path(
+        "application-object/<uuid:pk>/edit/",
+        application_object.ApplicationObjectEditView.as_view(),
+        name="applicationobject_edit",
+    ),
+    path(
+        "application-object/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="applicationobject_changelog",
+        kwargs={"model": models.ApplicationObject},
+    ),
+    path(
+        "application-object/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="applicationobject_notes",
+        kwargs={"model": models.ApplicationObject},
+    ),
+    # ApplicationObjectGroup URLs
+    path(
+        "application-object-group/",
+        application_object_group.ApplicationObjectGroupListView.as_view(),
+        name="applicationobjectgroup_list",
+    ),
+    # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
+    path(
+        "application-object-group/add/",
+        application_object_group.ApplicationObjectGroupEditView.as_view(),
+        name="applicationobjectgroup_add",
+    ),
+    path(
+        "application-object-group/delete/",
+        application_object_group.ApplicationObjectGroupBulkDeleteView.as_view(),
+        name="applicationobjectgroup_bulk_delete",
+    ),
+    path(
+        "application-object-group/edit/",
+        application_object_group.ApplicationObjectGroupBulkEditView.as_view(),
+        name="applicationobjectgroup_bulk_edit",
+    ),
+    path(
+        "application-object-group/<uuid:pk>/",
+        application_object_group.ApplicationObjectGroupView.as_view(),
+        name="applicationobjectgroup",
+    ),
+    path(
+        "application-object-group/<uuid:pk>/delete/",
+        application_object_group.ApplicationObjectGroupDeleteView.as_view(),
+        name="applicationobjectgroup_delete",
+    ),
+    path(
+        "application-object-group/<uuid:pk>/edit/",
+        application_object_group.ApplicationObjectGroupEditView.as_view(),
+        name="applicationobjectgroup_edit",
+    ),
+    path(
+        "application-group/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="applicationobjectgroup_changelog",
+        kwargs={"model": models.ApplicationObjectGroup},
+    ),
+    path(
+        "application-group/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="applicationobjectgroup_notes",
+        kwargs={"model": models.ApplicationObjectGroup},
+    ),
     # ServiceObject URLs
     path("service-object/", service_object.ServiceObjectListView.as_view(), name="serviceobject_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
@@ -134,6 +257,12 @@ urlpatterns = [
         "service-object/<uuid:pk>/changelog/",
         ObjectChangeLogView.as_view(),
         name="serviceobject_changelog",
+        kwargs={"model": models.ServiceObject},
+    ),
+    path(
+        "service-object/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="serviceobject_notes",
         kwargs={"model": models.ServiceObject},
     ),
     # ServiceObjectGroup URLs
@@ -179,6 +308,12 @@ urlpatterns = [
         name="serviceobjectgroup_changelog",
         kwargs={"model": models.ServiceObjectGroup},
     ),
+    path(
+        "service-object-group/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="serviceobjectgroup_notes",
+        kwargs={"model": models.ServiceObjectGroup},
+    ),
     # UserObject URLs
     path("user-object/", user_object.UserObjectListView.as_view(), name="userobject_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
@@ -192,6 +327,12 @@ urlpatterns = [
         "user-object/<uuid:pk>/changelog/",
         ObjectChangeLogView.as_view(),
         name="userobject_changelog",
+        kwargs={"model": models.UserObject},
+    ),
+    path(
+        "user-object/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="userobject_notes",
         kwargs={"model": models.UserObject},
     ),
     # UserObjectGroup URLs
@@ -225,6 +366,12 @@ urlpatterns = [
         name="userobjectgroup_changelog",
         kwargs={"model": models.UserObjectGroup},
     ),
+    path(
+        "user-object-group/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="userobjectgroup_notes",
+        kwargs={"model": models.UserObjectGroup},
+    ),
     # Zone URLs
     path("zone/", zone.ZoneListView.as_view(), name="zone_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
@@ -240,6 +387,12 @@ urlpatterns = [
         name="zone_changelog",
         kwargs={"model": models.Zone},
     ),
+    path(
+        "zone/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="zone_notes",
+        kwargs={"model": models.Zone},
+    ),
     # PolicyRule URLs
     path("policy-rule/", policy_rule.PolicyRuleListView.as_view(), name="policyrule_list"),
     # Order is important for these URLs to work (add/delete/edit) to be before any that require uuid/slug
@@ -253,6 +406,12 @@ urlpatterns = [
         "policy-rule/<uuid:pk>/changelog/",
         ObjectChangeLogView.as_view(),
         name="policyrule_changelog",
+        kwargs={"model": models.PolicyRule},
+    ),
+    path(
+        "policy-rule/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="policyrule_notes",
         kwargs={"model": models.PolicyRule},
     ),
     # Policy URLs
@@ -272,11 +431,6 @@ urlpatterns = [
         policy.PolicyDeviceWeight.as_view(),
         name="policy_set_device_weight",
     ),
-    path(
-        "policy/<uuid:pk>/policy-rules/",
-        policy.PolicyPolicyRuleIndex.as_view(),
-        name="policy_set_policy_rule_index",
-    ),
     path("policy/<uuid:pk>/delete/", policy.PolicyDeleteView.as_view(), name="policy_delete"),
     path("policy/<uuid:pk>/edit/", policy.PolicyEditView.as_view(), name="policy_edit"),
     path(
@@ -286,8 +440,72 @@ urlpatterns = [
         kwargs={"model": models.Policy},
     ),
     path(
+        "policy/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="policy_notes",
+        kwargs={"model": models.Policy},
+    ),
+    # NATPolicyRule URLs
+    path(
+        "nat-policy-rule/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="natpolicyrule_changelog",
+        kwargs={"model": models.NATPolicyRule},
+    ),
+    path(
+        "nat-policy-rule/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="natpolicyrule_notes",
+        kwargs={"model": models.NATPolicyRule},
+    ),
+    # NATPolicy urls
+    path(
+        "nat-policy/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="natpolicy_changelog",
+        kwargs={"model": models.NATPolicy},
+    ),
+    path(
+        "nat-policy/<uuid:pk>/notes/",
+        ObjectNotesView.as_view(),
+        name="natpolicy_notes",
+        kwargs={"model": models.NATPolicy},
+    ),
+    path(
+        "nat-policy/<uuid:pk>/dynamic-groups/",
+        nat_policy.NATPolicyDynamicGroupWeight.as_view(),
+        name="natpolicy_set_dynamic_group_weight",
+    ),
+    path(
+        "nat-policy/<uuid:pk>/devices/",
+        nat_policy.NATPolicyDeviceWeight.as_view(),
+        name="natpolicy_set_device_weight",
+    ),
+    path("capirca-policy/", capirca_policy.CapircaPolicyListView.as_view(), name="capircapolicy_list"),
+    path(
+        "capirca-policy/delete/", capirca_policy.CapircaPolicyBulkDeleteView.as_view(), name="capircapolicy_bulk_delete"
+    ),
+    path("capirca-policy/<uuid:pk>", capirca_policy.CapircaPolicyView.as_view(), name="capircapolicy"),
+    path(
+        "capirca-policy/<uuid:pk>/delete/",
+        capirca_policy.CapircaPolicyDeleteView.as_view(),
+        name="capircapolicy_delete",
+    ),
+    path(
+        "capirca-policy/<uuid:pk>/changelog/",
+        ObjectChangeLogView.as_view(),
+        name="capircapolicy_changelog",
+        kwargs={"model": models.CapircaPolicy},
+    ),
+    path(
+        "capirca-policy/devicedetail/<uuid:pk>",
+        capirca_policy.CapircaPolicyDeviceView.as_view(),
+        name="capircapolicy_devicedetail",
+    ),
+    path(
         "docs/",
         RedirectView.as_view(url=static("nautobot_firewall_models/docs/index.html")),
         name="docs",
     ),
 ]
+urlpatterns += router.urls

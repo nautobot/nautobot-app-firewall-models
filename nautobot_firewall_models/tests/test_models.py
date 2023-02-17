@@ -2,10 +2,13 @@
 # flake8: noqa: F403,405
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from nautobot.ipam.models import VRF
+from nautobot.dcim.models import Device
 from nautobot.extras.models import Status
+from nautobot.ipam.models import VRF
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
+
+from .fixtures import create_capirca_env, create_env
 
 
 class TestModels(TestCase):
@@ -222,3 +225,130 @@ class TestServiceObject(TestCase):
             ServiceObject.objects.create(
                 name="HTTP", port="8080-8088-999", ip_protocol="TCP", status=Status.objects.get(name="Active")
             )
+
+
+class TestPolicyRuleModels(TestCase):
+    """Test the PolicyRule model."""
+
+    def setUp(self) -> None:
+        """Create the data."""
+        create_env()
+
+    def test_policyrule_rule_details(self):
+        """Test method rule_details on PolicyRule model."""
+        rule_details = PolicyRule.objects.first().rule_details()
+        self.assertEqual(rule_details["log"], True)
+        # sample a few keys to ensure they are in there, more complete test in to_json test
+        keys = ["rule", "source_address_groups", "destination_address_groups", "action"]
+        self.assertTrue(set(keys).issubset(rule_details.keys()))
+
+    def test_policyrule_to_json(self):
+        """Test method to_json on PolicyRule model."""
+        json_details = PolicyRule.objects.first().to_json()
+        self.assertEqual(json_details["display"], "Policy Rule 1 - req1")
+        self.assertEqual(json_details["source_users"][0]["display"], "user1")
+        self.assertEqual(json_details["source_user_groups"][0]["user_objects"][0]["name"], "User 1")
+        self.assertEqual(json_details["source_addresses"][0]["ip_range"]["display"], "192.168.0.11-192.168.0.20")
+        self.assertEqual(
+            json_details["source_address_groups"][0]["address_objects"][1]["ip_address"]["display"], "10.0.0.1/32"
+        )
+        self.assertEqual(json_details["destination_services"][0]["name"], "PGSQL")
+        self.assertEqual(json_details["destination_services"][0]["port"], "5432")
+
+
+class TestPolicyModels(TestCase):
+    """Test the Policy model."""
+
+    def setUp(self) -> None:
+        """Create the data."""
+        create_env()
+
+    def test_policy_policy_details(self):
+        """Test method policy_details on Policy model."""
+        policy_details = Policy.objects.first().policy_details()[0]
+        self.assertEqual(policy_details["log"], True)
+        # sample a few keys to ensure they are in there, more complete test in to_json test
+        keys = ["rule", "source_address_groups", "destination_address_groups", "action"]
+        self.assertTrue(set(keys).issubset(policy_details.keys()))
+
+    def test_policy_to_json(self):
+        """Test method to_json on Policy model."""
+        json_details = Policy.objects.all()[2].to_json()["policy_rules"][2]
+        self.assertEqual(json_details["display"], "Policy Rule 3 - req3")
+        self.assertEqual(json_details["source_users"][0]["display"], "user1")
+        self.assertEqual(json_details["source_user_groups"][0]["user_objects"][0]["name"], "User 1")
+        self.assertEqual(json_details["source_addresses"][0]["ip_range"]["display"], "192.168.0.11-192.168.0.20")
+        self.assertEqual(
+            json_details["source_address_groups"][0]["address_objects"][1]["ip_address"]["display"], "10.0.0.1/32"
+        )
+        self.assertEqual(json_details["destination_services"][0]["name"], "DNS")
+        self.assertEqual(json_details["destination_services"][0]["port"], "53")
+
+
+class TestNATPolicyRuleModels(TestCase):
+    """Test the NATPolicyRule model."""
+
+    def setUp(self) -> None:
+        """Create the data."""
+        create_env()
+
+    def test_natpolicyrule_rule_details(self):
+        """Test method rule_details on NATPolicyRule model."""
+        rule_details = NATPolicyRule.objects.first().rule_details()
+        self.assertEqual(rule_details["log"], True)
+        # sample a few keys to ensure they are in there, more complete test in to_json test
+        keys = ["rule", "original_source_address_groups", "translated_destination_address_groups", "remark"]
+        self.assertTrue(set(keys).issubset(rule_details.keys()))
+
+    def test_natpolicyrule_to_json(self):
+        """Test method to_json on NATPolicyRule model."""
+        json_details = NATPolicyRule.objects.first().to_json()
+        self.assertEqual(json_details["display"], "NAT Policy Rule 1.1 - req1")
+        self.assertEqual(json_details["original_source_addresses"][0]["prefix"]["display"], "10.100.0.0/24")
+        self.assertEqual(json_details["translated_source_addresses"][0]["prefix"]["display"], "10.200.0.0/24")
+        self.assertEqual(json_details["original_destination_services"][0]["port"], "80")
+        self.assertEqual(json_details["translated_destination_services"][0]["port"], "8080")
+
+
+class TestNATPolicyModels(TestCase):
+    """Test the NATPolicy model."""
+
+    def setUp(self) -> None:
+        """Create the data."""
+        create_env()
+
+    def test_policy_policy_details(self):
+        """Test method policy_details on Policy model."""
+        policy_details = NATPolicy.objects.first().policy_details()[0]
+        self.assertEqual(policy_details["log"], True)
+        # sample a few keys to ensure they are in there, more complete test in to_json test
+        keys = ["rule", "original_source_address_groups", "original_destination_address_groups", "remark"]
+        self.assertTrue(set(keys).issubset(policy_details.keys()))
+
+    def test_policy_to_json(self):
+        """Test method to_json on Policy model."""
+        json_details = NATPolicyRule.objects.first().to_json()
+        self.assertEqual(json_details["display"], "NAT Policy Rule 1.1 - req1")
+        self.assertEqual(json_details["original_source_addresses"][0]["prefix"]["display"], "10.100.0.0/24")
+        self.assertEqual(json_details["translated_source_addresses"][0]["prefix"]["display"], "10.200.0.0/24")
+        self.assertEqual(json_details["original_destination_services"][0]["port"], "80")
+        self.assertEqual(json_details["translated_destination_services"][0]["port"], "8080")
+
+
+class TestCapircaModels(TestCase):
+    """Test the Capirca model."""
+
+    def setUp(self) -> None:
+        """Create the data."""
+        create_capirca_env()
+
+    def test_capirca_creates_model(self):
+        """Test method to create model."""
+        device_obj = Device.objects.get(name="DFW-WAN00")
+        cap_obj = CapircaPolicy.objects.create(device=device_obj)
+        svc = "PGSQL = 5432/tcp"
+        self.assertIn(svc, cap_obj.svc)
+        net = "printer = 10.0.0.100/32"
+        self.assertIn(net, cap_obj.net)
+        pol = "target:: srx from-zone all to-zone all"
+        self.assertIn(pol, cap_obj.pol)

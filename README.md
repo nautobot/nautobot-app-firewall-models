@@ -12,7 +12,7 @@ The plugin is available as a Python package in PyPI and can be installed with `p
 pip install nautobot-firewall-models
 ```
 
-> The plugin is compatible with Nautobot 1.3.0 and higher
+> The plugin is compatible with Nautobot 1.4.0 and higher
 
 To ensure Nautobot Firewall Models Plugin is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `nautobot-firewall-models` package:
 
@@ -37,19 +37,26 @@ Use the `default_status` plugin configuration setting to change the default valu
 PLUGINS_CONFIG = {
     "nautobot_firewall_models": {
         "default_status": "active"
+        "allowed_status": ["active"], # default shown, `[]` allows all
+        "capirca_remark_pass": True,
+        "capirca_os_map": {
+            "cisco_ios": "cisco",
+            "arista_eos": "arista",
+        },
+        # "custom_capirca": "my.custom.func", # provides ability to overide capirca logic
     }
 }
 ```
 
 The value assigned to `default_status` must match the slug of an existing Nautobot Status object. That Status object must have all of the Firewall Models listed in the Content Type associations. See examples below on selecting the Content Type(s) when creating/editing a Status object and the pre-built `Active` Status with firewall content types added.
 
-![Custom Status](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/main/docs/images/custom-status.png "Custom Status")
-![Existing Status](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/main/docs/images/existing-status.png "Existing Status")
+![Custom Status](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/develop/docs/images/custom-status.png "Custom Status")
+![Existing Status](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/develop/docs/images/existing-status.png "Existing Status")
 
 ## Screenshots
 
-![Navigation Menu](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/main/docs/images/navmenu.png "Navigation Menu")
-![Policy View](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/main/docs/images/policy.png "Policy View")
+![Navigation Menu](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/develop/docs/images/navmenu.png "Navigation Menu")
+![Policy View](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/develop/docs/images/policy.png "Policy View")
 
 ## Documentation
 

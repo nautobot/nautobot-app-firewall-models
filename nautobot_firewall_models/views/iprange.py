@@ -1,4 +1,4 @@
-"""Views for Firewall models."""
+"""IP Range Views."""
 
 from nautobot.core.views import generic
 

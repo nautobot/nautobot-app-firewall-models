@@ -1,4 +1,4 @@
-"""Tables for Firewall models."""
+"""Table Views for Firewall Models."""
 
 import django_tables2 as tables
 from nautobot.extras.tables import StatusTableMixin
@@ -62,6 +62,35 @@ class AddressObjectGroupTable(StatusTableMixin, BaseTable):
 
         model = models.AddressObjectGroup
         fields = ("pk", "name", "description", "address_objects", "status")
+
+
+class ApplicationObjectTable(StatusTableMixin, BaseTable):
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.Column(linkify=True)
+    actions = ButtonsColumn(models.ApplicationObject, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.ApplicationObject
+        fields = ("pk", "name", "description", "category", "subcategory", "technology", "risk", "default_type")
+
+
+class ApplicationObjectGroupTable(StatusTableMixin, BaseTable):
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.Column(linkify=True)
+    application_objects = tables.ManyToManyColumn(linkify_item=True)
+    actions = ButtonsColumn(models.ApplicationObjectGroup, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.ApplicationObjectGroup
+        fields = ("pk", "name", "description", "application_objects")
 
 
 class ServiceObjectTable(StatusTableMixin, BaseTable):
@@ -150,16 +179,43 @@ class PolicyRuleTable(StatusTableMixin, BaseTable):
             # pylint: disable=duplicate-code
             "pk",
             "name",
-            "source_user",
-            "source_user_group",
-            "source_address",
-            "source_address_group",
+            "source_users",
+            "source_user_groups",
+            "source_addresses",
+            "source_address_groups",
             "source_zone",
-            "destination_address",
-            "destination_address_group",
+            "source_services",
+            "source_service_groups",
+            "destination_addresses",
+            "destination_address_groups",
             "destination_zone",
-            "service",
-            "service_group",
+            "destination_services",
+            "destination_service_groups",
+            "applications",
+            "application_groups",
+            "action",
+            "description",
+            "request_id",
+            "log",
+            "status",
+        )
+        default_columns = (
+            "pk",
+            "name",
+            "source_users",
+            "source_user_groups",
+            "source_addresses",
+            "source_address_groups",
+            "source_zone",
+            "source_services",
+            "source_service_groups",
+            "destination_addresses",
+            "destination_address_groups",
+            "destination_zone",
+            "destination_services",
+            "destination_service_groups",
+            "applications",
+            "application_groups",
             "action",
             "log",
             "status",
@@ -180,3 +236,111 @@ class PolicyTable(StatusTableMixin, BaseTable):
 
         model = models.Policy
         fields = ("pk", "name", "description", "policy_rules", "assigned_devices", "assigned_dynamic_groups", "status")
+
+
+# TODO: refactor
+class NATPolicyRuleTable(StatusTableMixin, BaseTable):
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.LinkColumn()
+    actions = ButtonsColumn(models.NATPolicyRule, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.NATPolicyRule
+        fields = (
+            # pylint: disable=duplicate-code
+            "pk",
+            "name",
+            "source_zone",
+            "destination_zone",
+            "original_source_addresses",
+            "original_source_address_groups",
+            "original_source_services",
+            "original_source_service_groups",
+            "translated_source_addresses",
+            "translated_source_address_groups",
+            "translated_source_services",
+            "translated_source_service_groups",
+            "original_destination_addresses",
+            "original_destination_address_groups",
+            "original_destination_services",
+            "original_destination_service_groups",
+            "translated_destination_addresses",
+            "translated_destination_address_groups",
+            "translated_destination_services",
+            "translated_destination_service_groups",
+            "remark",
+            "request_id",
+            "description",
+            "log",
+            "status",
+        )
+        default_columns = (
+            # pylint: disable=duplicate-code
+            "pk",
+            "name",
+            "source_zone",
+            "destination_zone",
+            "original_source_addresses",
+            "original_source_address_groups",
+            "original_source_services",
+            "original_source_service_groups",
+            "translated_source_addresses",
+            "translated_source_address_groups",
+            "translated_source_services",
+            "translated_source_service_groups",
+            "original_destination_addresses",
+            "original_destination_address_groups",
+            "original_destination_services",
+            "original_destination_service_groups",
+            "translated_destination_addresses",
+            "translated_destination_address_groups",
+            "translated_destination_services",
+            "translated_destination_service_groups",
+            "remark",
+            "log",
+            "status",
+        )
+
+
+class NATPolicyTable(StatusTableMixin, BaseTable):
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    name = tables.Column(linkify=True)
+    nat_policy_rules = tables.ManyToManyColumn(verbose_name="NAT policy rules", linkify_item=True)
+    actions = ButtonsColumn(models.NATPolicy, buttons=("edit", "delete"))
+    assigned_devices = tables.ManyToManyColumn(linkify_item=True)
+    assigned_dynamic_groups = tables.ManyToManyColumn(linkify_item=True)
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.NATPolicy
+        fields = (
+            "pk",
+            "name",
+            "description",
+            "nat_policy_rules",
+            "assigned_devices",
+            "assigned_dynamic_groups",
+            "status",
+        )
+
+
+class CapircaPolicyTable(BaseTable):
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    device = tables.TemplateColumn(
+        template_code="""<a href="{% url 'plugins:nautobot_firewall_models:capircapolicy' pk=record.pk  %}" <strong>{{ record.device }}</strong></a> """
+    )
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.CapircaPolicy
+        fields = ("pk", "device")

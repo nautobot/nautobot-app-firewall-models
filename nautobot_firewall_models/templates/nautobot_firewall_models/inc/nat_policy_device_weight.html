@@ -1,0 +1,38 @@
+{% load helpers %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>Assign NAT Policy Weight to Device</strong>
+            </div>
+            {% if object.natpolicydevicem2m_set.all %}
+                <form action="{% url 'plugins:nautobot_firewall_models:natpolicy_set_device_weight' pk=object.id %}" method="post" enctype="multipart/form-data" class="form form-horizontal">
+                    {% csrf_token %}
+                    <table class="table table-hover panel-body">
+                        <tr>
+                            <th>Weight</th>
+                            <th>Device</th>
+                        </tr>
+                        <tbody>
+                            {% for m2m in object.natpolicydevicem2m_set.all %}
+                                <tr>
+                                    <td>
+                                        <input name="{{ m2m.device.id }}" value="{{ m2m.weight }}"></input>
+                                    </td>
+                                    <td>
+                                        {{ m2m.device }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            {% else %}
+                <div class="panel-body">
+                    <span class="text-muted">No Devices assigned</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

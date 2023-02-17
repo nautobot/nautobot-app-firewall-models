@@ -1,0 +1,18 @@
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>NAT Policy Rule Expanded</strong>
+            </div>
+            <table class="table table-hover panel-body">
+                {% include 'nautobot_firewall_models/inc/natpolicyrule_tablehead.html' with parent_policy=True %}
+                {% for m2m in object.natpolicyrulem2m_set.all %}
+                {% include 'nautobot_firewall_models/inc/natpolicyrule_tablerow.html' with nat_rule=m2m.nat_rule parent_policy=True %}
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>

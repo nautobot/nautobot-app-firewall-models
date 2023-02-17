@@ -1,4 +1,4 @@
-"""Views for Firewall models."""
+"""Policy Object Views."""
 
 from django.shortcuts import reverse, redirect
 from django.views.generic.edit import CreateView
@@ -21,35 +21,19 @@ class PolicyView(generic.ObjectView):
     """Detail view."""
 
     queryset = models.Policy.objects.all().prefetch_related(
-        "policyrulem2m_set__rule__service",
-        "policyrulem2m_set__rule__service_group",
-        "policyrulem2m_set__rule__source_address",
-        "policyrulem2m_set__rule__source_address_group",
-        "policyrulem2m_set__rule__source_user",
-        "policyrulem2m_set__rule__source_user_group",
+        "policyrulem2m_set__rule__source_addresses",
+        "policyrulem2m_set__rule__source_address_groups",
+        "policyrulem2m_set__rule__source_users",
+        "policyrulem2m_set__rule__source_user_groups",
         "policyrulem2m_set__rule__source_zone",
+        "policyrulem2m_set__rule__source_services",
+        "policyrulem2m_set__rule__source_service_groups",
         "policyrulem2m_set__rule__destination_zone",
-        "policyrulem2m_set__rule__destination_address",
-        "policyrulem2m_set__rule__destination_address_group",
+        "policyrulem2m_set__rule__destination_addresses",
+        "policyrulem2m_set__rule__destination_address_groups",
+        "policyrulem2m_set__rule__destination_services",
+        "policyrulem2m_set__rule__destination_service_groups",
     )
-
-
-class PolicyPolicyRuleIndex(CreateView):
-    """View to set index on a Policy/PolicyRule relationship."""
-
-    http_method_names = ["post"]
-
-    def post(self, request, pk, *args, **kwargs):
-        # pylint: disable=invalid-name, arguments-differ
-        """Method to set index on a rule in a policy."""
-        form_data = dict(request.POST)
-        form_data.pop("csrfmiddlewaretoken", None)
-        for rule, index in form_data.items():
-            m2m = models.PolicyRuleM2M.objects.get(rule=rule, policy=pk)
-            pol_index = index[0] if index[0] != "" else None
-            m2m.index = pol_index
-            m2m.validated_save()
-        return redirect(reverse("plugins:nautobot_firewall_models:policy", kwargs={"pk": pk}))
 
 
 class PolicyDynamicGroupWeight(CreateView):

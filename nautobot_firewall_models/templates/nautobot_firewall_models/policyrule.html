@@ -1,72 +1,53 @@
-{% extends 'generic/object_detail.html' %}
+{% extends 'generic/object_retrieve.html' %}
 {% load helpers %}
-{% load plugins %}
-{% block content %}
-    <div class="tab-content">
-        <div id="main" role="tabpanel" class="tab-pane {% if not active_tab and not request.GET.tab or request.GET.tab == "main" %}active{% else %}fade{% endif %}">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <strong>Policy Rule Details</strong>
-                        </div>
-                        <table class="table table-hover panel-body">
-                            {% include 'nautobot_firewall_models/inc/policyrule_tablehead.html' with  parent_policy=False %}
-                            {% include 'nautobot_firewall_models/inc/policyrule_tablerow.html' with rule=object parent_policy=False %}
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <strong>Description</strong>
-                        </div>
-                        <div class="panel-body">
-                            {% if object.description %}
-                                <span>{{ object.description }}</span>
-                            {% else %}
-                                <span class="text-muted">No description set</span>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    {% block content_left_page %}{% endblock content_left_page %}
-                    {% include 'inc/custom_fields/panel.html' with custom_fields=object.get_custom_fields_basic computed_fields_advanced_ui=False %}
-                    {% include 'inc/relationships_panel.html' %}
-                    {% include 'extras/inc/tags_panel.html' %}
-                    {% plugin_left_page object %}
-                </div>
-                <div class="col-md-6">
-                    {% block content_right_page %}{% endblock content_right_page %}
-                    {% plugin_right_page object %}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    {% block content_full_width_page %}{% endblock content_full_width_page %}
-                    {% plugin_full_width_page object %}
-                </div>
-            </div>
+
+{% block content_full_width_page %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Policy Rule Details</strong>
         </div>
-        <div id="advanced" role="tabpanel" class="tab-pane {% if request.GET.tab == 'advanced' %}active{% else %}fade{% endif %}">
-            <div class="row">
-                <div class="col-md-6">
-                    {% include 'inc/object_details_advanced_panel.html' %}
-                </div>
-                <div class="col-md-6">
-                    {% block advanced_content_right_page %}{% endblock advanced_content_right_page %}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    {% block advanced_content_full_width_page %}{% endblock advanced_content_full_width_page %}
-                </div>
-            </div>
+        <table class="table table-hover panel-body">
+            {% include 'nautobot_firewall_models/inc/policyrule_tablehead.html' %}
+            {% include 'nautobot_firewall_models/inc/policyrule_tablerow.html' with rule=object %}
+        </table>
+    </div>
+{% endblock content_full_width_page %}
+
+{% block content_left_page %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Description</strong>
+        </div>
+        <div class="panel-body">
+            {% if object.description %}
+                <span>{{ object.description }}</span>
+            {% else %}
+                <span class="text-muted">No description set</span>
+            {% endif %}
         </div>
     </div>
+{% endblock content_left_page %}
+
+{% block content_right_page %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Assigned To Policies</strong>
+        </div>
+        <div class="panel-body">
+            {% if object.policies.exists %}
+                <ul>
+                    {% for i in object.policies.all %}
+                        <li><a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <span class="text-muted">Not </span>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content_right_page %}
+
+{% block javascript %}
+    {{ block.super }}
+    <script>$("span[data-toggle='tooltip']").tooltip()</script>
 {% endblock %}

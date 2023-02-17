@@ -1,6 +1,6 @@
 {% block content %}
 <div class="panel panel-default">
-    <div class="panel-heading"><strong>Firewall Policies</strong></div>
+    <div class="panel-heading"><strong>Security Policies</strong></div>
     {% if not policies %}
     <div class="panel-body">
         <span class="text-muted">None</span>
@@ -10,6 +10,7 @@
         <tr>
             <th>Policy</th>
             <th>Weight</th>
+            <th>Type</th>
         </tr>
         <tbody>
             {% for m2m in policies %}
@@ -20,12 +21,29 @@
                     <td>
                         {{ m2m.weight }}
                     </td>
+                    <td>
+                        Firewall
+                    </td>
                 </tr>
-            {% empty %}
+            {% endfor %}
+            {% for m2m in nat_policies %}
+                <tr>
+                    <td>
+                        <a href="{{ m2m.policy.get_absolute_url }}">{{ m2m.nat_policy }}</a>
+                    </td>
+                    <td>
+                        {{ m2m.weight }}
+                    </td>
+                    <td>
+                        NAT
+                    </td>
+                </tr>
+            {% endfor %}
+            {% if policies|length == 0 and nat_policies|length == 0 %}
                 <div class="panel-body">
                     <span class="text-muted">None</span>
                 </div>
-            {% endfor %}
+            {% endif %}
         </tbody>
     </table>
     {% endif %}

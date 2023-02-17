@@ -1,6 +1,10 @@
 # Nautobot Firewall Models Plugin
 
-A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to model layer 4 firewall policies and/or extended access control lists.
+A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to model any of the following:
+
+- Layer 4 firewall policies
+- Extended access control lists
+- NAT policies
 
 Future development will include the ability to onboard an existing access list from a device and the ability to generate device configuration.
 
@@ -12,7 +16,7 @@ The plugin is available as a Python package in PyPI and can be installed with `p
 pip install nautobot-firewall-models
 ```
 
-> The plugin is compatible with Nautobot 1.3.0 and higher
+> The plugin is compatible with Nautobot 1.4.0 and higher
 
 To ensure Nautobot Firewall Models Plugin is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `nautobot-firewall-models` package:
 

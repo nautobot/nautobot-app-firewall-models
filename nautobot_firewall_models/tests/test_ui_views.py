@@ -33,6 +33,22 @@ class IPRangeUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
+        pass
+
 
 class FQDNUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the Protocol viewsets."""
@@ -57,6 +73,22 @@ class FQDNUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("Not implemented")
     def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
         pass
 
 
@@ -87,6 +119,10 @@ class AddressObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -101,6 +137,18 @@ class AddressObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
         pass
 
 
@@ -130,6 +178,10 @@ class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -146,6 +198,136 @@ class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_delete_object_with_permission(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
+        pass
+
+
+class ApplicationObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+    """Test the ApplicationObject viewsets."""
+
+    model = ApplicationObject
+    bulk_edit_data = {"description": "bulk test update description"}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        create_env()
+
+        status = Status.objects.get(slug="active").id
+        cls.form_data = {"name": "obj1", "risk": 1, "status": status}
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_constrained_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
+        pass
+
+
+class ApplicationObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
+    """Test the ApplicationObjectGroup viewsets."""
+
+    model = ApplicationObjectGroup
+    bulk_edit_data = {"description": "test update description"}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        create_env()
+        status = Status.objects.get(slug="active").id
+        app_obj = ApplicationObject.objects.first()
+        cls.form_data = {"name": "test1", "application_objects": [app_obj.id], "status": status}
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_constrained_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_constrained_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
+        pass
+
 
 class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the ServiceObject viewsets."""
@@ -156,6 +338,7 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
+        ServiceObject.objects.all().delete()
         status = Status.objects.get(slug="active").id
         cls.form_data = {"name": "HTTP", "port": "8088", "status": status, "ip_protocol": "TCP"}
         create_env()
@@ -172,6 +355,10 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -186,6 +373,18 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
         pass
 
 
@@ -215,6 +414,10 @@ class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -229,6 +432,18 @@ class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
         pass
 
 
@@ -257,6 +472,10 @@ class UserObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -271,6 +490,18 @@ class UserObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
         pass
 
 
@@ -300,6 +531,10 @@ class UserObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -314,6 +549,18 @@ class UserObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
         pass
 
 
@@ -342,6 +589,10 @@ class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -358,12 +609,24 @@ class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_delete_object_with_permission(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
+        pass
+
 
 class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the PolicyRule viewsets."""
 
     model = PolicyRule
-    bulk_edit_data = {"log": True}
+    bulk_edit_data = {"description": "bulk test update description"}
 
     @classmethod
     def setUpTestData(cls):
@@ -376,9 +639,9 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         svc = ServiceObject.objects.first()
         cls.form_data = {
             # pylint: disable=R0801
-            "source_user": [src_usr.id],
-            "source_address": [src_addr.id],
-            "destination_address": [dest_addr.id],
+            "source_users": [src_usr.id],
+            "source_addresses": [src_addr.id],
+            "destination_addresses": [dest_addr.id],
             "action": "deny",
             "log": True,
             "service": [svc.id],
@@ -398,6 +661,10 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -412,6 +679,18 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
         pass
 
 
@@ -446,6 +725,10 @@ class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def test_bulk_import_objects_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_bulk_import_objects_with_permission_csv_file(self):
+        pass
+
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects_with_constrained_permission(self):
         pass
@@ -460,4 +743,16 @@ class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_with_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_with_permission_and_xwwwformurlencoded(self):
+        pass
+
+    @skip("BROKEN IN v1.5.2 FIXED in v1.5.5")
+    def test_list_objects_with_permission(self):
         pass

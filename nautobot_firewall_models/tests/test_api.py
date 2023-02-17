@@ -1,7 +1,6 @@
 """Unit tests for API views."""
 # flake8: noqa: F403,405
 from unittest import skip
-from nautobot.extras.models.statuses import Status
 from nautobot.utilities.testing import APIViewTestCases
 from nautobot.ipam.models import Prefix
 
@@ -13,20 +12,21 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the IPRange viewsets."""
 
     model = models.IPRange
+    brief_fields = ["display", "end_address", "id", "start_address", "url"]
     bulk_update_data = {"description": "test update description"}
 
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"start_address": "10.0.0.1", "end_address": "10.0.0.3", "status": status},
-            {"start_address": "10.0.0.4", "end_address": "10.0.0.10", "status": status},
+            {"start_address": "10.0.0.1", "end_address": "10.0.0.3"},
+            {"start_address": "10.0.0.4", "end_address": "10.0.0.10"},
         ]
         create_ip_range()
 
     @skip("Not implemented")
-    def test_list_objects_brief(self):
+    def test_notes_url_on_object(self):
         pass
 
 
@@ -34,20 +34,88 @@ class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the Protocol viewsets."""
 
     model = models.FQDN
+    brief_fields = ["display", "id", "name", "url"]
     bulk_update_data = {"description": "test update description"}
 
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"name": "test.local", "status": status},
-            {"name": "sub.test.local", "status": status},
+            {"name": "test.local"},
+            {"name": "sub.test.local"},
         ]
         create_fqdn()
 
     @skip("Not implemented")
+    def test_notes_url_on_object(self):
+        pass
+
+
+class ApplicationObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
+    """Test the ApplicationObject viewsets."""
+
+    model = models.ApplicationObject
+    bulk_update_data = {"description": "test update description"}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        create_env()
+
+        cls.create_data = [
+            {"name": "obj2", "risk": 1},
+            {"name": "obj1", "risk": 1},
+        ]
+
+    @skip("Not implemented")
     def test_list_objects_brief(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+
+class ApplicationObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
+    """Test the ApplicationObjectGroup viewsets."""
+
+    model = models.ApplicationObjectGroup
+    bulk_update_data = {"description": "test update description"}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        create_env()
+        app_obj = models.ApplicationObject.objects.first()
+
+        cls.create_data = [
+            {"name": "test1", "application_objects": [app_obj.id]},
+            {"name": "test2", "application_objects": [app_obj.id]},
+        ]
+
+    @skip("Not implemented")
+    def test_list_objects_brief(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -63,11 +131,10 @@ class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
         create_env()
         ip_range = models.IPRange.objects.first()
         prefix = Prefix.objects.first()
-        status = Status.objects.get(slug="active").id
 
         cls.create_data = [
-            {"name": "obj1", "ip_range": ip_range.id, "status": status},
-            {"name": "obj2", "prefix": prefix.id, "status": status},
+            {"name": "obj2", "prefix": prefix.id},
+            {"name": "obj1", "ip_range": ip_range.id},
         ]
 
     @skip("Not implemented")
@@ -80,6 +147,10 @@ class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -94,10 +165,10 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         addr_obj = models.AddressObject.objects.first()
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"name": "test1", "address_objects": [addr_obj.id], "status": status},
-            {"name": "test2", "address_objects": [addr_obj.id], "status": status},
+            {"name": "test1", "address_objects": [addr_obj.id]},
+            {"name": "test2", "address_objects": [addr_obj.id]},
         ]
 
     @skip("Not implemented")
@@ -110,6 +181,10 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
     def test_create_object(self):
@@ -135,10 +210,10 @@ class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"name": "HTTP", "port": "8088", "status": status, "ip_protocol": "TCP"},
-            {"name": "HTTP", "port": "8080-8088", "status": status, "ip_protocol": "TCP"},
+            {"name": "HTTP", "port": "8088", "ip_protocol": "TCP"},
+            {"name": "HTTP", "port": "8080-8088", "ip_protocol": "TCP"},
         ]
         create_env()
 
@@ -152,6 +227,10 @@ class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -166,10 +245,10 @@ class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         svc_obj = models.ServiceObject.objects.first()
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"name": "test1", "service_objects": [svc_obj.id], "status": status},
-            {"name": "test2", "service_objects": [svc_obj.id], "status": status},
+            {"name": "test1", "service_objects": [svc_obj.id]},
+            {"name": "test2", "service_objects": [svc_obj.id]},
         ]
 
     @skip("Not implemented")
@@ -182,6 +261,10 @@ class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
     def test_create_object(self):
@@ -206,10 +289,10 @@ class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"username": "test1", "name": "Foo", "status": status},
-            {"username": "test2", "name": "Bar", "status": status},
+            {"username": "test1", "name": "Foo"},
+            {"username": "test2", "name": "Bar"},
         ]
         create_env()
 
@@ -223,6 +306,10 @@ class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -237,10 +324,10 @@ class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         user = models.UserObject.objects.first()
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"name": "test1", "user_objects": [user.id], "status": status},
-            {"name": "test2", "user_objects": [user.id], "status": status},
+            {"name": "test1", "user_objects": [user.id]},
+            {"name": "test2", "user_objects": [user.id]},
         ]
 
     @skip("Not implemented")
@@ -253,6 +340,10 @@ class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
     def test_create_object(self):
@@ -277,10 +368,10 @@ class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"name": "trust", "status": status},
-            {"name": "untrust", "status": status},
+            {"name": "trust"},
+            {"name": "untrust"},
         ]
         create_env()
 
@@ -294,6 +385,10 @@ class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass
 
 
@@ -311,29 +406,27 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
         src_usr = models.UserObject.objects.first()
         src_addr = models.AddressObject.objects.first()
         dest_addr = models.AddressObject.objects.last()
-        status = Status.objects.get(slug="active").id
+
         svc = models.ServiceObject.objects.first()
         cls.create_data = [
             {
                 # pylint: disable=R0801
-                "source_user": [src_usr.id],
-                "source_address": [src_addr.id],
-                "destination_address": [dest_addr.id],
+                "source_users": [src_usr.id],
+                "source_addresses": [src_addr.id],
+                "destination_addresses": [dest_addr.id],
                 "action": "deny",
                 "log": True,
-                "service": [svc.id],
+                "destination_services": [svc.id],
                 "name": "test rule",
-                "status": status,
             },
             {
-                "source_user": [src_usr.id],
-                "source_address": [src_addr.id],
-                "destination_address": [dest_addr.id],
+                "source_users": [src_usr.id],
+                "source_addresses": [src_addr.id],
+                "destination_addresses": [dest_addr.id],
                 "action": "deny",
                 "log": False,
-                "service": [svc.id],
+                "destination_services": [svc.id],
                 "name": "test rule",
-                "status": status,
             },
         ]
 
@@ -348,6 +441,10 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_bulk_delete_objects(self):
         pass
 
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
 
 class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the Policy viewsets."""
@@ -360,10 +457,10 @@ class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         pol_rule = models.PolicyRule.objects.first()
-        status = Status.objects.get(slug="active").id
+
         cls.create_data = [
-            {"name": "test 1", "policy_rules": [{"rule": pol_rule.id}], "status": status},
-            {"name": "test 2", "policy_rules": [{"rule": pol_rule.id}], "description": "Test desc", "status": status},
+            {"name": "test 1", "policy_rules": [pol_rule.id]},
+            {"name": "test 2", "policy_rules": [pol_rule.id], "description": "Test desc"},
         ]
 
     @skip("Not implemented")
@@ -388,4 +485,104 @@ class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+
+class NATPolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
+    """Test the PolicyRule viewsets."""
+
+    model = models.NATPolicyRule
+    bulk_update_data = {"log": False}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        create_env()
+        src_addr = models.AddressObject.objects.first()
+        dest_addr = models.AddressObject.objects.last()
+
+        svc = models.ServiceObject.objects.first()
+        cls.create_data = [
+            {
+                "original_source_addresses": [src_addr.id],
+                "original_destination_addresses": [dest_addr.id],
+                "translated_destination_addresses": [src_addr.id],
+                "log": True,
+                "original_destination_services": [svc.id],
+                "name": "test rule",
+            },
+            {
+                "original_source_addresses": [src_addr.id],
+                "original_destination_addresses": [dest_addr.id],
+                "translated_destination_addresses": [src_addr.id],
+                "log": False,
+                "original_destination_services": [svc.id],
+                "name": "test rule",
+            },
+        ]
+
+    @skip("not implemented")
+    def test_list_objects_brief(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
+        pass
+
+
+class NATPolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
+    """Test the Policy viewsets."""
+
+    model = models.NATPolicy
+    bulk_update_data = {"description": "test update description"}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        create_env()
+        nat_pol_rule = models.NATPolicyRule.objects.first()
+
+        cls.create_data = [
+            {"name": "test 1", "nat_policy_rules": [nat_pol_rule.id]},
+            {"name": "test 2", "nat_policy_rules": [nat_pol_rule.id], "description": "Test desc"},
+        ]
+
+    @skip("Not implemented")
+    def test_list_objects_brief(self):
+        pass
+
+    def test_create_object(self):
+        self.validation_excluded_fields = ["nat_policy_rules"]
+        return super().test_create_object()
+
+    def test_update_object(self):
+        self.validation_excluded_fields = ["nat_policy_rules"]
+        return super().test_update_object()
+
+    def test_bulk_create_objects(self):
+        self.validation_excluded_fields = ["nat_policy_rules"]
+        return super().test_bulk_create_objects()
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_bulk_delete_objects(self):
+        pass
+
+    @skip("on_delete set to PROTECT")
+    def test_delete_object_without_permission(self):
         pass

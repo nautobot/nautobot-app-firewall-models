@@ -1,0 +1,12 @@
+{% load helpers %}
+
+{% if service_group or service %}
+  {% for i in service_group %}
+    <i title="Service Group Object" class="mdi mdi-folder-cog"></i> <a href="{{ i.get_absolute_url }}" title="{% for svc_obj in i.service_objects.all %}{{ svc_obj }}&#013;{% endfor %}">{{ i|placeholder }}</a><br/>
+  {% endfor %}
+  {% for i in service %}
+    <i title="Service Object" class="mdi mdi-cog"></i> <a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a><br/>
+  {% endfor %}
+{% else %}
+  <span title="No Service or ServiceGroup set{% if not nat %}, implicit any{% endif %}" data-toggle="tooltip">{% if nat %}—{% else %}ANY{% endif %}</span>
+ {% endif %}
