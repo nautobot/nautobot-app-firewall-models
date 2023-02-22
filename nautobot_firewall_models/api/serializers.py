@@ -227,7 +227,9 @@ class PolicyRuleSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, N
         required=False,
         many=True,
     )
-    source_zone = ZoneSerializer(required=False)
+    source_zone = SerializedPKRelatedField(
+        queryset=models.Zone.objects.all(), serializer=ZoneSerializer, required=False
+    )
     destination_addresses = SerializedPKRelatedField(
         queryset=models.AddressObject.objects.all(), serializer=AddressObjectSerializer, required=False, many=True
     )
@@ -237,7 +239,9 @@ class PolicyRuleSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, N
         required=False,
         many=True,
     )
-    destination_zone = ZoneSerializer(required=False)
+    destination_zone = SerializedPKRelatedField(
+        queryset=models.Zone.objects.all(), serializer=ZoneSerializer, required=False
+    )
     destination_services = SerializedPKRelatedField(
         queryset=models.ServiceObject.objects.all(), serializer=ServiceObjectSerializer, required=False, many=True
     )
