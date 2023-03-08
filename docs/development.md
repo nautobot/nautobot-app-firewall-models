@@ -8,9 +8,9 @@ Below is a quick start guide if you're already familiar with the development env
 
 The [Invoke](http://www.pyinvoke.org/) library is used to provide some helper commands based on the environment. There are a few configuration parameters which can be passed to Invoke to override the default configuration:
 
-* `nautobot_ver`: the version of Nautobot to use as a base for any built Docker containers (default: 1.1.4)
+* `nautobot_ver`: the version of Nautobot to use as a base for any built Docker containers (default: 1.4.1)
 * `project_name`: the Docker Compose project name (default: nautobot_firewall_models)
-* `python_ver`: the version of Python to use as a base for any built Docker containers (default: 3.6)
+* `python_ver`: the version of Python to use as a base for any built Docker containers (default: 3.8)
 * `local`: a boolean flag indicating if Invoke tasks should be run on the host or inside the Docker containers (default: False, commands will be run in Docker containers)
 * `compose_dir`: the full path to a directory containing the project Compose files
 * `compose_files`: a list of Compose files applied in order (see [Multiple Compose files](https://docs.docker.com/compose/extends/#multiple-compose-files) for more information)
@@ -28,7 +28,8 @@ Using **Invoke** these configuration options can be overridden using [several me
 nautobot_firewall_models:
   local: true
   compose_files:
-    - "docker-compose.requirements.yml"
+    - "docker-compose.postgres.yml"
+    - "docker-compose.redis.yml"
 ```
 
 3. Run the following commands:
