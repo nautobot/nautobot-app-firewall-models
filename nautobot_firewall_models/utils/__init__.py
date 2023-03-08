@@ -4,7 +4,7 @@ from django.conf import settings
 from django.utils.module_loading import import_string
 from rest_framework.renderers import JSONRenderer
 from nautobot.extras.models import Status
-from nautobot.utilities.utils import serialize_object_v2
+from nautobot.core.models.utils import serialize_object_v2
 
 
 def get_default_status():

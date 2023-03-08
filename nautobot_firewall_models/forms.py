@@ -15,7 +15,7 @@ from nautobot.extras.models import DynamicGroup, Tag
 from nautobot.ipam.models import VRF, IPAddress, Prefix
 from nautobot.tenancy.forms import TenancyFilterForm, TenancyForm
 from nautobot.tenancy.models import Tenant
-from nautobot.utilities.forms import (
+from nautobot.apps.forms import (
     DynamicModelChoiceField,
     DynamicModelMultipleChoiceField,
     TagFilterField,
