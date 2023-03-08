@@ -7,7 +7,7 @@ from django_filters.filterset import FilterSet
 from nautobot.dcim.models import Device
 from nautobot.extras.filters import NautobotFilterSet
 from nautobot.extras.models import Status
-from nautobot.utilities.filters import TagFilter
+from nautobot.core.filters import TagFilter
 
 from nautobot_firewall_models import models
 

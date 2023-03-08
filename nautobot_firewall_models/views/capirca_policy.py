@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 from nautobot.core.views import generic
 from nautobot.dcim.models import Device
-from nautobot.utilities.views import ContentTypePermissionRequiredMixin
+from nautobot.core.views.mixins import ContentTypePermissionRequiredMixin
 
 from nautobot_firewall_models import filters, forms, models, tables
 
