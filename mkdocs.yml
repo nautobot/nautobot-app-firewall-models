@@ -118,7 +118,7 @@ nav:
       - Contributing to the App: "dev/contributing.md"
       - Development Environment: "dev/dev_environment.md"
       - Firewall Models Reference: "dev/models.md"
-      - Code Reference:
-          - "dev/code_reference/index.md"
-          - Package: "dev/code_reference/package.md"
+      # - Code Reference:
+      #     - "dev/code_reference/index.md"
+      #     - Package: "dev/code_reference/package.md"
   - Nautobot Docs Home ↗︎: "https://docs.nautobot.com"

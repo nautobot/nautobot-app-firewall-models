@@ -2,13 +2,14 @@
 
 Here you will find any steps necessary to cleanly remove the App from your Nautobot environment.
 
+## Database Cleanup
+
+Prior to removing the plugin from the `nautobot_config.py`, run the following command to roll back any migration specific to this plugin.
+
+```shell
+nautobot-server migrate nautobot_firewall_models zero
+```
+
 ## Uninstall Guide
 
 Remove the configuration you added in `nautobot_config.py` from `PLUGINS` & `PLUGINS_CONFIG`.
-
-## Database Cleanup
-
-!!! warning "Developer Note - Remove Me!"
-    Any cleanup operations to ensure the database is clean after the app is removed. Beyond deleting tables, is there anything else that needs cleaning up, such as CFs, relationships, etc. if they're no longer desired?
-
-Drop all tables from the plugin: `nautobot_plugin_firewall_models*`.
