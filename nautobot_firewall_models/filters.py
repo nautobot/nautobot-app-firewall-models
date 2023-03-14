@@ -85,7 +85,7 @@ class ApplicationObjectFilterSet(BaseFilterSet, NautobotFilterSet):
 
         model = models.ApplicationObject
 
-        fields = ["id", "name", "description", "category", "subcategory", "risk", "description"]
+        fields = ["id", "name", "description", "category", "subcategory", "risk"]
 
 
 class ApplicationObjectGroupFilterSet(BaseFilterSet, NautobotFilterSet):
@@ -175,7 +175,7 @@ class PolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.PolicyRule
-        fields = ["id", "action", "log", "request_id"]
+        fields = ["id", "action", "log", "request_id", "description"]
 
 
 # TODO: Refactor to allow for better filtering, currently very limited.

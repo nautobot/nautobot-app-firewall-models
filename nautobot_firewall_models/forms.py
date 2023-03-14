@@ -169,7 +169,7 @@ class AddressObjectGroupFilterForm(LocalContextFilterForm, NautobotFilterForm):
 class AddressObjectGroupForm(LocalContextModelForm, NautobotModelForm):
     """AddressObjectGroup creation/edit form."""
 
-    address_objects = DynamicModelMultipleChoiceField(queryset=models.AddressObject.objects.all())
+    address_objects = DynamicModelMultipleChoiceField(queryset=models.AddressObject.objects.all(), required=False)
 
     class Meta:
         """Meta attributes."""
