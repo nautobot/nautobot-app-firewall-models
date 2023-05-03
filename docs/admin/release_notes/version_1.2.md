@@ -2,6 +2,23 @@
 
 This document describes all new features and changes in the release `1.0`. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v1.2.1 - 2023-05-03
+
+### Fixed
+
+- `#135` Form fields incorrectly marked as required
+- `#136` Invalid serializers for Zone and PolicyRule APIs
+- `#145` FilterSets missing name field for PolicyRule and NATPolicyRule
+
+### Changed
+
+- `#140` Doc updates
+- `#123` Doc updates
+
+### Added
+
+- `#143` Allow for ORM reversibility from CapircaPolicy
+
 ## v1.2.0 - 2023-02-08
 
 ### Fixed
