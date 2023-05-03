@@ -1,7 +1,6 @@
+# Capirca Integration
 
-### Capirca Integrations
-
-The firewall model plugin provides the ability to integrate with Capirca for configuration generation. The authors have applied a very light opinion onto the translation from the firewall models to generate valid policy (.pol), network (.net), and service (.svc) files that are consumed by Capirca.
+The firewall model plugin provides the ability to integrate with Capirca for configuration generation. The authors have applied a very light opinion onto the translation from the firewall models to generate valid policy (`.pol`), network (`.net`), and service (`.svc`) files that are consumed by Capirca.
 
 FW Model                    | Capirca
 --------------------------- | -------
@@ -18,9 +17,10 @@ Address Group               | *.net
 Service - tcp/udp           | *.svc
 Service Group               | *.svc
 
-> Note: If this terminology is not familiar, please review the documentation at [Capirca](https://github.com/google/capirca).
+!!! note
+    If this terminology is not familiar, please review the documentation at [Capirca](https://github.com/google/capirca).
 
-Special Considerations
+## Special Considerations
 
 * Capirca does not allow special characters in a majority of the named objects, as such named objects are modified to the ouput used when processed via a modified (to allow for capital letters) [Django slugify](https://docs.djangoproject.com/en/4.0/ref/utils/#django.utils.text.slugify), this includes:
     * Policy name, policy rule name, address, address group, zone, service, service group
@@ -38,7 +38,6 @@ Special Considerations
 * The Platform slug must match the Capirca generator name
     * You can optionally provide a mapping in the settings `capirca_os_map` to map from the current platform name, to the Capirca generator name
 * The action of "remark" on a rule is not conidered, you can set the setting `capirca_remark_pass=False` if you want it to fail by default rather than silently skipping
-
 
 In addition to the above, you can add to any header or term by creating specific custom fields on the `PolicyRule` data model. They must start with:
 
@@ -61,16 +60,18 @@ That being said, in an effort to provide flexibility, you can override the trans
 self.pol, self.svc, self.net, self.cfg = import_string(PLUGIN_CFG["custom_capirca"])(self.device)
 ```
 
-To Summarize what this integration provides and does not provide
+## Summary
 
-Provides:
+To summarize, what this integration provides and does not provide.
+
+### Provides
 
 * Integrations with Capirca
 * The ability to manage per platform Headers and Terms
 * A Job that generated the configurations at the time you want
 * The ability to override the opinionated Capirca solution
 
-Does not Provide:
+### Does not Provide
 
 * An opinionated configuration management solution that matches anything other than Capirca-provided configurations
 * The ability to push configurations directly and natively from Nautobot

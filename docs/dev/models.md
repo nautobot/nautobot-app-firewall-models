@@ -1,4 +1,4 @@
-# Overview
+# Firewall Models Reference
 
 This plugin follows hierarchical approach to the modeling of the firewall objects. The aim is to provide flexible framework for building firewall policies.
 
@@ -24,7 +24,7 @@ All the data models introduced by the Firewall plugin support the following Naut
 
 The below diagram shows hierarchy of the models, and how they relate to one another. Policy model is at the top of the hierarchy; it has no parents. Every other model is in the child-parent relationship with the preceding model, moving from left to right.
 
-![Model Hierarchy](images/datamodel.png "Model Hierarchy")
+![Model Hierarchy](../images/datamodel.png "Model Hierarchy")
 
 ## Creation Order
 

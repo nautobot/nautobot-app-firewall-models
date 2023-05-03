@@ -287,6 +287,21 @@ def post_upgrade(context):
 
 
 # ------------------------------------------------------------------------------
+# DOCS
+# ------------------------------------------------------------------------------
+@task
+def docs(context):
+    """Build and serve docs locally for development."""
+    command = "mkdocs serve -v"
+
+    if is_truthy(context.nautobot_firewall_models.local):
+        print("Serving Documentation...")
+        run_command(context, command)
+    else:
+        print("Only used when developing locally (i.e. context.nautobot_firewall_models.local=True)!")
+
+
+# ------------------------------------------------------------------------------
 # TESTS
 # ------------------------------------------------------------------------------
 @task(
