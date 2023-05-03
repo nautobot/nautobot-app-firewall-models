@@ -41,3 +41,15 @@ class NestedIPRangeSerializer(WritableNestedSerializer):
 
         model = models.IPRange
         fields = ["id", "url", "start_address", "end_address"]
+
+
+class NestedZoneSerializer(WritableNestedSerializer):
+    """Nested serializer for Zone."""
+
+    url = HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:zone-detail")
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.Zone
+        fields = ["id", "url", "name"]

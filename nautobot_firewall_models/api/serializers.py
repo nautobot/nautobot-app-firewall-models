@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from nautobot.core.api import ValidatedModelSerializer, SerializedPKRelatedField
 from nautobot.dcim.api.nested_serializers import NestedInterfaceSerializer
-from nautobot.dcim.models import Device
+from nautobot.dcim.models import Device, Interface
 from nautobot.extras.api.customfields import CustomFieldModelSerializer
 from nautobot.extras.api.fields import StatusSerializerField
 from nautobot.extras.api.serializers import (
@@ -22,6 +22,7 @@ from nautobot_firewall_models.api.nested_serializers import (
     NestedFQDNSerializer,
     NestedIPRangeSerializer,
     # NestedApplicationSerializer,
+    NestedZoneSerializer,
 )
 
 
@@ -199,7 +200,9 @@ class ZoneSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, Nautobo
     """Zone Serializer."""
 
     url = serializers.HyperlinkedIdentityField(view_name="plugins-api:nautobot_firewall_models-api:zone-detail")
-    interfaces = NestedInterfaceSerializer(required=False, many=True)
+    interfaces = SerializedPKRelatedField(
+        queryset=Interface.objects.all(), serializer=NestedInterfaceSerializer, required=False, many=True
+    )
 
     class Meta:
         """Meta attributes."""
@@ -227,7 +230,7 @@ class PolicyRuleSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, N
         required=False,
         many=True,
     )
-    source_zone = ZoneSerializer(required=False)
+    source_zone = NestedZoneSerializer(required=False)
     destination_addresses = SerializedPKRelatedField(
         queryset=models.AddressObject.objects.all(), serializer=AddressObjectSerializer, required=False, many=True
     )
@@ -237,7 +240,7 @@ class PolicyRuleSerializer(TaggedObjectSerializer, StatusModelSerializerMixin, N
         required=False,
         many=True,
     )
-    destination_zone = ZoneSerializer(required=False)
+    destination_zone = NestedZoneSerializer(required=False)
     destination_services = SerializedPKRelatedField(
         queryset=models.ServiceObject.objects.all(), serializer=ServiceObjectSerializer, required=False, many=True
     )
