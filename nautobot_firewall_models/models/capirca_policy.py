@@ -27,7 +27,9 @@ LOGGER = logging.getLogger(__name__)
 class CapircaPolicy(PrimaryModel):
     """CapircaPolicy model."""
 
-    device = models.OneToOneField(to="dcim.Device", blank=True, null=True, on_delete=models.CASCADE, related_name="capirca_policy")
+    device = models.OneToOneField(
+        to="dcim.Device", blank=True, null=True, on_delete=models.CASCADE, related_name="capirca_policy"
+    )
     pol = models.TextField(blank=True, null=True)
     net = models.TextField(blank=True, null=True)
     svc = models.TextField(blank=True, null=True)
