@@ -118,6 +118,10 @@ class ApplicationObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("Incompatible with nested serializer starting in 1.5.18")
+    def test_update_object(self):
+        pass
+
 
 class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the AddressObject viewsets."""
@@ -185,6 +189,10 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_without_permission(self):
+        pass
+
+    @skip("Incompatible with nested serializer starting in 1.5.18")
+    def test_update_object(self):
         pass
 
     def test_create_object(self):
@@ -267,6 +275,10 @@ class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("Incompatible with nested serializer starting in 1.5.18")
+    def test_update_object(self):
+        pass
+
     def test_create_object(self):
         self.validation_excluded_fields = ["service_objects"]
         return super().test_create_object()
@@ -344,6 +356,10 @@ class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_without_permission(self):
+        pass
+
+    @skip("Incompatible with nested serializer starting in 1.5.18")
+    def test_update_object(self):
         pass
 
     def test_create_object(self):
@@ -445,6 +461,10 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("Incompatible with nested serializer starting in 1.5.18")
+    def test_update_object(self):
+        pass
+
 
 class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the Policy viewsets."""
@@ -539,6 +559,10 @@ class NATPolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_without_permission(self):
+        pass
+
+    @skip("Incompatible with nested serializer starting in 1.5.18")
+    def test_update_object(self):
         pass
 
 
