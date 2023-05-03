@@ -199,10 +199,6 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         self.validation_excluded_fields = ["address_objects"]
         return super().test_create_object()
 
-    def test_update_object(self):
-        self.validation_excluded_fields = ["address_objects"]
-        return super().test_update_object()
-
     def test_bulk_create_objects(self):
         self.validation_excluded_fields = ["address_objects"]
         return super().test_bulk_create_objects()
@@ -283,10 +279,6 @@ class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         self.validation_excluded_fields = ["service_objects"]
         return super().test_create_object()
 
-    def test_update_object(self):
-        self.validation_excluded_fields = ["service_objects"]
-        return super().test_update_object()
-
     def test_bulk_create_objects(self):
         self.validation_excluded_fields = ["service_objects"]
         return super().test_bulk_create_objects()
@@ -365,10 +357,6 @@ class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_create_object(self):
         self.validation_excluded_fields = ["user_objects"]
         return super().test_create_object()
-
-    def test_update_object(self):
-        self.validation_excluded_fields = ["user_objects"]
-        return super().test_update_object()
 
     def test_bulk_create_objects(self):
         self.validation_excluded_fields = ["user_objects"]
