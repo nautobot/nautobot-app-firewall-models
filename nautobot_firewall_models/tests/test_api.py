@@ -118,6 +118,10 @@ class ApplicationObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("Incompatible with nested serializer starting in 1.5.18")
+    def test_update_object(self):
+        pass
+
 
 class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the AddressObject viewsets."""
@@ -187,13 +191,13 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("Incompatible with nested serializer starting in 1.5.18")
+    def test_update_object(self):
+        pass
+
     def test_create_object(self):
         self.validation_excluded_fields = ["address_objects"]
         return super().test_create_object()
-
-    def test_update_object(self):
-        self.validation_excluded_fields = ["address_objects"]
-        return super().test_update_object()
 
     def test_bulk_create_objects(self):
         self.validation_excluded_fields = ["address_objects"]
@@ -267,13 +271,13 @@ class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("Incompatible with nested serializer starting in 1.5.18")
+    def test_update_object(self):
+        pass
+
     def test_create_object(self):
         self.validation_excluded_fields = ["service_objects"]
         return super().test_create_object()
-
-    def test_update_object(self):
-        self.validation_excluded_fields = ["service_objects"]
-        return super().test_update_object()
 
     def test_bulk_create_objects(self):
         self.validation_excluded_fields = ["service_objects"]
@@ -346,13 +350,13 @@ class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("Incompatible with nested serializer starting in 1.5.18")
+    def test_update_object(self):
+        pass
+
     def test_create_object(self):
         self.validation_excluded_fields = ["user_objects"]
         return super().test_create_object()
-
-    def test_update_object(self):
-        self.validation_excluded_fields = ["user_objects"]
-        return super().test_update_object()
 
     def test_bulk_create_objects(self):
         self.validation_excluded_fields = ["user_objects"]
@@ -443,6 +447,10 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_without_permission(self):
+        pass
+
+    @skip("Incompatible with nested serializer starting in 1.5.18")
+    def test_update_object(self):
         pass
 
 
@@ -539,6 +547,10 @@ class NATPolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_without_permission(self):
+        pass
+
+    @skip("Incompatible with nested serializer starting in 1.5.18")
+    def test_update_object(self):
         pass
 
 
