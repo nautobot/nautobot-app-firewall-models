@@ -6,56 +6,56 @@ This document describes all new features and changes in the release `1.0`. The f
 
 ### Fixed
 
-- `#135` Form fields incorrectly marked as required
-- `#136` Invalid serializers for Zone and PolicyRule APIs
-- `#145` FilterSets missing name field for PolicyRule and NATPolicyRule
+- [#135](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/135) Form fields incorrectly marked as required
+- [#136](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/136) Invalid serializers for Zone and PolicyRule APIs
+- [#145](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/145) FilterSets missing name field for PolicyRule and NATPolicyRule
 
 ### Changed
 
-- `#140` Doc updates
-- `#123` Doc updates
+- [#140](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/140) Doc updates
+- [#123](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/123) Doc updates
 
 ### Added
 
-- `#143` Allow for ORM reversibility from CapircaPolicy
+- [#143](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/143) Allow for ORM reversibility from CapircaPolicy
 
 ## v1.2.0 - 2023-02-08
 
 ### Fixed
 
-- `#120` Resolved inconsistent forms.
+- [#120](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/120) Resolved inconsistent forms.
 
 ### Changed
 
-- `#108` Changed Application & Application Group migrations to allow null values.
+- [#108](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/108) Changed Application & Application Group migrations to allow null values.
 
 ### Added
 
-- `#108` Application & ApplicationGroup support
+- [#108](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/108) Application & ApplicationGroup support
 
 ## v1.2.0-alpha.2 - 2022-12-07
 
 ### Fixed
 
-- `#120` Resolved inconsistent forms.
+- [#120](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/120) Resolved inconsistent forms.
 
 ## v1.2.0-alpha.1 - 2022-11-25
 
 ### Changed
 
-- `#108` Changed Application & Application Group migrations to allow null values.
+- [#108](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/108) Changed Application & Application Group migrations to allow null values.
 
 ## v1.2.0-alpha.0 - 2022-11-22
 
 ### Added
 
-- `#108` Application & ApplicationGroup support
+- [#108](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/108) Application & ApplicationGroup support
 
 ### Fixed
 
-- `#117` Resolved `main` tab not loading on initial load of Policy & PolicyRule detail page
+- [#117](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/117) Resolved `main` tab not loading on initial load of Policy & PolicyRule detail page
 
 ### Changed
 
-- `#117` Reorganized `models/` folder to improve developer experience
+- [#117](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/117) Reorganized `models/` folder to improve developer experience
 
