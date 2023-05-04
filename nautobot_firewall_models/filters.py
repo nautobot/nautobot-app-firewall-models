@@ -175,7 +175,7 @@ class PolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.PolicyRule
-        fields = ["id", "action", "log", "request_id", "description"]
+        fields = ["id", "action", "log", "request_id", "description", "name"]
 
 
 # TODO: Refactor to allow for better filtering, currently very limited.
@@ -201,7 +201,7 @@ class NATPolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.NATPolicyRule
-        fields = ["id", "remark", "log", "request_id"]
+        fields = ["id", "remark", "log", "request_id", "name"]
 
 
 class PolicyFilterSet(BaseFilterSet, NautobotFilterSet):
