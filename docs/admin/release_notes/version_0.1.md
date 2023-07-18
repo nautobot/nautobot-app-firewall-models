@@ -6,8 +6,8 @@ This document describes all new features and changes in the release `1.0`. The f
 
 ### Changed
 
-- [#68](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/68) Update Policy Rules Expanded to be more intuitive
-- [#69](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/69) Change to use arrow in UI elements
+- `#68` Update Policy Rules Expanded to be more intuitive
+- `#69` Change to use arrow in UI elements
 
 ### Added
 
