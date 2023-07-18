@@ -7,7 +7,7 @@ This document describes all new features and changes in the release `1.0`. The f
 ### Changed
 
 - `#68` Update Policy Rules Expanded to be more intuitive
-- `#69` Change to use arrow in UI elements
+- `#69` Change to use arrow in UI element
 
 ### Added
 
