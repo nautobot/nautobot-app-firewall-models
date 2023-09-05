@@ -1,8 +1,9 @@
 """Unit tests for views."""
 # flake8: noqa: F403,405
+# pylint: disable=invalid-name
 from unittest import skip
 from nautobot.extras.models.statuses import Status
-from nautobot.utilities.testing import ViewTestCases
+from nautobot.apps.testing import ViewTestCases
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 from .fixtures import create_env, create_fqdn, create_ip_range
@@ -17,7 +18,7 @@ class IPRangeUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for UI calls."""
-        status = Status.objects.get(slug="active").id
+        status = Status.objects.get(name="Active").id
         cls.form_data = {"start_address": "10.0.0.1", "end_address": "10.0.0.3", "status": status}
         create_ip_range()
 
@@ -59,7 +60,7 @@ class FQDNUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        status = Status.objects.get(slug="active").id
+        status = Status.objects.get(name="Active").id
         cls.form_data = {"name": "test.local", "status": status}
         create_fqdn()
 
@@ -103,7 +104,7 @@ class AddressObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         """Create test data for API calls."""
         create_env()
         ip_range = IPRange.objects.first()
-        status = Status.objects.get(slug="active").id
+        status = Status.objects.get(name="Active").id
 
         cls.form_data = {"name": "obj1", "ip_range": ip_range.id, "status": status}
 
@@ -162,7 +163,7 @@ class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
-        status = Status.objects.get(slug="active").id
+        status = Status.objects.get(name="Active").id
         addr_obj = AddressObject.objects.first()
         cls.form_data = {"name": "test1", "address_objects": [addr_obj.id], "status": status}
 
@@ -222,7 +223,7 @@ class ApplicationObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         """Create test data for API calls."""
         create_env()
 
-        status = Status.objects.get(slug="active").id
+        status = Status.objects.get(name="Active").id
         cls.form_data = {"name": "obj1", "risk": 1, "status": status}
 
     @skip("Not implemented")
@@ -280,7 +281,7 @@ class ApplicationObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
-        status = Status.objects.get(slug="active").id
+        status = Status.objects.get(name="Active").id
         app_obj = ApplicationObject.objects.first()
         cls.form_data = {"name": "test1", "application_objects": [app_obj.id], "status": status}
 
@@ -339,7 +340,7 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         ServiceObject.objects.all().delete()
-        status = Status.objects.get(slug="active").id
+        status = Status.objects.get(name="Active").id
         cls.form_data = {"name": "HTTP", "port": "8088", "status": status, "ip_protocol": "TCP"}
         create_env()
 
@@ -399,7 +400,7 @@ class ServiceGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         """Create test data for API calls."""
         create_env()
         svc_obj = ServiceObject.objects.first()
-        status = Status.objects.get(slug="active").id
+        status = Status.objects.get(name="Active").id
         cls.form_data = {"name": "test1", "service_objects": [svc_obj.id], "status": status}
 
     @skip("Not implemented")
@@ -456,7 +457,7 @@ class UserObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        status = Status.objects.get(slug="active").id
+        status = Status.objects.get(name="Active").id
         cls.form_data = {"username": "test1", "name": "Foo", "status": status}
         create_env()
 
@@ -516,7 +517,7 @@ class UserObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         """Create test data for API calls."""
         create_env()
         user = UserObject.objects.first()
-        status = Status.objects.get(slug="active").id
+        status = Status.objects.get(name="Active").id
         cls.form_data = {"name": "test1", "user_objects": [user.id], "status": status}
 
     @skip("Not implemented")
@@ -573,7 +574,7 @@ class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for UI calls."""
-        status = Status.objects.get(slug="active").id
+        status = Status.objects.get(name="Active").id
         cls.form_data = {"name": "trust", "status": status}
         create_env()
 
@@ -635,7 +636,7 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         src_usr = UserObject.objects.first()
         src_addr = AddressObject.objects.first()
         dest_addr = AddressObject.objects.last()
-        status = Status.objects.get(slug="active").id
+        status = Status.objects.get(name="Active").id
         svc = ServiceObject.objects.first()
         cls.form_data = {
             # pylint: disable=R0801
@@ -705,7 +706,7 @@ class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         """Create test data for API calls."""
         create_env()
         pol_rule = PolicyRule.objects.first()
-        status = Status.objects.get(slug="active").id
+        status = Status.objects.get(name="Active").id
         cls.form_data = {
             "name": "test 2",
             "policy_rules": [pol_rule.id],

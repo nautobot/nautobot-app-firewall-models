@@ -25,7 +25,7 @@ class BaseFilterSet(FilterSet):
         queryset=Status.objects.all(),
     )
 
-    def search(self, queryset, name, value):  # pylint: disable=unused-argument, no-self-use
+    def search(self, queryset, name, value):  # pylint: disable=unused-argument
         """Construct Q filter for filterset."""
         if not value.strip():
             return queryset
@@ -163,7 +163,7 @@ class PolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
         label="Search",
     )
 
-    def search(self, queryset, name, value):  # pylint: disable=unused-argument, no-self-use
+    def search(self, queryset, name, value):  # pylint: disable=unused-argument
         """Construct Q filter for filterset."""
         if not value.strip():
             return queryset
@@ -189,7 +189,7 @@ class NATPolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
         label="Search",
     )
 
-    def search(self, queryset, name, value):  # pylint: disable=unused-argument, no-self-use
+    def search(self, queryset, name, value):  # pylint: disable=unused-argument
         """Construct Q filter for filterset."""
         if not value.strip():
             return queryset

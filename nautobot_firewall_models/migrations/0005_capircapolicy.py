@@ -9,7 +9,6 @@ import uuid
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("extras", "0033_add__optimized_indexing"),
         ("dcim", "0009_add_natural_indexing"),

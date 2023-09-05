@@ -10,14 +10,14 @@ def create_app_status(apps, schema_editor):
     that are associated with the original set of security models.
     """
 
-    statuses = ["active", "staged", "decommissioned"]
+    statuses = ["Active", "Staged", "Decommissioned"]
     ContentType = apps.get_model("contenttypes.ContentType")
     relevant_models = [
         apps.get_model(model)
         for model in ["nautobot_firewall_models.ApplicationObject", "nautobot_firewall_models.ApplicationObjectGroup"]
     ]
     for i in statuses:
-        status = apps.get_model("extras.Status").objects.get(slug=i)
+        status = apps.get_model("extras.Status").objects.get(name=i)
         for model in relevant_models:
             ct = ContentType.objects.get_for_model(model)
             status.content_types.add(ct)
@@ -30,21 +30,20 @@ def remove_app_status(apps, schema_editor):
     that are associated with the original set of security models.
     """
 
-    statuses = ["active", "staged", "decommissioned"]
+    statuses = ["Active", "Staged", "Decommissioned"]
     ContentType = apps.get_model("contenttypes.ContentType")
     relevant_models = [
         apps.get_model(model)
         for model in ["nautobot_firewall_models.ApplicationObject", "nautobot_firewall_models.ApplicationObjectGroup"]
     ]
     for i in statuses:
-        status = apps.get_model("extras.Status").objects.get(slug=i)
+        status = apps.get_model("extras.Status").objects.get(name=i)
         for model in relevant_models:
             ct = ContentType.objects.get_for_model(model)
             status.content_types.remove(ct)
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("nautobot_firewall_models", "0013_applications"),
     ]

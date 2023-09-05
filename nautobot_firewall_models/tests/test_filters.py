@@ -1,4 +1,5 @@
 """Unit tests for nautobot_firewall_models."""
+# pylint: disable=invalid-name
 
 from django.test import TestCase
 

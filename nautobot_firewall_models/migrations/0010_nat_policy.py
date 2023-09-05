@@ -11,7 +11,6 @@ import uuid
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("extras", "0047_enforce_custom_field_slug"),
         ("tenancy", "0002_auto_slug"),

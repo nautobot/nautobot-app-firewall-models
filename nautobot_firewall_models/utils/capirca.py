@@ -80,7 +80,7 @@ class PolicyToCapirca:
     def __init__(self, platform, policy_obj=None, **kwargs):
         """Overload init to account for computed field."""
         self.policy_name = str(policy_obj)
-        self.platform_obj = Platform.objects.get(slug=platform)
+        self.platform_obj = Platform.objects.get(network_driver=platform)
         self.platform = CAPIRCA_OS_MAPPER.get(platform, platform)
         self.policy_details = None
         if policy_obj:
@@ -203,7 +203,7 @@ class PolicyToCapirca:
                 "Must have set the self.policy_details attribute, which is an Policy.policy_details() object instance."
             )
         for rule in self.policy_details:
-            if _check_status(rule["rule"].status.slug):
+            if _check_status(rule["rule"].status.name):
                 LOGGER.debug("Skipped due to status: `%s`", str(rule["rule"]))
                 continue
             if rule["action"] == "remark" and PLUGIN_CFG["capirca_remark_pass"] is True:
@@ -383,7 +383,7 @@ class PolicyToCapirca:
 
         if not CAPIRCA_MAPPER.get(self.platform):
             raise ValidationError(
-                f"The platform slug {self.platform} was not one of the supported options {list(CAPIRCA_MAPPER.keys())}."
+                f"The platform network driver {self.platform} was not one of the supported options {list(CAPIRCA_MAPPER.keys())}."
             )
 
         networkdata = {}
@@ -431,7 +431,6 @@ class PolicyToCapirca:
 
         cap_policy = []
         for pol in self.policy:
-
             rule_name = _slugify(pol["rule-name"])
             if pol["action"] not in ACTION_MAP:
                 raise ValidationError(
@@ -558,11 +557,11 @@ class DevicePolicyToCapirca(PolicyToCapirca):
 
     def __init__(self, device_obj, **kwargs):  # pylint: disable=super-init-not-called
         """Overload init."""
-        super().__init__(device_obj.platform.slug, **kwargs)
+        super().__init__(device_obj.platform.network_driver, **kwargs)
         self.policy_objs = []
         policy_name = []
         LOGGER.debug("Capirca Platform Name: `%s`", str(self.platform))
-        LOGGER.debug("Original Platform Name: `%s`", str(device_obj.platform.slug))
+        LOGGER.debug("Original Platform Name: `%s`", str(device_obj.platform.network_driver))
         LOGGER.debug("cf_allow_list_enabled: `%s`", str(self.cf_allow_list_enabled))
         LOGGER.debug("cf_allow_list: `%s`", str(self.cf_allow_list))
 
@@ -581,7 +580,7 @@ class DevicePolicyToCapirca(PolicyToCapirca):
     def get_all_capirca_cfg(self):
         """Aggregate off of the Capirca Configurations for a device."""
         for pol in self.policy_objs:
-            if _check_status(pol.status.slug):
+            if _check_status(pol.status.name):
                 LOGGER.debug("Policy Skipped due to status: `%s`", str(pol))
                 continue
             self.policy_details = pol.policy_details()

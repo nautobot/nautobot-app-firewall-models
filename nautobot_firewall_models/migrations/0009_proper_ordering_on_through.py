@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("nautobot_firewall_models", "0008_renaming_part3"),
     ]

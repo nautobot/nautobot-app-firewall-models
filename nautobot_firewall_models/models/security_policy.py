@@ -2,7 +2,6 @@
 # pylint: disable=duplicate-code, too-many-lines
 
 from django.db import models
-from django.urls import reverse
 from nautobot.core.models.generics import BaseModel, PrimaryModel
 from nautobot.extras.models import StatusField
 from nautobot.extras.models.tags import TaggedItem
@@ -123,12 +122,9 @@ class PolicyRule(PrimaryModel):
     class Meta:
         """Meta class."""
 
-        ordering = ["index"]
+        ordering = ["index", "name"]
         verbose_name_plural = "Policy Rules"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:policyrule", args=[self.pk])
+        unique_together = ["name", "action", "index"]
 
     def rule_details(self):
         """Convience method to convert to more consumable dictionary."""
@@ -215,10 +211,7 @@ class Policy(PrimaryModel):
         ordering = ["name"]
         verbose_name_plural = "Policies"
 
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:policy", args=[self.pk])
-
+    @property
     def policy_details(self):
         """Convience method to convert to a Python list of dictionaries."""
         data = []

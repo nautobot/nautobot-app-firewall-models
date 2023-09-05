@@ -11,7 +11,6 @@ import uuid
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("extras", "0047_enforce_custom_field_slug"),
         ("nautobot_firewall_models", "0012_remove_status_m2m_through_models"),

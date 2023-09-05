@@ -2,7 +2,6 @@
 # pylint: disable=duplicate-code
 
 from django.db import models
-from django.urls import reverse
 from nautobot.core.models.generics import BaseModel, PrimaryModel
 from nautobot.extras.models import StatusField
 from nautobot.extras.utils import extras_features
@@ -48,10 +47,6 @@ class Zone(PrimaryModel):
 
         ordering = ["name"]
         verbose_name_plural = "Zones"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:zone", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""
