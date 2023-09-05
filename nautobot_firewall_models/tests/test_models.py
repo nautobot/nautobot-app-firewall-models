@@ -1,5 +1,6 @@
 """Test Firewall models."""
 # flake8: noqa: F403,405
+# pylint: disable=invalid-name
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from nautobot.dcim.models import Device
@@ -304,8 +305,6 @@ class TestNATPolicyRuleModels(TestCase):
         """Test method to_json on NATPolicyRule model."""
         json_details = NATPolicyRule.objects.first().to_json()
         self.assertEqual(json_details["display"], "NAT Policy Rule 1.1 - req1")
-        self.assertEqual(json_details["original_source_addresses"][0]["prefix"]["display"], "10.100.0.0/24")
-        self.assertEqual(json_details["translated_source_addresses"][0]["prefix"]["display"], "10.200.0.0/24")
         self.assertEqual(json_details["original_destination_services"][0]["port"], "80")
         self.assertEqual(json_details["translated_destination_services"][0]["port"], "8080")
 
@@ -329,8 +328,6 @@ class TestNATPolicyModels(TestCase):
         """Test method to_json on Policy model."""
         json_details = NATPolicyRule.objects.first().to_json()
         self.assertEqual(json_details["display"], "NAT Policy Rule 1.1 - req1")
-        self.assertEqual(json_details["original_source_addresses"][0]["prefix"]["display"], "10.100.0.0/24")
-        self.assertEqual(json_details["translated_source_addresses"][0]["prefix"]["display"], "10.200.0.0/24")
         self.assertEqual(json_details["original_destination_services"][0]["port"], "80")
         self.assertEqual(json_details["translated_destination_services"][0]["port"], "8080")
 

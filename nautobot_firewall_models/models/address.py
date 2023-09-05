@@ -5,7 +5,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
-from django.urls import reverse
 from nautobot.core.models.generics import BaseModel, PrimaryModel
 from nautobot.extras.models import StatusField
 from nautobot.extras.utils import extras_features
@@ -68,10 +67,6 @@ class IPRange(PrimaryModel):
             UniqueConstraint(fields=["start_address", "end_address"], condition=Q(vrf=None), name="unique_without_vrf"),
         ]
 
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:iprange", args=[self.pk])
-
     def __str__(self):
         """Stringify instance."""
         return f"{self.start_address}-{self.end_address}"
@@ -133,10 +128,6 @@ class FQDN(PrimaryModel):
         verbose_name = "FQDN"
         verbose_name_plural = "FQDNs"
 
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:fqdn", args=[self.pk])
-
     def __str__(self):
         """Stringify instance."""
         return self.name
@@ -183,10 +174,6 @@ class AddressObject(PrimaryModel):
             if getattr(self, key):
                 return (key, getattr(self, key))
         return (None, None)
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:addressobject", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""
@@ -252,10 +239,6 @@ class AddressObjectGroup(PrimaryModel):
 
         ordering = ["name"]
         verbose_name_plural = "Address Object Groups"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:addressobjectgroup", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""

@@ -3,7 +3,6 @@
 import logging
 
 from django.db import models
-from django.urls import reverse
 from django.utils.module_loading import import_string
 from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.utils import extras_features
@@ -42,10 +41,6 @@ class CapircaPolicy(PrimaryModel):
 
         ordering = ["device"]
         verbose_name_plural = "Capirca Policies"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:capircapolicy", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""

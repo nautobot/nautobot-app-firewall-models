@@ -38,9 +38,9 @@ namespace = Collection("nautobot_firewall_models")
 namespace.configure(
     {
         "nautobot_firewall_models": {
-            "nautobot_ver": "1.4.1",
+            "nautobot_ver": "2.0.0rc2",
             "project_name": "nautobot_firewall_models",
-            "python_ver": "3.8",
+            "python_ver": "3.11",
             "local": False,
             "compose_dir": os.path.join(os.path.dirname(__file__), "development"),
             "compose_files": [

@@ -1,6 +1,6 @@
 """Django API urlpatterns declaration for firewall model plugin."""
 
-from nautobot.core.api import OrderedDefaultRouter
+from nautobot.apps.api import OrderedDefaultRouter
 
 from nautobot_firewall_models.api import views
 

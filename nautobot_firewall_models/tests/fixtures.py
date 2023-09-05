@@ -1,10 +1,10 @@
 """Create basic objects for use in test class setup."""
 # flake8: noqa: F403,405
 from django.contrib.contenttypes.models import ContentType
-from nautobot.dcim.models import Device, DeviceRole, DeviceType, Manufacturer, Platform, Site
-from nautobot.extras.models import DynamicGroup, Job
+from nautobot.dcim.models import Device, DeviceType, Manufacturer, Platform, Location, LocationType
+from nautobot.extras.models import DynamicGroup, Job, Role
 from nautobot.extras.models.statuses import Status
-from nautobot.ipam.models import Prefix, VRF
+from nautobot.ipam.models import Prefix, VRF, Namespace
 from nautobot.ipam.models import IPAddress as IPAddr
 from nautobot.tenancy.models import Tenant, TenantGroup
 
@@ -13,7 +13,7 @@ from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard
 
 def create_ip_range():
     """Creates 3 IPRange objects."""
-    status = Status.objects.get(slug="active")
+    status = Status.objects.get(name="Active")
     vrf = VRF.objects.create(name="global")
     IPRange.objects.create(start_address="192.168.0.1", end_address="192.168.0.10", status=status)
     IPRange.objects.create(start_address="192.168.0.1", end_address="192.168.0.10", vrf=vrf, status=status)
@@ -22,7 +22,7 @@ def create_ip_range():
 
 def create_fqdn():
     """Creates 3 FQDN objects."""
-    status = Status.objects.get(slug="active")
+    status = Status.objects.get(name="Active")
     FQDN.objects.create(name="test.dev", status=status)
     FQDN.objects.create(name="test.uat", status=status)
     return FQDN.objects.create(name="test.prod", status=status)
@@ -32,9 +32,11 @@ def create_env():
     """Creates 3 of all objects."""  # pylint: disable=too-many-locals, too-many-statements
     # Core Models
     vrf = VRF.objects.create(name="global")
-    ip_address = IPAddr.objects.create(address="10.0.0.1")
-    prefix = Prefix.objects.create(network="10.0.0.0", prefix_length=24)
-    status = Status.objects.get(slug="active")
+    status = Status.objects.get(name="Active")
+    namespace = Namespace.objects.create(name="global")
+    Prefix.objects.create(network="0.0.0.0", prefix_length=0, namespace=namespace, status=status)
+    prefix = Prefix.objects.create(network="10.0.0.0", prefix_length=24, namespace=namespace, status=status)
+    ip_address = IPAddr.objects.create(address="10.0.0.1", namespace=namespace, status=status)
 
     # Plugin Models
     ip_range = create_ip_range()
@@ -178,9 +180,9 @@ def create_env():
         name="END OF ACCESS LIST", action="remark", log=False, request_id="req4", index=99
     )
     pol_rule5 = PolicyRule.objects.create(name="DENY ALL", action="deny", log=False, request_id="req5", index=100)
-    tenant_group = TenantGroup.objects.create(name="ABC Holding Corp", slug="abc-holding-corp")
-    tenant1 = Tenant.objects.create(name="ABC LLC", slug="abc-llc", group=tenant_group)
-    tenant2 = Tenant.objects.create(name="XYZ LLC", slug="xyz-llc")
+    tenant_group = TenantGroup.objects.create(name="ABC Holding Corp")
+    tenant1 = Tenant.objects.create(name="ABC LLC", tenant_group=tenant_group)
+    tenant2 = Tenant.objects.create(name="XYZ LLC")
     pol1 = Policy.objects.create(name="Policy 1", status=status)
     pol1.policy_rules.set([pol_rule1])
     pol2 = Policy.objects.create(name="Policy 2", status=status, tenant=tenant2)
@@ -200,11 +202,17 @@ def create_env():
     nat_trans_dest_service, _ = ServiceObject.objects.get_or_create(
         name="HTTP (alt)", port="8080", ip_protocol="TCP", status=status
     )
-    original_source_prefix = Prefix.objects.create(network="10.100.0.0", prefix_length=24)
+    original_source_prefix = Prefix.objects.create(
+        network="10.100.0.0", prefix_length=24, status=status, namespace=namespace
+    )
     original_source = AddressObject.objects.create(name="nat-original-source", prefix=original_source_prefix)
-    translated_source_prefix = Prefix.objects.create(network="10.200.0.0", prefix_length=24)
+    translated_source_prefix = Prefix.objects.create(
+        network="10.200.0.0", prefix_length=24, status=status, namespace=namespace
+    )
     translated_source = AddressObject.objects.create(name="nat-translated-source", prefix=translated_source_prefix)
-    destination_prefix = Prefix.objects.create(network="192.168.0.0", prefix_length=24)
+    destination_prefix = Prefix.objects.create(
+        network="192.168.0.0", prefix_length=24, status=status, namespace=namespace
+    )
     destination = AddressObject.objects.create(name="nat-destination", prefix=destination_prefix)
 
     nat_policy_1 = NATPolicy.objects.create(name="NAT Policy 1")
@@ -234,33 +242,35 @@ def create_env():
     nat_policy_2.nat_policy_rules.add(nat_policy_rule_2_1)
 
     # Mapping policies to devices
-    site1 = Site.objects.create(name="DFW", slug="dfw")
-    site2 = Site.objects.create(name="HOU", slug="hou")
-    jun_manufacturer = Manufacturer.objects.create(name="Juniper", slug="juniper")
-    jun_platform = Platform.objects.create(name="Juniper", slug="srx")
-    jun_dev_type = DeviceType.objects.create(manufacturer=jun_manufacturer, model="SRX300", slug="srx300")
-    palo_manufacturer = Manufacturer.objects.create(name="Palo Alto", slug="paloalto")
-    palo_platform = Platform.objects.create(name="Palo Alto", slug="paloalto")
-    palo_dev_type = DeviceType.objects.create(manufacturer=palo_manufacturer, model="PA-3020", slug="pa3020")
-    dev_role = DeviceRole.objects.create(name="WAN", slug="wan")
+    loc_type = LocationType.objects.create(name="site")
+    site1 = Location.objects.create(name="DFW", location_type=loc_type, status=status)
+    site2 = Location.objects.create(name="HOU", location_type=loc_type, status=status)
+    jun_manufacturer = Manufacturer.objects.create(name="Juniper")
+    jun_platform = Platform.objects.create(name="Juniper", network_driver="juniper")
+    jun_dev_type = DeviceType.objects.create(manufacturer=jun_manufacturer, model="SRX300")
+    palo_manufacturer = Manufacturer.objects.create(name="Palo Alto")
+    palo_platform = Platform.objects.create(name="Palo Alto", network_driver="paloalto")
+    palo_dev_type = DeviceType.objects.create(manufacturer=palo_manufacturer, model="PA-3020")
+    dev_role = Role.objects.create(name="WAN")
+    dev_role.content_types.add(ContentType.objects.get_for_model(Device))
     dev1 = Device.objects.create(
         name="DFW-WAN00",
-        device_role=dev_role,
+        role=dev_role,
         device_type=jun_dev_type,
-        site=site1,
+        location=site1,
         status=status,
         platform=jun_platform,
     )
     dev2 = Device.objects.create(
         name="HOU-WAN00",
-        device_role=dev_role,
+        role=dev_role,
         device_type=palo_dev_type,
-        site=site2,
+        location=site2,
         status=status,
         platform=palo_platform,
     )
     dynamic_group = DynamicGroup.objects.create(
-        name="North Texas", slug="north-texas", content_type=ContentType.objects.get_for_model(Device)
+        name="North Texas", content_type=ContentType.objects.get_for_model(Device)
     )
     dynamic_group.filter = {"site": ["dfw"]}
     dynamic_group.save()
@@ -277,7 +287,8 @@ def create_env():
 def create_capirca_env():
     """Create objects that are Capirca Ready."""  # pylint: disable=too-many-locals, too-many-statements
     create_env()
-    status = Status.objects.get(slug="active")
+    namespace = Namespace.objects.get(name="global")
+    status = Status.objects.get(name="Active")
     zoneall = Zone.objects.create(name="all", status=status)
 
     pol_rule1 = PolicyRule.objects.get(name="Policy Rule 1")
@@ -295,8 +306,8 @@ def create_capirca_env():
     pol_rule5.destination_zone = zoneall
     pol_rule5.validated_save()
 
-    ip_address = IPAddr.objects.create(address="10.0.0.100")
-    prefix = Prefix.objects.create(network="10.1.0.0", prefix_length=24)
+    ip_address = IPAddr.objects.create(address="10.0.0.100", namespace=namespace, status=status)
+    prefix = Prefix.objects.create(network="10.1.0.0", prefix_length=24, status=status, namespace=namespace)
 
     addr_obj1 = AddressObject.objects.get(name="printer")
     addr_obj1.ip_range = None

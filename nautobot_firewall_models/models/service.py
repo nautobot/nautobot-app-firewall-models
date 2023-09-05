@@ -2,7 +2,6 @@
 # pylint: disable=duplicate-code, too-many-lines
 
 from django.db import models
-from django.urls import reverse
 from nautobot.core.models.generics import BaseModel, PrimaryModel
 from nautobot.extras.models import StatusField
 from nautobot.extras.utils import extras_features
@@ -65,10 +64,6 @@ class ApplicationObject(PrimaryModel):
                 return (key, getattr(self, key))
         return (None, None)
 
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:applicationobject", args=[self.pk])
-
     def __str__(self):
         """Stringify instance."""
         return self.name
@@ -119,10 +114,6 @@ class ApplicationObjectGroup(PrimaryModel):
         ordering = ["name"]
         verbose_name_plural = "Application Object Groups"
 
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:applicationobjectgroup", args=[self.pk])
-
     def __str__(self):
         """Stringify instance."""
         return self.name
@@ -162,15 +153,13 @@ class ServiceObject(PrimaryModel):
         default=get_default_status,
     )
 
+    natural_key_field_names = ["ip_protocol", "port", "name"]
+
     class Meta:
         """Meta class."""
 
         ordering = ["name"]
         verbose_name_plural = "Service Objects"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:serviceobject", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""
@@ -219,10 +208,6 @@ class ServiceObjectGroup(PrimaryModel):
 
         ordering = ["name"]
         verbose_name_plural = "Service Object Groups"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:serviceobjectgroup", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""

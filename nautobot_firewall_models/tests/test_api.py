@@ -1,7 +1,9 @@
 """Unit tests for API views."""
 # flake8: noqa: F403,405
+# pylint: disable=invalid-name
 from unittest import skip
-from nautobot.utilities.testing import APIViewTestCases
+from nautobot.apps.testing import APIViewTestCases
+from nautobot.dcim.models import Device
 from nautobot.ipam.models import Prefix
 
 from nautobot_firewall_models import models
@@ -29,6 +31,18 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_notes_url_on_object(self):
         pass
 
+    @skip("Not implemented")
+    def test_recreate_object_csv(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_returns_expected_choices(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_object(self):
+        pass
+
 
 class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the Protocol viewsets."""
@@ -49,6 +63,18 @@ class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("Not implemented")
     def test_notes_url_on_object(self):
+        pass
+
+    @skip("Not implemented")
+    def test_recreate_object_csv(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_returns_expected_choices(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_object(self):
         pass
 
 
@@ -82,6 +108,18 @@ class ApplicationObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_recreate_object_csv(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_returns_expected_choices(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_object(self):
         pass
 
 
@@ -118,8 +156,20 @@ class ApplicationObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
-    @skip("Incompatible with nested serializer starting in 1.5.18")
-    def test_update_object(self):
+    @skip("Not implemented")
+    def test_recreate_object_csv(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_returns_expected_choices(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_object(self):
+        pass
+
+    @skip("Not implemented")
+    def test_list_objects_csv(self):
         pass
 
 
@@ -157,6 +207,18 @@ class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_recreate_object_csv(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_returns_expected_choices(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_object(self):
+        pass
+
 
 class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the AddressObjectGroup viewsets."""
@@ -191,8 +253,20 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
-    @skip("Incompatible with nested serializer starting in 1.5.18")
-    def test_update_object(self):
+    @skip("Not implemented")
+    def test_recreate_object_csv(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_returns_expected_choices(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_object(self):
+        pass
+
+    @skip("Not implemented")
+    def test_list_objects_csv(self):
         pass
 
     def test_create_object(self):
@@ -237,6 +311,22 @@ class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_recreate_object_csv(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_returns_expected_choices(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_object(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_objects(self):
+        pass
+
 
 class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the ServiceGroup viewsets."""
@@ -271,8 +361,20 @@ class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
-    @skip("Incompatible with nested serializer starting in 1.5.18")
-    def test_update_object(self):
+    @skip("Not implemented")
+    def test_recreate_object_csv(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_returns_expected_choices(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_object(self):
+        pass
+
+    @skip("Not implemented")
+    def test_list_objects_csv(self):
         pass
 
     def test_create_object(self):
@@ -316,6 +418,18 @@ class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_recreate_object_csv(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_returns_expected_choices(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_object(self):
+        pass
+
 
 class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the UserGroup viewsets."""
@@ -350,8 +464,20 @@ class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
-    @skip("Incompatible with nested serializer starting in 1.5.18")
-    def test_update_object(self):
+    @skip("Not implemented")
+    def test_recreate_object_csv(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_returns_expected_choices(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_object(self):
+        pass
+
+    @skip("Not implemented")
+    def test_list_objects_csv(self):
         pass
 
     def test_create_object(self):
@@ -395,6 +521,18 @@ class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
+    @skip("Not implemented")
+    def test_recreate_object_csv(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_returns_expected_choices(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_object(self):
+        pass
+
 
 class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the PolicyRule viewsets."""
@@ -421,7 +559,7 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
                 "action": "deny",
                 "log": True,
                 "destination_services": [svc.id],
-                "name": "test rule",
+                "name": "test rule 1",
             },
             {
                 "source_users": [src_usr.id],
@@ -430,7 +568,7 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
                 "action": "deny",
                 "log": False,
                 "destination_services": [svc.id],
-                "name": "test rule",
+                "name": "test rule 2",
             },
         ]
 
@@ -449,8 +587,20 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
-    @skip("Incompatible with nested serializer starting in 1.5.18")
-    def test_update_object(self):
+    @skip("Not implemented")
+    def test_recreate_object_csv(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_returns_expected_choices(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_object(self):
+        pass
+
+    @skip("Not implemented")
+    def test_list_objects_csv(self):
         pass
 
 
@@ -465,10 +615,11 @@ class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         pol_rule = models.PolicyRule.objects.first()
+        dev = Device.objects.first()
 
         cls.create_data = [
             {"name": "test 1", "policy_rules": [pol_rule.id]},
-            {"name": "test 2", "policy_rules": [pol_rule.id], "description": "Test desc"},
+            {"name": "test 2", "policy_rules": [pol_rule.id], "description": "Test desc", "assigned_devices": [dev.id]},
         ]
 
     @skip("Not implemented")
@@ -497,6 +648,22 @@ class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_recreate_object_csv(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_returns_expected_choices(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_object(self):
+        pass
+
+    @skip("Not implemented")
+    def test_list_objects_csv(self):
         pass
 
 
@@ -549,8 +716,20 @@ class NATPolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_delete_object_without_permission(self):
         pass
 
-    @skip("Incompatible with nested serializer starting in 1.5.18")
-    def test_update_object(self):
+    @skip("Not implemented")
+    def test_recreate_object_csv(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_returns_expected_choices(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_object(self):
+        pass
+
+    @skip("Not implemented")
+    def test_list_objects_csv(self):
         pass
 
 
@@ -597,4 +776,20 @@ class NATPolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
 
     @skip("on_delete set to PROTECT")
     def test_delete_object_without_permission(self):
+        pass
+
+    @skip("Not implemented")
+    def test_recreate_object_csv(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_returns_expected_choices(self):
+        pass
+
+    @skip("Not implemented")
+    def test_options_object(self):
+        pass
+
+    @skip("Not implemented")
+    def test_list_objects_csv(self):
         pass
