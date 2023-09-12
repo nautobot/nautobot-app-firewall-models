@@ -246,7 +246,7 @@ def create_env():
     site1 = Location.objects.create(name="DFW", location_type=loc_type, status=status)
     site2 = Location.objects.create(name="HOU", location_type=loc_type, status=status)
     jun_manufacturer = Manufacturer.objects.create(name="Juniper")
-    jun_platform = Platform.objects.create(name="Juniper", network_driver="juniper")
+    jun_platform = Platform.objects.create(name="Juniper", network_driver="srx")
     jun_dev_type = DeviceType.objects.create(manufacturer=jun_manufacturer, model="SRX300")
     palo_manufacturer = Manufacturer.objects.create(name="Palo Alto")
     palo_platform = Platform.objects.create(name="Palo Alto", network_driver="paloalto")

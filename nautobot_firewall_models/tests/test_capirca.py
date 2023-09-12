@@ -289,7 +289,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         self.device_obj = Device.objects.get(name="DFW-WAN00")
         namespace = Namespace.objects.get(name="global")
 
-        self.dev_name = self.device_obj.platform.name
+        self.dev_name = self.device_obj.platform.network_driver
         zoneall = Zone.objects.get(name="all")
 
         self.pol_rule6 = PolicyRule.objects.create(
@@ -421,7 +421,8 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
 
     def test_address_group_skipped_member(self):
         """Check that an address group whose members are all inactive gets cleared."""
-        ip_address6 = IPAddress.objects.create(address="10.0.0.102")
+        namespace = Namespace.objects.get(name="global")
+        ip_address6 = IPAddress.objects.create(address="10.0.0.102", status=self.active, namespace=namespace)
         addr_obj6 = AddressObject.objects.create(name="test-name6", ip_address=ip_address6, status=self.decomm)
         addr_grp6 = AddressObjectGroup.objects.create(name="test-group6", status=self.active)
         addr_grp6.address_objects.set([addr_obj6])
@@ -596,16 +597,16 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
 
     def test_alt_capirca_type(self):
         """Test non-zone Capirca config generation."""
-        Platform.objects.create(name="Cisco")
-        cap_obj = PolicyToCapirca("Cisco", self.pol1)
+        Platform.objects.create(name="Cisco", network_driver="cisco")
+        cap_obj = PolicyToCapirca("cisco", self.pol1)
         cap_obj.get_capirca_cfg()
-        self.assertIn("Cisco", cap_obj.pol_file)
+        self.assertIn("cisco", cap_obj.pol_file)
 
     def test_validate_capirca_data_bad_platform(self):
         """Ensure that an error is raised if platform is not found."""
-        Platform.objects.create(name="Fake Platform")
+        Platform.objects.create(name="Fake Platform", network_driver="fake")
         with self.assertRaises(ValidationError):
-            PolicyToCapirca("Fake Platform", self.pol1).validate_capirca_data()
+            PolicyToCapirca("fake", self.pol1).validate_capirca_data()
 
     @patch("nautobot_firewall_models.utils.capirca.CAPIRCA_OS_MAPPER", {"srx": "paloaltofw"})
     def test_capirca_os_map(self):
