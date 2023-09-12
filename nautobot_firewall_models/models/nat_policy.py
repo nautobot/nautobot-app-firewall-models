@@ -279,6 +279,7 @@ class NATPolicy(PrimaryModel):
         verbose_name = "NAT Policy"
         verbose_name_plural = "NAT Policies"
 
+    @property
     def policy_details(self):
         """Convenience method to convert to a Python list of dictionaries."""
         return [rule.rule_details() for rule in self.nat_policy_rules.all()]

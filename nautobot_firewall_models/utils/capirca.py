@@ -6,8 +6,9 @@ import unicodedata
 from capirca.lib.naming import Naming
 from capirca.lib import policy
 
-from django.utils.module_loading import import_string
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
+from django.utils.module_loading import import_string
 
 from nautobot.dcim.models import Platform
 
@@ -52,8 +53,18 @@ def _clean_list(_list, remove_empty=False):
     return sorted(_list)
 
 
+def _get_instance_from_dict(obj):
+    """Get DB object from serialized json."""
+    if isinstance(obj, dict) and obj.get("id") and obj.get("object_type"):
+        app, model = obj["object_type"].split(".")
+        obj = ContentType.objects.get(app_label=app, model=model).get_object_for_this_type(id=obj["id"])
+    return obj
+
+
 def _check_status(status):
     """Check if status is active or as provided via plugin settings. If nothing, it is always good."""
+    if not isinstance(status, str):
+        status = _get_instance_from_dict(status).status.name
     if len(ALLOW_STATUS) == 0 or status not in ALLOW_STATUS:
         return True
     return False
@@ -84,7 +95,7 @@ class PolicyToCapirca:
         self.platform = CAPIRCA_OS_MAPPER.get(platform, platform)
         self.policy_details = None
         if policy_obj:
-            self.policy_details = policy_obj.policy_details()
+            self.policy_details = policy_obj.policy_details
         self.address = {}
         self.address_group = {}
         self.service = {}
@@ -139,7 +150,8 @@ class PolicyToCapirca:
             """Format address group objects, also adding the address objects as new ones are found."""
             address_group = []
             for address in data["address_objects"]:
-                if _check_status(address["status"]["value"]):
+                address = model_to_json(_get_instance_from_dict(address))
+                if _check_status(address["status"]["name"]):
                     LOGGER.debug("Skipped due to status: `%s`", str(address["name"]))
                     continue
                 format_address(address, address["name"])
@@ -160,7 +172,8 @@ class PolicyToCapirca:
             service_group = []
             service_group_protocols = []
             for service in data["service_objects"]:
-                if _check_status(service["status"]["value"]):
+                service = model_to_json(_get_instance_from_dict(service))
+                if _check_status(service["status"]["name"]):
                     LOGGER.debug("Skipped due to status: `%s`", str(service["name"]))
                     continue
                 format_service(service, service["name"])
@@ -173,7 +186,7 @@ class PolicyToCapirca:
                 self.service_group_protocol[name] = service_group_protocols
 
         data = model_to_json(data)
-        if _check_status(data["status"]["value"]):
+        if _check_status(data["status"]["name"]):
             LOGGER.debug("Skipped due to status: `%s`", str(data))
             return None
         name = data["name"]
@@ -583,7 +596,7 @@ class DevicePolicyToCapirca(PolicyToCapirca):
             if _check_status(pol.status.name):
                 LOGGER.debug("Policy Skipped due to status: `%s`", str(pol))
                 continue
-            self.policy_details = pol.policy_details()
+            self.policy_details = pol.policy_details
             self.validate_policy_data()
 
         self.get_capirca_cfg()

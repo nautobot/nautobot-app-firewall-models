@@ -245,16 +245,30 @@ class TestPolicyRuleModels(TestCase):
 
     def test_policyrule_to_json(self):
         """Test method to_json on PolicyRule model."""
-        json_details = PolicyRule.objects.first().to_json()
+        obj = PolicyRule.objects.first()
+        json_details = obj.to_json()
         self.assertEqual(json_details["display"], "Policy Rule 1 - req1")
-        self.assertEqual(json_details["source_users"][0]["display"], "user1")
-        self.assertEqual(json_details["source_user_groups"][0]["user_objects"][0]["name"], "User 1")
-        self.assertEqual(json_details["source_addresses"][0]["ip_range"]["display"], "192.168.0.11-192.168.0.20")
-        self.assertEqual(
-            json_details["source_address_groups"][0]["address_objects"][1]["ip_address"]["display"], "10.0.0.1/32"
+        self.assertTrue(obj.source_users.filter(id=json_details["source_users"][0]["id"]).exists())
+        self.assertTrue(
+            obj.source_user_groups.filter(
+                id=json_details["source_user_groups"][0]["id"]
+            ).exists()
         )
-        self.assertEqual(json_details["destination_services"][0]["name"], "PGSQL")
-        self.assertEqual(json_details["destination_services"][0]["port"], "5432")
+        self.assertTrue(
+            obj.source_addresses.filter(
+                id=json_details["source_addresses"][0]["id"]
+            ).exists()
+        )
+        self.assertTrue(
+            obj.source_address_groups.filter(
+                id=json_details["source_address_groups"][0]["id"]
+            ).exists()
+        )
+        self.assertTrue(
+            obj.destination_services.filter(
+                id=json_details["destination_services"][0]["id"]
+            ).exists()
+        )
 
 
 class TestPolicyModels(TestCase):
@@ -266,7 +280,7 @@ class TestPolicyModels(TestCase):
 
     def test_policy_policy_details(self):
         """Test method policy_details on Policy model."""
-        policy_details = Policy.objects.first().policy_details()[0]
+        policy_details = Policy.objects.first().policy_details[0]
         self.assertEqual(policy_details["log"], True)
         # sample a few keys to ensure they are in there, more complete test in to_json test
         keys = ["rule", "source_address_groups", "destination_address_groups", "action"]
@@ -274,16 +288,9 @@ class TestPolicyModels(TestCase):
 
     def test_policy_to_json(self):
         """Test method to_json on Policy model."""
-        json_details = Policy.objects.all()[2].to_json()["policy_rules"][2]
-        self.assertEqual(json_details["display"], "Policy Rule 3 - req3")
-        self.assertEqual(json_details["source_users"][0]["display"], "user1")
-        self.assertEqual(json_details["source_user_groups"][0]["user_objects"][0]["name"], "User 1")
-        self.assertEqual(json_details["source_addresses"][0]["ip_range"]["display"], "192.168.0.11-192.168.0.20")
-        self.assertEqual(
-            json_details["source_address_groups"][0]["address_objects"][1]["ip_address"]["display"], "10.0.0.1/32"
-        )
-        self.assertEqual(json_details["destination_services"][0]["name"], "DNS")
-        self.assertEqual(json_details["destination_services"][0]["port"], "53")
+        obj = Policy.objects.all()[2]
+        json_details = obj.to_json()["policy_rules"][2]
+        self.assertTrue(obj.policy_rules.filter(id=json_details["id"]).exists())
 
 
 class TestNATPolicyRuleModels(TestCase):
@@ -303,10 +310,17 @@ class TestNATPolicyRuleModels(TestCase):
 
     def test_natpolicyrule_to_json(self):
         """Test method to_json on NATPolicyRule model."""
-        json_details = NATPolicyRule.objects.first().to_json()
+        obj = NATPolicyRule.objects.first()
+        json_details = obj.to_json()
         self.assertEqual(json_details["display"], "NAT Policy Rule 1.1 - req1")
-        self.assertEqual(json_details["original_destination_services"][0]["port"], "80")
-        self.assertEqual(json_details["translated_destination_services"][0]["port"], "8080")
+        self.assertTrue(
+            obj.original_destination_services.filter(id=json_details["original_destination_services"][0]["id"]).exists()
+        )
+        self.assertTrue(
+            obj.translated_destination_services.filter(
+                id=json_details["translated_destination_services"][0]["id"]
+            ).exists()
+        )
 
 
 class TestNATPolicyModels(TestCase):
@@ -318,7 +332,7 @@ class TestNATPolicyModels(TestCase):
 
     def test_policy_policy_details(self):
         """Test method policy_details on Policy model."""
-        policy_details = NATPolicy.objects.first().policy_details()[0]
+        policy_details = NATPolicy.objects.first().policy_details[0]
         self.assertEqual(policy_details["log"], True)
         # sample a few keys to ensure they are in there, more complete test in to_json test
         keys = ["rule", "original_source_address_groups", "original_destination_address_groups", "remark"]
@@ -326,10 +340,17 @@ class TestNATPolicyModels(TestCase):
 
     def test_policy_to_json(self):
         """Test method to_json on Policy model."""
-        json_details = NATPolicyRule.objects.first().to_json()
-        self.assertEqual(json_details["display"], "NAT Policy Rule 1.1 - req1")
-        self.assertEqual(json_details["original_destination_services"][0]["port"], "80")
-        self.assertEqual(json_details["translated_destination_services"][0]["port"], "8080")
+        obj = NATPolicyRule.objects.first()
+        json_details = obj.to_json()
+        self.assertEqual(json_details["name"], "NAT Policy Rule 1.1")
+        self.assertTrue(
+            obj.original_destination_services.filter(id=json_details["original_destination_services"][0]["id"]).exists()
+        )
+        self.assertTrue(
+            obj.translated_destination_services.filter(
+                id=json_details["translated_destination_services"][0]["id"]
+            ).exists()
+        )
 
 
 class TestCapircaModels(TestCase):
