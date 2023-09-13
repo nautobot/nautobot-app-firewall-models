@@ -151,7 +151,7 @@ class PolicyRuleSerializer(NautobotModelSerializer):
 
     index = serializers.IntegerField(required=False, default=None)
 
-    ## source
+    # source
     source_users = NautobotHyperlinkedRelatedField(
         queryset=models.UserObject.objects.all(),
         many=True,
@@ -183,7 +183,7 @@ class PolicyRuleSerializer(NautobotModelSerializer):
         required=False,
     )
 
-    ## destination
+    # destination
     applications = NautobotHyperlinkedRelatedField(
         queryset=models.ApplicationObject.objects.all(),
         many=True,

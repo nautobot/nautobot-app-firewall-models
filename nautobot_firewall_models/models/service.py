@@ -68,11 +68,6 @@ class ApplicationObject(PrimaryModel):
         """Stringify instance."""
         return self.name
 
-    def save(self, *args, **kwargs):
-        """Overloads to enforce clear."""
-        self.clean()
-        super().save(*args, **kwargs)
-
     @property
     def application(self):  # pylint: disable=inconsistent-return-statements
         """Returns the assigned application object."""

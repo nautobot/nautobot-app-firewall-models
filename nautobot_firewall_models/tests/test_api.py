@@ -27,22 +27,6 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
         ]
         create_ip_range()
 
-    @skip("Not implemented")
-    def test_notes_url_on_object(self):
-        pass
-
-    @skip("Not implemented")
-    def test_recreate_object_csv(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_returns_expected_choices(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_object(self):
-        pass
-
 
 class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the Protocol viewsets."""
@@ -61,22 +45,6 @@ class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
         ]
         create_fqdn()
 
-    @skip("Not implemented")
-    def test_notes_url_on_object(self):
-        pass
-
-    @skip("Not implemented")
-    def test_recreate_object_csv(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_returns_expected_choices(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_object(self):
-        pass
-
 
 class ApplicationObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the ApplicationObject viewsets."""
@@ -88,39 +56,13 @@ class ApplicationObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     def setUpTestData(cls):
         """Create test data for API calls."""
         create_env()
-
+        models.ApplicationObject.objects.create(name="deleteableobj1")
+        models.ApplicationObject.objects.create(name="deleteableobj2")
+        models.ApplicationObject.objects.create(name="deleteableobj3")
         cls.create_data = [
             {"name": "obj2", "risk": 1},
             {"name": "obj1", "risk": 1},
         ]
-
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_bulk_delete_objects(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_recreate_object_csv(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_returns_expected_choices(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_object(self):
-        pass
 
 
 class ApplicationObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -134,43 +76,14 @@ class ApplicationObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         app_obj = models.ApplicationObject.objects.first()
+        models.ApplicationObjectGroup.objects.create(name="deleteableobj1")
+        models.ApplicationObjectGroup.objects.create(name="deleteableobj2")
+        models.ApplicationObjectGroup.objects.create(name="deleteableobj3")
 
         cls.create_data = [
             {"name": "test1", "application_objects": [app_obj.id]},
             {"name": "test2", "application_objects": [app_obj.id]},
         ]
-
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_bulk_delete_objects(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_recreate_object_csv(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_returns_expected_choices(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_object(self):
-        pass
-
-    @skip("Not implemented")
-    def test_list_objects_csv(self):
-        pass
 
 
 class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -185,39 +98,14 @@ class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
         create_env()
         ip_range = models.IPRange.objects.first()
         prefix = Prefix.objects.first()
+        models.AddressObject.objects.create(name="deleteableobj1", prefix=prefix)
+        models.AddressObject.objects.create(name="deleteableobj2", prefix=prefix)
+        models.AddressObject.objects.create(name="deleteableobj3", prefix=prefix)
 
         cls.create_data = [
             {"name": "obj2", "prefix": prefix.id},
             {"name": "obj1", "ip_range": ip_range.id},
         ]
-
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_bulk_delete_objects(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_recreate_object_csv(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_returns_expected_choices(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_object(self):
-        pass
 
 
 class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -231,6 +119,9 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         addr_obj = models.AddressObject.objects.first()
+        models.AddressObjectGroup.objects.create(name="deleteableobj1")
+        models.AddressObjectGroup.objects.create(name="deleteableobj2")
+        models.AddressObjectGroup.objects.create(name="deleteableobj3")
 
         cls.create_data = [
             {"name": "test1", "address_objects": [addr_obj.id]},
@@ -238,44 +129,8 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         ]
 
     @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_bulk_delete_objects(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_recreate_object_csv(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_returns_expected_choices(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_object(self):
-        pass
-
-    @skip("Not implemented")
     def test_list_objects_csv(self):
         pass
-
-    def test_create_object(self):
-        self.validation_excluded_fields = ["address_objects"]
-        return super().test_create_object()
-
-    def test_bulk_create_objects(self):
-        self.validation_excluded_fields = ["address_objects"]
-        return super().test_bulk_create_objects()
 
 
 class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -288,6 +143,9 @@ class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
+        models.ServiceObject.objects.create(name="deleteableobj1", ip_protocol="TCP")
+        models.ServiceObject.objects.create(name="deleteableobj2", ip_protocol="TCP")
+        models.ServiceObject.objects.create(name="deleteableobj3", ip_protocol="TCP")
 
         cls.create_data = [
             {"name": "HTTP", "port": "8088", "ip_protocol": "TCP"},
@@ -295,36 +153,16 @@ class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
         ]
         create_env()
 
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
+    @skip("Issues with custom validators")
+    def test_options_objects(self):
         pass
 
-    @skip("on_delete set to PROTECT")
-    def test_delete_object(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_bulk_delete_objects(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_recreate_object_csv(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_returns_expected_choices(self):
-        pass
-
-    @skip("Not implemented")
+    @skip("Issues with custom validators")
     def test_options_object(self):
         pass
 
-    @skip("Not implemented")
-    def test_options_objects(self):
+    @skip("Issues with custom validators")
+    def test_options_returns_expected_choices(self):
         pass
 
 
@@ -339,51 +177,14 @@ class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         svc_obj = models.ServiceObject.objects.first()
+        models.ServiceObjectGroup.objects.create(name="deleteableobj1")
+        models.ServiceObjectGroup.objects.create(name="deleteableobj2")
+        models.ServiceObjectGroup.objects.create(name="deleteableobj3")
 
         cls.create_data = [
             {"name": "test1", "service_objects": [svc_obj.id]},
             {"name": "test2", "service_objects": [svc_obj.id]},
         ]
-
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_bulk_delete_objects(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_recreate_object_csv(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_returns_expected_choices(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_object(self):
-        pass
-
-    @skip("Not implemented")
-    def test_list_objects_csv(self):
-        pass
-
-    def test_create_object(self):
-        self.validation_excluded_fields = ["service_objects"]
-        return super().test_create_object()
-
-    def test_bulk_create_objects(self):
-        self.validation_excluded_fields = ["service_objects"]
-        return super().test_bulk_create_objects()
 
 
 class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -400,35 +201,10 @@ class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"username": "test1", "name": "Foo"},
             {"username": "test2", "name": "Bar"},
         ]
+        models.UserObject.objects.create(username="deleteableobj1", name="deleteableobj1")
+        models.UserObject.objects.create(username="deleteableobj2", name="deleteableobj2")
+        models.UserObject.objects.create(username="deleteableobj3", name="deleteableobj3")
         create_env()
-
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_bulk_delete_objects(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_recreate_object_csv(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_returns_expected_choices(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_object(self):
-        pass
 
 
 class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -442,51 +218,14 @@ class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         user = models.UserObject.objects.first()
+        models.UserObjectGroup.objects.create(name="deleteableobj1")
+        models.UserObjectGroup.objects.create(name="deleteableobj2")
+        models.UserObjectGroup.objects.create(name="deleteableobj3")
 
         cls.create_data = [
             {"name": "test1", "user_objects": [user.id]},
             {"name": "test2", "user_objects": [user.id]},
         ]
-
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_bulk_delete_objects(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_recreate_object_csv(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_returns_expected_choices(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_object(self):
-        pass
-
-    @skip("Not implemented")
-    def test_list_objects_csv(self):
-        pass
-
-    def test_create_object(self):
-        self.validation_excluded_fields = ["user_objects"]
-        return super().test_create_object()
-
-    def test_bulk_create_objects(self):
-        self.validation_excluded_fields = ["user_objects"]
-        return super().test_bulk_create_objects()
 
 
 class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -503,35 +242,10 @@ class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"name": "trust"},
             {"name": "untrust"},
         ]
+        models.Zone.objects.create(name="deleteableobj1")
+        models.Zone.objects.create(name="deleteableobj2")
+        models.Zone.objects.create(name="deleteableobj3")
         create_env()
-
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_bulk_delete_objects(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_recreate_object_csv(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_returns_expected_choices(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_object(self):
-        pass
 
 
 class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -548,8 +262,10 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
         src_usr = models.UserObject.objects.first()
         src_addr = models.AddressObject.objects.first()
         dest_addr = models.AddressObject.objects.last()
-
         svc = models.ServiceObject.objects.first()
+        models.PolicyRule.objects.create(name="deleteableobj1", action="deny", index=1)
+        models.PolicyRule.objects.create(name="deleteableobj2", action="deny", index=1)
+        models.PolicyRule.objects.create(name="deleteableobj3", action="deny", index=1)
         cls.create_data = [
             {
                 # pylint: disable=R0801
@@ -572,37 +288,6 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
             },
         ]
 
-    def test_list_objects_brief(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_bulk_delete_objects(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_recreate_object_csv(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_returns_expected_choices(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_object(self):
-        pass
-
-    @skip("Not implemented")
-    def test_list_objects_csv(self):
-        pass
-
 
 class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the Policy viewsets."""
@@ -616,54 +301,21 @@ class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
         create_env()
         pol_rule = models.PolicyRule.objects.first()
         dev = Device.objects.first()
+        models.Policy.objects.create(name="deleteableobj1")
+        models.Policy.objects.create(name="deleteableobj2")
+        models.Policy.objects.create(name="deleteableobj3")
 
         cls.create_data = [
             {"name": "test 1", "policy_rules": [pol_rule.id]},
             {"name": "test 2", "policy_rules": [pol_rule.id], "description": "Test desc", "assigned_devices": [dev.id]},
         ]
 
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-    def test_create_object(self):
-        self.validation_excluded_fields = ["policy_rules"]
-        return super().test_create_object()
-
-    def test_update_object(self):
-        self.validation_excluded_fields = ["policy_rules"]
-        return super().test_update_object()
-
-    def test_bulk_create_objects(self):
-        self.validation_excluded_fields = ["policy_rules"]
-        return super().test_bulk_create_objects()
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_bulk_delete_objects(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_recreate_object_csv(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_returns_expected_choices(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_object(self):
-        pass
-
-    @skip("Not implemented")
+    @skip("CSV Not supported")
     def test_list_objects_csv(self):
+        pass
+
+    @skip("CSV Not supported")
+    def test_recreate_object_csv(self):
         pass
 
 
@@ -679,8 +331,10 @@ class NATPolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
         create_env()
         src_addr = models.AddressObject.objects.first()
         dest_addr = models.AddressObject.objects.last()
-
         svc = models.ServiceObject.objects.first()
+        models.NATPolicyRule.objects.create(name="deleteableobj1")
+        models.NATPolicyRule.objects.create(name="deleteableobj2")
+        models.NATPolicyRule.objects.create(name="deleteableobj3")
         cls.create_data = [
             {
                 "original_source_addresses": [src_addr.id],
@@ -700,35 +354,7 @@ class NATPolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
             },
         ]
 
-    @skip("not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_bulk_delete_objects(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_recreate_object_csv(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_returns_expected_choices(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_object(self):
-        pass
-
-    @skip("Not implemented")
+    @skip("CSV Not supported")
     def test_list_objects_csv(self):
         pass
 
@@ -744,52 +370,19 @@ class NATPolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         nat_pol_rule = models.NATPolicyRule.objects.first()
+        models.NATPolicy.objects.create(name="deleteableobj1")
+        models.NATPolicy.objects.create(name="deleteableobj2")
+        models.NATPolicy.objects.create(name="deleteableobj3")
 
         cls.create_data = [
             {"name": "test 1", "nat_policy_rules": [nat_pol_rule.id]},
             {"name": "test 2", "nat_policy_rules": [nat_pol_rule.id], "description": "Test desc"},
         ]
 
-    @skip("Not implemented")
-    def test_list_objects_brief(self):
-        pass
-
-    def test_create_object(self):
-        self.validation_excluded_fields = ["nat_policy_rules"]
-        return super().test_create_object()
-
-    def test_update_object(self):
-        self.validation_excluded_fields = ["nat_policy_rules"]
-        return super().test_update_object()
-
-    def test_bulk_create_objects(self):
-        self.validation_excluded_fields = ["nat_policy_rules"]
-        return super().test_bulk_create_objects()
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_bulk_delete_objects(self):
-        pass
-
-    @skip("on_delete set to PROTECT")
-    def test_delete_object_without_permission(self):
-        pass
-
-    @skip("Not implemented")
-    def test_recreate_object_csv(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_returns_expected_choices(self):
-        pass
-
-    @skip("Not implemented")
-    def test_options_object(self):
-        pass
-
-    @skip("Not implemented")
+    @skip("CSV Not supported")
     def test_list_objects_csv(self):
+        pass
+
+    @skip("CSV Not supported")
+    def test_recreate_object_csv(self):
         pass
