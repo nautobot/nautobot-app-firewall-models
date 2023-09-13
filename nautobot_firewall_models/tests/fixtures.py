@@ -14,7 +14,7 @@ from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard
 def create_ip_range():
     """Creates 3 IPRange objects."""
     status = Status.objects.get(name="Active")
-    vrf = VRF.objects.create(name="global")
+    vrf = VRF.objects.create(name="random_vrf")
     IPRange.objects.create(start_address="192.168.0.1", end_address="192.168.0.10", status=status)
     IPRange.objects.create(start_address="192.168.0.1", end_address="192.168.0.10", vrf=vrf, status=status)
     return IPRange.objects.create(start_address="192.168.0.11", end_address="192.168.0.20", status=status)
@@ -34,7 +34,6 @@ def create_env():
     vrf = VRF.objects.create(name="global")
     status = Status.objects.get(name="Active")
     namespace = Namespace.objects.create(name="global")
-    Prefix.objects.create(network="0.0.0.0", prefix_length=0, namespace=namespace, status=status)
     prefix = Prefix.objects.create(network="10.0.0.0", prefix_length=24, namespace=namespace, status=status)
     ip_address = IPAddr.objects.create(address="10.0.0.1", namespace=namespace, status=status)
 
@@ -62,9 +61,9 @@ def create_env():
     svc_grp2.service_objects.set([svc_obj2, svc_obj3])
     svc_grp3 = ServiceObjectGroup.objects.create(name="svc group3", status=status)
     svc_grp3.service_objects.set([svc_obj1, svc_obj2, svc_obj3])
-    usr_obj1 = UserObject.objects.create(username="user1", name="User 1", status=status)
-    usr_obj2 = UserObject.objects.create(username="user2", name="User 2", status=status)
-    usr_obj3 = UserObject.objects.create(username="user3", name="User 3", status=status)
+    usr_obj1 = UserObject.objects.create(username="user1", name="Bob", status=status)
+    usr_obj2 = UserObject.objects.create(username="user2", name="Fred", status=status)
+    usr_obj3 = UserObject.objects.create(username="user3", name="Tom", status=status)
     usr_grp1 = UserObjectGroup.objects.create(name="usr group1", status=status)
     usr_grp1.user_objects.set([usr_obj1])
     usr_grp2 = UserObjectGroup.objects.create(name="usr group2", status=status)
@@ -228,9 +227,7 @@ def create_env():
     nat_policy_1.nat_policy_rules.add(nat_policy_rule_1_1)
 
     nat_policy_rule_1_2 = NATPolicyRule.objects.create(
-        name="END OF NAT POLICY",
-        request_id="req2",
-        remark=True,
+        name="END OF NAT POLICY", request_id="req2", remark=True, log=True
     )
     nat_policy_1.nat_policy_rules.add(nat_policy_rule_1_2)
 
@@ -240,6 +237,13 @@ def create_env():
     nat_policy_rule_2_1.original_destination_addresses.add(destination)
     nat_policy_rule_2_1.original_destination_services.add(nat_orig_dest_service)
     nat_policy_2.nat_policy_rules.add(nat_policy_rule_2_1)
+
+    nat_policy_rule_3_1 = NATPolicyRule.objects.create(name="NAT Policy Rule 3.1", log=True, request_id="req4")
+    nat_policy_rule_3_1.original_source_addresses.add(addr_obj1)
+    nat_policy_rule_3_1.translated_source_addresses.add(translated_source)
+    nat_policy_rule_3_1.original_destination_addresses.add(destination)
+    nat_policy_rule_3_1.original_destination_services.add(nat_orig_dest_service)
+    nat_policy_2.nat_policy_rules.add(nat_policy_rule_3_1)
 
     # Mapping policies to devices
     loc_type = LocationType.objects.create(name="site")

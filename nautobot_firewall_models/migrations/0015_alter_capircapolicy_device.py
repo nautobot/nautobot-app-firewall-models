@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("dcim", "0014_location_status_data_migration"),
         ("nautobot_firewall_models", "0014_custom_status_application"),

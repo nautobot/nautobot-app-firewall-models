@@ -249,26 +249,10 @@ class TestPolicyRuleModels(TestCase):
         json_details = obj.to_json()
         self.assertEqual(json_details["display"], "Policy Rule 1 - req1")
         self.assertTrue(obj.source_users.filter(id=json_details["source_users"][0]["id"]).exists())
-        self.assertTrue(
-            obj.source_user_groups.filter(
-                id=json_details["source_user_groups"][0]["id"]
-            ).exists()
-        )
-        self.assertTrue(
-            obj.source_addresses.filter(
-                id=json_details["source_addresses"][0]["id"]
-            ).exists()
-        )
-        self.assertTrue(
-            obj.source_address_groups.filter(
-                id=json_details["source_address_groups"][0]["id"]
-            ).exists()
-        )
-        self.assertTrue(
-            obj.destination_services.filter(
-                id=json_details["destination_services"][0]["id"]
-            ).exists()
-        )
+        self.assertTrue(obj.source_user_groups.filter(id=json_details["source_user_groups"][0]["id"]).exists())
+        self.assertTrue(obj.source_addresses.filter(id=json_details["source_addresses"][0]["id"]).exists())
+        self.assertTrue(obj.source_address_groups.filter(id=json_details["source_address_groups"][0]["id"]).exists())
+        self.assertTrue(obj.destination_services.filter(id=json_details["destination_services"][0]["id"]).exists())
 
 
 class TestPolicyModels(TestCase):

@@ -4,9 +4,7 @@
 from django.db import models
 from nautobot.core.models.generics import BaseModel, PrimaryModel
 from nautobot.extras.models import StatusField
-from nautobot.extras.models.tags import TaggedItem
 from nautobot.extras.utils import extras_features
-from taggit.managers import TaggableManager
 
 from nautobot_firewall_models import choices
 from nautobot_firewall_models.utils import get_default_status, model_to_json
@@ -35,7 +33,6 @@ class PolicyRule(PrimaryModel):
     """
 
     name = models.CharField(max_length=100)
-    tags = TaggableManager(through=TaggedItem)
     source_users = models.ManyToManyField(
         to="nautobot_firewall_models.UserObject", through="SrcUserM2M", related_name="policy_rules"
     )
@@ -118,13 +115,13 @@ class PolicyRule(PrimaryModel):
         "log",
         "status",
     ]
+    natural_key_field_names = ["pk"]
 
     class Meta:
         """Meta class."""
 
         ordering = ["index", "name"]
         verbose_name_plural = "Policy Rules"
-        unique_together = ["name", "action", "index"]
 
     def rule_details(self):
         """Convience method to convert to more consumable dictionary."""

@@ -36,5 +36,5 @@ class CapircaPolicyModelTestCase(TestCase):
         """Test filtering by Device."""
         params = {"device": [self.dev01.name]}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
-        params = {"device_id": [self.dev01.id]}
+        params = {"device": [self.dev01.id]}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
