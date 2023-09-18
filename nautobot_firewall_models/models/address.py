@@ -110,9 +110,8 @@ class FQDN(PrimaryModel):
     )
     ip_addresses = models.ManyToManyField(
         to="ipam.IPAddress",
-        blank=True,
-        through="FQDNIPAddressM2M",
         related_name="fqdns",
+        blank=True,
         help_text="IP(s) an FQDN should resolve to.",
     )
     status = StatusField(
@@ -224,9 +223,8 @@ class AddressObjectGroup(PrimaryModel):
     name = models.CharField(max_length=100, unique=True, help_text="Name descriptor for a group address objects.")
     address_objects = models.ManyToManyField(
         to="nautobot_firewall_models.AddressObject",
-        blank=True,
-        through="AddressObjectGroupM2M",
         related_name="address_object_groups",
+        blank=True,
     )
     status = StatusField(
         on_delete=models.PROTECT,
@@ -243,22 +241,3 @@ class AddressObjectGroup(PrimaryModel):
     def __str__(self):
         """Stringify instance."""
         return self.name
-
-
-###########################
-# Through Models
-###########################
-
-
-class AddressObjectGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated AddressObject if assigned to a AddressObjectGroup."""
-
-    address = models.ForeignKey("nautobot_firewall_models.AddressObject", on_delete=models.PROTECT)
-    address_group = models.ForeignKey("nautobot_firewall_models.AddressObjectGroup", on_delete=models.CASCADE)
-
-
-class FQDNIPAddressM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated IPAddress if assigned to a FQDN."""
-
-    fqdn = models.ForeignKey("nautobot_firewall_models.FQDN", on_delete=models.CASCADE)
-    ip_address = models.ForeignKey("ipam.IPAddress", on_delete=models.PROTECT)

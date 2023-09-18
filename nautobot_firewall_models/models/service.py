@@ -94,7 +94,6 @@ class ApplicationObjectGroup(PrimaryModel):
     application_objects = models.ManyToManyField(
         to="nautobot_firewall_models.ApplicationObject",
         blank=True,
-        through="ApplicationObjectGroupM2M",
         related_name="application_object_groups",
     )
     status = StatusField(
@@ -189,7 +188,6 @@ class ServiceObjectGroup(PrimaryModel):
     service_objects = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObject",
         blank=True,
-        through="ServiceObjectGroupM2M",
         related_name="service_object_groups",
     )
     status = StatusField(
@@ -207,22 +205,3 @@ class ServiceObjectGroup(PrimaryModel):
     def __str__(self):
         """Stringify instance."""
         return self.name
-
-
-###########################
-# Through Models
-###########################
-
-
-class ApplicationObjectGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated ApplicationObject if assigned to a ApplicationObjectGroup."""
-
-    application = models.ForeignKey("nautobot_firewall_models.ApplicationObject", on_delete=models.PROTECT)
-    application_group = models.ForeignKey("nautobot_firewall_models.ApplicationObjectGroup", on_delete=models.CASCADE)
-
-
-class ServiceObjectGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated ServiceGroup if assigned to a PolicyRule."""
-
-    service = models.ForeignKey("nautobot_firewall_models.ServiceObject", on_delete=models.PROTECT)
-    service_group = models.ForeignKey("nautobot_firewall_models.ServiceObjectGroup", on_delete=models.CASCADE)
