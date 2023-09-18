@@ -185,14 +185,9 @@ def create_env():
     pol1 = Policy.objects.create(name="Policy 1", status=status)
     pol1.policy_rules.set([pol_rule1])
     pol2 = Policy.objects.create(name="Policy 2", status=status, tenant=tenant2)
-    PolicyRuleM2M.objects.create(policy=pol2, rule=pol_rule1)
-    PolicyRuleM2M.objects.create(policy=pol2, rule=pol_rule2)
+    pol2.policy_rules.set([pol_rule1, pol_rule2])
     pol3 = Policy.objects.create(name="Policy 3", status=status, tenant=tenant1)
-    PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule1)
-    PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule2)
-    PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule3)
-    PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule4)
-    PolicyRuleM2M.objects.create(policy=pol3, rule=pol_rule5)
+    pol3.policy_rules.set([pol_rule1, pol_rule2, pol_rule3, pol_rule4, pol_rule5])
 
     # Nat policies
     nat_orig_dest_service, _ = ServiceObject.objects.get_or_create(
@@ -276,8 +271,8 @@ def create_env():
     dynamic_group = DynamicGroup.objects.create(
         name="North Texas", content_type=ContentType.objects.get_for_model(Device)
     )
-    dynamic_group.filter = {"site": ["dfw"]}
-    dynamic_group.save()
+    dynamic_group.filter = {"location": ["dfw"]}
+    dynamic_group.validated_save()
     PolicyDeviceM2M.objects.create(policy=pol1, device=dev1, weight=150)
     PolicyDeviceM2M.objects.create(policy=pol2, device=dev1, weight=200)
     PolicyDeviceM2M.objects.create(policy=pol1, device=dev2)

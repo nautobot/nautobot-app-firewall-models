@@ -73,7 +73,6 @@ class UserObjectGroup(PrimaryModel):
     user_objects = models.ManyToManyField(
         to="nautobot_firewall_models.UserObject",
         blank=True,
-        through="UserObjectGroupM2M",
         related_name="user_object_groups",
     )
     status = StatusField(
@@ -91,15 +90,3 @@ class UserObjectGroup(PrimaryModel):
     def __str__(self):
         """Stringify instance."""
         return self.name
-
-
-###########################
-# Through Models
-###########################
-
-
-class UserObjectGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated User if assigned to a UserGroup."""
-
-    user = models.ForeignKey("nautobot_firewall_models.UserObject", on_delete=models.PROTECT)
-    user_group = models.ForeignKey("nautobot_firewall_models.UserObjectGroup", on_delete=models.CASCADE)
