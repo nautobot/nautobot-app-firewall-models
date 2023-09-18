@@ -18,7 +18,7 @@ packages = [{ include = "nautobot_firewall_models" }]
 
 [tool.poetry.dependencies]
 # Used for local development
-nautobot = "2.0.0rc2"
+nautobot = "2.0.0rc3"
 python = ">=3.8,<3.12"
 netutils = "^1.0.0"
 capirca = "^2.0.6"
