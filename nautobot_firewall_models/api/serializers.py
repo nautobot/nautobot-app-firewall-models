@@ -9,6 +9,20 @@ from nautobot.core.api.fields import NautobotHyperlinkedRelatedField
 from nautobot_firewall_models import models
 
 
+# TODO: This is a complete hack, M2M fields are not being picked up correctly.
+class ThroughNautobotHyperlinkedRelatedField(NautobotHyperlinkedRelatedField):
+    """Overload to account for nested through fields."""
+
+    def to_representation(self, value):
+        """Convert URL representation to a brief nested representation."""
+        return {
+            "id": value.pk,
+            "object_type": value._meta.label_lower,
+            "url": super().to_representation(value)["url"],
+            "composite_key": value.composite_key,
+        }
+
+
 class IPRangeSerializer(NautobotModelSerializer):
     """IPRange Serializer."""
 
@@ -45,10 +59,8 @@ class AddressObjectSerializer(NautobotModelSerializer):
 class AddressObjectGroupSerializer(NautobotModelSerializer):
     """AddressObjectGroup Serializer."""
 
-    address_objects = NautobotHyperlinkedRelatedField(
-        queryset=models.AddressObject.objects.all(),
-        many=True,
-        required=False,
+    address_objects = ThroughNautobotHyperlinkedRelatedField(
+        queryset=models.AddressObject.objects.all(), many=True, required=False
     )
 
     class Meta:
@@ -71,7 +83,7 @@ class ApplicationObjectSerializer(NautobotModelSerializer):
 class ApplicationObjectGroupSerializer(NautobotModelSerializer):
     """ApplicationObjectGroup Serializer."""
 
-    application_objects = NautobotHyperlinkedRelatedField(
+    application_objects = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ApplicationObject.objects.all(),
         many=True,
         required=False,
@@ -97,7 +109,7 @@ class ServiceObjectSerializer(NautobotModelSerializer):
 class ServiceObjectGroupSerializer(NautobotModelSerializer):
     """ServiceObjectGroup Serializer."""
 
-    service_objects = NautobotHyperlinkedRelatedField(
+    service_objects = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ServiceObject.objects.all(),
         many=True,
         required=False,
@@ -123,7 +135,7 @@ class UserObjectSerializer(NautobotModelSerializer):
 class UserObjectGroupSerializer(NautobotModelSerializer):
     """UserObjectGroup Serializer."""
 
-    user_objects = NautobotHyperlinkedRelatedField(
+    user_objects = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.UserObject.objects.all(),
         many=True,
         required=False,
@@ -152,64 +164,64 @@ class PolicyRuleSerializer(NautobotModelSerializer):
     index = serializers.IntegerField(required=False, default=None)
 
     # source
-    source_users = NautobotHyperlinkedRelatedField(
+    source_users = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.UserObject.objects.all(),
         many=True,
         required=False,
     )
-    source_user_groups = NautobotHyperlinkedRelatedField(
+    source_user_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.UserObjectGroup.objects.all(),
         many=True,
         required=False,
     )
-    source_addresses = NautobotHyperlinkedRelatedField(
+    source_addresses = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.AddressObject.objects.all(),
         many=True,
         required=False,
     )
-    source_address_groups = NautobotHyperlinkedRelatedField(
+    source_address_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.AddressObjectGroup.objects.all(),
         many=True,
         required=False,
     )
-    source_services = NautobotHyperlinkedRelatedField(
+    source_services = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ServiceObject.objects.all(),
         many=True,
         required=False,
     )
-    source_service_groups = NautobotHyperlinkedRelatedField(
+    source_service_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ServiceObjectGroup.objects.all(),
         many=True,
         required=False,
     )
 
     # destination
-    applications = NautobotHyperlinkedRelatedField(
+    applications = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ApplicationObject.objects.all(),
         many=True,
         required=False,
     )
-    application_groups = NautobotHyperlinkedRelatedField(
+    application_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ApplicationObjectGroup.objects.all(),
         many=True,
         required=False,
     )
-    destination_addresses = NautobotHyperlinkedRelatedField(
+    destination_addresses = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.AddressObject.objects.all(),
         many=True,
         required=False,
     )
-    destination_address_groups = NautobotHyperlinkedRelatedField(
+    destination_address_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.AddressObjectGroup.objects.all(),
         many=True,
         required=False,
     )
-    destination_services = NautobotHyperlinkedRelatedField(
+    destination_services = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ServiceObject.objects.all(),
         many=True,
         required=False,
     )
-    destination_service_groups = NautobotHyperlinkedRelatedField(
+    destination_service_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ServiceObjectGroup.objects.all(),
         many=True,
         required=False,
@@ -225,17 +237,17 @@ class PolicyRuleSerializer(NautobotModelSerializer):
 class PolicySerializer(NautobotModelSerializer):
     """Policy Serializer."""
 
-    policy_rules = NautobotHyperlinkedRelatedField(
+    policy_rules = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.PolicyRule.objects.all(),
         many=True,
         required=False,
     )
-    assigned_devices = NautobotHyperlinkedRelatedField(
+    assigned_devices = ThroughNautobotHyperlinkedRelatedField(
         queryset=Device.objects.all(),
         many=True,
         required=False,
     )
-    assigned_dynamic_groups = NautobotHyperlinkedRelatedField(
+    assigned_dynamic_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=DynamicGroup.objects.all(),
         many=True,
         required=False,
@@ -313,88 +325,88 @@ class NATPolicyRuleSerializer(NautobotModelSerializer):
     """PolicyRule Serializer."""
 
     # original source
-    original_source_addresses = NautobotHyperlinkedRelatedField(
+    original_source_addresses = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.AddressObject.objects.all(),
         many=True,
         required=False,
     )
-    original_source_address_groups = NautobotHyperlinkedRelatedField(
+    original_source_address_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.AddressObjectGroup.objects.all(),
         many=True,
         required=False,
     )
-    original_source_services = NautobotHyperlinkedRelatedField(
+    original_source_services = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ServiceObject.objects.all(),
         many=True,
         required=False,
     )
-    original_source_service_groups = NautobotHyperlinkedRelatedField(
+    original_source_service_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ServiceObjectGroup.objects.all(),
         many=True,
         required=False,
     )
 
     # translated source
-    translated_source_addresses = NautobotHyperlinkedRelatedField(
+    translated_source_addresses = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.AddressObject.objects.all(),
         many=True,
         required=False,
     )
-    translated_source_address_groups = NautobotHyperlinkedRelatedField(
+    translated_source_address_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.AddressObjectGroup.objects.all(),
         many=True,
         required=False,
     )
-    translated_source_services = NautobotHyperlinkedRelatedField(
+    translated_source_services = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ServiceObject.objects.all(),
         many=True,
         required=False,
     )
-    translated_source_service_groups = NautobotHyperlinkedRelatedField(
+    translated_source_service_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ServiceObjectGroup.objects.all(),
         many=True,
         required=False,
     )
 
     # original destination
-    original_destination_addresses = NautobotHyperlinkedRelatedField(
+    original_destination_addresses = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.AddressObject.objects.all(),
         many=True,
         required=False,
     )
-    original_destination_address_groups = NautobotHyperlinkedRelatedField(
+    original_destination_address_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.AddressObjectGroup.objects.all(),
         many=True,
         required=False,
     )
-    original_destination_services = NautobotHyperlinkedRelatedField(
+    original_destination_services = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ServiceObject.objects.all(),
         many=True,
         required=False,
     )
-    original_destination_service_groups = NautobotHyperlinkedRelatedField(
+    original_destination_service_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ServiceObjectGroup.objects.all(),
         many=True,
         required=False,
     )
 
     # translated destination
-    translated_destination_addresses = NautobotHyperlinkedRelatedField(
+    translated_destination_addresses = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.AddressObject.objects.all(),
         many=True,
         required=False,
     )
-    translated_destination_address_groups = NautobotHyperlinkedRelatedField(
+    translated_destination_address_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.AddressObjectGroup.objects.all(),
         many=True,
         required=False,
     )
-    translated_destination_services = NautobotHyperlinkedRelatedField(
+    translated_destination_services = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ServiceObject.objects.all(),
         many=True,
         required=False,
     )
-    translated_destination_service_groups = NautobotHyperlinkedRelatedField(
+    translated_destination_service_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.ServiceObjectGroup.objects.all(),
         many=True,
         required=False,
@@ -410,17 +422,17 @@ class NATPolicyRuleSerializer(NautobotModelSerializer):
 class NATPolicySerializer(NautobotModelSerializer):
     """NATPolicy Serializer."""
 
-    nat_policy_rules = NautobotHyperlinkedRelatedField(
+    nat_policy_rules = ThroughNautobotHyperlinkedRelatedField(
         queryset=models.NATPolicyRule.objects.all(),
         many=True,
         required=False,
     )
-    assigned_devices = NautobotHyperlinkedRelatedField(
+    assigned_devices = ThroughNautobotHyperlinkedRelatedField(
         queryset=Device.objects.all(),
         many=True,
         required=False,
     )
-    assigned_dynamic_groups = NautobotHyperlinkedRelatedField(
+    assigned_dynamic_groups = ThroughNautobotHyperlinkedRelatedField(
         queryset=DynamicGroup.objects.all(),
         many=True,
         required=False,
