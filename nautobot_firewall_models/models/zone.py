@@ -33,9 +33,7 @@ class Zone(PrimaryModel):
     )
     name = models.CharField(max_length=100, unique=True, help_text="Name of the zone (e.g. trust)")
     vrfs = models.ManyToManyField(to="ipam.VRF", blank=True, related_name="zones")
-    interfaces = models.ManyToManyField(
-        to="dcim.Interface", blank=True, related_name="zones"
-    )
+    interfaces = models.ManyToManyField(to="dcim.Interface", blank=True, related_name="zones")
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related

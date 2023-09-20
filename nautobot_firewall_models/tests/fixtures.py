@@ -271,7 +271,7 @@ def create_env():
     dynamic_group = DynamicGroup.objects.create(
         name="North Texas", content_type=ContentType.objects.get_for_model(Device)
     )
-    dynamic_group.filter = {"location": ["dfw"]}
+    dynamic_group.filter = {"location": ["DFW"]}
     dynamic_group.validated_save()
     PolicyDeviceM2M.objects.create(policy=pol1, device=dev1, weight=150)
     PolicyDeviceM2M.objects.create(policy=pol2, device=dev1, weight=200)

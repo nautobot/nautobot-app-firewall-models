@@ -32,16 +32,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="zone",
             name="new_interfaces",
-            field=models.ManyToManyField(
-                blank=True, related_name="zones", to="nautobot_firewall_models.UserObject"
-            ),
+            field=models.ManyToManyField(blank=True, related_name="zones", to="nautobot_firewall_models.UserObject"),
         ),
         migrations.AddField(
             model_name="zone",
             name="new_vrfs",
-            field=models.ManyToManyField(
-                blank=True, related_name="zones", to="nautobot_firewall_models.UserObject"
-            ),
+            field=models.ManyToManyField(blank=True, related_name="zones", to="nautobot_firewall_models.UserObject"),
         ),
         migrations.AddField(
             model_name="serviceobjectgroup",
@@ -54,7 +50,9 @@ class Migration(migrations.Migration):
             model_name="applicationobjectgroup",
             name="new_application_objects",
             field=models.ManyToManyField(
-                blank=True, related_name="new_application_object_groups", to="nautobot_firewall_models.ApplicationObject"
+                blank=True,
+                related_name="new_application_object_groups",
+                to="nautobot_firewall_models.ApplicationObject",
             ),
         ),
         # start policyrule source
@@ -112,7 +110,9 @@ class Migration(migrations.Migration):
             model_name="policyrule",
             name="new_destination_address_groups",
             field=models.ManyToManyField(
-                blank=True, related_name="new_destination_policy_rules", to="nautobot_firewall_models.AddressObjectGroup"
+                blank=True,
+                related_name="new_destination_policy_rules",
+                to="nautobot_firewall_models.AddressObjectGroup",
             ),
         ),
         migrations.AddField(
@@ -126,7 +126,9 @@ class Migration(migrations.Migration):
             model_name="policyrule",
             name="new_destination_service_groups",
             field=models.ManyToManyField(
-                blank=True, related_name="new_destination_policy_rules", to="nautobot_firewall_models.ServiceObjectGroup"
+                blank=True,
+                related_name="new_destination_policy_rules",
+                to="nautobot_firewall_models.ServiceObjectGroup",
             ),
         ),
         migrations.AddField(

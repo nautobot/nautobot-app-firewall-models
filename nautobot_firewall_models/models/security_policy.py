@@ -62,7 +62,8 @@ class PolicyRule(PrimaryModel):
         blank=True, to="nautobot_firewall_models.AddressObject", related_name="destination_policy_rules"
     )
     destination_address_groups = models.ManyToManyField(
-        blank=True, to="nautobot_firewall_models.AddressObjectGroup",
+        blank=True,
+        to="nautobot_firewall_models.AddressObjectGroup",
         related_name="destination_policy_rules",
     )
     destination_zone = models.ForeignKey(
@@ -73,10 +74,11 @@ class PolicyRule(PrimaryModel):
         related_name="destination_policy_rules",
     )
     destination_services = models.ManyToManyField(
-        blank=True,to="nautobot_firewall_models.ServiceObject", related_name="destination_policy_rules"
+        blank=True, to="nautobot_firewall_models.ServiceObject", related_name="destination_policy_rules"
     )
     destination_service_groups = models.ManyToManyField(
-        blank=True,to="nautobot_firewall_models.ServiceObjectGroup",
+        blank=True,
+        to="nautobot_firewall_models.ServiceObjectGroup",
         related_name="destination_policy_rules",
     )
     action = models.CharField(choices=choices.ACTION_CHOICES, max_length=20)
@@ -87,10 +89,10 @@ class PolicyRule(PrimaryModel):
         default=get_default_status,
     )
     applications = models.ManyToManyField(
-        blank=True,to="nautobot_firewall_models.ApplicationObject", related_name="policy_rules"
+        blank=True, to="nautobot_firewall_models.ApplicationObject", related_name="policy_rules"
     )
     application_groups = models.ManyToManyField(
-        blank=True,to="nautobot_firewall_models.ApplicationObjectGroup", related_name="policy_rules"
+        blank=True, to="nautobot_firewall_models.ApplicationObjectGroup", related_name="policy_rules"
     )
     request_id = models.CharField(max_length=100, null=True, blank=True)
     description = models.CharField(max_length=200, null=True, blank=True)
@@ -226,6 +228,7 @@ class Policy(PrimaryModel):
 ###########################
 # Through Models
 ###########################
+
 
 class PolicyDeviceM2M(BaseModel):
     """Through model to add weight to the the Policy & Device relationship."""
