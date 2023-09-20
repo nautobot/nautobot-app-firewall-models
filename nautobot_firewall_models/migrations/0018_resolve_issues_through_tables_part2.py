@@ -19,9 +19,15 @@ affected_models = {
     "nautobot_firewall_models.PolicyRule": {"old": "source_service_groups", "new": "new_source_service_groups"},
     # policy rule dest
     "nautobot_firewall_models.PolicyRule": {"old": "destination_addresses", "new": "new_destination_addresses"},
-    "nautobot_firewall_models.PolicyRule": {"old": "destination_address_groups", "new": "new_destination_addresse_groups"},
+    "nautobot_firewall_models.PolicyRule": {
+        "old": "destination_address_groups",
+        "new": "new_destination_addresse_groups",
+    },
     "nautobot_firewall_models.PolicyRule": {"old": "destination_services", "new": "new_destination_services"},
-    "nautobot_firewall_models.PolicyRule": {"old": "destination_service_groups", "new": "new_destination_service_groups"},
+    "nautobot_firewall_models.PolicyRule": {
+        "old": "destination_service_groups",
+        "new": "new_destination_service_groups",
+    },
     "nautobot_firewall_models.PolicyRule": {"old": "applications", "new": "new_applications"},
     "nautobot_firewall_models.PolicyRule": {"old": "application_groups", "new": "new_application_groups"},
     # policy policyrule

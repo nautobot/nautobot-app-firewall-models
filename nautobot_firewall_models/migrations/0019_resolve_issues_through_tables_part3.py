@@ -24,9 +24,11 @@ class Migration(migrations.Migration):
             new_name="address_objects",
         ),
         migrations.AlterField(
-            model_name='addressobjectgroup',
-            name='address_objects',
-            field=models.ManyToManyField(blank=True, related_name='address_object_groups', to='nautobot_firewall_models.AddressObject'),
+            model_name="addressobjectgroup",
+            name="address_objects",
+            field=models.ManyToManyField(
+                blank=True, related_name="address_object_groups", to="nautobot_firewall_models.AddressObject"
+            ),
         ),
         # models.address.fqdn
         migrations.RemoveField(
@@ -42,9 +44,9 @@ class Migration(migrations.Migration):
             new_name="ip_addresses",
         ),
         migrations.AlterField(
-            model_name='fqdn',
-            name='ip_addresses',
-            field=models.ManyToManyField(blank=True, related_name='fqdns', to='ipam.IPAddress'),
+            model_name="fqdn",
+            name="ip_addresses",
+            field=models.ManyToManyField(blank=True, related_name="fqdns", to="ipam.IPAddress"),
         ),
         # models.user.userobjectgroup
         migrations.RemoveField(
@@ -60,9 +62,11 @@ class Migration(migrations.Migration):
             new_name="user_objects",
         ),
         migrations.AlterField(
-            model_name='userobjectgroup',
-            name='user_objects',
-            field=models.ManyToManyField(blank=True, related_name='user_object_groups', to='nautobot_firewall_models.UserObject'),
+            model_name="userobjectgroup",
+            name="user_objects",
+            field=models.ManyToManyField(
+                blank=True, related_name="user_object_groups", to="nautobot_firewall_models.UserObject"
+            ),
         ),
         # models.zone.zone
         migrations.RemoveField(
@@ -90,14 +94,14 @@ class Migration(migrations.Migration):
             new_name="vrfs",
         ),
         migrations.AlterField(
-            model_name='zone',
-            name='interfaces',
-            field=models.ManyToManyField(blank=True, related_name='zones', to='dcim.Interface'),
+            model_name="zone",
+            name="interfaces",
+            field=models.ManyToManyField(blank=True, related_name="zones", to="dcim.Interface"),
         ),
         migrations.AlterField(
-            model_name='zone',
-            name='vrfs',
-            field=models.ManyToManyField(blank=True, related_name='zones', to='ipam.VRF'),
+            model_name="zone",
+            name="vrfs",
+            field=models.ManyToManyField(blank=True, related_name="zones", to="ipam.VRF"),
         ),
         # models.service.serviceobjectgroup
         migrations.RemoveField(
@@ -113,9 +117,11 @@ class Migration(migrations.Migration):
             new_name="service_objects",
         ),
         migrations.AlterField(
-            model_name='serviceobjectgroup',
-            name='service_objects',
-            field=models.ManyToManyField(blank=True, related_name='service_object_groups', to='nautobot_firewall_models.ServiceObject'),
+            model_name="serviceobjectgroup",
+            name="service_objects",
+            field=models.ManyToManyField(
+                blank=True, related_name="service_object_groups", to="nautobot_firewall_models.ServiceObject"
+            ),
         ),
         # models.service.applicationobjectgroup
         migrations.RemoveField(
@@ -131,9 +137,11 @@ class Migration(migrations.Migration):
             new_name="application_objects",
         ),
         migrations.AlterField(
-            model_name='applicationobjectgroup',
-            name='application_objects',
-            field=models.ManyToManyField(blank=True, related_name='application_object_groups', to='nautobot_firewall_models.ApplicationObject'),
+            model_name="applicationobjectgroup",
+            name="application_objects",
+            field=models.ManyToManyField(
+                blank=True, related_name="application_object_groups", to="nautobot_firewall_models.ApplicationObject"
+            ),
         ),
         # models.security_policy.policyrule source
         migrations.RemoveField(
@@ -209,34 +217,46 @@ class Migration(migrations.Migration):
             new_name="source_service_groups",
         ),
         migrations.AlterField(
-            model_name='policyrule',
-            name='source_address_groups',
-            field=models.ManyToManyField(blank=True, related_name='source_policy_rules', to='nautobot_firewall_models.AddressObjectGroup'),
+            model_name="policyrule",
+            name="source_address_groups",
+            field=models.ManyToManyField(
+                blank=True, related_name="source_policy_rules", to="nautobot_firewall_models.AddressObjectGroup"
+            ),
         ),
         migrations.AlterField(
-            model_name='policyrule',
-            name='source_addresses',
-            field=models.ManyToManyField(blank=True, related_name='source_policy_rules', to='nautobot_firewall_models.AddressObject'),
+            model_name="policyrule",
+            name="source_addresses",
+            field=models.ManyToManyField(
+                blank=True, related_name="source_policy_rules", to="nautobot_firewall_models.AddressObject"
+            ),
         ),
         migrations.AlterField(
-            model_name='policyrule',
-            name='source_service_groups',
-            field=models.ManyToManyField(blank=True, related_name='source_policy_rules', to='nautobot_firewall_models.ServiceObjectGroup'),
+            model_name="policyrule",
+            name="source_service_groups",
+            field=models.ManyToManyField(
+                blank=True, related_name="source_policy_rules", to="nautobot_firewall_models.ServiceObjectGroup"
+            ),
         ),
         migrations.AlterField(
-            model_name='policyrule',
-            name='source_services',
-            field=models.ManyToManyField(blank=True, related_name='source_policy_rules', to='nautobot_firewall_models.ServiceObject'),
+            model_name="policyrule",
+            name="source_services",
+            field=models.ManyToManyField(
+                blank=True, related_name="source_policy_rules", to="nautobot_firewall_models.ServiceObject"
+            ),
         ),
         migrations.AlterField(
-            model_name='policyrule',
-            name='source_user_groups',
-            field=models.ManyToManyField(blank=True, related_name='policy_rules', to='nautobot_firewall_models.UserObjectGroup'),
+            model_name="policyrule",
+            name="source_user_groups",
+            field=models.ManyToManyField(
+                blank=True, related_name="policy_rules", to="nautobot_firewall_models.UserObjectGroup"
+            ),
         ),
         migrations.AlterField(
-            model_name='policyrule',
-            name='source_users',
-            field=models.ManyToManyField(blank=True, related_name='policy_rules', to='nautobot_firewall_models.UserObject'),
+            model_name="policyrule",
+            name="source_users",
+            field=models.ManyToManyField(
+                blank=True, related_name="policy_rules", to="nautobot_firewall_models.UserObject"
+            ),
         ),
         # models.security_policy.policyrule destination
         migrations.RemoveField(
@@ -312,34 +332,46 @@ class Migration(migrations.Migration):
             new_name="application_groups",
         ),
         migrations.AlterField(
-            model_name='policyrule',
-            name='application_groups',
-            field=models.ManyToManyField(blank=True, related_name='policy_rules', to='nautobot_firewall_models.ApplicationObjectGroup'),
+            model_name="policyrule",
+            name="application_groups",
+            field=models.ManyToManyField(
+                blank=True, related_name="policy_rules", to="nautobot_firewall_models.ApplicationObjectGroup"
+            ),
         ),
         migrations.AlterField(
-            model_name='policyrule',
-            name='applications',
-            field=models.ManyToManyField(blank=True, related_name='policy_rules', to='nautobot_firewall_models.ApplicationObject'),
+            model_name="policyrule",
+            name="applications",
+            field=models.ManyToManyField(
+                blank=True, related_name="policy_rules", to="nautobot_firewall_models.ApplicationObject"
+            ),
         ),
         migrations.AlterField(
-            model_name='policyrule',
-            name='destination_address_groups',
-            field=models.ManyToManyField(blank=True, related_name='destination_policy_rules', to='nautobot_firewall_models.AddressObjectGroup'),
+            model_name="policyrule",
+            name="destination_address_groups",
+            field=models.ManyToManyField(
+                blank=True, related_name="destination_policy_rules", to="nautobot_firewall_models.AddressObjectGroup"
+            ),
         ),
         migrations.AlterField(
-            model_name='policyrule',
-            name='destination_addresses',
-            field=models.ManyToManyField(blank=True, related_name='destination_policy_rules', to='nautobot_firewall_models.AddressObject'),
+            model_name="policyrule",
+            name="destination_addresses",
+            field=models.ManyToManyField(
+                blank=True, related_name="destination_policy_rules", to="nautobot_firewall_models.AddressObject"
+            ),
         ),
         migrations.AlterField(
-            model_name='policyrule',
-            name='destination_service_groups',
-            field=models.ManyToManyField(blank=True, related_name='destination_policy_rules', to='nautobot_firewall_models.ServiceObjectGroup'),
+            model_name="policyrule",
+            name="destination_service_groups",
+            field=models.ManyToManyField(
+                blank=True, related_name="destination_policy_rules", to="nautobot_firewall_models.ServiceObjectGroup"
+            ),
         ),
         migrations.AlterField(
-            model_name='policyrule',
-            name='destination_services',
-            field=models.ManyToManyField(blank=True, related_name='destination_policy_rules', to='nautobot_firewall_models.ServiceObject'),
+            model_name="policyrule",
+            name="destination_services",
+            field=models.ManyToManyField(
+                blank=True, related_name="destination_policy_rules", to="nautobot_firewall_models.ServiceObject"
+            ),
         ),
         # models.security_policy.policy
         migrations.RemoveField(
@@ -355,9 +387,8 @@ class Migration(migrations.Migration):
             new_name="policy_rules",
         ),
         migrations.AlterField(
-            model_name='policy',
-            name='policy_rules',
-            field=models.ManyToManyField(blank=True, related_name='policies', to='nautobot_firewall_models.PolicyRule'),
+            model_name="policy",
+            name="policy_rules",
+            field=models.ManyToManyField(blank=True, related_name="policies", to="nautobot_firewall_models.PolicyRule"),
         ),
     ]
-
