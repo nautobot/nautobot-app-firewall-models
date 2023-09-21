@@ -2,7 +2,7 @@
 # pylint: disable=duplicate-code, too-many-lines
 
 from django.db import models
-from nautobot.core.models.generics import BaseModel, PrimaryModel
+from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.models import StatusField
 from nautobot.extras.utils import extras_features
 

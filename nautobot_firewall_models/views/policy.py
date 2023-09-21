@@ -21,18 +21,18 @@ class PolicyView(generic.ObjectView):
     """Detail view."""
 
     queryset = models.Policy.objects.all().prefetch_related(
-        "policyrulem2m_set__rule__source_addresses",
-        "policyrulem2m_set__rule__source_address_groups",
-        "policyrulem2m_set__rule__source_users",
-        "policyrulem2m_set__rule__source_user_groups",
-        "policyrulem2m_set__rule__source_zone",
-        "policyrulem2m_set__rule__source_services",
-        "policyrulem2m_set__rule__source_service_groups",
-        "policyrulem2m_set__rule__destination_zone",
-        "policyrulem2m_set__rule__destination_addresses",
-        "policyrulem2m_set__rule__destination_address_groups",
-        "policyrulem2m_set__rule__destination_services",
-        "policyrulem2m_set__rule__destination_service_groups",
+        "policy_rules__source_addresses",
+        "policy_rules__source_address_groups",
+        "policy_rules__source_users",
+        "policy_rules__source_user_groups",
+        "policy_rules__source_zone",
+        "policy_rules__source_services",
+        "policy_rules__source_service_groups",
+        "policy_rules__destination_zone",
+        "policy_rules__destination_addresses",
+        "policy_rules__destination_address_groups",
+        "policy_rules__destination_services",
+        "policy_rules__destination_service_groups",
     )
 
 

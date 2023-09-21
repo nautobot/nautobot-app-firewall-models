@@ -4,7 +4,6 @@ from rest_framework import serializers
 from nautobot.dcim.models import Device
 from nautobot.apps.api import NautobotModelSerializer
 from nautobot.extras.models import DynamicGroup
-from nautobot.core.api.fields import NautobotHyperlinkedRelatedField
 
 from nautobot_firewall_models import models
 

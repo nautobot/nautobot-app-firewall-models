@@ -2,7 +2,6 @@
 # flake8: noqa: F403,405
 # pylint: disable=invalid-name
 from nautobot.apps.testing import APIViewTestCases
-from nautobot.dcim.models import Device
 from nautobot.ipam.models import Prefix
 
 from nautobot_firewall_models import models
@@ -283,14 +282,13 @@ class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         create_env()
         pol_rule = models.PolicyRule.objects.first()
-        dev = Device.objects.first()
         models.Policy.objects.create(name="deleteableobj1")
         models.Policy.objects.create(name="deleteableobj2")
         models.Policy.objects.create(name="deleteableobj3")
 
         cls.create_data = [
             {"name": "test 1", "policy_rules": [pol_rule.id]},
-            {"name": "test 2", "policy_rules": [pol_rule.id], "description": "Test desc", "assigned_devices": [dev.id]},
+            {"name": "test 2", "policy_rules": [pol_rule.id], "description": "Test desc"},
         ]
 
 
