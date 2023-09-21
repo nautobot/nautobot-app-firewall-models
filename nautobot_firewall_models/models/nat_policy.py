@@ -63,88 +63,88 @@ class NATPolicyRule(PrimaryModel):
     # Original source data
     original_source_addresses = models.ManyToManyField(
         to="nautobot_firewall_models.AddressObject",
-        through="NATOrigSrcAddrM2M",
+        blank=True,
         related_name="original_source_nat_policy_rules",
     )
     original_source_address_groups = models.ManyToManyField(
         to="nautobot_firewall_models.AddressObjectGroup",
-        through="NATOrigSrcAddrGroupM2M",
+        blank=True,
         related_name="original_source_nat_policy_rules",
     )
     original_source_services = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObject",
-        through="NATOrigSrcSvcM2M",
+        blank=True,
         related_name="original_source_nat_policy_rules",
     )
     original_source_service_groups = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObjectGroup",
-        through="NATOrigSrcSvcGroupM2M",
+        blank=True,
         related_name="original_source_nat_policy_rules",
     )
 
     # Translated source data
     translated_source_addresses = models.ManyToManyField(
         to="nautobot_firewall_models.AddressObject",
-        through="NATTransSrcAddrM2M",
+        blank=True,
         related_name="translated_source_nat_policy_rules",
     )
     translated_source_address_groups = models.ManyToManyField(
         to="nautobot_firewall_models.AddressObjectGroup",
-        through="NATTransSrcAddrGroupM2M",
+        blank=True,
         related_name="translated_source_nat_policy_rules",
     )
     translated_source_services = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObject",
-        through="NATTransSrcSvcM2M",
+        blank=True,
         related_name="translated_source_nat_policy_rules",
     )
     translated_source_service_groups = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObjectGroup",
-        through="NATTransSrcSvcGroupM2M",
+        blank=True,
         related_name="translated_source_nat_policy_rules",
     )
 
     # Original destination data
     original_destination_addresses = models.ManyToManyField(
         to="nautobot_firewall_models.AddressObject",
-        through="NATOrigDestAddrM2M",
+        blank=True,
         related_name="original_destination_nat_policy_rules",
     )
     original_destination_address_groups = models.ManyToManyField(
         to="nautobot_firewall_models.AddressObjectGroup",
-        through="NATOrigDestAddrGroupM2M",
+        blank=True,
         related_name="original_destination_nat_policy_rules",
     )
     original_destination_services = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObject",
-        through="NATOrigDestSvcM2M",
+        blank=True,
         related_name="original_destination_nat_policy_rules",
     )
     original_destination_service_groups = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObjectGroup",
-        through="NATOrigDestSvcGroupM2M",
+        blank=True,
         related_name="original_destination_nat_policy_rules",
     )
 
     # Translated destination data
     translated_destination_addresses = models.ManyToManyField(
         to="nautobot_firewall_models.AddressObject",
-        through="NATTransDestAddrM2M",
+        blank=True,
         related_name="translated_destination_nat_policy_rules",
     )
     translated_destination_address_groups = models.ManyToManyField(
         to="nautobot_firewall_models.AddressObjectGroup",
-        through="NATTransDestAddrGroupM2M",
+        blank=True,
         related_name="translated_destination_nat_policy_rules",
     )
     translated_destination_services = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObject",
-        through="NATTransDestSvcM2M",
+        blank=True,
         related_name="translated_destination_nat_policy_rules",
     )
     translated_destination_service_groups = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObjectGroup",
-        through="NATTransDestSvcGroupM2M",
+        blank=True,
         related_name="translated_destination_nat_policy_rules",
     )
 
@@ -249,7 +249,9 @@ class NATPolicy(PrimaryModel):
         blank=True,
     )
     name = models.CharField(max_length=100, unique=True)
-    nat_policy_rules = models.ManyToManyField(to=NATPolicyRule, through="NATPolicyRuleM2M", related_name="nat_policies")
+    nat_policy_rules = models.ManyToManyField(
+        to="nautobot_firewall_models.NATPolicyRule", blank=True, related_name="nat_policies"
+    )
     assigned_devices = models.ManyToManyField(
         to="dcim.Device", through="NATPolicyDeviceM2M", related_name="nat_policies"
     )
@@ -295,62 +297,6 @@ class NATPolicy(PrimaryModel):
 ###########################
 
 
-class NATOrigDestAddrGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated original destination AddressObject if assigned to a NATPolicyRule."""
-
-    addr_group = models.ForeignKey("nautobot_firewall_models.AddressObjectGroup", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATOrigDestAddrM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated original destination AddressObjectGroup if assigned to a NATPolicyRule."""
-
-    user = models.ForeignKey("nautobot_firewall_models.AddressObject", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATOrigDestSvcGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated original destination ServiceObjectGroup if assigned to a NATPolicyRule."""
-
-    svc_group = models.ForeignKey("nautobot_firewall_models.ServiceObjectGroup", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATOrigDestSvcM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated original destination ServiceObject if assigned to a NATPolicyRule."""
-
-    svc = models.ForeignKey("nautobot_firewall_models.ServiceObject", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATOrigSrcAddrGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated original source AddressObjectGroup if assigned to a NATPolicyRule."""
-
-    addr_group = models.ForeignKey("nautobot_firewall_models.AddressObjectGroup", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATOrigSrcAddrM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated original source AddressObject if assigned to a NATPolicyRule."""
-
-    addr = models.ForeignKey("nautobot_firewall_models.AddressObject", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATOrigSrcSvcGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated original source ServiceObjectGroup if assigned to a NATPolicyRule."""
-
-    svc_group = models.ForeignKey("nautobot_firewall_models.ServiceObjectGroup", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATOrigSrcSvcM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated original source ServiceObject if assigned to a NATPolicyRule."""
-
-    svc = models.ForeignKey("nautobot_firewall_models.ServiceObject", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
 class NATPolicyDeviceM2M(BaseModel):
     """Through model to add weight to the NATPolicy & Device relationship."""
 
@@ -377,87 +323,3 @@ class NATPolicyDynamicGroupM2M(BaseModel):
 
         ordering = ["weight"]
         unique_together = ["nat_policy", "dynamic_group"]
-
-
-class NATPolicyNATRuleM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated NATPolicyRule if assigned to a NATPolicy."""
-
-    nat_policy = models.ForeignKey("nautobot_firewall_models.NATPolicy", on_delete=models.CASCADE)
-    nat_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.PROTECT)
-
-
-class NATPolicyRuleM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated NATPolicyRule if assigned to a NATPolicy."""
-
-    nat_policy = models.ForeignKey("nautobot_firewall_models.NATPolicy", on_delete=models.CASCADE)
-    nat_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.PROTECT)
-
-
-class NATSrcUserGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated UserGroup if assigned to a NATPolicyRule."""
-
-    user_group = models.ForeignKey("nautobot_firewall_models.UserObjectGroup", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATSrcUserM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated User if assigned to a NATPolicyRule."""
-
-    user = models.ForeignKey("nautobot_firewall_models.UserObject", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATTransDestAddrM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated translated destination AddressObjectGroup if assigned to a NATPolicyRule."""
-
-    user = models.ForeignKey("nautobot_firewall_models.AddressObject", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATTransDestAddrGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated translated destination AddressObject if assigned to a NATPolicyRule."""
-
-    addr_group = models.ForeignKey("nautobot_firewall_models.AddressObjectGroup", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATTransDestSvcGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated translated destination ServiceObjectGroup if assigned to a NATPolicyRule."""
-
-    svc_group = models.ForeignKey("nautobot_firewall_models.ServiceObjectGroup", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATTransDestSvcM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated translated destination ServiceObject if assigned to a NATPolicyRule."""
-
-    svc = models.ForeignKey("nautobot_firewall_models.ServiceObject", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATTransSrcAddrGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated translated source AddressObjectGroup if assigned to a NATPolicyRule."""
-
-    addr_group = models.ForeignKey("nautobot_firewall_models.AddressObjectGroup", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATTransSrcAddrM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated translated source AddressObject if assigned to a NATPolicyRule."""
-
-    addr = models.ForeignKey("nautobot_firewall_models.AddressObject", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATTransSrcSvcGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated translated source ServiceObjectGroup if assigned to a NATPolicyRule."""
-
-    svc_group = models.ForeignKey("nautobot_firewall_models.ServiceObjectGroup", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)
-
-
-class NATTransSrcSvcM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated translated source ServiceObject if assigned to a NATPolicyRule."""
-
-    svc = models.ForeignKey("nautobot_firewall_models.ServiceObject", on_delete=models.PROTECT)
-    nat_pol_rule = models.ForeignKey("nautobot_firewall_models.NATPolicyRule", on_delete=models.CASCADE)

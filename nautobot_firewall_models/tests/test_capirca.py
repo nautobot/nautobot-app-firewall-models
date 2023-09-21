@@ -296,7 +296,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
             name="Test", action="deny", log=False, request_id="req6", source_zone=zoneall, destination_zone=zoneall
         )
         self.pol1 = Policy.objects.get(name="Policy 1")
-        PolicyRuleM2M.objects.create(policy=self.pol1, rule=self.pol_rule6)
+        self.pol1.policy_rules.add(self.pol_rule6)
         self.addr_obj4 = AddressObject.objects.get(name="server")
         self.ip_address = IPAddress.objects.create(address="10.0.0.101", namespace=namespace, status=self.active)
         self.addr_obj5 = AddressObject.objects.create(name="test-name", ip_address=self.ip_address, status=self.active)
@@ -515,7 +515,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
     def test_policy_skip(self):
         """Check that policy rules are found with status active and not found when other."""
         pol_rule5 = PolicyRule.objects.get(name="DENY ALL")
-        PolicyRuleM2M.objects.create(policy=self.pol1, rule=pol_rule5)
+        self.pol1.policy_rules.add(pol_rule5)
         pol, _, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
         self.assertIn("Test", [i["rule-name"] for i in pol])
 
