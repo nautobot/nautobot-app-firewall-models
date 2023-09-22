@@ -1,6 +1,9 @@
 """NAT Rule Object Viewsets."""
-
+from django.shortcuts import redirect
+from django.urls import reverse
 from nautobot.apps.views import NautobotUIViewSet
+from nautobot.core.views.mixins import PERMISSIONS_ACTION_MAP
+from rest_framework.decorators import action
 
 from nautobot_firewall_models.api.serializers import NATPolicyRuleSerializer, NATPolicySerializer
 from nautobot_firewall_models.filters import NATPolicyRuleFilterSet, NATPolicyFilterSet
@@ -12,7 +15,7 @@ from nautobot_firewall_models.forms import (
     NATPolicyFilterForm,
     NATPolicyForm,
 )
-from nautobot_firewall_models.models import NATPolicyRule, NATPolicy
+from nautobot_firewall_models.models import NATPolicyRule, NATPolicy, NATPolicyDeviceM2M, NATPolicyDynamicGroupM2M
 from nautobot_firewall_models.tables import NATPolicyRuleTable, NATPolicyTable
 
 
@@ -66,3 +69,32 @@ class NATPolicyUIViewSet(NautobotUIViewSet):
     action_buttons = ("add",)
 
     lookup_field = "pk"
+
+    @action(detail=True, methods=["post"])
+    def devices(self, request, pk, *args, **kwargs):
+        # pylint: disable=invalid-name, arguments-differ
+        """Method to set weight on a Device & NATPolicy Relationship."""
+        form_data = dict(request.POST)
+        form_data.pop("csrfmiddlewaretoken", None)
+        for device, weight in form_data.items():
+            m2m = NATPolicyDeviceM2M.objects.get(device=device, policy=pk)
+            m2m.weight = weight[0]
+            m2m.validated_save()
+        return redirect(reverse("plugins:nautobot_firewall_models:nat_policy", kwargs={"pk": pk}))
+
+    @action(detail=True, methods=["post"])
+    def dynamic_groups(self, request, pk, *args, **kwargs):
+        # pylint: disable=invalid-name, arguments-differ
+        """Method to set weight on a DynamicGroup & Policy Relationship."""
+        form_data = dict(request.POST)
+        form_data.pop("csrfmiddlewaretoken", None)
+        for group, weight in form_data.items():
+            m2m = NATPolicyDynamicGroupM2M.objects.get(dynamic_group=group, policy=pk)
+            m2m.weight = weight[0]
+            m2m.validated_save()
+        return redirect(reverse("plugins:nautobot_firewall_models:nat_policy", kwargs={"pk": pk}))
+
+    def get_queryset(self):
+        """Overload to overwrite permissiosn action map."""
+        PERMISSIONS_ACTION_MAP.update({"devices": "change", "dynamic_groups": "change"})
+        return super().get_queryset()
