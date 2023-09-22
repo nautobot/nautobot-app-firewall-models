@@ -1,11 +1,9 @@
-{% extends 'generic/object_detail.html' %}
+{% extends 'generic/object_retrieve.html' %}
 {% load helpers %}
-
-
 {% block content_left_page %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <strong>User Object Group</strong>
+            <strong>Service Object</strong>
         </div>
         <table class="table table-hover panel-body attr-table">
             <tr>
@@ -13,16 +11,12 @@
                 <td>{{ object.description|placeholder }}</td>
             </tr>
             <tr>
-                <td>User Objects</td>
-                <td>
-                    <ul>
-                        {% for i in object.user_objects.all %}
-                            <li><a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a></li>
-                        {% empty %}
-                            None
-                        {% endfor %}
-                    </ul>
-                </td>
+                <td>Port</td>
+                <td>{{ object.port|placeholder }}</td>
+            </tr>
+            <tr>
+                <td>IANA IP Protocol</td>
+                <td>{{ object.ip_protocol|placeholder }}</td>
             </tr>
             <tr>
                 <td>Status</td>
@@ -30,4 +24,4 @@
             </tr>
         </table>
     </div>
-{% endblock %}
+{% endblock content_left_page %}

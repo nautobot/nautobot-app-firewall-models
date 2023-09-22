@@ -5,7 +5,7 @@ from nautobot_firewall_models.viewsets.address import (
     FQDNUIViewSet,
     IPRangeUIViewSet,
 )
-from nautobot_firewall_models.viewsets.capirca_policy import CapircaPolicyUIViewSet
+from nautobot_firewall_models.viewsets.capirca_policy import CapircaPolicyUIViewSet, CapircaPolicyDeviceUIViewSet
 from nautobot_firewall_models.viewsets.nat_policy import NATPolicyRuleUIViewSet, NATPolicyUIViewSet
 from nautobot_firewall_models.viewsets.security_policy import PolicyUIViewSet, PolicyRuleUIViewSet
 from nautobot_firewall_models.viewsets.service import (
@@ -24,6 +24,7 @@ __all__ = (
     "ApplicationObjectUIViewSet",
     "ApplicationObjectGroupUIViewSet",
     "CapircaPolicyUIViewSet",
+    "CapircaPolicyDeviceUIViewSet",
     "FQDNUIViewSet",
     "IPRangeUIViewSet",
     "NATPolicyRuleUIViewSet",
