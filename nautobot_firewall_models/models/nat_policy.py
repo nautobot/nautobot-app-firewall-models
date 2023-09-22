@@ -310,6 +310,10 @@ class NATPolicyDeviceM2M(BaseModel):
         ordering = ["weight"]
         unique_together = ["nat_policy", "device"]
 
+    def __str__(self):
+        """Stringify instance."""
+        return f"{self.nat_policy.name} - {self.device.name} - {self.weight}"
+
 
 class NATPolicyDynamicGroupM2M(BaseModel):
     """Through model to add weight to the NATPolicy & DynamicGroup relationship."""
@@ -323,3 +327,7 @@ class NATPolicyDynamicGroupM2M(BaseModel):
 
         ordering = ["weight"]
         unique_together = ["nat_policy", "dynamic_group"]
+
+    def __str__(self):
+        """Stringify instance."""
+        return f"{self.nat_policy.name} - {self.dynamic_group.name} - {self.weight}"
