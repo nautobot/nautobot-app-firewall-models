@@ -132,3 +132,40 @@ class CapircaPolicyViewSet(ModelViewSet):
     queryset = models.CapircaPolicy.objects.all()
     serializer_class = serializers.CapircaPolicySerializer
     filterset_class = filters.CapircaPolicyFilterSet
+
+
+###########################
+# Through Models
+###########################
+
+
+class PolicyDeviceM2MViewSet(ModelViewSet):
+    """PolicyDeviceM2M viewset."""
+
+    queryset = models.PolicyDeviceM2M.objects.all()
+    serializer_class = serializers.PolicyDeviceM2MSerializer
+    filterset_class = filters.PolicyDeviceM2MFilterSet
+
+
+class PolicyDynamicGroupM2MViewSet(ModelViewSet):
+    """PolicyDynamicGroupM2M viewset."""
+
+    queryset = models.PolicyDynamicGroupM2M.objects.all()
+    serializer_class = serializers.PolicyDynamicGroupM2MSerializer
+    filterset_class = filters.PolicyDynamicGroupM2MFilterSet
+
+
+class NATPolicyDeviceM2MViewSet(ModelViewSet):
+    """NATPolicyDeviceM2M viewset."""
+
+    queryset = models.NATPolicyDeviceM2M.objects.all()
+    serializer_class = serializers.NATPolicyDeviceM2MSerializer
+    filterset_class = filters.NATPolicyDeviceM2MFilterSet
+
+
+class NATPolicyDynamicGroupM2MViewSet(ModelViewSet):
+    """NATPolicyDynamicGroupM2M viewset."""
+
+    queryset = models.NATPolicyDynamicGroupM2M.objects.all()
+    serializer_class = serializers.NATPolicyDynamicGroupM2MSerializer
+    filterset_class = filters.NATPolicyDynamicGroupM2MFilterSet

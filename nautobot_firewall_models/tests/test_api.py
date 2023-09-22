@@ -2,6 +2,8 @@
 # flake8: noqa: F403,405
 # pylint: disable=invalid-name
 from nautobot.apps.testing import APIViewTestCases
+from nautobot.dcim.models import Location, Platform, DeviceType, Device
+from nautobot.extras.models import Status, Role
 from nautobot.ipam.models import Prefix
 
 from nautobot_firewall_models import models
@@ -346,4 +348,46 @@ class NATPolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
         cls.create_data = [
             {"name": "test 1", "nat_policy_rules": [nat_pol_rule.id]},
             {"name": "test 2", "nat_policy_rules": [nat_pol_rule.id], "description": "Test desc"},
+        ]
+
+
+###########################
+# Through Models
+###########################
+class PolicyDeviceM2MAPIViewTest(APIViewTestCases.APIViewTestCase):
+    """Test the PolicyDeviceM2M viewsets."""
+
+    model = models.PolicyDeviceM2M
+    bulk_update_data = {"weight": 1000}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        create_env()
+        policy = models.Policy.objects.first()
+        location = Location.objects.get(name="DFW")
+        dev_role = Role.objects.get(name="WAN")
+        status = Status.objects.get(name="Active")
+        platform = Platform.objects.get(name="Juniper")
+        dev_type = DeviceType.objects.get(model="SRX300")
+        dev1 = Device.objects.create(
+            name="TEST-DEV-01",
+            role=dev_role,
+            device_type=dev_type,
+            location=location,
+            status=status,
+            platform=platform,
+        )
+        dev2 = Device.objects.create(
+            name="TEST-DEV-02",
+            role=dev_role,
+            device_type=dev_type,
+            location=location,
+            status=status,
+            platform=platform,
+        )
+
+        cls.create_data = [
+            {"device": dev1.id, "policy": policy.id, "weight": 100},
+            {"device": dev2.id, "policy": policy.id, "weight": 200},
         ]

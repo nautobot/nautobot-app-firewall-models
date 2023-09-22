@@ -226,3 +226,48 @@ class CapircaPolicyFilterSet(NautobotFilterSet):
 
         model = models.CapircaPolicy
         fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
+
+
+###########################
+# Through Models
+###########################
+
+
+class PolicyDeviceM2MFilterSet(NautobotFilterSet):
+    """Filter for PolicyDeviceM2M."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.PolicyDeviceM2M
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
+
+
+class PolicyDynamicGroupM2MFilterSet(NautobotFilterSet):
+    """Filter for PolicyDynamicGroupM2M."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.PolicyDynamicGroupM2M
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
+
+
+class NATPolicyDeviceM2MFilterSet(NautobotFilterSet):
+    """Filter for NATPolicyDeviceM2M."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.NATPolicyDeviceM2M
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
+
+
+class NATPolicyDynamicGroupM2MFilterSet(NautobotFilterSet):
+    """Filter for NATPolicyDynamicGroupM2M."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.NATPolicyDynamicGroupM2M
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]

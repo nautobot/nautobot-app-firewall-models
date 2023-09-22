@@ -243,6 +243,10 @@ class PolicyDeviceM2M(BaseModel):
         ordering = ["weight"]
         unique_together = ["policy", "device"]
 
+    def __str__(self):
+        """Stringify instance."""
+        return f"{self.policy.name} - {self.device.name} - {self.weight}"
+
 
 class PolicyDynamicGroupM2M(BaseModel):
     """Through model to add weight to the the Policy & DynamicGroup relationship."""
@@ -256,3 +260,7 @@ class PolicyDynamicGroupM2M(BaseModel):
 
         ordering = ["weight"]
         unique_together = ["policy", "dynamic_group"]
+
+    def __str__(self):
+        """Stringify instance."""
+        return f"{self.policy.name} - {self.dynamic_group.name} - {self.weight}"
