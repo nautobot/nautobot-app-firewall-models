@@ -72,7 +72,7 @@ class PolicyUIViewSet(NautobotUIViewSet):
 
     def get_queryset(self):
         """Overload to overwrite permissiosn action map."""
-        PERMISSIONS_ACTION_MAP.update({"devices": "change", "dynamic_groups": "change"})
+        PERMISSIONS_ACTION_MAP.update({"devices": "devices", "dynamic_groups": "dynamic_groups"})
         return super().get_queryset()
 
     @action(detail=True, methods=["post"])
