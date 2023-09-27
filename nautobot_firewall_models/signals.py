@@ -97,7 +97,8 @@ if PLUGIN_CFG["protect_on_delete"]:
     @receiver(pre_delete, sender=models.Zone)
     @receiver(pre_delete, sender=models.PolicyRule)
     @receiver(pre_delete, sender=models.NATPolicyRule)
-    def handler(instance, **kwargs):
+    def on_delete_handler(instance, **kwargs):
+        """Signal handler to enable on_delete=PROTECT."""
         for i in ON_DELETE[instance._meta.model]:
             if hasattr(instance, i) and getattr(instance, i).exists():
                 raise ValidationError(f"{instance} is assigned to an {i} & `protect_on_delete` is enabled.")

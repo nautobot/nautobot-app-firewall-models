@@ -24,13 +24,13 @@ class NautobotFirewallModelsConfig(PluginConfig):
         "capirca_remark_pass": True,
         "capirca_os_map": {},
         "allowed_status": ["Active"],
-        "protect_on_delete": False,
+        "protect_on_delete": True,
     }
     docs_view_name = "plugins:nautobot_firewall_models:docs"
 
     def ready(self):
         """Register custom signals."""
-        import nautobot_firewall_models.signals  # noqa: F401
+        import nautobot_firewall_models.signals  # noqa: F401, pylint: disable=import-outside-toplevel,unused-import
 
         super().ready()
 
