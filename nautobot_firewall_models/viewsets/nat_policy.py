@@ -2,10 +2,10 @@
 from django.shortcuts import redirect
 from django.urls import reverse
 from nautobot.apps.views import NautobotUIViewSet
+from nautobot.core.views.mixins import PERMISSIONS_ACTION_MAP
 from rest_framework.decorators import action
 
 from nautobot_firewall_models.api.serializers import NATPolicyRuleSerializer, NATPolicySerializer
-from nautobot.core.views.mixins import PERMISSIONS_ACTION_MAP
 from nautobot_firewall_models.filters import NATPolicyRuleFilterSet, NATPolicyFilterSet
 from nautobot_firewall_models.forms import (
     NATPolicyRuleBulkEditForm,

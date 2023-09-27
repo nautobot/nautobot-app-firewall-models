@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nautobot-firewall-models"
-version = "2.0.0a0"
+version = "2.0.0rc1"
 description = "Nautobot plugin to model firewall objects."
 authors = ["Network to Code, LLC <info@networktocode.com>"]
 license = "Apache-2.0"
