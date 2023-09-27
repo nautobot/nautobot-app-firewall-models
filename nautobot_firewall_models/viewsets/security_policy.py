@@ -2,10 +2,10 @@
 from django.shortcuts import redirect
 from django.urls import reverse
 from nautobot.apps.views import NautobotUIViewSet
-from nautobot.core.views.mixins import PERMISSIONS_ACTION_MAP
 from rest_framework.decorators import action
 
 from nautobot_firewall_models.api.serializers import PolicyRuleSerializer, PolicySerializer
+from nautobot.core.views.mixins import PERMISSIONS_ACTION_MAP
 from nautobot_firewall_models.filters import PolicyRuleFilterSet, PolicyFilterSet
 from nautobot_firewall_models.forms import (
     PolicyRuleBulkEditForm,
@@ -72,8 +72,9 @@ class PolicyUIViewSet(NautobotUIViewSet):
 
     def get_queryset(self):
         """Overload to overwrite permissiosn action map."""
-        PERMISSIONS_ACTION_MAP.update({"devices": "devices", "dynamic_groups": "dynamic_groups"})
-        return super().get_queryset()
+        queryset = super().get_queryset()
+        _perms = {**PERMISSIONS_ACTION_MAP, "devices": "change", "dynamic_groups": "change"}
+        return queryset.restrict(self.request.user, _perms[self.action])
 
     @action(detail=True, methods=["post"])
     def devices(self, request, pk, *args, **kwargs):
