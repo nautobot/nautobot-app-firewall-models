@@ -150,10 +150,26 @@ class AddressObject(PrimaryModel):
         blank=True,
     )
     name = models.CharField(max_length=100, unique=True, help_text="Name descriptor for an address object type.")
-    fqdn = models.ForeignKey(to="nautobot_firewall_models.FQDN", on_delete=models.PROTECT, null=True, blank=True)
-    ip_range = models.ForeignKey(to="nautobot_firewall_models.IPRange", on_delete=models.PROTECT, null=True, blank=True)
-    ip_address = models.ForeignKey(to="ipam.IPAddress", on_delete=models.PROTECT, null=True, blank=True)
-    prefix = models.ForeignKey(to="ipam.Prefix", on_delete=models.PROTECT, null=True, blank=True)
+    fqdn = models.ForeignKey(
+        to="nautobot_firewall_models.FQDN",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="address_objects",
+    )
+    ip_range = models.ForeignKey(
+        to="nautobot_firewall_models.IPRange",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="address_objects",
+    )
+    ip_address = models.ForeignKey(
+        to="ipam.IPAddress", on_delete=models.PROTECT, null=True, blank=True, related_name="address_objects"
+    )
+    prefix = models.ForeignKey(
+        to="ipam.Prefix", on_delete=models.PROTECT, null=True, blank=True, related_name="address_objects"
+    )
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
