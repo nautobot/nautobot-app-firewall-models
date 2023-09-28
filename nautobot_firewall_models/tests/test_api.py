@@ -7,7 +7,7 @@ from nautobot.extras.models import Status, Role
 from nautobot.ipam.models import Prefix
 
 from nautobot_firewall_models import models
-from .fixtures import create_env, create_ip_range, create_fqdn
+from . import fixtures
 
 
 class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -25,7 +25,7 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"start_address": "10.0.0.1", "end_address": "10.0.0.3"},
             {"start_address": "10.0.0.4", "end_address": "10.0.0.10"},
         ]
-        create_ip_range()
+        fixtures.create_ip_range()
 
 
 class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -43,7 +43,7 @@ class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"name": "test.local"},
             {"name": "sub.test.local"},
         ]
-        create_fqdn()
+        fixtures.create_fqdn()
 
 
 class ApplicationObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -55,7 +55,7 @@ class ApplicationObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_app_obj()
         models.ApplicationObject.objects.create(name="deleteableobj1")
         models.ApplicationObject.objects.create(name="deleteableobj2")
         models.ApplicationObject.objects.create(name="deleteableobj3")
@@ -74,7 +74,7 @@ class ApplicationObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_app_group()
         app_obj = models.ApplicationObject.objects.first()
         models.ApplicationObjectGroup.objects.create(name="deleteableobj1")
         models.ApplicationObjectGroup.objects.create(name="deleteableobj2")
@@ -95,7 +95,7 @@ class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_addr_obj()
         ip_range = models.IPRange.objects.first()
         prefix = Prefix.objects.first()
         models.AddressObject.objects.create(name="deleteableobj1", prefix=prefix)
@@ -117,7 +117,7 @@ class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_addr_group()
         addr_obj = models.AddressObject.objects.first()
         models.AddressObjectGroup.objects.create(name="deleteableobj1")
         models.AddressObjectGroup.objects.create(name="deleteableobj2")
@@ -147,7 +147,7 @@ class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"name": "HTTP", "port": "8088", "ip_protocol": "TCP"},
             {"name": "HTTP", "port": "8080-8088", "ip_protocol": "TCP"},
         ]
-        create_env()
+        fixtures.create_svc_obj()
 
 
 class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -159,7 +159,7 @@ class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_svc_group()
         svc_obj = models.ServiceObject.objects.first()
         models.ServiceObjectGroup.objects.create(name="deleteableobj1")
         models.ServiceObjectGroup.objects.create(name="deleteableobj2")
@@ -188,7 +188,7 @@ class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
         models.UserObject.objects.create(username="deleteableobj1", name="deleteableobj1")
         models.UserObject.objects.create(username="deleteableobj2", name="deleteableobj2")
         models.UserObject.objects.create(username="deleteableobj3", name="deleteableobj3")
-        create_env()
+        fixtures.create_user_obj()
 
 
 class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -200,7 +200,7 @@ class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_user_group()
         user = models.UserObject.objects.first()
         models.UserObjectGroup.objects.create(name="deleteableobj1")
         models.UserObjectGroup.objects.create(name="deleteableobj2")
@@ -229,7 +229,7 @@ class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
         models.Zone.objects.create(name="deleteableobj1")
         models.Zone.objects.create(name="deleteableobj2")
         models.Zone.objects.create(name="deleteableobj3")
-        create_env()
+        fixtures.create_zone()
 
 
 class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -242,7 +242,7 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_policy_rule()
         src_usr = models.UserObject.objects.first()
         src_addr = models.AddressObject.objects.first()
         dest_addr = models.AddressObject.objects.last()
@@ -282,7 +282,7 @@ class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_policy()
         pol_rule = models.PolicyRule.objects.first()
         models.Policy.objects.create(name="deleteableobj1")
         models.Policy.objects.create(name="deleteableobj2")
@@ -303,7 +303,7 @@ class NATPolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_natpolicy_rule()
         src_addr = models.AddressObject.objects.first()
         dest_addr = models.AddressObject.objects.last()
         svc = models.ServiceObject.objects.first()
@@ -339,7 +339,7 @@ class NATPolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_natpolicy()
         nat_pol_rule = models.NATPolicyRule.objects.first()
         models.NATPolicy.objects.create(name="deleteableobj1")
         models.NATPolicy.objects.create(name="deleteableobj2")
@@ -363,7 +363,7 @@ class PolicyDeviceM2MAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.assign_policies()
         policy = models.Policy.objects.first()
         location = Location.objects.get(name="DFW")
         dev_role = Role.objects.get(name="WAN")

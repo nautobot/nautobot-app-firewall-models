@@ -9,7 +9,7 @@ from nautobot.ipam.models import VRF
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
-from .fixtures import create_capirca_env, create_env
+from . import fixtures
 
 
 class TestModels(TestCase):
@@ -233,7 +233,7 @@ class TestPolicyRuleModels(TestCase):
 
     def setUp(self) -> None:
         """Create the data."""
-        create_env()
+        fixtures.create_policy_rule()
 
     def test_policyrule_rule_details(self):
         """Test method rule_details on PolicyRule model."""
@@ -260,7 +260,7 @@ class TestPolicyModels(TestCase):
 
     def setUp(self) -> None:
         """Create the data."""
-        create_env()
+        fixtures.create_policy()
 
     def test_policy_policy_details(self):
         """Test method policy_details on Policy model."""
@@ -282,7 +282,7 @@ class TestNATPolicyRuleModels(TestCase):
 
     def setUp(self) -> None:
         """Create the data."""
-        create_env()
+        fixtures.create_natpolicy_rule()
 
     def test_natpolicyrule_rule_details(self):
         """Test method rule_details on NATPolicyRule model."""
@@ -312,7 +312,7 @@ class TestNATPolicyModels(TestCase):
 
     def setUp(self) -> None:
         """Create the data."""
-        create_env()
+        fixtures.create_natpolicy()
 
     def test_policy_policy_details(self):
         """Test method policy_details on Policy model."""
@@ -342,7 +342,7 @@ class TestCapircaModels(TestCase):
 
     def setUp(self) -> None:
         """Create the data."""
-        create_capirca_env()
+        fixtures.create_capirca_env()
 
     def test_capirca_creates_model(self):
         """Test method to create model."""

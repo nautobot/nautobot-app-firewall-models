@@ -5,7 +5,7 @@ from nautobot.extras.models.statuses import Status
 from nautobot.apps.testing import ViewTestCases
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
-from .fixtures import create_env, create_fqdn, create_ip_range
+from . import fixtures
 
 
 class IPRangeUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
@@ -19,7 +19,7 @@ class IPRangeUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         """Create test data for UI calls."""
         status = Status.objects.get(name="Active").id
         cls.form_data = {"start_address": "10.0.0.1", "end_address": "10.0.0.3", "status": status}
-        create_ip_range()
+        fixtures.create_ip_range()
         cls.csv_data = (
             "start_address,end_address,status",
             "11.11.11.1,11.11.11.11,Active",
@@ -39,7 +39,7 @@ class FQDNUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         """Create test data for API calls."""
         status = Status.objects.get(name="Active").id
         cls.form_data = {"name": "test.local", "status": status}
-        create_fqdn()
+        fixtures.create_fqdn()
         cls.csv_data = (
             "name,status",
             "foo.bar.com,Active",
@@ -57,7 +57,7 @@ class AddressObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_addr_obj()
         ip_range = IPRange.objects.first()
         status = Status.objects.get(name="Active").id
         AddressObject.objects.create(name="deleteableobj1", ip_range=ip_range)
@@ -82,7 +82,7 @@ class AddressObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_addr_group()
         status = Status.objects.get(name="Active").id
         addr_obj = AddressObject.objects.first()
         AddressObjectGroup.objects.create(name="deleteableobj1")
@@ -106,7 +106,7 @@ class ApplicationObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_app_obj()
         ApplicationObject.objects.create(name="deleteableobj1")
         ApplicationObject.objects.create(name="deleteableobj2")
         ApplicationObject.objects.create(name="deleteableobj3")
@@ -129,7 +129,7 @@ class ApplicationObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_app_group()
         status = Status.objects.get(name="Active").id
         app_obj = ApplicationObject.objects.first()
         ApplicationObjectGroup.objects.create(name="deleteableobj1")
@@ -158,7 +158,7 @@ class ServiceObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         ServiceObject.objects.create(name="deleteableobj3", ip_protocol="TCP")
         status = Status.objects.get(name="Active").id
         cls.form_data = {"name": "HTTP", "port": "8088", "status": status, "ip_protocol": "TCP"}
-        create_env()
+        fixtures.create_svc_obj()
         cls.csv_data = (
             "name,port,ip_protocol,status",
             "csvobj1,1,TCP,Active",
@@ -176,7 +176,7 @@ class ServiceObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_svc_group()
         svc_obj = ServiceObject.objects.first()
         status = Status.objects.get(name="Active").id
         ServiceObjectGroup.objects.create(name="deleteableobj1")
@@ -205,7 +205,7 @@ class UserObjectUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         UserObject.objects.create(username="deleteableobj2", name="deleteableobj2")
         UserObject.objects.create(username="deleteableobj3", name="deleteableobj3")
         cls.form_data = {"username": "test1", "name": "Foo", "status": status}
-        create_env()
+        fixtures.create_user_obj()
         cls.csv_data = (
             "name,username,status",
             "csvobj1,csvuser1,Active",
@@ -223,7 +223,7 @@ class UserObjectGroupUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_user_group()
         user = UserObject.objects.first()
         status = Status.objects.get(name="Active").id
         UserObjectGroup.objects.create(name="deleteableobj1")
@@ -252,7 +252,7 @@ class ZoneUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         Zone.objects.create(name="deleteableobj2")
         Zone.objects.create(name="deleteableobj3")
         cls.form_data = {"name": "trust", "status": status}
-        create_env()
+        fixtures.create_zone()
         cls.csv_data = (
             "name,status",
             "csvobj1,Active",
@@ -270,7 +270,7 @@ class PolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_policy_rule()
         src_usr = UserObject.objects.first()
         src_addr = AddressObject.objects.first()
         dest_addr = AddressObject.objects.last()
@@ -307,7 +307,7 @@ class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_policy()
         pol_rule = PolicyRule.objects.first()
         status = Status.objects.get(name="Active").id
         Policy.objects.create(name="deleteableobj1")
@@ -336,7 +336,7 @@ class NATPolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_natpolicy_rule()
         src_addr = AddressObject.objects.first()
         dest_addr = AddressObject.objects.last()
         svc = ServiceObject.objects.first()
@@ -370,7 +370,7 @@ class NATPolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-        create_env()
+        fixtures.create_natpolicy()
         status = Status.objects.get(name="Active").id
         nat_pol_rule = NATPolicyRule.objects.first()
         NATPolicy.objects.create(name="deleteableobj1")
