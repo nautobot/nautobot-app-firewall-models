@@ -29,10 +29,10 @@ class CapircaPolicy(PrimaryModel):
     device = models.OneToOneField(
         to="dcim.Device", blank=True, null=True, on_delete=models.CASCADE, related_name="capirca_policy"
     )
-    pol = models.TextField(blank=True, null=True)
-    net = models.TextField(blank=True, null=True)
-    svc = models.TextField(blank=True, null=True)
-    cfg = models.TextField(blank=True, null=True)
+    pol = models.TextField(blank=True)
+    net = models.TextField(blank=True)
+    svc = models.TextField(blank=True)
+    cfg = models.TextField(blank=True)
 
     csv_headers = ["device"]
 

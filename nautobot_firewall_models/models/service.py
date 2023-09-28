@@ -31,18 +31,15 @@ class ApplicationObject(PrimaryModel):
     description = models.CharField(
         max_length=200,
         blank=True,
-        null=True,
     )
-    category = models.CharField(max_length=48, blank=True, null=True, help_text="Category of application.")
-    subcategory = models.CharField(max_length=48, blank=True, null=True, help_text="Sub-category of application.")
-    technology = models.CharField(max_length=48, blank=True, null=True, help_text="Type of application technology.")
+    category = models.CharField(max_length=48, blank=True, help_text="Category of application.")
+    subcategory = models.CharField(max_length=48, blank=True, help_text="Sub-category of application.")
+    technology = models.CharField(max_length=48, blank=True, help_text="Type of application technology.")
     risk = models.PositiveIntegerField(blank=True, null=True, help_text="Assessed risk of the application.")
-    default_type = models.CharField(
-        max_length=48, blank=True, null=True, help_text="Default type, i.e. port or app-id."
-    )
+    default_type = models.CharField(max_length=48, blank=True, help_text="Default type, i.e. port or app-id.")
     name = models.CharField(max_length=100, unique=True, help_text="Name descriptor for an application object type.")
     default_ip_protocol = models.CharField(
-        max_length=48, blank=True, null=True, help_text="Name descriptor for an application object type."
+        max_length=48, blank=True, help_text="Name descriptor for an application object type."
     )
     status = StatusField(
         on_delete=models.PROTECT,
@@ -89,7 +86,7 @@ class ApplicationObject(PrimaryModel):
 class ApplicationObjectGroup(PrimaryModel):
     """Groups together ApplicationObjects to better mimic grouping sets of application objects that have a some commonality."""
 
-    description = models.CharField(max_length=200, blank=True, null=True)
+    description = models.CharField(max_length=200, blank=True)
     name = models.CharField(max_length=100, unique=True, help_text="Name descriptor for a group application objects.")
     application_objects = models.ManyToManyField(
         to="nautobot_firewall_models.ApplicationObject",
@@ -132,7 +129,6 @@ class ServiceObject(PrimaryModel):
     )
     name = models.CharField(max_length=100, help_text="Name of the service (e.g. HTTP)")
     port = models.CharField(
-        null=True,
         blank=True,
         validators=[validators.validate_port],
         max_length=20,

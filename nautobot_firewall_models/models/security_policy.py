@@ -94,8 +94,8 @@ class PolicyRule(PrimaryModel):
     application_groups = models.ManyToManyField(
         blank=True, to="nautobot_firewall_models.ApplicationObjectGroup", related_name="policy_rules"
     )
-    request_id = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=200, null=True, blank=True)
+    request_id = models.CharField(max_length=100, blank=True)
+    description = models.CharField(max_length=200, blank=True)
     index = models.PositiveSmallIntegerField(null=True, blank=True)
 
     clone_fields = [

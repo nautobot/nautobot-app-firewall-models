@@ -214,11 +214,11 @@ class TestServiceObject(TestCase):
 
         self.assertEqual(svc.port, "")
 
-    def test_service_port_null(self):
-        """Test port null."""
+    def test_service_port_omitted_equals_blank(self):
+        """Test port blank."""
         svc = ServiceObject.objects.create(name="HTTP", ip_protocol="TCP", status=Status.objects.get(name="Active"))
 
-        self.assertEqual(svc.port, None)
+        self.assertEqual(svc.port, "")
 
     def test_service_port_range_invalid(self):
         """Test port range."""

@@ -40,8 +40,8 @@ class NATPolicyRule(PrimaryModel):
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
         default=get_default_status,
     )
-    request_id = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=200, null=True, blank=True)
+    request_id = models.CharField(max_length=100, blank=True)
+    description = models.CharField(max_length=200, blank=True)
     index = models.PositiveSmallIntegerField(null=True, blank=True)
 
     # Data that can not undergo a translation

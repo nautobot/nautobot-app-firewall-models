@@ -347,8 +347,8 @@ def assign_policies():  # pylint: disable=too-many-locals
     pol1, pol2, pol3 = create_policy()
     # Mapping policies to devices
     loc_type, _ = LocationType.objects.get_or_create(name="site")
-    site1, _ = Location.objects.get_or_create(name="DFW", location_type=loc_type, status=status)
-    site2, _ = Location.objects.get_or_create(name="HOU", location_type=loc_type, status=status)
+    site1, _ = Location.objects.get_or_create(name="DFW02", location_type=loc_type, status=status)
+    site2, _ = Location.objects.get_or_create(name="HOU02", location_type=loc_type, status=status)
     jun_manufacturer, _ = Manufacturer.objects.get_or_create(name="Juniper")
     jun_platform, _ = Platform.objects.get_or_create(name="Juniper", network_driver="srx")
     jun_dev_type, _ = DeviceType.objects.get_or_create(manufacturer=jun_manufacturer, model="SRX300")
@@ -358,7 +358,7 @@ def assign_policies():  # pylint: disable=too-many-locals
     dev_role, _ = Role.objects.get_or_create(name="WAN")
     dev_role.content_types.add(ContentType.objects.get_for_model(Device))
     dev1, _ = Device.objects.get_or_create(
-        name="DFW-WAN00",
+        name="DFW02-WAN00",
         role=dev_role,
         device_type=jun_dev_type,
         location=site1,
@@ -366,7 +366,7 @@ def assign_policies():  # pylint: disable=too-many-locals
         platform=jun_platform,
     )
     dev2, _ = Device.objects.get_or_create(
-        name="HOU-WAN00",
+        name="HOU02-WAN00",
         role=dev_role,
         device_type=palo_dev_type,
         location=site2,
@@ -376,7 +376,7 @@ def assign_policies():  # pylint: disable=too-many-locals
     dynamic_group, _ = DynamicGroup.objects.get_or_create(
         name="North Texas", content_type=ContentType.objects.get_for_model(Device)
     )
-    dynamic_group.filter = {"location": ["DFW"]}
+    dynamic_group.filter = {"location": ["DFW02"]}
     dynamic_group.validated_save()
     PolicyDeviceM2M.objects.get_or_create(policy=pol1, device=dev1, weight=150)
     PolicyDeviceM2M.objects.get_or_create(policy=pol2, device=dev1, weight=200)
