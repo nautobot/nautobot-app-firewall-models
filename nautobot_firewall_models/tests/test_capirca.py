@@ -286,7 +286,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         create_capirca_env()
         self.active = Status.objects.get(name="Active")
         self.decomm = Status.objects.get(name="Decommissioned")
-        self.device_obj = Device.objects.get(name="DFW-WAN00")
+        self.device_obj = Device.objects.get(name="DFW02-WAN00")
         namespace = Namespace.objects.get(name="global")
 
         self.dev_name = self.device_obj.platform.network_driver
@@ -629,7 +629,7 @@ class TestDevicePolicyToCapirca(TestCase):
     def setUp(self) -> None:
         """Setup test data."""
         create_capirca_env()
-        self.device_obj = Device.objects.get(name="DFW-WAN00")
+        self.device_obj = Device.objects.get(name="DFW02-WAN00")
 
     @skip("Not implemented until policy method provided to merge queries provided")
     def test_dynamic_group_and_device(self):

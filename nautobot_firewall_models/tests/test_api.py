@@ -365,7 +365,7 @@ class PolicyDeviceM2MAPIViewTest(APIViewTestCases.APIViewTestCase):
         """Create test data for API calls."""
         fixtures.assign_policies()
         policy = models.Policy.objects.first()
-        location = Location.objects.get(name="DFW")
+        location = Location.objects.get(name="DFW02")
         dev_role = Role.objects.get(name="WAN")
         status = Status.objects.get(name="Active")
         platform = Platform.objects.get(name="Juniper")

@@ -18,8 +18,8 @@ class CapircaPolicyModelTestCase(TestCase):
     def setUp(self):
         """Set up base objects."""
         create_capirca_env()
-        self.dev01 = Device.objects.get(name="DFW-WAN00")
-        dev02 = Device.objects.get(name="HOU-WAN00")
+        self.dev01 = Device.objects.get(name="DFW02-WAN00")
+        dev02 = Device.objects.get(name="HOU02-WAN00")
         models.CapircaPolicy.objects.create(device=self.dev01)
         models.CapircaPolicy.objects.create(device=dev02)
 

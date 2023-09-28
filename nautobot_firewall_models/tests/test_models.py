@@ -346,7 +346,7 @@ class TestCapircaModels(TestCase):
 
     def test_capirca_creates_model(self):
         """Test method to create model."""
-        device_obj = Device.objects.get(name="DFW-WAN00")
+        device_obj = Device.objects.get(name="DFW02-WAN00")
         cap_obj = CapircaPolicy.objects.create(device=device_obj)
         svc = "PGSQL = 5432/tcp"
         self.assertIn(svc, cap_obj.svc)
