@@ -10,7 +10,7 @@ if PLUGIN_CFG.get("capirca_os_map"):
     CAPIRCA_OS_MAPPER = PLUGIN_CFG["capirca_os_map"]
 
 # This is used to determine which status slug names are valid
-ALLOW_STATUS = ["active"]
+ALLOW_STATUS = ["Active"]
 if PLUGIN_CFG.get("allowed_status"):
     ALLOW_STATUS = PLUGIN_CFG["allowed_status"]
 

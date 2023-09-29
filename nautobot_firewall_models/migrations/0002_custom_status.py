@@ -9,10 +9,10 @@ import yaml
 def create_status(apps, schema_editor):
     """Initial subset of statuses."""
 
-    statuses = ["active", "staged", "decommissioned"]
+    statuses = ["Active", "Staged", "Decommissioned"]
     ContentType = apps.get_model("contenttypes.ContentType")
     for i in statuses:
-        status = apps.get_model("extras.Status").objects.get(slug=i)
+        status = apps.get_model("extras.Status").objects.get(name=i)
         for model in apps.app_configs["nautobot_firewall_models"].get_models():
             if hasattr(model, "status"):
                 ct = ContentType.objects.get_for_model(model)
@@ -22,10 +22,10 @@ def create_status(apps, schema_editor):
 def reverse_create_status(apps, schema_editor):
     """Reverse adding firewall models to status content_types."""
 
-    statuses = ["active", "staged", "decommissioned"]
+    statuses = ["Active", "Staged", "Decommissioned"]
     ContentType = apps.get_model("contenttypes.ContentType")
     for i in statuses:
-        status = apps.get_model("extras.Status").objects.get(slug=i)
+        status = apps.get_model("extras.Status").objects.get(name=i)
         for model in apps.app_configs["nautobot_firewall_models"].get_models():
             if hasattr(model, "status"):
                 ct = ContentType.objects.get_for_model(model)
@@ -37,7 +37,7 @@ def create_default_objects(apps, schema_editor):
     defaults = os.path.join(os.path.dirname(__file__), "services.yml")
     with open(defaults, "r") as f:
         services = yaml.safe_load(f)
-    status = apps.get_model("extras.Status").objects.get(slug="active")
+    status = apps.get_model("extras.Status").objects.get(name="Active")
 
     for i in services:
         apps.get_model("nautobot_firewall_models.ServiceObject").objects.create(status=status, **i)
@@ -48,7 +48,7 @@ def reverse_create_default_objects(apps, schema_editor):
     defaults = os.path.join(os.path.dirname(__file__), "services.yml")
     with open(defaults, "r") as f:
         services = yaml.safe_load(f)
-    status = apps.get_model("extras.Status").objects.get(slug="active")
+    status = apps.get_model("extras.Status").objects.get(name="Active")
 
     for i in services:
         try:
@@ -59,7 +59,6 @@ def reverse_create_default_objects(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("extras", "0033_add__optimized_indexing"),
         ("nautobot_firewall_models", "0001_initial"),

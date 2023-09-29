@@ -14,8 +14,8 @@
             </div>
             <table class="table table-hover panel-body">
                 {% include 'nautobot_firewall_models/inc/policyrule_tablehead.html' with parent_policy=True %}
-                {% for m2m in object.policyrulem2m_set.all %}
-                {% include 'nautobot_firewall_models/inc/policy_rules_tablerow.html' with m2m=m2m parent_policy=True %}
+                {% for rule in object.policy_rules.all %}
+                {% include 'nautobot_firewall_models/inc/policy_rules_tablerow.html' with rule=rule parent_policy=True %}
                 {% endfor %}
             </table>
         </div>

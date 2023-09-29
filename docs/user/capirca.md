@@ -35,7 +35,7 @@ Service Group               | *.svc
 * An object (policy, policy rule, src-addr, dst-addr, etc.) is put into and out of use based on whether or not the status is `active` or as defined in your plugin configuration
     * Anything other than active or defined in plugin setting `allowed_status` is ignored
 * Removing the last active object in an source-address, destination-address, or service will fail the process to avoid your policy failing open
-* The Platform slug must match the Capirca generator name
+* The Platform `network_driver` must match the Capirca generator name
     * You can optionally provide a mapping in the settings `capirca_os_map` to map from the current platform name, to the Capirca generator name
 * The action of "remark" on a rule is not conidered, you can set the setting `capirca_remark_pass=False` if you want it to fail by default rather than silently skipping
 

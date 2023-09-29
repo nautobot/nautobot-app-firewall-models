@@ -1,31 +1,28 @@
 """Filtering for Firewall Model Plugin."""
-
-import django_filters
+from django.contrib.contenttypes.fields import GenericRelation
+from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django_filters import CharFilter
-from django_filters.filterset import FilterSet
+import django_filters
+from nautobot.apps.filters import (
+    NautobotFilterSet,
+    StatusModelFilterSetMixin,
+    MultiValueCharFilter,
+    NaturalKeyOrPKMultipleChoiceFilter,
+)
 from nautobot.dcim.models import Device
-from nautobot.extras.filters import NautobotFilterSet
-from nautobot.extras.models import Status
-from nautobot.utilities.filters import TagFilter
 
 from nautobot_firewall_models import models
 
 
-class BaseFilterSet(FilterSet):
+class BaseFilterSet(StatusModelFilterSetMixin, django_filters.filterset.FilterSet):
     """A base class for adding the search method to models which only expose the `name` and `description` fields."""
 
-    q = CharFilter(
+    q = django_filters.CharFilter(
         method="search",
         label="Search",
     )
-    status = django_filters.ModelMultipleChoiceFilter(
-        field_name="status__slug",
-        to_field_name="slug",
-        queryset=Status.objects.all(),
-    )
 
-    def search(self, queryset, name, value):  # pylint: disable=unused-argument, no-self-use
+    def search(self, queryset, name, value):  # pylint: disable=unused-argument
         """Construct Q filter for filterset."""
         if not value.strip():
             return queryset
@@ -35,13 +32,27 @@ class BaseFilterSet(FilterSet):
 class IPRangeFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for IPRange."""
 
+    start_address = MultiValueCharFilter(
+        method="filter_address",
+        label="Address",
+    )
+    end_address = MultiValueCharFilter(
+        method="filter_address",
+        label="Address",
+    )
+
     class Meta:
         """Meta attributes for filter."""
 
         model = models.IPRange
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
-        # fields = ["id", "start_address", "end_address", "vrf", "size", "description"]
-        fields = ["id", "vrf", "size", "description"]
+    def filter_address(self, queryset, name, value):  # pylint: disable=unused-argument
+        """Filter method for start & end addresses."""
+        try:
+            return queryset.net_in(value)
+        except ValidationError:
+            return queryset.none()
 
 
 class FQDNFilterSet(BaseFilterSet, NautobotFilterSet):
@@ -51,8 +62,7 @@ class FQDNFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.FQDN
-
-        fields = ["id", "name", "description"]
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
 class AddressObjectFilterSet(BaseFilterSet, NautobotFilterSet):
@@ -62,8 +72,7 @@ class AddressObjectFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.AddressObject
-
-        fields = ["id", "name", "ip_address", "prefix", "ip_range", "fqdn", "description"]
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
 class AddressObjectGroupFilterSet(BaseFilterSet, NautobotFilterSet):
@@ -73,8 +82,7 @@ class AddressObjectGroupFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.AddressObjectGroup
-
-        fields = ["id", "name", "address_objects", "description"]
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
 class ApplicationObjectFilterSet(BaseFilterSet, NautobotFilterSet):
@@ -84,8 +92,7 @@ class ApplicationObjectFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.ApplicationObject
-
-        fields = ["id", "name", "description", "category", "subcategory", "risk"]
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
 class ApplicationObjectGroupFilterSet(BaseFilterSet, NautobotFilterSet):
@@ -95,8 +102,7 @@ class ApplicationObjectGroupFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.ApplicationObjectGroup
-
-        fields = ["id", "name", "application_objects", "description"]
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
 class ServiceObjectFilterSet(BaseFilterSet, NautobotFilterSet):
@@ -106,8 +112,7 @@ class ServiceObjectFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.ServiceObject
-
-        fields = ["id", "name", "ip_protocol", "port", "description"]
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
 class ServiceObjectGroupFilterSet(BaseFilterSet, NautobotFilterSet):
@@ -117,8 +122,7 @@ class ServiceObjectGroupFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.ServiceObjectGroup
-
-        fields = ["id", "name", "service_objects", "description"]
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
 class UserObjectFilterSet(BaseFilterSet, NautobotFilterSet):
@@ -128,7 +132,7 @@ class UserObjectFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.UserObject
-        fields = ["id", "name", "username"]
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
 class UserObjectGroupFilterSet(BaseFilterSet, NautobotFilterSet):
@@ -138,7 +142,7 @@ class UserObjectGroupFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.UserObjectGroup
-        fields = ["id", "name", "user_objects", "description"]
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
 class ZoneFilterSet(BaseFilterSet, NautobotFilterSet):
@@ -148,22 +152,13 @@ class ZoneFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.Zone
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
-        fields = ["id", "name", "vrfs", "interfaces", "description"]
 
-
-# TODO: Refactor to allow for better filtering, currently very limited.
 class PolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for PolicyRule."""
 
-    tag = TagFilter()
-
-    q = CharFilter(
-        method="search",
-        label="Search",
-    )
-
-    def search(self, queryset, name, value):  # pylint: disable=unused-argument, no-self-use
+    def search(self, queryset, name, value):  # pylint: disable=unused-argument
         """Construct Q filter for filterset."""
         if not value.strip():
             return queryset
@@ -175,21 +170,13 @@ class PolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.PolicyRule
-        fields = ["id", "action", "log", "request_id", "description", "name"]
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
-# TODO: Refactor to allow for better filtering, currently very limited.
 class NATPolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for NATPolicyRule."""
 
-    tag = TagFilter()
-
-    q = CharFilter(
-        method="search",
-        label="Search",
-    )
-
-    def search(self, queryset, name, value):  # pylint: disable=unused-argument, no-self-use
+    def search(self, queryset, name, value):  # pylint: disable=unused-argument
         """Construct Q filter for filterset."""
         if not value.strip():
             return queryset
@@ -201,7 +188,7 @@ class NATPolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.NATPolicyRule
-        fields = ["id", "remark", "log", "request_id", "name"]
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
 class PolicyFilterSet(BaseFilterSet, NautobotFilterSet):
@@ -211,12 +198,7 @@ class PolicyFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.Policy
-        fields = ["id", "name", "description", "policy_rules", "assigned_devices", "assigned_dynamic_groups"]
-
-    def __init__(self, data=None, queryset=None, *, request=None, prefix=None):
-        """Overload init to allow for deep=True on detail API call."""
-        super().__init__(data, queryset, request=request, prefix=prefix)
-        self.data.pop("deep", None)
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
 class NATPolicyFilterSet(BaseFilterSet, NautobotFilterSet):
@@ -226,25 +208,66 @@ class NATPolicyFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.NATPolicy
-        fields = ["id", "name", "description", "nat_policy_rules", "assigned_devices", "assigned_dynamic_groups"]
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
 class CapircaPolicyFilterSet(NautobotFilterSet):
     """Filter for CapircaPolicy."""
 
-    device = django_filters.ModelMultipleChoiceFilter(
-        field_name="device__name",
+    device = NaturalKeyOrPKMultipleChoiceFilter(
+        field_name="device",
         queryset=Device.objects.all(),
         to_field_name="name",
-        label="Device Name",
-    )
-    device_id = django_filters.ModelMultipleChoiceFilter(
-        queryset=Device.objects.all(),
-        label="Device ID",
+        label="Schema (name or PK)",
     )
 
     class Meta:
         """Meta attributes for filter."""
 
         model = models.CapircaPolicy
-        fields = ["id"]
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
+
+
+###########################
+# Through Models
+###########################
+
+
+class PolicyDeviceM2MFilterSet(NautobotFilterSet):
+    """Filter for PolicyDeviceM2M."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.PolicyDeviceM2M
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
+
+
+class PolicyDynamicGroupM2MFilterSet(NautobotFilterSet):
+    """Filter for PolicyDynamicGroupM2M."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.PolicyDynamicGroupM2M
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
+
+
+class NATPolicyDeviceM2MFilterSet(NautobotFilterSet):
+    """Filter for NATPolicyDeviceM2M."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.NATPolicyDeviceM2M
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
+
+
+class NATPolicyDynamicGroupM2MFilterSet(NautobotFilterSet):
+    """Filter for NATPolicyDynamicGroupM2M."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.NATPolicyDynamicGroupM2M
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]

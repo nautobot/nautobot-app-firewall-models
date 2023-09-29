@@ -5,8 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
-from django.urls import reverse
-from nautobot.core.models.generics import BaseModel, PrimaryModel
+from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.models import StatusField
 from nautobot.extras.utils import extras_features
 from nautobot.ipam.fields import VarbinaryIPField
@@ -68,10 +67,6 @@ class IPRange(PrimaryModel):
             UniqueConstraint(fields=["start_address", "end_address"], condition=Q(vrf=None), name="unique_without_vrf"),
         ]
 
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:iprange", args=[self.pk])
-
     def __str__(self):
         """Stringify instance."""
         return f"{self.start_address}-{self.end_address}"
@@ -115,9 +110,8 @@ class FQDN(PrimaryModel):
     )
     ip_addresses = models.ManyToManyField(
         to="ipam.IPAddress",
-        blank=True,
-        through="FQDNIPAddressM2M",
         related_name="fqdns",
+        blank=True,
         help_text="IP(s) an FQDN should resolve to.",
     )
     status = StatusField(
@@ -132,10 +126,6 @@ class FQDN(PrimaryModel):
         ordering = ["name"]
         verbose_name = "FQDN"
         verbose_name_plural = "FQDNs"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:fqdn", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""
@@ -160,10 +150,26 @@ class AddressObject(PrimaryModel):
         blank=True,
     )
     name = models.CharField(max_length=100, unique=True, help_text="Name descriptor for an address object type.")
-    fqdn = models.ForeignKey(to="nautobot_firewall_models.FQDN", on_delete=models.PROTECT, null=True, blank=True)
-    ip_range = models.ForeignKey(to="nautobot_firewall_models.IPRange", on_delete=models.PROTECT, null=True, blank=True)
-    ip_address = models.ForeignKey(to="ipam.IPAddress", on_delete=models.PROTECT, null=True, blank=True)
-    prefix = models.ForeignKey(to="ipam.Prefix", on_delete=models.PROTECT, null=True, blank=True)
+    fqdn = models.ForeignKey(
+        to="nautobot_firewall_models.FQDN",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="address_objects",
+    )
+    ip_range = models.ForeignKey(
+        to="nautobot_firewall_models.IPRange",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="address_objects",
+    )
+    ip_address = models.ForeignKey(
+        to="ipam.IPAddress", on_delete=models.PROTECT, null=True, blank=True, related_name="address_objects"
+    )
+    prefix = models.ForeignKey(
+        to="ipam.Prefix", on_delete=models.PROTECT, null=True, blank=True, related_name="address_objects"
+    )
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
@@ -183,10 +189,6 @@ class AddressObject(PrimaryModel):
             if getattr(self, key):
                 return (key, getattr(self, key))
         return (None, None)
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:addressobject", args=[self.pk])
 
     def __str__(self):
         """Stringify instance."""
@@ -237,9 +239,8 @@ class AddressObjectGroup(PrimaryModel):
     name = models.CharField(max_length=100, unique=True, help_text="Name descriptor for a group address objects.")
     address_objects = models.ManyToManyField(
         to="nautobot_firewall_models.AddressObject",
-        blank=True,
-        through="AddressObjectGroupM2M",
         related_name="address_object_groups",
+        blank=True,
     )
     status = StatusField(
         on_delete=models.PROTECT,
@@ -253,29 +254,6 @@ class AddressObjectGroup(PrimaryModel):
         ordering = ["name"]
         verbose_name_plural = "Address Object Groups"
 
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:addressobjectgroup", args=[self.pk])
-
     def __str__(self):
         """Stringify instance."""
         return self.name
-
-
-###########################
-# Through Models
-###########################
-
-
-class AddressObjectGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated AddressObject if assigned to a AddressObjectGroup."""
-
-    address = models.ForeignKey("nautobot_firewall_models.AddressObject", on_delete=models.PROTECT)
-    address_group = models.ForeignKey("nautobot_firewall_models.AddressObjectGroup", on_delete=models.CASCADE)
-
-
-class FQDNIPAddressM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated IPAddress if assigned to a FQDN."""
-
-    fqdn = models.ForeignKey("nautobot_firewall_models.FQDN", on_delete=models.CASCADE)
-    ip_address = models.ForeignKey("ipam.IPAddress", on_delete=models.PROTECT)

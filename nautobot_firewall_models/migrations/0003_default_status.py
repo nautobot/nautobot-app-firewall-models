@@ -7,7 +7,6 @@ import nautobot_firewall_models.utils
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("extras", "0033_add__optimized_indexing"),
         ("nautobot_firewall_models", "0002_custom_status"),

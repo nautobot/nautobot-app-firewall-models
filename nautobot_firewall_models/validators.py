@@ -18,3 +18,6 @@ def validate_port(value):
             _("%(i)s is not a port number or port range."),
             params={"value": i},
         )
+
+
+validate_port.message = "Must be a valid port, or port range."

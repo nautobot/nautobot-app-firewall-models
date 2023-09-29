@@ -1,4 +1,5 @@
 """Unit tests for nautobot_firewall_models."""
+# pylint: disable=invalid-name
 
 from django.test import TestCase
 
@@ -17,8 +18,8 @@ class CapircaPolicyModelTestCase(TestCase):
     def setUp(self):
         """Set up base objects."""
         create_capirca_env()
-        self.dev01 = Device.objects.get(name="DFW-WAN00")
-        dev02 = Device.objects.get(name="HOU-WAN00")
+        self.dev01 = Device.objects.get(name="DFW02-WAN00")
+        dev02 = Device.objects.get(name="HOU02-WAN00")
         models.CapircaPolicy.objects.create(device=self.dev01)
         models.CapircaPolicy.objects.create(device=dev02)
 
@@ -35,5 +36,5 @@ class CapircaPolicyModelTestCase(TestCase):
         """Test filtering by Device."""
         params = {"device": [self.dev01.name]}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
-        params = {"device_id": [self.dev01.id]}
+        params = {"device": [self.dev01.id]}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)

@@ -2,8 +2,7 @@
 # pylint: disable=duplicate-code
 
 from django.db import models
-from django.urls import reverse
-from nautobot.core.models.generics import BaseModel, PrimaryModel
+from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.models import StatusField
 from nautobot.extras.utils import extras_features
 
@@ -33,10 +32,8 @@ class Zone(PrimaryModel):
         blank=True,
     )
     name = models.CharField(max_length=100, unique=True, help_text="Name of the zone (e.g. trust)")
-    vrfs = models.ManyToManyField(to="ipam.VRF", blank=True, through="ZoneVRFM2M", related_name="zones")
-    interfaces = models.ManyToManyField(
-        to="dcim.Interface", blank=True, through="ZoneInterfaceM2M", related_name="zones"
-    )
+    vrfs = models.ManyToManyField(to="ipam.VRF", blank=True, related_name="zones")
+    interfaces = models.ManyToManyField(to="dcim.Interface", blank=True, related_name="zones")
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
@@ -49,29 +46,6 @@ class Zone(PrimaryModel):
         ordering = ["name"]
         verbose_name_plural = "Zones"
 
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:zone", args=[self.pk])
-
     def __str__(self):
         """Stringify instance."""
         return self.name
-
-
-###########################
-# Through Models
-###########################
-
-
-class ZoneInterfaceM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated Interface if assigned to a Zone."""
-
-    zone = models.ForeignKey("nautobot_firewall_models.Zone", on_delete=models.CASCADE)
-    interface = models.ForeignKey("dcim.Interface", on_delete=models.PROTECT)
-
-
-class ZoneVRFM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated VRF if assigned to a Zone."""
-
-    zone = models.ForeignKey("nautobot_firewall_models.Zone", on_delete=models.CASCADE)
-    vrf = models.ForeignKey("ipam.vrf", on_delete=models.PROTECT)

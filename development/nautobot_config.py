@@ -80,22 +80,18 @@ if not TESTING:
         "handlers": {
             "normal_console": {
                 "level": "INFO",
-                "class": "rq.utils.ColorizingStreamHandler",
+                "class": "logging.StreamHandler",
                 "formatter": "normal",
             },
             "verbose_console": {
                 "level": "DEBUG",
-                "class": "rq.utils.ColorizingStreamHandler",
+                "class": "logging.StreamHandler",
                 "formatter": "verbose",
             },
         },
         "loggers": {
             "django": {"handlers": ["normal_console"], "level": "INFO"},
             "nautobot": {
-                "handlers": ["verbose_console" if DEBUG else "normal_console"],
-                "level": LOG_LEVEL,
-            },
-            "rq.worker": {
                 "handlers": ["verbose_console" if DEBUG else "normal_console"],
                 "level": LOG_LEVEL,
             },
