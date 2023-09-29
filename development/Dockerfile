@@ -6,11 +6,11 @@
 # -------------------------------------------------------------------------------------
 # !!! USE CAUTION WHEN MODIFYING LINES BELOW
 
-# Accepts a desired Nautobot version as build argument, default to 1.5
-ARG NAUTOBOT_VER="1.4"
+# Accepts a desired Nautobot version as build argument, default to `2.0.0-rc.2`
+ARG NAUTOBOT_VER="2.0.0"
 
-# Accepts a desired Python version as build argument, default to 3.8
-ARG PYTHON_VER="3.8"
+# Accepts a desired Python version as build argument, default to 3.11
+ARG PYTHON_VER="3.11"
 
 # Retrieve published development image of Nautobot base which should include most CI dependencies
 FROM ghcr.io/nautobot/nautobot-dev:${NAUTOBOT_VER}-py${PYTHON_VER}
@@ -26,7 +26,7 @@ ENV NAUTOBOT_ROOT ${NAUTOBOT_ROOT}
 # and CI and local development may have a newer version of Poetry
 # Since this is only used for development and we don't ship this container, pinning Poetry back is not expressly necessary
 # We also don't need virtual environments in container
-RUN curl -sSL https://install.python-poetry.org | python3 - && \
+RUN which poetry || curl -sSL https://install.python-poetry.org | python3 - && \
   poetry config virtualenvs.create false
 
 # !!! USE CAUTION WHEN MODIFYING LINES ABOVE
@@ -68,7 +68,7 @@ RUN sort poetry_freeze_base.txt poetry_freeze_all.txt | uniq -u > poetry_freeze_
 
 # Install all local project as editable, constrained on Nautobot version, to get any additional
 #   direct dependencies of the app
-RUN pip install -c constraints.txt -e .
+RUN pip install -c constraints.txt -e .[all]
 
 # Install any dev dependencies frozen from Poetry
 # Can be improved in Poetry 1.2 which allows `poetry install --only dev`

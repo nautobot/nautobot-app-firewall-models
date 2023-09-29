@@ -1,8 +1,6 @@
 """API views for firewall models."""
 
-from nautobot.core.api.views import ModelViewSet
-from nautobot.core.settings_funcs import is_truthy
-from nautobot.extras.api.views import NautobotModelViewSet
+from nautobot.apps.api import ModelViewSet, NautobotModelViewSet
 
 from nautobot_firewall_models import filters, models
 from nautobot_firewall_models.api import serializers
@@ -111,12 +109,6 @@ class PolicyViewSet(NautobotModelViewSet):
     serializer_class = serializers.PolicySerializer
     filterset_class = filters.PolicyFilterSet
 
-    def get_serializer_class(self):
-        """Overload for the ability to expand nested objects on retrieve view."""
-        if self.action == "retrieve" and is_truthy(self.request.GET.get("deep", False)):
-            self.serializer_class = serializers.PolicyDeepSerializer
-        return super().get_serializer_class()
-
 
 class NATPolicyRuleViewSet(NautobotModelViewSet):
     """NATPolicyRule viewset."""
@@ -133,12 +125,6 @@ class NATPolicyViewSet(NautobotModelViewSet):
     serializer_class = serializers.NATPolicySerializer
     filterset_class = filters.NATPolicyFilterSet
 
-    def get_serializer_class(self):
-        """Overload for the ability to expand nested objects on retrieve view."""
-        if self.action == "retrieve" and is_truthy(self.request.GET.get("deep", False)):
-            self.serializer_class = serializers.NATPolicyDeepSerializer
-        return super().get_serializer_class()
-
 
 class CapircaPolicyViewSet(ModelViewSet):
     """CapircaPolicy viewset."""
@@ -146,3 +132,40 @@ class CapircaPolicyViewSet(ModelViewSet):
     queryset = models.CapircaPolicy.objects.all()
     serializer_class = serializers.CapircaPolicySerializer
     filterset_class = filters.CapircaPolicyFilterSet
+
+
+###########################
+# Through Models
+###########################
+
+
+class PolicyDeviceM2MViewSet(ModelViewSet):
+    """PolicyDeviceM2M viewset."""
+
+    queryset = models.PolicyDeviceM2M.objects.all()
+    serializer_class = serializers.PolicyDeviceM2MSerializer
+    filterset_class = filters.PolicyDeviceM2MFilterSet
+
+
+class PolicyDynamicGroupM2MViewSet(ModelViewSet):
+    """PolicyDynamicGroupM2M viewset."""
+
+    queryset = models.PolicyDynamicGroupM2M.objects.all()
+    serializer_class = serializers.PolicyDynamicGroupM2MSerializer
+    filterset_class = filters.PolicyDynamicGroupM2MFilterSet
+
+
+class NATPolicyDeviceM2MViewSet(ModelViewSet):
+    """NATPolicyDeviceM2M viewset."""
+
+    queryset = models.NATPolicyDeviceM2M.objects.all()
+    serializer_class = serializers.NATPolicyDeviceM2MSerializer
+    filterset_class = filters.NATPolicyDeviceM2MFilterSet
+
+
+class NATPolicyDynamicGroupM2MViewSet(ModelViewSet):
+    """NATPolicyDynamicGroupM2M viewset."""
+
+    queryset = models.NATPolicyDynamicGroupM2M.objects.all()
+    serializer_class = serializers.NATPolicyDynamicGroupM2MSerializer
+    filterset_class = filters.NATPolicyDynamicGroupM2MFilterSet

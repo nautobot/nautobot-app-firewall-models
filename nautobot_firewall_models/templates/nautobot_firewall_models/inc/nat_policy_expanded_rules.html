@@ -9,8 +9,8 @@
             </div>
             <table class="table table-hover panel-body">
                 {% include 'nautobot_firewall_models/inc/natpolicyrule_tablehead.html' with parent_policy=True %}
-                {% for m2m in object.natpolicyrulem2m_set.all %}
-                {% include 'nautobot_firewall_models/inc/natpolicyrule_tablerow.html' with nat_rule=m2m.nat_rule parent_policy=True %}
+                {% for rule in object.nat_policy_rules.all %}
+                {% include 'nautobot_firewall_models/inc/natpolicyrule_tablerow.html' with nat_rule=rule parent_policy=True %}
                 {% endfor %}
             </table>
         </div>

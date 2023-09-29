@@ -1,9 +1,10 @@
-{% extends 'generic/object_detail.html' %}
+{% extends 'generic/object_retrieve.html' %}
 {% load helpers %}
+
 {% block content_left_page %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <strong>Service Object</strong>
+            <strong>IP Range</strong>
         </div>
         <table class="table table-hover panel-body attr-table">
             <tr>
@@ -11,12 +12,20 @@
                 <td>{{ object.description|placeholder }}</td>
             </tr>
             <tr>
-                <td>Port</td>
-                <td>{{ object.port|placeholder }}</td>
+                <td>Start Address</td>
+                <td>{{ object.start_address }}</td>
             </tr>
             <tr>
-                <td>IANA IP Protocol</td>
-                <td>{{ object.ip_protocol|placeholder }}</td>
+                <td>End Address</td>
+                <td>{{ object.end_address }}</td>
+            </tr>
+            <tr>
+                <td>Size</td>
+                <td>{{ object.size }}</td>
+            </tr>
+            <tr>
+                <td>VRF</td>
+                <td><a href="{{ object.vrf.get_absolute_url }}">{{ object.vrf|placeholder }}</a></td>
             </tr>
             <tr>
                 <td>Status</td>
@@ -24,4 +33,4 @@
             </tr>
         </table>
     </div>
-{% endblock content_left_page %}
+{% endblock %}

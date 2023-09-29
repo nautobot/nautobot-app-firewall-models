@@ -2,12 +2,9 @@
 # pylint: disable=duplicate-code, too-many-lines
 
 from django.db import models
-from django.urls import reverse
 from nautobot.core.models.generics import BaseModel, PrimaryModel
 from nautobot.extras.models import StatusField
-from nautobot.extras.models.tags import TaggedItem
 from nautobot.extras.utils import extras_features
-from taggit.managers import TaggableManager
 
 from nautobot_firewall_models import choices
 from nautobot_firewall_models.utils import get_default_status, model_to_json
@@ -36,18 +33,17 @@ class PolicyRule(PrimaryModel):
     """
 
     name = models.CharField(max_length=100)
-    tags = TaggableManager(through=TaggedItem)
     source_users = models.ManyToManyField(
-        to="nautobot_firewall_models.UserObject", through="SrcUserM2M", related_name="policy_rules"
+        blank=True, to="nautobot_firewall_models.UserObject", related_name="policy_rules"
     )
     source_user_groups = models.ManyToManyField(
-        to="nautobot_firewall_models.UserObjectGroup", through="SrcUserGroupM2M", related_name="policy_rules"
+        blank=True, to="nautobot_firewall_models.UserObjectGroup", related_name="policy_rules"
     )
     source_addresses = models.ManyToManyField(
-        to="nautobot_firewall_models.AddressObject", through="SrcAddrM2M", related_name="source_policy_rules"
+        blank=True, to="nautobot_firewall_models.AddressObject", related_name="source_policy_rules"
     )
     source_address_groups = models.ManyToManyField(
-        to="nautobot_firewall_models.AddressObjectGroup", through="SrcAddrGroupM2M", related_name="source_policy_rules"
+        blank=True, to="nautobot_firewall_models.AddressObjectGroup", related_name="source_policy_rules"
     )
     source_zone = models.ForeignKey(
         to="nautobot_firewall_models.Zone",
@@ -57,17 +53,17 @@ class PolicyRule(PrimaryModel):
         related_name="source_policy_rules",
     )
     source_services = models.ManyToManyField(
-        to="nautobot_firewall_models.ServiceObject", through="SrcSvcM2M", related_name="source_policy_rules"
+        blank=True, to="nautobot_firewall_models.ServiceObject", related_name="source_policy_rules"
     )
     source_service_groups = models.ManyToManyField(
-        to="nautobot_firewall_models.ServiceObjectGroup", through="SrcSvcGroupM2M", related_name="source_policy_rules"
+        blank=True, to="nautobot_firewall_models.ServiceObjectGroup", related_name="source_policy_rules"
     )
     destination_addresses = models.ManyToManyField(
-        to="nautobot_firewall_models.AddressObject", through="DestAddrM2M", related_name="destination_policy_rules"
+        blank=True, to="nautobot_firewall_models.AddressObject", related_name="destination_policy_rules"
     )
     destination_address_groups = models.ManyToManyField(
+        blank=True,
         to="nautobot_firewall_models.AddressObjectGroup",
-        through="DestAddrGroupM2M",
         related_name="destination_policy_rules",
     )
     destination_zone = models.ForeignKey(
@@ -78,11 +74,11 @@ class PolicyRule(PrimaryModel):
         related_name="destination_policy_rules",
     )
     destination_services = models.ManyToManyField(
-        to="nautobot_firewall_models.ServiceObject", through="DestSvcM2M", related_name="destination_policy_rules"
+        blank=True, to="nautobot_firewall_models.ServiceObject", related_name="destination_policy_rules"
     )
     destination_service_groups = models.ManyToManyField(
+        blank=True,
         to="nautobot_firewall_models.ServiceObjectGroup",
-        through="DestSvcGroupM2M",
         related_name="destination_policy_rules",
     )
     action = models.CharField(choices=choices.ACTION_CHOICES, max_length=20)
@@ -93,13 +89,13 @@ class PolicyRule(PrimaryModel):
         default=get_default_status,
     )
     applications = models.ManyToManyField(
-        to="nautobot_firewall_models.ApplicationObject", through="ApplicationM2M", related_name="policy_rules"
+        blank=True, to="nautobot_firewall_models.ApplicationObject", related_name="policy_rules"
     )
     application_groups = models.ManyToManyField(
-        to="nautobot_firewall_models.ApplicationObjectGroup", through="ApplicationGroupM2M", related_name="policy_rules"
+        blank=True, to="nautobot_firewall_models.ApplicationObjectGroup", related_name="policy_rules"
     )
-    request_id = models.CharField(max_length=100, null=True, blank=True)
-    description = models.CharField(max_length=200, null=True, blank=True)
+    request_id = models.CharField(max_length=100, blank=True)
+    description = models.CharField(max_length=200, blank=True)
     index = models.PositiveSmallIntegerField(null=True, blank=True)
 
     clone_fields = [
@@ -119,16 +115,13 @@ class PolicyRule(PrimaryModel):
         "log",
         "status",
     ]
+    natural_key_field_names = ["pk"]
 
     class Meta:
         """Meta class."""
 
-        ordering = ["index"]
+        ordering = ["index", "name"]
         verbose_name_plural = "Policy Rules"
-
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:policyrule", args=[self.pk])
 
     def rule_details(self):
         """Convience method to convert to more consumable dictionary."""
@@ -189,7 +182,7 @@ class Policy(PrimaryModel):
         blank=True,
     )
     name = models.CharField(max_length=100, unique=True)
-    policy_rules = models.ManyToManyField(to=PolicyRule, through="PolicyRuleM2M", related_name="policies")
+    policy_rules = models.ManyToManyField(to=PolicyRule, blank=True, related_name="policies")
     assigned_devices = models.ManyToManyField(
         to="dcim.Device", through="PolicyDeviceM2M", related_name="firewall_policies"
     )
@@ -215,10 +208,7 @@ class Policy(PrimaryModel):
         ordering = ["name"]
         verbose_name_plural = "Policies"
 
-    def get_absolute_url(self):
-        """Return detail view URL."""
-        return reverse("plugins:nautobot_firewall_models:policy", args=[self.pk])
-
+    @property
     def policy_details(self):
         """Convience method to convert to a Python list of dictionaries."""
         data = []
@@ -228,7 +218,7 @@ class Policy(PrimaryModel):
 
     def to_json(self):
         """Convience method to convert to json."""
-        return model_to_json(self, "nautobot_firewall_models.api.serializers.PolicyDeepSerializer")
+        return model_to_json(self, "nautobot_firewall_models.api.serializers.PolicySerializer")
 
     def __str__(self):
         """Stringify instance."""
@@ -238,48 +228,6 @@ class Policy(PrimaryModel):
 ###########################
 # Through Models
 ###########################
-
-
-class ApplicationM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated destination ApplicationObject if assigned to a PolicyRule."""
-
-    app = models.ForeignKey("nautobot_firewall_models.ApplicationObject", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
-
-
-class ApplicationGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated destination ApplicationObjectGroup if assigned to a PolicyRule."""
-
-    app_group = models.ForeignKey("nautobot_firewall_models.ApplicationObjectGroup", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
-
-
-class DestAddrGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated destination Address if assigned to a PolicyRule."""
-
-    addr_group = models.ForeignKey("nautobot_firewall_models.AddressObjectGroup", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
-
-
-class DestAddrM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated destination AddressGroup if assigned to a PolicyRule."""
-
-    user = models.ForeignKey("nautobot_firewall_models.AddressObject", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
-
-
-class DestSvcM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated Service if assigned to a PolicyRule."""
-
-    svc = models.ForeignKey("nautobot_firewall_models.ServiceObject", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
-
-
-class DestSvcGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated ServiceGroup if assigned to a PolicyRule."""
-
-    svc_group = models.ForeignKey("nautobot_firewall_models.ServiceObjectGroup", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
 
 
 class PolicyDeviceM2M(BaseModel):
@@ -295,6 +243,10 @@ class PolicyDeviceM2M(BaseModel):
         ordering = ["weight"]
         unique_together = ["policy", "device"]
 
+    def __str__(self):
+        """Stringify instance."""
+        return f"{self.policy.name} - {self.device.name} - {self.weight}"
+
 
 class PolicyDynamicGroupM2M(BaseModel):
     """Through model to add weight to the the Policy & DynamicGroup relationship."""
@@ -309,56 +261,6 @@ class PolicyDynamicGroupM2M(BaseModel):
         ordering = ["weight"]
         unique_together = ["policy", "dynamic_group"]
 
-
-class PolicyRuleM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated PolicyRule if assigned to a Policy."""
-
-    policy = models.ForeignKey("nautobot_firewall_models.Policy", on_delete=models.CASCADE)
-    rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.PROTECT)
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["rule__index"]
-
-
-class SrcAddrM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated source Address if assigned to a PolicyRule."""
-
-    addr = models.ForeignKey("nautobot_firewall_models.AddressObject", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
-
-
-class SrcAddrGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated source AddressGroup if assigned to a PolicyRule."""
-
-    addr_group = models.ForeignKey("nautobot_firewall_models.AddressObjectGroup", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
-
-
-class SrcUserM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated User if assigned to a PolicyRule."""
-
-    user = models.ForeignKey("nautobot_firewall_models.UserObject", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
-
-
-class SrcUserGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated UserGroup if assigned to a PolicyRule."""
-
-    user_group = models.ForeignKey("nautobot_firewall_models.UserObjectGroup", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
-
-
-class SrcSvcM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated Service if assigned to a PolicyRule."""
-
-    svc = models.ForeignKey("nautobot_firewall_models.ServiceObject", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
-
-
-class SrcSvcGroupM2M(BaseModel):
-    """Custom through model to on_delete=models.PROTECT to prevent deleting associated ServiceGroup if assigned to a PolicyRule."""
-
-    svc_group = models.ForeignKey("nautobot_firewall_models.ServiceObjectGroup", on_delete=models.PROTECT)
-    pol_rule = models.ForeignKey("nautobot_firewall_models.PolicyRule", on_delete=models.CASCADE)
+    def __str__(self):
+        """Stringify instance."""
+        return f"{self.policy.name} - {self.dynamic_group.name} - {self.weight}"

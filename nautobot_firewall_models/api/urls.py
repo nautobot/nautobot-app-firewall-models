@@ -1,6 +1,6 @@
 """Django API urlpatterns declaration for firewall model plugin."""
 
-from nautobot.core.api import OrderedDefaultRouter
+from nautobot.apps.api import OrderedDefaultRouter
 
 from nautobot_firewall_models.api import views
 
@@ -15,8 +15,12 @@ router.register("fqdn", views.FQDNViewSet)
 router.register("ip-range", views.IPRangeViewSet)
 router.register("nat-policy-rule", views.NATPolicyRuleViewSet)
 router.register("nat-policy", views.NATPolicyViewSet)
+router.register("nat-policy-device-association", views.NATPolicyDeviceM2MViewSet)
+router.register("nat-policy-dynamic-group-association", views.NATPolicyDynamicGroupM2MViewSet)
 router.register("policy-rule", views.PolicyRuleViewSet)
 router.register("policy", views.PolicyViewSet)
+router.register("policy-device-association", views.PolicyDeviceM2MViewSet)
+router.register("policy-dynamic-group-association", views.PolicyDynamicGroupM2MViewSet)
 router.register("service-object", views.ServiceObjectViewSet)
 router.register("service-object-group", views.ServiceObjectGroupViewSet)
 router.register("user-object", views.UserObjectViewSet)

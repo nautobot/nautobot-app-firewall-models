@@ -6,7 +6,6 @@ import uuid
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("nautobot_firewall_models", "0005_capircapolicy"),
     ]

@@ -2,7 +2,7 @@
 
 import django_tables2 as tables
 from nautobot.extras.tables import StatusTableMixin
-from nautobot.utilities.tables import BaseTable, ButtonsColumn, ToggleColumn
+from nautobot.apps.tables import BaseTable, ButtonsColumn, ToggleColumn
 
 from nautobot_firewall_models import models
 

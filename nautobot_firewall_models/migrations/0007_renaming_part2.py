@@ -45,7 +45,6 @@ def move_index(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("nautobot_firewall_models", "0006_renaming_part1"),
     ]
