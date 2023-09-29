@@ -115,14 +115,17 @@ jobs:
       matrix:
         python-version: ["3.8"]
         db-backend: ["postgresql"]
-        nautobot-version: ["2.0.0-rc.4"]
+        nautobot-version: ["2.0.0"]
         # The include is a method to limit the amount of jobs ran. This essentially
         # means that in addition to standard postgres and stable, also the lowest
         # supported version and with mysql
         include:
           - python-version: "3.11"
             db-backend: "postgresql"
-            nautobot-version: "2.0.0-rc.4"
+            nautobot-version: "2.0.0"
+          - python-version: "3.11"
+            db-backend: "postgresql"
+            nautobot-version: "stable"
           # - python-version: "3.11"
           #   db-backend: "mysql"
           #   nautobot-version: "2.0.0-rc.4"
