@@ -32,12 +32,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="zone",
             name="new_interfaces",
-            field=models.ManyToManyField(blank=True, related_name="zones", to="nautobot_firewall_models.UserObject"),
+            field=models.ManyToManyField(blank=True, related_name="zones", to="dcim.Interface"),
         ),
         migrations.AddField(
             model_name="zone",
             name="new_vrfs",
-            field=models.ManyToManyField(blank=True, related_name="zones", to="nautobot_firewall_models.UserObject"),
+            field=models.ManyToManyField(blank=True, related_name="zones", to="ipam.VRF"),
         ),
         migrations.AddField(
             model_name="serviceobjectgroup",
