@@ -38,7 +38,7 @@ affected_models = [
     {
         "model": "nautobot_firewall_models.PolicyRule",
         "old": "destination_address_groups",
-        "new": "new_destination_addresse_groups",
+        "new": "new_destination_address_groups",
     },
     {"model": "nautobot_firewall_models.PolicyRule", "old": "destination_services", "new": "new_destination_services"},
     {
