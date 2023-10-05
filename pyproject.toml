@@ -20,7 +20,8 @@ packages = [{ include = "nautobot_firewall_models" }]
 # Used for local development
 python = "^3.8,<3.12"
 nautobot = "^2.0.0"
-netutils = "^1.0.0"
+# netutils is a dependency of nautobot, declaring since it is a direct dependency for the app. netutils version matches nautobot v2.0.1
+netutils = "^1.6.0"
 capirca = "^2.0.6"
 
 [tool.poetry.dev-dependencies]
