@@ -1,7 +1,7 @@
 ---
 nautobot_firewall_models:
   project_name: "nautobot-firewall-models"
-  nautobot_ver: "latest"
+  nautobot_ver: "stable"
   local: false
   python_ver: "3.11"
   compose_dir: "development"

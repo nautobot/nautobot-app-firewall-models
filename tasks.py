@@ -46,7 +46,7 @@ namespace = Collection("nautobot_firewall_models")
 namespace.configure(
     {
         "nautobot_firewall_models": {
-            "nautobot_ver": "latest",
+            "nautobot_ver": "stable",
             "project_name": "nautobot-firewall-models",
             "python_ver": "3.11",
             "local": False,

@@ -1,6 +1,7 @@
 """Unit tests for API views."""
 # flake8: noqa: F403,405
 # pylint: disable=invalid-name
+# pylint: disable=duplicate-code
 from nautobot.apps.testing import APIViewTestCases
 from nautobot.dcim.models import Location, Platform, DeviceType, Device
 from nautobot.extras.models import Status, Role

@@ -8,6 +8,7 @@ rules:
   line-length: "disable"
   quoted-strings:
     quote-type: "double"
+    required: false
 ignore: |
   .venv/
   compose.yaml

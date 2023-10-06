@@ -1,6 +1,7 @@
 """Unit tests for views."""
 # flake8: noqa: F403,405
 # pylint: disable=invalid-name
+# pylint: disable=duplicate-code
 from nautobot.extras.models.statuses import Status
 from nautobot.apps.testing import ViewTestCases
 
