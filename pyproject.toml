@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "nautobot-firewall-models"
 version = "2.0.1"
-description = "Nautobot App to model firewall and security objects. Allows users to model policies in a vendor-neutral manner and use that data to drive network security automation"
+description = "Nautobot plugin to model firewall objects."
 authors = ["Network to Code, LLC <opensource@networktocode.com>"]
 license = "Apache-2.0"
 readme = "README.md"
@@ -29,6 +29,8 @@ packages = [
 python = ">=3.8,<3.12"
 # Used for local development
 nautobot = { version = "^2.0.0", optional = true }
+netutils = "^1.0.0"
+capirca = "^2.0.6"
 
 [tool.poetry.group.dev.dependencies]
 bandit = "*"
