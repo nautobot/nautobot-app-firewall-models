@@ -1,0 +1,12 @@
+---
+nautobot_firewall_models:
+  project_name: "nautobot-firewall-models"
+  nautobot_ver: "latest"
+  local: false
+  python_ver: "3.11"
+  compose_dir: "development"
+  compose_files:
+    - "docker-compose.base.yml"
+    - "docker-compose.redis.yml"
+    - "docker-compose.postgres.yml"
+    - "docker-compose.dev.yml"
