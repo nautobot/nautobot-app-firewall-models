@@ -6,7 +6,7 @@
 # -------------------------------------------------------------------------------------
 # !!! USE CAUTION WHEN MODIFYING LINES BELOW
 
-# Accepts a desired Nautobot version as build argument, default to `2.0.0-rc.2`
+# Accepts a desired Nautobot version as build argument, default to 2.0.0
 ARG NAUTOBOT_VER="2.0.0"
 
 # Accepts a desired Python version as build argument, default to 3.11
@@ -32,7 +32,7 @@ RUN which poetry || curl -sSL https://install.python-poetry.org | python3 - && \
 # !!! USE CAUTION WHEN MODIFYING LINES ABOVE
 # -------------------------------------------------------------------------------------
 # App-specifc system build/test dependencies.
-# 
+#
 # Example: LDAP requires `libldap2-dev` to be apt-installed before the Python package.
 # -------------------------------------------------------------------------------------
 # --> Start safe to modify section
@@ -68,7 +68,7 @@ RUN sort poetry_freeze_base.txt poetry_freeze_all.txt | uniq -u > poetry_freeze_
 
 # Install all local project as editable, constrained on Nautobot version, to get any additional
 #   direct dependencies of the app
-RUN pip install -c constraints.txt -e .[all]
+RUN pip install -c constraints.txt -e .
 
 # Install any dev dependencies frozen from Poetry
 # Can be improved in Poetry 1.2 which allows `poetry install --only dev`

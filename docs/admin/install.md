@@ -2,6 +2,9 @@
 
 Here you will find detailed instructions on how to **install** and **configure** the App within your Nautobot environment.
 
+!!! warning "Developer Note - Remove Me!"
+    Detailed instructions on installing the App. You will need to update this section based on any additional dependencies or prerequisites.
+
 ## Prerequisites
 
 - The plugin is compatible with Nautobot 2.0.0 and higher.
@@ -9,6 +12,11 @@ Here you will find detailed instructions on how to **install** and **configure**
 
 !!! note
     Please check the [dedicated page](compatibility_matrix.md) for a full compatibility matrix and the deprecation policy.
+
+### Access Requirements
+
+!!! warning "Developer Note - Remove Me!"
+    What external systems (if any) it needs access to in order to work.
 
 ## Install Guide
 
@@ -21,7 +29,7 @@ The plugin is available as a Python package via PyPI and can be installed with `
 pip install nautobot-firewall-models
 ```
 
-To ensure Nautobot Plugin Firewall Model is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `nautobot-firewall-models` package:
+To ensure Nautobot Firewall Models is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `nautobot-firewall-models` package:
 
 ```shell
 echo nautobot-firewall-models >> local_requirements.txt
@@ -61,27 +69,13 @@ sudo systemctl restart nautobot nautobot-worker nautobot-scheduler
 
 ## App Configuration
 
-Models provided by this plugin have a `status` attribute and the default `status` is set to use `active`. This corresponds to the pre-built Nautobot `Active` Status object.
+!!! warning "Developer Note - Remove Me!"
+    Any configuration required to get the App set up. Edit the table below as per the examples provided.
 
-Use the `default_status` plugin configuration setting to change the default value for the `status` attribute.
+The plugin behavior can be controlled with the following list of settings:
 
-```python
-PLUGINS_CONFIG = {
-    "nautobot_firewall_models": {
-        "default_status": "active"
-        "allowed_status": ["active"], # default shown, `[]` allows all
-        "capirca_remark_pass": True,
-        "capirca_os_map": {
-            "cisco_ios": "cisco",
-            "arista_eos": "arista",
-        },
-        # "custom_capirca": "my.custom.func", # provides ability to overide capirca logic
-    }
-}
-```
-
-The value assigned to `default_status` must match the slug of an existing Nautobot Status object. That Status object must have all of the Firewall Models listed in the Content Type associations. See examples below on selecting the Content Type(s) when creating/editing a Status object and the pre-built `Active` Status with firewall content types added.
-
-![Custom Status](../images/custom-status.png "Custom Status")
-
-![Existing Status](../images/existing-status.png "Existing Status")
+| Key     | Example | Default | Description                          |
+| ------- | ------ | -------- | ------------------------------------- |
+| `enable_backup` | `True` | `True` | A boolean to represent whether or not to run backup configurations within the plugin. |
+| `platform_slug_map` | `{"cisco_wlc": "cisco_aireos"}` | `None` | A dictionary in which the key is the platform slug and the value is what netutils uses in any "network_os" parameter. |
+| `per_feature_bar_width` | `0.15` | `0.15` | The width of the table bar within the overview report |

@@ -7,23 +7,24 @@ This document provides an overview of the App including critical information and
 
 ## Description
 
-A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to model any of the following:
-
-- Layer 4 firewall policies
-- Extended access control lists
-- NAT policies
-- Generation of firewall configurations, via Capirca
-
-Future development will include the ability to onboard an existing access list from a device and the ability to generate device configuration.
 
 ## Audience (User Personas) - Who should use this App?
 
-This app will allow network and security engineers to model policies that drive their network and security automation. Even better, the firewall models are built to take a vendor-agnostic approach; the models are robust to provide maximum flexibility.
+!!! warning "Developer Note - Remove Me!"
+    Who is this meant for/ who is the common user of this app?
 
 ## Authors and Maintainers
 
-Jeremy White @whitej6
+!!! warning "Developer Note - Remove Me!"
+    Add the team and/or the main individuals maintaining this project. Include historical maintainers as well.
 
 ## Nautobot Features Used
 
-To view the models that are added to Nautobot please see the dedicated [models](../dev/models.md) page.
+!!! warning "Developer Note - Remove Me!"
+    What is shown today in the Installed Plugins page in Nautobot. What parts of Nautobot does it interact with, what does it add etc. ?
+
+### Extras
+
+!!! warning "Developer Note - Remove Me!"
+    Custom Fields - things like which CFs are created by this app?
+    Jobs - are jobs, if so, which ones, installed by this app?
