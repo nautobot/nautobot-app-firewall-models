@@ -21,7 +21,7 @@ The plugin is available as a Python package via PyPI and can be installed with `
 pip install nautobot-firewall-models
 ```
 
-To ensure Nautobot Plugin Firewall Model is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `nautobot-firewall-models` package:
+To ensure Nautobot Firewall Models is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `nautobot-firewall-models` package:
 
 ```shell
 echo nautobot-firewall-models >> local_requirements.txt

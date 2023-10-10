@@ -7,7 +7,7 @@ This document provides an overview of the App including critical information and
 
 ## Description
 
-A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to model any of the following:
+An app for [Nautobot](https://github.com/nautobot/nautobot) that is meant to model any of the following:
 
 - Layer 4 firewall policies
 - Extended access control lists
