@@ -85,6 +85,7 @@ markdown_extensions:
   - "footnotes"
 plugins:
   - "search"
+  - include-markdown
   - "mkdocs-version-annotations"
   - "mkdocstrings":
       default_handler: "python"
@@ -102,6 +103,7 @@ nav:
       - App Overview: "user/app_overview.md"
       - Getting Started: "user/app_getting_started.md"
       - Using the App: "user/app_use_cases.md"
+      - Capirca Integration: "user/capirca.md"
       - Frequently Asked Questions: "user/faq.md"
       - External Interactions: "user/external_interactions.md"
   - Administrator Guide:
@@ -111,7 +113,11 @@ nav:
       - Compatibility Matrix: "admin/compatibility_matrix.md"
       - Release Notes:
           - "admin/release_notes/index.md"
+          - v2.0: "admin/release_notes/version_2.0.md"
+          - v1.2: "admin/release_notes/version_1.2.md"
+          - v1.1: "admin/release_notes/version_1.1.md"
           - v1.0: "admin/release_notes/version_1.0.md"
+          - v0.1: "admin/release_notes/version_0.1.md"
   - Developer Guide:
       - Extending the App: "dev/extending.md"
       - Contributing to the App: "dev/contributing.md"
@@ -121,4 +127,5 @@ nav:
           - "dev/code_reference/index.md"
           - Package: "dev/code_reference/package.md"
           - API: "dev/code_reference/api.md"
+          - Firewall Models Reference: "dev/models.md"
   - Nautobot Docs Home ↗︎: "https://docs.nautobot.com"
