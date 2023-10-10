@@ -23,7 +23,6 @@ More screenshots can be found in the [Using the App](https://docs.nautobot.com/p
 
 ![Policy View](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/develop/docs/images/policy.png "Policy View")
 
-
 ## Try it out!
 
 This App is installed in the Nautobot Community Sandbox found over at [demo.nautobot.com](https://demo.nautobot.com/)!
