@@ -28,7 +28,7 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.8,<3.12"
 # Used for local development
-nautobot = { version = "^2.0.0", optional = true }
+nautobot = "^2.0.0"
 netutils = "^1.0.0"
 capirca = "^2.0.6"
 
@@ -57,9 +57,6 @@ mkdocs-version-annotations = "1.0.0"
 # Automatic documentation from sources, for MkDocs
 mkdocstrings = "0.22.0"
 mkdocstrings-python = "1.5.2"
-
-[tool.poetry.extras]
-nautobot = ["nautobot"]
 
 [tool.black]
 line-length = 120
