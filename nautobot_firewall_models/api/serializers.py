@@ -118,7 +118,7 @@ class ApplicationObjectGroupSerializer(TaggedObjectSerializer, StatusModelSerial
     """ApplicationObjectGroup Serializer."""
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="plugins-api:nautobot_firewall_models-api:applicationobject-detail"
+        view_name="plugins-api:nautobot_firewall_models-api:applicationobjectgroup-detail"
     )
     application_objects = SerializedPKRelatedField(
         queryset=models.ApplicationObject.objects.all(),
