@@ -1,4 +1,4 @@
-# Nautobot Plugin Firewall Models
+# Nautobot Firewall Models
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/develop/docs/images/icon-nautobot-firewall-models.png" class="logo" height="200px">
@@ -22,7 +22,6 @@ More screenshots can be found in the [Using the App](https://docs.nautobot.com/p
 ![Navigation Menu](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/develop/docs/images/navmenu.png "Navigation Menu")
 
 ![Policy View](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/develop/docs/images/policy.png "Policy View")
-
 
 ## Try it out!
 

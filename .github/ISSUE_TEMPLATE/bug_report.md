@@ -1,12 +1,12 @@
 ---
 name: 🐛 Bug Report
-about: Report a reproducible bug in the current release of nautobot-plugin-firewall-model
+about: Report a reproducible bug in the current release of nautobot-firewall-models
 ---
 
 ### Environment
-* Python version:  <!-- Example: 3.7.7 -->
-* Nautobot version:  <!-- Example: 1.1.0 -->
-* nautobot-plugin-firewall-model version:  <!-- Example: 0.1.0 -->
+* Python version:  <!-- Example: 3.11.4 -->
+* Nautobot version:  <!-- Example: 2.0.0 -->
+* nautobot-firewall-models version:  <!-- Example: 2.0.1 -->
 
 <!-- What did you expect to happen? -->
 ### Expected Behavior
