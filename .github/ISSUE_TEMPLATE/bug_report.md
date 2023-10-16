@@ -6,7 +6,7 @@ about: Report a reproducible bug in the current release of nautobot-firewall-mod
 ### Environment
 * Python version:  <!-- Example: 3.11.4 -->
 * Nautobot version:  <!-- Example: 2.0.0 -->
-* nautobot-firewall-models version:  <!-- Example: 1.0.0 -->
+* nautobot-firewall-models version:  <!-- Example: 2.0.1 -->
 
 <!-- What did you expect to happen? -->
 ### Expected Behavior
