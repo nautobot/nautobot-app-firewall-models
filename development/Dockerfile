@@ -19,7 +19,8 @@ FROM ghcr.io/nautobot/nautobot-dev:${NAUTOBOT_VER}-py${PYTHON_VER}
 ARG NAUTOBOT_ROOT=/opt/nautobot
 
 ENV prometheus_multiproc_dir=/prom_cache
-ENV NAUTOBOT_ROOT ${NAUTOBOT_ROOT}
+ENV NAUTOBOT_ROOT=${NAUTOBOT_ROOT}
+ENV INVOKE_NAUTOBOT_FIREWALL_MODELS_LOCAL=true
 
 # Install Poetry manually via its installer script;
 # We might be using an older version of Nautobot that includes an older version of Poetry

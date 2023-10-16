@@ -685,5 +685,5 @@ def tests(context, failfast=False, keepdb=False, lint_only=False):
     if not lint_only:
         print("Running unit tests...")
         unittest(context, failfast=failfast, keepdb=keepdb)
+        unittest_coverage(context)
     print("All tests have passed!")
-    unittest_coverage(context)
