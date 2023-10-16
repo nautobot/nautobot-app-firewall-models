@@ -306,3 +306,4 @@ invoke.yml
 public
 /compose.yaml
 /dump.sql
+/nautobot_firewall_models/static/nautobot_firewall_models/docs

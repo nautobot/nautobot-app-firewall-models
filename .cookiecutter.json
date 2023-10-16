@@ -12,10 +12,8 @@
         "base_url": "firewall-models",
         "min_nautobot_version": "2.0.0",
         "max_nautobot_version": "2.9999",
-        "nautobot_version": "latest",
         "camel_name": "NautobotFirewallModels",
         "project_short_description": "Nautobot App to model firewall and security objects. Allows users to model policies in a vendor-neutral manner and use that data to drive network security automation",
-        "version": "2.0.1",
         "model_class_name": "None",
         "open_source_license": "Apache-2.0",
         "docs_base_url": "https://docs.nautobot.com",
@@ -26,7 +24,7 @@
             "template_ref": "develop",
             "cookie_dir": "",
             "branch_prefix": "drift-manager",
-            "pull_request_strategy": "create",
+            "pull_request_strategy": "update-or-create",
             "post_actions": [
                 "black"
             ],

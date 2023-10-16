@@ -45,7 +45,7 @@ namespace = Collection("nautobot_firewall_models")
 namespace.configure(
     {
         "nautobot_firewall_models": {
-            "nautobot_ver": "latest",
+            "nautobot_ver": "2.0.0",
             "project_name": "nautobot-firewall-models",
             "python_ver": "3.11",
             "local": False,
@@ -684,5 +684,5 @@ def tests(context, failfast=False, keepdb=False, lint_only=False):
     if not lint_only:
         print("Running unit tests...")
         unittest(context, failfast=failfast, keepdb=keepdb)
+        unittest_coverage(context)
     print("All tests have passed!")
-    unittest_coverage(context)
