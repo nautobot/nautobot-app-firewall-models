@@ -172,7 +172,14 @@ def generate_packages(context):
     run_command(context, command)
 
 
-@task
+@task(
+    help={
+        "check": (
+            "If enabled, check for outdated dependencies in the poetry.lock file, "
+            "instead of generating a new one. (default: disabled)"
+        )
+    }
+)
 def lock(context, check=False):
     """Generate poetry.lock inside the Nautobot container."""
     run_command(context, f"poetry {'check' if check else 'lock --no-update'}")
