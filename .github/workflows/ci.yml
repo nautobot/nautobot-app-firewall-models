@@ -171,6 +171,7 @@ jobs:
   unittest:
     needs:
       - "pylint"
+      - "check-migrations"
     strategy:
       fail-fast: true
       matrix:
