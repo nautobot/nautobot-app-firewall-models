@@ -40,8 +40,17 @@ jobs:
           tag-prefix: "${{ inputs.tag-prefix }}"
           use-cache: "${{ inputs.use-cache }}"
       - name: "Unit Tests"
-        uses: "./.github/actions/unittests"
-        with:
-          compose-file: "${{ steps.config.outputs.compose-file }}"
-          nautobot-version: "${{ inputs.nautobot-version }}"
-          python-version: "${{ inputs.python-version }}"
+        shell: "bash"
+        env:
+          COMPOSE_ANSI: "0"
+          COMPOSE_FILE: "${{ steps.config.outputs.compose-file }}"
+          NAUTOBOT_VER: "${{ inputs.nautobot-version }}"
+          PYTHON_VER: "${{ inputs.python-version }}"
+        run: |
+          cd development
+          docker compose run \
+            --rm \
+            --entrypoint='' \
+            -- \
+            nautobot \
+            invoke unittest --failfast --keepdb

@@ -191,7 +191,7 @@ Jobs will run in parallel and re-use cached Docker layers and [database dumps](#
 
 When testing the single Nautobot and Python version the cache is much less utilized.
 
-- Currently, the limit is 10 G per repository. Each Nautobot/Python combination uses about 2.5 GB. That means, two concurrent PRs will purge others cache.
+- Currently, the limit is 10 G per repository. Each Nautobot/Python combination uses almost 1 GB. That means, multiple concurrent PRs can often purge others cache.
 - For full tests, caching will be disabled.
 
 Better define `.gitignore` file to avoid unnecessary context changes.

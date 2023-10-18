@@ -1,9 +1,13 @@
 ---
-name: "Run Linters"
+name: "Check Migrations"
 # yamllint disable-line rule:truthy
 on:
   workflow_call:
     inputs:
+      db-backend:
+        description: "Database Backend"
+        required: true
+        type: "string"
       nautobot-version:
         description: "Nautobot Version"
         required: true
@@ -21,7 +25,7 @@ on:
         required: true
         type: "boolean"
 jobs:
-  linters:
+  check-migrations:
     runs-on: "ubuntu-22.04"
     steps:
       - name: "Check out repository code"
@@ -30,12 +34,12 @@ jobs:
         id: "config"
         uses: "./.github/actions/config-compose"
         with:
+          db-backend: "${{ inputs.db-backend }}"
           nautobot-version: "${{ inputs.nautobot-version }}"
           python-version: "${{ inputs.python-version }}"
           tag-prefix: "${{ inputs.tag-prefix }}"
           use-cache: "${{ inputs.use-cache }}"
-      - name: "Run Linters"
-        shell: "bash"
+      - name: "Check Migrations"
         env:
           COMPOSE_ANSI: "0"
           COMPOSE_FILE: "${{ steps.config.outputs.compose-file }}"
@@ -43,9 +47,9 @@ jobs:
           PYTHON_VER: "${{ inputs.python-version }}"
         run: |
           cd development
-          docker-compose run \
+          docker compose run \
             --rm \
             --entrypoint='' \
             -- \
             nautobot \
-            invoke test-linters
+            invoke check-migrations

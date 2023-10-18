@@ -663,15 +663,8 @@ def unittest_coverage(context):
     run_command(context, command)
 
 
-@task(
-    help={
-        "failfast": "fail as soon as a single test fails don't run the entire test suite. (default: False)",
-        "keepdb": "Save and re-use test database between test runs for faster re-testing. (default: False)",
-        "lint-only": "Only run linters; unit tests will be excluded. (default: False)",
-        "test-docs": "Build documentation to be available within Nautobot. (default: True)",
-    }
-)
-def tests(context, failfast=False, keepdb=False, lint_only=False, test_docs=True):
+@task
+def test_linters(context):
     """Run all tests for this plugin."""
     # If we are not running locally, start the docker containers so we don't have to for each test
     if not is_truthy(context.nautobot_firewall_models.local):
@@ -690,10 +683,27 @@ def tests(context, failfast=False, keepdb=False, lint_only=False, test_docs=True
     yamllint(context)
     print("Running poetry check...")
     lock(context, check=True)
-    print("Running migrations check...")
-    check_migrations(context)
     print("Running pylint...")
     pylint(context)
+    print("All linters have passed!")
+
+
+@task(
+    help={
+        "failfast": "fail as soon as a single test fails don't run the entire test suite. (default: False)",
+        "keepdb": "Save and re-use test database between test runs for faster re-testing. (default: False)",
+        "lint-only": "Only run linters; unit tests will be excluded. (default: False)",
+        "test-docs": "Build documentation to be available within Nautobot. (default: True)",
+        "test-migrations": "Run migration checks. (default: True)",
+    }
+)
+def tests(context, failfast=False, keepdb=False, lint_only=False, test_docs=True, test_migrations=True):
+    """Run all tests for this plugin."""
+    # If we are not running locally, start the docker containers so we don't have to for each test
+    test_linters(context)
+    if test_migrations:
+        print("Running migrations check...")
+        check_migrations(context)
     if test_docs:
         print("Running mkdocs...")
         build_and_check_docs(context)

@@ -25,9 +25,17 @@ on:
         required: true
         type: "boolean"
 jobs:
-  linters:
+  run-linters:
     uses: "./.github/workflows/run-linters.yml"
     with:
+      nautobot-version: "${{ inputs.nautobot-version }}"
+      python-version: "${{ inputs.python-version }}"
+      tag-prefix: "${{ inputs.tag-prefix }}"
+      use-cache: "${{ inputs.use-cache }}"
+  check-migrations:
+    uses: "./.github/workflows/check-migrations.yml"
+    with:
+      db-backend: "${{ inputs.db-backend }}"
       nautobot-version: "${{ inputs.nautobot-version }}"
       python-version: "${{ inputs.python-version }}"
       tag-prefix: "${{ inputs.tag-prefix }}"
