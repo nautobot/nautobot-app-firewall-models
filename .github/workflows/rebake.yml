@@ -30,7 +30,7 @@ on:  # yamllint disable-line rule:truthy
       drift-manager-tag:
         description: "The drift manager Docker image tag to use"
         type: "string"
-        default: "prod"
+        default: "latest"
   workflow_dispatch:
     inputs:
       cookie:
@@ -60,7 +60,7 @@ on:  # yamllint disable-line rule:truthy
       drift-manager-tag:
         description: "The drift manager Docker image tag to use"
         type: "string"
-        default: "prod"
+        default: "latest"
 jobs:
   rebake:
     runs-on: "ubuntu-22.04"

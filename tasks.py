@@ -13,6 +13,8 @@ limitations under the License.
 """
 
 import os
+from hashlib import sha256
+from pathlib import Path
 
 from invoke.collection import Collection
 from invoke.tasks import task as invoke_task
@@ -666,9 +668,10 @@ def unittest_coverage(context):
         "failfast": "fail as soon as a single test fails don't run the entire test suite. (default: False)",
         "keepdb": "Save and re-use test database between test runs for faster re-testing. (default: False)",
         "lint-only": "Only run linters; unit tests will be excluded. (default: False)",
+        "test-docs": "Build documentation to be available within Nautobot. (default: True)",
     }
 )
-def tests(context, failfast=False, keepdb=False, lint_only=False):
+def tests(context, failfast=False, keepdb=False, lint_only=False, test_docs=True):
     """Run all tests for this plugin."""
     # If we are not running locally, start the docker containers so we don't have to for each test
     if not is_truthy(context.nautobot_firewall_models.local):
@@ -691,10 +694,34 @@ def tests(context, failfast=False, keepdb=False, lint_only=False):
     check_migrations(context)
     print("Running pylint...")
     pylint(context)
-    print("Running mkdocs...")
-    build_and_check_docs(context)
+    if test_docs:
+        print("Running mkdocs...")
+        build_and_check_docs(context)
     if not lint_only:
         print("Running unit tests...")
         unittest(context, failfast=failfast, keepdb=keepdb)
         unittest_coverage(context)
     print("All tests have passed!")
+
+
+@task(help={"salt": "Salt to use when generating cache key."})
+def calc_dbdump_cache_key(_context, salt=""):
+    """Calculate database dump cache key.
+
+    Calculate cache key as:
+
+    - `migrations` folder file content.
+    - `salt` argument.
+    """
+    migrations_dir = Path("nautobot_firewall_modesl/migrations")
+    hasher = sha256()
+
+    hasher.update(salt.encode())
+
+    if migrations_dir.is_dir():
+        for file in sorted(migrations_dir.rglob("*.py")):
+            if file.is_file():
+                with file.open("r") as f:
+                    hasher.update(f.read().encode())
+
+    print(hasher.hexdigest())

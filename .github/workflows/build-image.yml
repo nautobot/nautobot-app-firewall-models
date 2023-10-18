@@ -1,0 +1,42 @@
+# NOT USED
+---
+name: "Build Image"
+on:  # yamllint disable-line rule:truthy
+  workflow_call:
+    inputs:
+      nautobot-version:
+        description: "Nautobot Version"
+        required: true
+        type: "string"
+      python-version:
+        description: "Python Version"
+        required: true
+        type: "string"
+      tag-prefix:
+        description: "Docker Image Tag Prefix"
+        required: true
+        type: "string"
+   #    username:
+   #      description: "GitHub Username"
+   #      required: true
+   #      type: "string"
+   #  secrets:
+   #    password:
+   #      description: "GitHub Token"
+   #      required: true
+jobs:
+  build:
+    runs-on: "ubuntu-22.04"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@v4"
+      - name: "Build Nautobot App Docker Image"
+        uses: "./.github/actions/docker-image"
+        with:
+          action: "build"
+          image-prefix: "ghcr.io/${{ github.repository }}/nautobot-dev-test"
+          image-tag: "${{ inputs.tag-prefix }}-${{ inputs.nautobot-version }}-py${{ inputs.python-version }}"
+          nautobot-version: "${{ inputs.nautobot-version }}"
+          # password: "${{ secrets.password }}"
+          python-version: "${{ inputs.python-version }}"
+          # username: "${{ inputs.username }}"

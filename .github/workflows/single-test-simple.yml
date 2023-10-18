@@ -1,0 +1,53 @@
+---
+name: "Single Test Simple"
+
+on:  # yamllint disable-line rule:truthy
+  # pull_request: {}
+  workflow_dispatch: {}
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+env:
+  NAUTOBOT_VER: "stable"
+  PYTHON_VER: "3.11"
+  RUN_MYSQL_TESTS: "false"
+
+jobs:
+  tests:
+    runs-on: "ubuntu-22.04"
+    steps:
+      - name: "Check Out Repository Code"
+        uses: "actions/checkout@v4"
+      - name: "Build Nautobot App Docker Image"
+        uses: "./.github/actions/docker-image"
+        with:
+          action: "load"
+          image-prefix: "ghcr.io/${{ github.repository }}/nautobot-dev-test"
+          image-tag: "pr-${{ github.event.pull_request.number }}-${{ env.NAUTOBOT_VER }}-py${{ env.PYTHON_VER }}"
+          nautobot-version: "${{ env.NAUTOBOT_VER }}"
+          # password: "${{ secrets.GH_NAUTOBOT_BOT_TOKEN }}"
+          # pull: true
+          # push: true
+          python-version: "${{ env.PYTHON_VER }}"
+          # username: "${{ github.actor }}"
+      - name: "Run Linters"
+        uses: "./.github/actions/run-linters"
+        with:
+          nautobot-version: "${{ env.NAUTOBOT_VER }}"
+          python-version: "${{ env.PYTHON_VER }}"
+      - name: "Unit Tests with MySQL"
+        if: |
+          env.RUN_MYSQL_TESTS == 'true'
+        uses: "./.github/actions/unittests"
+        with:
+          db-backend: "mysql"
+          nautobot-version: "${{ env.NAUTOBOT_VER }}"
+          python-version: "${{ env.PYTHON_VER }}"
+      - name: "Unit Tests with PostgreSQL"
+        uses: "./.github/actions/unittests"
+        with:
+          db-backend: "postgres"
+          nautobot-version: "${{ env.NAUTOBOT_VER }}"
+          python-version: "${{ env.PYTHON_VER }}"

@@ -1,0 +1,108 @@
+---
+name: "Build"
+description: "Build Nautobot App Docker Image"
+inputs:
+  action:
+    description: "Action to Perform, (build | load | load-with-cache | pull | push)"
+    required: true
+  image-prefix:
+    description: "Docker Image Prefix"
+    required: true
+  image-tag:
+    description: "Docker Image Tag"
+    required: true
+  nautobot-version:
+    description: "Nautobot Version"
+    required: true
+  password:
+    description: "GitHub Token"
+    required: false
+  python-version:
+    description: "Python Version"
+    required: true
+  username:
+    description: "GitHub Username"
+    required: false
+  use-cache:
+    description: "Use GitHub Actions Cache"
+    required: false
+    default: "false"
+runs:
+  using: "composite"
+  steps:
+    - name: "Login to GitHub Container Registry"
+      if: |
+        inputs.password != '' &&
+        inputs.username != ''
+      uses: "docker/login-action@v3"
+      with:
+        password: "${{ inputs.password }}"
+        registry: "ghcr.io"
+        username: "${{ inputs.username }}"
+    - name: "Set up Docker Buildx"
+      if: |
+        inputs.action != 'pull'
+      uses: "docker/setup-buildx-action@v3"
+    - name: "Build"
+      if: |
+        inputs.action == 'build'
+      uses: "docker/build-push-action@v5"
+      with:
+        context: "./"
+        file: "./development/Dockerfile"
+        tags: "${{ inputs.image-prefix }}:${{ inputs.image-tag }}"
+        cache-from: "type=gha,scope=${{ inputs.image-tag }}"
+        cache-to: "type=gha,scope=${{ inputs.image-tag }}"
+        build-args: |
+          NAUTOBOT_VER=${{ inputs.nautobot-version }}
+          PYTHON_VER=${{ inputs.python-version }}
+    - name: "Build and Load"
+      if: |
+        inputs.action == 'load'
+      uses: "docker/build-push-action@v5"
+      with:
+        load: true
+        context: "./"
+        file: "./development/Dockerfile"
+        tags: "${{ inputs.image-prefix }}:${{ inputs.image-tag }}"
+        build-args: |
+          NAUTOBOT_VER=${{ inputs.nautobot-version }}
+          PYTHON_VER=${{ inputs.python-version }}
+    - name: "Build and Load With Cache"
+      if: |
+        inputs.action == 'load-with-cache'
+      uses: "docker/build-push-action@v5"
+      with:
+        load: true
+        context: "./"
+        file: "./development/Dockerfile"
+        tags: "${{ inputs.image-prefix }}:${{ inputs.image-tag }}"
+        cache-from: "type=gha,scope=${{ inputs.image-tag }}"
+        cache-to: "type=gha,scope=${{ inputs.image-tag }}"
+        build-args: |
+          NAUTOBOT_VER=${{ inputs.nautobot-version }}
+          PYTHON_VER=${{ inputs.python-version }}
+    - name: "Build and Push"
+      if: |
+        inputs.action == 'push'
+      uses: "docker/build-push-action@v5"
+      with:
+        push: true
+        context: "./"
+        file: "./development/Dockerfile"
+        tags: "${{ inputs.image-prefix }}:${{ inputs.image-tag }}"
+        cache-from: "type=gha,scope=${{ inputs.image-tag }}"
+        cache-to: "type=gha,scope=${{ inputs.image-tag }}"
+        build-args: |
+          NAUTOBOT_VER=${{ inputs.nautobot-version }}
+          PYTHON_VER=${{ inputs.python-version }}
+    - name: "Pull"
+      shell: "bash"
+      if: |
+        inputs.action == 'pull'
+      run: |
+        docker pull '${{ inputs.image-prefix }}:${{ inputs.image-tag }}'
+outputs:
+  image:
+    description: "Docker Image Reference"
+    value: "${{ inputs.image-prefix }}:${{ inputs.image-tag }}"

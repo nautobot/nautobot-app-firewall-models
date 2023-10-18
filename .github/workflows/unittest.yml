@@ -1,0 +1,47 @@
+---
+name: "Unit Tests"
+# yamllint disable-line rule:truthy
+on:
+  workflow_call:
+    inputs:
+      db-backend:
+        description: "Database Backend"
+        required: true
+        type: "string"
+      nautobot-version:
+        description: "Nautobot Version"
+        required: true
+        type: "string"
+      python-version:
+        description: "Python Version"
+        required: true
+        type: "string"
+      tag-prefix:
+        description: "Docker Image Tag Prefix"
+        required: true
+        type: "string"
+      use-cache:
+        description: "Whether to use GitHub Actions cache"
+        required: true
+        type: "boolean"
+jobs:
+  unittest:
+    runs-on: "ubuntu-22.04"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@v4"
+      - name: "Configure Compose"
+        id: "config"
+        uses: "./.github/actions/config-compose"
+        with:
+          db-backend: "${{ inputs.db-backend }}"
+          nautobot-version: "${{ inputs.nautobot-version }}"
+          python-version: "${{ inputs.python-version }}"
+          tag-prefix: "${{ inputs.tag-prefix }}"
+          use-cache: "${{ inputs.use-cache }}"
+      - name: "Unit Tests"
+        uses: "./.github/actions/unittests"
+        with:
+          compose-file: "${{ steps.config.outputs.compose-file }}"
+          nautobot-version: "${{ inputs.nautobot-version }}"
+          python-version: "${{ inputs.python-version }}"

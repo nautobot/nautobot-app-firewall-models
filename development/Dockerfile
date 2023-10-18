@@ -50,8 +50,11 @@ RUN which poetry || curl -sSL https://install.python-poetry.org | python3 - && \
 # !!! USE CAUTION WHEN MODIFYING LINES BELOW
 
 # Copy in the source code
+COPY pyproject.toml poetry.lock /source/
 WORKDIR /source
-COPY . /source
+RUN touch README.md && \
+    mkdir nautobot_firewall_models && \
+    touch nautobot_firewall_models/__init__.py
 
 # Get container's installed Nautobot version as a forced constraint
 # NAUTOBOT_VER may be a branch name and not a published release therefor we need to get the installed version
@@ -76,6 +79,4 @@ RUN --mount=type=cache,target="/root/.cache/pip",sharing=locked \
 # Can be improved in Poetry 1.2 which allows `poetry install --only dev`
 RUN --mount=type=cache,target="/root/.cache/pip",sharing=locked \
     pip install -c constraints.txt -r poetry_freeze_dev.txt
-
-COPY development/nautobot_config.py ${NAUTOBOT_ROOT}/nautobot_config.py
 # !!! USE CAUTION WHEN MODIFYING LINES ABOVE

@@ -1,0 +1,13 @@
+---
+name: "Test Pull Request"
+# yamllint disable-line rule:truthy
+on: "pull_request"
+jobs:
+  tests:
+    uses: "./.github/workflows/single-test-parallel.yml"
+    with:
+      db-backend: "postgres"
+      nautobot-version: "stable"
+      python-version: "3.11"
+      tag-prefix: "pr-${{ github.event.pull_request.number }}"
+      use-cache: true

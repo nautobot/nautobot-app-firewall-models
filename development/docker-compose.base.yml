@@ -16,11 +16,6 @@ x-nautobot-base: &nautobot-base
 version: "3.8"
 services:
   nautobot:
-    depends_on:
-      redis:
-        condition: "service_started"
-      db:
-        condition: "service_healthy"
     <<:
       - *nautobot-base
       - *nautobot-build

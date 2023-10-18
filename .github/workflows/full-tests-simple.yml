@@ -1,0 +1,99 @@
+---
+name: "Full Tests Simple"
+
+on:  # yamllint disable-line rule:truthy
+  # pull_request: {}
+  workflow_dispatch: {}
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+env:
+  DISABLE_MYSQL_TESTS: 1
+
+jobs:
+  tests:
+    runs-on: "ubuntu-22.04"
+    strategy:
+      fail-fast: true
+      matrix:
+        nautobot-version: ["stable"]
+        python-version: ["3.11", "3.8"]
+        include:
+          - nautobot-version: "2.0.0"
+            python-version: "3.11"
+    env:
+      NAUTOBOT_VER: "${{ matrix.nautobot-version }}"
+      PYTHON_VER: "${{ matrix.python-version }}"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@v4"
+      - name: "Configure"
+        id: "config"
+        env:
+          COMPOSE_FILE: "docker-compose.base.yml"
+        run: |
+          cd development
+          cp creds.example.env creds.env
+          # Read Docker image reference from Compose configuration
+          IMAGE="$(docker compose convert --format json | jq -r .services.nautobot.image)"
+          cd -
+
+          RUN_LINTERS=0
+          TEST_MYSQL=0
+          if [[ "${{ matrix.python-version }}" == "3.11" ]]; then
+            if [[ "${{ matrix.nautobot-version }}" == "stable" ]]; then
+              RUN_LINTERS=1
+            else
+              if [[ "${{ env.DISABLE_MYSQL_TESTS }}" != "1" ]]; then
+                TEST_MYSQL=1
+              fi
+            fi
+          fi
+
+          echo "image=$IMAGE" | tee -a "$GITHUB_OUTPUT"
+          echo "run-linters=$RUN_LINTERS" | tee -a "$GITHUB_OUTPUT"
+          echo "test-mysql=$TEST_MYSQL" | tee -a "$GITHUB_OUTPUT"
+      - name: "Build"
+        uses: "./.github/actions/build"
+        with:
+          image: "${{ steps.config.outputs.image }}"
+          nautobot-version: "${{ matrix.nautobot-version }}"
+          python-version: "${{ matrix.python-version }}"
+      - name: "Run Linters"
+        if: |
+          steps.config.outputs.run-linters == '1'
+        run: |
+          docker run \
+            --rm \
+            --entrypoint='' \
+            --volume="$PWD:/source" \
+            --env-file=development/creds.env \
+            --env-file=development/development.env \
+            '${{ steps.config.outputs.image }}' \
+            invoke tests --lint-only --no-test-docs
+      - name: "Test with Postgres"
+        env:
+          COMPOSE_FILE: "docker-compose.base.yml:docker-compose.postgres.yml:docker-compose.redis.yml:docker-compose.dev.yml"
+        run: |
+          cd development
+          docker compose run \
+            --rm \
+            --entrypoint='' \
+            -- \
+            nautobot \
+            invoke unittest --failfast
+      - name: "Test with MySQL"
+        if: |
+          steps.config.outputs.test-mysql == '1'
+        env:
+          COMPOSE_FILE: "docker-compose.base.yml:docker-compose.mysql.yml:docker-compose.redis.yml:docker-compose.dev.yml"
+        run: |
+          cd development
+          docker compose run \
+            --rm \
+            --entrypoint='' \
+            -- \
+            nautobot \
+            invoke unittest --failfast

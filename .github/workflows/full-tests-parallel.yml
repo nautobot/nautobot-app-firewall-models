@@ -1,0 +1,61 @@
+---
+name: "Full Tests Parallel"
+on:  # yamllint disable-line rule:truthy
+  # pull_request: {}
+  workflow_dispatch: {}
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+jobs:
+  # build:
+  #   strategy:
+  #     fail-fast: true
+  #     matrix:
+  #       nautobot-version: ["stable"]
+  #       # python-version: ["3.11"]
+  #       python-version: ["3.8", "3.11"]
+  #       include:
+  #         - nautobot-version: "2.0.0"
+  #           python-version: "3.11"
+  #   uses: "./.github/workflows/build-image.yml"
+  #   with:
+  #     nautobot-version: "${{ matrix.nautobot-version }}"
+  #     python-version: "${{ matrix.python-version }}"
+  #     tag-prefix: "pr-test-${{ github.event.pull_request.number }}"
+  #   #   username: "${{ github.actor }}"
+  #   # secrets:
+  #   #   password: "${{ secrets.GH_NAUTOBOT_BOT_TOKEN }}"
+  linters:
+    # needs: "build"
+    strategy:
+      fail-fast: true
+      matrix:
+        nautobot-version: ["stable"]
+        python-version: ["3.11"]
+    uses: "./.github/workflows/run-linters.yml"
+    with:
+      nautobot-version: "${{ matrix.nautobot-version }}"
+      python-version: "${{ matrix.python-version }}"
+      tag-prefix: "pr-${{ github.event.pull_request.number }}"
+  unittest:
+    # needs: "build"
+    strategy:
+      fail-fast: true
+      matrix:
+        db-backend: ["postgres"]
+        nautobot-version: ["stable"]
+        # python-version: ["3.11"]
+        python-version: ["3.8", "3.11"]
+        include:
+          - db-backend: "postgres"
+            nautobot-version: "2.0.0"
+            python-version: "3.11"
+          # - db-backend: "mysql"
+          #   nautobot-version: "2.0.0"
+          #   python-version: "3.11"
+    uses: "./.github/workflows/unittest.yml"
+    with:
+      db-backend: "${{ matrix.db-backend }}"
+      nautobot-version: "${{ matrix.nautobot-version }}"
+      python-version: "${{ matrix.python-version }}"
+      tag-prefix: "pr-${{ github.event.pull_request.number }}"

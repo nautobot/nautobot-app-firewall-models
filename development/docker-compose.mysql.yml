@@ -9,6 +9,11 @@ services:
       - "development.env"
       - "creds.env"
       - "development_mysql.env"
+    depends_on:
+      redis:
+        condition: "service_started"
+      db:
+        condition: "service_healthy"
   worker:
     environment:
       - "NAUTOBOT_DB_ENGINE=django.db.backends.mysql"

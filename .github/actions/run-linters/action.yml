@@ -1,0 +1,31 @@
+---
+name: "Run Linters"
+description: "Run Linters for Nautobot App"
+inputs:
+  compose-file:
+    description: "Docker Compose File"
+    required: true
+  nautobot-version:
+    description: "Nautobot Version"
+    required: true
+  python-version:
+    description: "Python Version"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: "Run Linters"
+      shell: "bash"
+      env:
+        COMPOSE_ANSI: "0"
+        COMPOSE_FILE: "${{ inputs.compose-file }}"
+        NAUTOBOT_VER: "${{ inputs.nautobot-version }}"
+        PYTHON_VER: "${{ inputs.python-version }}"
+      run: |
+        cd development
+        docker-compose run \
+          --rm \
+          --entrypoint='' \
+          -- \
+          nautobot \
+          invoke tests --lint-only --no-test-docs

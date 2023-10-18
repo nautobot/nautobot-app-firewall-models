@@ -1,0 +1,31 @@
+---
+name: "Unit Tests"
+description: "Run Unit Tests for Nautobot App"
+inputs:
+  compose-file:
+    description: "Docker Compose Files"
+    required: true
+  nautobot-version:
+    description: "Nautobot Version"
+    required: true
+  python-version:
+    description: "Python Version"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: "Unit Tests"
+      shell: "bash"
+      env:
+        COMPOSE_ANSI: "0"
+        COMPOSE_FILE: "${{ inputs.compose-file }}"
+        NAUTOBOT_VER: "${{ inputs.nautobot-version }}"
+        PYTHON_VER: "${{ inputs.python-version }}"
+      run: |
+        cd development
+        docker compose run \
+          --rm \
+          --entrypoint='' \
+          -- \
+          nautobot \
+          invoke unittest --failfast --keepdb

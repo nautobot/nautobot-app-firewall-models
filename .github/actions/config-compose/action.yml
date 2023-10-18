@@ -1,0 +1,146 @@
+---
+name: "Configure Compose"
+description: "Configure Docker Compose for Nautobot App"
+inputs:
+  db-backend:
+    description: "Database Backend"
+    required: false
+    default: ""
+  nautobot-version:
+    description: "Nautobot Version"
+    required: true
+  python-version:
+    description: "Python Version"
+    required: true
+  tag-prefix:
+    description: "Docker Image Tag Prefix"
+    required: true
+  use-cache:
+    description: "Use GitHub Actions Cache"
+    required: false
+    default: "false"
+runs:
+  using: "composite"
+  steps:
+    - name: "Configure"
+      id: "config"
+      shell: "bash"
+      run: |
+        cd development
+
+        cp creds.example.env creds.env
+
+        GHCR_IMAGE_PREFIX="ghcr.io/${{ github.repository }}/nautobot-dev"
+        GHCR_IMAGE_TAG="${{ inputs.tag-prefix }}-${{ inputs.nautobot-version }}-py${{ inputs.python-version }}"
+
+        export COMPOSE_ANSI=0
+
+        COMPOSE_FILE="docker-compose.base.yml"
+        if [[ -n "${{ inputs.db-backend }}" ]]; then
+          COMPOSE_FILE="$COMPOSE_FILE:docker-compose.${{ inputs.db-backend }}.yml:docker-compose.redis.yml"
+        fi
+        export COMPOSE_FILE="$COMPOSE_FILE:docker-compose.dev.yml"
+
+        export NAUTOBOT_VER="${{ inputs.nautobot-version }}"
+        export PYTHON_VER="${{ inputs.python-version }}"
+
+        COMPOSE_IMAGE="$(docker compose convert --format json | jq -r .services.nautobot.image)"
+
+        echo "COMPOSE_FILE=$COMPOSE_FILE" | tee -a "$GITHUB_ENV"
+        echo "NAUTOBOT_VER=$NAUTOBOT_VER" | tee -a "$GITHUB_ENV"
+        echo "PYTHON_VER=$PYTHON_VER" | tee -a "$GITHUB_ENV"
+
+        echo "compose-file=$COMPOSE_FILE" | tee -a "$GITHUB_OUTPUT"
+        echo "compose-image=$COMPOSE_IMAGE" | tee -a "$GITHUB_OUTPUT"
+        echo "ghcr-image=$GHCR_IMAGE_PREFIX:$GHCR_IMAGE_TAG" | tee -a "$GITHUB_OUTPUT"
+        echo "ghcr-image-prefix=$GHCR_IMAGE_PREFIX" | tee -a "$GITHUB_OUTPUT"
+        echo "ghcr-image-tag=$GHCR_IMAGE_TAG" | tee -a "$GITHUB_OUTPUT"
+
+        if [[ -n "${{ inputs.db-backend }}" ]]; then
+          DB_IMAGE="$(docker compose convert --format json | jq -r .services.db.image)"
+          echo "db-image=$DB_IMAGE" | tee -a "$GITHUB_OUTPUT"
+        fi
+    - name: "Load Nautobot App Docker Image"
+      id: "load"
+      uses: "./.github/actions/docker-image"
+      with:
+        action: "${{ inputs.use-cache == 'true' && 'load-with-cache' || 'load' }}"
+        image-prefix: "${{ steps.config.outputs.ghcr-image-prefix }}"
+        image-tag: "${{ steps.config.outputs.ghcr-image-tag }}"
+        nautobot-version: "${{ inputs.nautobot-version }}"
+        python-version: "${{ inputs.python-version }}"
+    - name: "Tag Nautobot App Docker Image"
+      shell: "bash"
+      run: |
+        cd development
+        docker tag "${{ steps.config.outputs.ghcr-image }}" "${{ steps.config.outputs.compose-image }}"
+    - name: "Setup Database Services"
+      if: |
+        inputs.db-backend != ''
+      id: "setup-db"
+      shell: "bash"
+      run: |
+        cd development
+        docker compose pull -- db redis
+        docker compose up --detach -- db redis
+
+        if [[ "${{ inputs.use-cache }}" == "true" ]]; then
+          export NAUTOBOT_VERSION=$(docker image inspect --format '{{ index .Config.Labels "org.opencontainers.image.version" }}' '${{ steps.config.outputs.ghcr-image }}')
+          CACHE_KEY="$(docker compose run --rm --entrypoint='' -- nautobot invoke calc-dbdump-cache-key --salt="$NAUTOBOT_VERSION-${{ steps.config.outputs.db-image }}")"
+          echo "cache-key=db-dump-$CACHE_KEY" | tee -a "$GITHUB_OUTPUT"
+        fi
+    - name: "Cache Database Dump"
+      if: |
+        inputs.use-cache == 'true' &&
+        inputs.db-backend != ''
+      id: "cache"
+      uses: actions/cache@v3
+      with:
+        path: "development/dump.sql"
+        key: "${{ steps.setup-db.outputs.cache-key }}"
+        restore-keys: "${{ steps.setup-db.outputs.cache-key }}"
+    - name: "Use Cached Database Dump"
+      if: |
+        inputs.use-cache == 'true' &&
+        inputs.db-backend != '' &&
+        steps.cache.outputs.cache-hit == 'true'
+      shell: "bash"
+      run: |
+        cd development
+        docker compose exec -- db sh -c \
+          '${{ inputs.db-backend == 'mysql' &&
+            'mysql --user=nautobot --password=$MYSQL_PASSWORD' ||
+            'psql --username=nautobot postgres'
+          }}' \
+          < dump.sql
+    - name: "Build Database Dump"
+      if: |
+        inputs.use-cache == 'true' &&
+        inputs.db-backend != '' &&
+        steps.cache.outputs.cache-hit != 'true'
+      shell: "bash"
+      run: |
+        cd development
+        docker compose exec -- db sh -c \
+          '${{ inputs.db-backend == 'mysql' &&
+            'mysql -u nautobot -e "CREATE DATABASE test_nautobot;"' ||
+            'createdb --user=nautobot test_nautobot'
+          }}'
+        docker compose run --rm --entrypoint='' --env=NAUTOBOT_DB_NAME=test_nautobot -- nautobot \
+          nautobot-server migrate
+        docker compose exec -- db sh -c \
+          '${{ inputs.db-backend == 'mysql' &&
+            'mysqldump --user=root --password=$MYSQL_ROOT_PASSWORD --databases test_nautobot' ||
+            'pg_dump --clean --create --username=nautobot --dbname=test_nautobot'
+          }}' \
+          > dump.sql
+outputs:
+  compose-file:
+    description: "Docker Compose Files"
+    value: "${{ steps.config.outputs.compose-file }}"
+  compose-image:
+    description: "Docker Compose Image Reference"
+    value: "${{ steps.config.outputs.compose-image }}"
+  ghcr-image:
+    description: "Docker Image Reference"
+    value: "${{ steps.config.outputs.ghcr-image }}"

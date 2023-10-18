@@ -1,0 +1,42 @@
+---
+name: "Test Single Nautobot and Python Version in Parallel"
+# yamllint disable-line rule:truthy
+on:
+  workflow_call:
+    inputs:
+      db-backend:
+        description: "The database backend to test against"
+        required: true
+        type: "string"
+      nautobot-version:
+        description: "The Nautobot version to test against"
+        required: true
+        type: "string"
+      python-version:
+        description: "The Python version to test against"
+        required: true
+        type: "string"
+      tag-prefix:
+        description: "The prefix to use for the tag"
+        required: true
+        type: "string"
+      use-cache:
+        description: "Whether to use GitHub Actions cache"
+        required: true
+        type: "boolean"
+jobs:
+  linters:
+    uses: "./.github/workflows/run-linters.yml"
+    with:
+      nautobot-version: "${{ inputs.nautobot-version }}"
+      python-version: "${{ inputs.python-version }}"
+      tag-prefix: "${{ inputs.tag-prefix }}"
+      use-cache: "${{ inputs.use-cache }}"
+  unittest:
+    uses: "./.github/workflows/unittest.yml"
+    with:
+      db-backend: "${{ inputs.db-backend }}"
+      nautobot-version: "${{ inputs.nautobot-version }}"
+      python-version: "${{ inputs.python-version }}"
+      tag-prefix: "${{ inputs.tag-prefix }}"
+      use-cache: "${{ inputs.use-cache }}"
