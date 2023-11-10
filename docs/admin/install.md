@@ -61,15 +61,15 @@ sudo systemctl restart nautobot nautobot-worker nautobot-scheduler
 
 ## App Configuration
 
-Models provided by this plugin have a `status` attribute and the default `status` is set to use `active`. This corresponds to the pre-built Nautobot `Active` Status object.
+Models provided by this plugin have a `status` attribute and the default `status` is set to use `Active`. This corresponds to the pre-built Nautobot `Active` Status object.
 
 Use the `default_status` plugin configuration setting to change the default value for the `status` attribute.
 
 ```python
 PLUGINS_CONFIG = {
     "nautobot_firewall_models": {
-        "default_status": "active"
-        "allowed_status": ["active"], # default shown, `[]` allows all
+        "default_status": "Active"
+        "allowed_status": ["Active"], # default shown, `[]` allows all
         "capirca_remark_pass": True,
         "capirca_os_map": {
             "cisco_ios": "cisco",
@@ -80,7 +80,9 @@ PLUGINS_CONFIG = {
 }
 ```
 
-The value assigned to `default_status` must match the slug of an existing Nautobot Status object. That Status object must have all of the Firewall Models listed in the Content Type associations. See examples below on selecting the Content Type(s) when creating/editing a Status object and the pre-built `Active` Status with firewall content types added.
+The value assigned to `default_status` must match the name of an existing Nautobot Status object. That Status object must have all of the Firewall Models listed in the Content Type associations. See examples below on selecting the Content Type(s) when creating/editing a Status object and the pre-built `Active` Status with firewall content types added.
+
+> Note: In Nautobot v1.x, the `default_status` must match the slug on an existing Nautobot Status object, not the name. Nautobot v2 moved away from using slugs entirely, instead using the name as an identifier.
 
 ![Custom Status](../images/custom-status.png "Custom Status")
 
