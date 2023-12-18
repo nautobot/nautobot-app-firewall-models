@@ -1,14 +1,14 @@
-"""Plugin declaration for nautobot_firewall_models."""
+"""App declaration for nautobot_firewall_models."""
 # Metadata is inherited from Nautobot. If not including Nautobot in the environment, this should be added
 from importlib import metadata
 
 __version__ = metadata.version(__name__)
 
-from nautobot.extras.plugins import PluginConfig
+from nautobot.apps import NautobotAppConfig
 
 
-class NautobotFirewallModelsConfig(PluginConfig):
-    """Plugin configuration for the nautobot_firewall_models plugin."""
+class NautobotFirewallModelsConfig(NautobotAppConfig):
+    """App configuration for the nautobot_firewall_models app."""
 
     name = "nautobot_firewall_models"
     verbose_name = "Firewall & Security Models"
