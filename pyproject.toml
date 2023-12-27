@@ -28,7 +28,7 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.8,<3.12"
 # Used for local development
-nautobot = "^2.0.0"
+nautobot = "^2.1.0"
 netutils = "^1.0.0"
 capirca = "^2.0.6"
 
