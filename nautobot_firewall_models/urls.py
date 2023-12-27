@@ -1,4 +1,4 @@
-"""Django urlpatterns declaration for nautobot_firewall_models plugin."""
+"""Django urlpatterns declaration for nautobot_firewall_models app."""
 
 from django.templatetags.static import static
 from django.urls import path

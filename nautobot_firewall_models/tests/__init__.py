@@ -1,1 +1,1 @@
-"""Unit tests for nautobot_firewall_models plugin."""
+"""Unit tests for nautobot_firewall_models app."""

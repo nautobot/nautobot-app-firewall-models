@@ -1,4 +1,4 @@
-"""Filtering for Firewall Model Plugin."""
+"""Filtering for Firewall Model App."""
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db.models import Q

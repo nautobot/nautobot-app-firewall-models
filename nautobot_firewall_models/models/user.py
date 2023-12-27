@@ -1,4 +1,4 @@
-"""Models for the Firewall plugin."""
+"""Models for the Firewall app."""
 # pylint: disable=duplicate-code
 
 from django.db import models

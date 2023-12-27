@@ -1,4 +1,4 @@
-"""Management command to bootstrap dummy data for firewall model plugin."""
+"""Management command to bootstrap dummy data for firewall model app."""
 
 from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError

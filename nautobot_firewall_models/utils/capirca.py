@@ -1,4 +1,4 @@
-"""Management command to bootstrap dummy data for firewall model plugin."""
+"""Management command to bootstrap dummy data for firewall model app."""
 # pylint: disable=too-many-instance-attributes,too-many-locals
 import logging
 import re
