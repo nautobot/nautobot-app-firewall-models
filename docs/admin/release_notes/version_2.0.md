@@ -6,30 +6,34 @@ This document describes all new features and changes in the release `2.0`. The f
 
 ### Fixed
 
-- [#199](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/199) Resolve incorrect reverse for custom viewset
+- [#199](https://github.com/nautobot/nautobot-app-firewall-models/issues/199) Resolve incorrect reverse for custom viewset
 
 ### Added
 
-- [#198](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/199) Added towncrier changelogs.
+- [#199](https://github.com/nautobot/nautobot-app-firewall-models/issues/199) Added towncrier changelogs
+
+### Changed
+
+- [#195](https://github.com/nautobot/nautobot-app-firewall-models/pull/195) Replace references to `plugin` with `app`
 
 ## v2.0.1 - 2023-10-04
 
 ### Fixed
 
-- [#173](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/173) Resolve issues with v2 migrations
+- [#173](https://github.com/nautobot/nautobot-app-firewall-models/issues/173) Resolve issues with v2 migrations
 
 ## v2.0.0 - 2023-09-29
 
 ### Changed
 
-- [#167](https://github.com/nautobot/nautobot-plugin-firewall-models/pull/167) Nautobot 2.0.0 as minimum dependency
-- [#167](https://github.com/nautobot/nautobot-plugin-firewall-models/pull/167) Substantial updates to API
-- [#167](https://github.com/nautobot/nautobot-plugin-firewall-models/pull/167) on_delete=PROTECT was moved from the model custom through field to a DB signal
+- [#167](https://github.com/nautobot/nautobot-app-firewall-models/pull/167) Nautobot 2.0.0 as minimum dependency
+- [#167](https://github.com/nautobot/nautobot-app-firewall-models/pull/167) Substantial updates to API
+- [#167](https://github.com/nautobot/nautobot-app-firewall-models/pull/167) on_delete=PROTECT was moved from the model custom through field to a DB signal
 
 ### Added
 
-- [#167](https://github.com/nautobot/nautobot-plugin-firewall-models/pull/167) Added support for Python 3.11
+- [#167](https://github.com/nautobot/nautobot-app-firewall-models/pull/167) Added support for Python 3.11
 
 ### Removed
 
-- [#167](https://github.com/nautobot/nautobot-plugin-firewall-models/pull/167) Dropped support for Python 3.7
+- [#167](https://github.com/nautobot/nautobot-app-firewall-models/pull/167) Dropped support for Python 3.7
