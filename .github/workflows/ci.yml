@@ -241,10 +241,8 @@ jobs:
         uses: "networktocode/gh-action-setup-poetry-environment@v4"
       - name: "Check for changelog entry"
         run: |
-          
           git fetch --no-tags origin +refs/heads/${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}
           poetry run towncrier check --compare-with origin/${{ github.base_ref }}
-          
   publish_gh:
     needs:
       - "unittest"
