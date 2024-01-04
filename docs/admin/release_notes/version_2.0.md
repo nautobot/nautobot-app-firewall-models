@@ -8,6 +8,10 @@ This document describes all new features and changes in the release `2.0`. The f
 
 - [#199](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/199) Resolve incorrect reverse for custom viewset
 
+### Added
+
+- [#198](https://github.com/nautobot/nautobot-plugin-firewall-models/issues/199) Added towncrier changelogs.
+
 ## v2.0.1 - 2023-10-04
 
 ### Fixed
