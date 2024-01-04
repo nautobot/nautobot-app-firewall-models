@@ -5,9 +5,9 @@ description = "Nautobot app to model firewall objects."
 authors = ["Network to Code, LLC <opensource@networktocode.com>"]
 license = "Apache-2.0"
 readme = "README.md"
-homepage = "https://github.com/nautobot/nautobot-plugin-firewall-models"
-repository = "https://github.com/nautobot/nautobot-plugin-firewall-models"
-keywords = ["nautobot", "nautobot-plugin"]
+homepage = "https://github.com/nautobot/nautobot-app-firewall-models"
+repository = "https://github.com/nautobot/nautobot-app-firewall-models"
+keywords = ["nautobot", "nautobot-app", "nautobot-plugin"]
 classifiers = [
     "Intended Audience :: Developers",
     "Development Status :: 5 - Production/Stable",
@@ -16,10 +16,6 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-]
-include = [
-    "LICENSE",
-    "README.md",
 ]
 packages = [
     { include = "nautobot_firewall_models" },
@@ -56,6 +52,11 @@ mkdocs-version-annotations = "1.0.0"
 # Automatic documentation from sources, for MkDocs
 mkdocstrings = "0.22.0"
 mkdocstrings-python = "1.5.2"
+towncrier = "~23.6.0"
+
+[tool.poetry.extras]
+all = [
+]
 
 [tool.black]
 line-length = 120
@@ -125,3 +126,56 @@ add_ignore = "D212"
 [build-system]
 requires = ["poetry_core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.towncrier]
+package = "nautobot"
+directory = "changes"
+filename = "docs/admin/release_notes/version_2.1.md"
+template = "development/towncrier_template.j2"
+start_string = "<!-- towncrier release notes start -->"
+issue_format = "[#{issue}](https://github.com/nautobot/nautobot/issues/{issue})"
+
+[[tool.towncrier.type]]
+directory = "security"
+name = "Security"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "added"
+name = "Added"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "changed"
+name = "Changed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "deprecated"
+name = "Deprecated"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "removed"
+name = "Removed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "fixed"
+name = "Fixed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "dependencies"
+name = "Dependencies"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "documentation"
+name = "Documentation"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "housekeeping"
+name = "Housekeeping"
+showcontent = true

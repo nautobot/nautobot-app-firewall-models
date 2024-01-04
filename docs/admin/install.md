@@ -4,7 +4,7 @@ Here you will find detailed instructions on how to **install** and **configure**
 
 ## Prerequisites
 
-- The plugin is compatible with Nautobot 2.0.0 and higher.
+- The app is compatible with Nautobot 2.0.0 and higher.
 - Databases supported: PostgreSQL, MySQL
 
 !!! note
@@ -13,9 +13,9 @@ Here you will find detailed instructions on how to **install** and **configure**
 ## Install Guide
 
 !!! note
-    Plugins can be installed manually or using Python's `pip`. See the [nautobot documentation](https://nautobot.readthedocs.io/en/latest/plugins/#install-the-package) for more details. The pip package name for this plugin is [`nautobot-firewall-models`](https://pypi.org/project/nautobot-firewall-models/).
+    Apps can be installed manually or using Python's `pip`. See the [nautobot documentation](https://nautobot.readthedocs.io/en/latest/plugins/#install-the-package) for more details. The pip package name for this app is [`nautobot-firewall-models`](https://pypi.org/project/nautobot-firewall-models/).
 
-The plugin is available as a Python package via PyPI and can be installed with `pip`:
+The app is available as a Python package via PyPI and can be installed with `pip`:
 
 ```shell
 pip install nautobot-firewall-models
@@ -27,7 +27,7 @@ To ensure Nautobot Firewall Models is automatically re-installed during future u
 echo nautobot-firewall-models >> local_requirements.txt
 ```
 
-Once installed, the plugin needs to be enabled in your Nautobot configuration. The following block of code below shows the additional configuration required to be added to your `nautobot_config.py` file:
+Once installed, the app needs to be enabled in your Nautobot configuration. The following block of code below shows the additional configuration required to be added to your `nautobot_config.py` file:
 
 - Append `"nautobot_firewall_models"` to the `PLUGINS` list.
 - Append the `"nautobot_firewall_models"` dictionary to the `PLUGINS_CONFIG` dictionary and override any defaults.
@@ -62,6 +62,8 @@ sudo systemctl restart nautobot nautobot-worker nautobot-scheduler
 ## App Configuration
 
 Models provided by this plugin have a `status` attribute and the default `status` is set to use `Active`. This corresponds to the pre-built Nautobot `Active` Status object.
+
+The app behavior can be controlled with the following list of settings:
 
 Use the `default_status` plugin configuration setting to change the default value for the `status` attribute.
 

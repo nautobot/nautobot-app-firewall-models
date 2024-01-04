@@ -1,9 +1,9 @@
 # Nautobot Firewall Models
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/develop/docs/images/icon-nautobot-firewall-models.png" class="logo" height="200px">
+  <img src="https://raw.githubusercontent.com/nautobot/nautobot-app-firewall-models/develop/docs/images/icon-nautobot-firewall-models.png" class="logo" height="200px">
   <br>
-  <a href="https://github.com/nautobot/nautobot-plugin-firewall-models/actions"><img src="https://github.com/nautobot/nautobot-plugin-firewall-models/actions/workflows/ci.yml/badge.svg?branch=main"></a>
+  <a href="https://github.com/nautobot/nautobot-app-firewall-models/actions"><img src="https://github.com/nautobot/nautobot-app-firewall-models/actions/workflows/ci.yml/badge.svg?branch=main"></a>
   <a href="https://docs.nautobot.com/projects/firewall-models/en/latest"><img src="https://readthedocs.org/projects/nautobot-plugin-firewall-models/badge/"></a>
   <a href="https://pypi.org/project/nautobot-firewall-models/"><img src="https://img.shields.io/pypi/v/nautobot-firewall-models"></a>
   <a href="https://pypi.org/project/nautobot-firewall-models/"><img src="https://img.shields.io/pypi/dm/nautobot-firewall-models"></a>
@@ -17,11 +17,11 @@ A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to m
 
 ### Screenshots
 
-More screenshots can be found in the [Using the App](https://docs.nautobot.com/projects/firewall-models/en/latest/user/app_use_cases/) page in the documentation. Here's a quick overview of some of the plugin's added functionality:
+More screenshots can be found in the [Using the App](https://docs.nautobot.com/projects/firewall-models/en/latest/user/app_use_cases/) page in the documentation. Here's a quick overview of some of the app's added functionality:
 
-![Navigation Menu](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/develop/docs/images/navmenu.png "Navigation Menu")
+![Navigation Menu](https://raw.githubusercontent.com/nautobot/nautobot-app-firewall-models/develop/docs/images/navmenu.png "Navigation Menu")
 
-![Policy View](https://raw.githubusercontent.com/nautobot/nautobot-plugin-firewall-models/develop/docs/images/policy.png "Policy View")
+![Policy View](https://raw.githubusercontent.com/nautobot/nautobot-app-firewall-models/develop/docs/images/policy.png "Policy View")
 
 ## Try it out!
 
@@ -41,7 +41,7 @@ Full documentation for this App can be found over on the [Nautobot Docs](https:/
 
 ### Contributing to the Documentation
 
-You can find all the Markdown source for the App documentation under the [`docs`](https://github.com/nautobot/nautobot-plugin-firewall-models/tree/develop/docs) folder in this repository. For simple edits, a Markdown capable editor is sufficient: clone the repository and edit away.
+You can find all the Markdown source for the App documentation under the [`docs`](https://github.com/nautobot/nautobot-app-firewall-models/tree/develop/docs) folder in this repository. For simple edits, a Markdown capable editor is sufficient: clone the repository and edit away.
 
 If you need to view the fully-generated documentation site, you can build it with [MkDocs](https://www.mkdocs.org/). A container hosting the documentation can be started using the `invoke` commands (details in the [Development Environment Guide](https://docs.nautobot.com/projects/firewall-models/en/latest/dev/dev_environment/#docker-development-environment)) on [http://localhost:8001](http://localhost:8001). Using this container, as your changes to the documentation are saved, they will be automatically rebuilt and any pages currently being viewed will be reloaded in your browser.
 
