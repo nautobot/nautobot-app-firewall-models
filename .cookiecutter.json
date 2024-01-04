@@ -4,11 +4,11 @@
         "full_name": "Network to Code, LLC",
         "email": "opensource@networktocode.com",
         "github_org": "nautobot",
-        "plugin_name": "nautobot_firewall_models",
+        "app_name": "nautobot_firewall_models",
         "verbose_name": "Nautobot Firewall Models",
-        "plugin_slug": "nautobot-firewall-models",
-        "project_slug": "nautobot-plugin-firewall-models",
-        "repo_url": "https://github.com/nautobot/nautobot-plugin-firewall-models",
+        "app_slug": "nautobot-firewall-models",
+        "project_slug": "nautobot-app-firewall-models",
+        "repo_url": "https://github.com/nautobot/nautobot-app-firewall-models",
         "base_url": "firewall-models",
         "min_nautobot_version": "2.0.0",
         "max_nautobot_version": "2.9999",
@@ -19,9 +19,9 @@
         "docs_base_url": "https://docs.nautobot.com",
         "docs_app_url": "https://docs.nautobot.com/projects/firewall-models/en/latest",
         "_drift_manager": {
-            "template": "https://github.com/nautobot/cookiecutter-nautobot-app.git",
+            "template": "git@github.com:nautobot/cookiecutter-nautobot-app.git",
             "template_dir": "nautobot-app",
-            "template_ref": "develop",
+            "template_ref": "u/snaselj-towncrier",
             "cookie_dir": "",
             "branch_prefix": "drift-manager",
             "pull_request_strategy": "create",
@@ -29,7 +29,7 @@
                 "black"
             ],
             "draft": true,
-            "baked_commit_ref": "945dd478c02d70bbd35cef776d1fae1c102c5e26"
+            "baked_commit_ref": "a6caf43d118d9da2655c6ac1244daf455e3f86bf"
         }
     }
 }

@@ -4,7 +4,7 @@ Here you will find detailed instructions on how to **install** and **configure**
 
 ## Prerequisites
 
-- The plugin is compatible with Nautobot 2.0.0 and higher.
+- The app is compatible with Nautobot 2.0.0 and higher.
 - Databases supported: PostgreSQL, MySQL
 
 !!! note
@@ -13,9 +13,9 @@ Here you will find detailed instructions on how to **install** and **configure**
 ## Install Guide
 
 !!! note
-    Plugins can be installed manually or using Python's `pip`. See the [nautobot documentation](https://nautobot.readthedocs.io/en/latest/plugins/#install-the-package) for more details. The pip package name for this plugin is [`nautobot-firewall-models`](https://pypi.org/project/nautobot-firewall-models/).
+    Apps can be installed manually or using Python's `pip`. See the [nautobot documentation](https://nautobot.readthedocs.io/en/latest/plugins/#install-the-package) for more details. The pip package name for this app is [`nautobot-firewall-models`](https://pypi.org/project/nautobot-firewall-models/).
 
-The plugin is available as a Python package via PyPI and can be installed with `pip`:
+The app is available as a Python package via PyPI and can be installed with `pip`:
 
 ```shell
 pip install nautobot-firewall-models
@@ -27,7 +27,7 @@ To ensure Nautobot Firewall Models is automatically re-installed during future u
 echo nautobot-firewall-models >> local_requirements.txt
 ```
 
-Once installed, the plugin needs to be enabled in your Nautobot configuration. The following block of code below shows the additional configuration required to be added to your `nautobot_config.py` file:
+Once installed, the app needs to be enabled in your Nautobot configuration. The following block of code below shows the additional configuration required to be added to your `nautobot_config.py` file:
 
 - Append `"nautobot_firewall_models"` to the `PLUGINS` list.
 - Append the `"nautobot_firewall_models"` dictionary to the `PLUGINS_CONFIG` dictionary and override any defaults.
@@ -63,27 +63,10 @@ sudo systemctl restart nautobot nautobot-worker nautobot-scheduler
 
 Models provided by this plugin have a `status` attribute and the default `status` is set to use `Active`. This corresponds to the pre-built Nautobot `Active` Status object.
 
-Use the `default_status` plugin configuration setting to change the default value for the `status` attribute.
+The app behavior can be controlled with the following list of settings:
 
-```python
-PLUGINS_CONFIG = {
-    "nautobot_firewall_models": {
-        "default_status": "Active"
-        "allowed_status": ["Active"], # default shown, `[]` allows all
-        "capirca_remark_pass": True,
-        "capirca_os_map": {
-            "cisco_ios": "cisco",
-            "arista_eos": "arista",
-        },
-        # "custom_capirca": "my.custom.func", # provides ability to overide capirca logic
-    }
-}
-```
-
-The value assigned to `default_status` must match the name of an existing Nautobot Status object. That Status object must have all of the Firewall Models listed in the Content Type associations. See examples below on selecting the Content Type(s) when creating/editing a Status object and the pre-built `Active` Status with firewall content types added.
-
-> Note: In Nautobot v1.x, the `default_status` must match the slug on an existing Nautobot Status object, not the name. Nautobot v2 moved away from using slugs entirely, instead using the name as an identifier.
-
-![Custom Status](../images/custom-status.png "Custom Status")
-
-![Existing Status](../images/existing-status.png "Existing Status")
+| Key     | Example | Default | Description                          |
+| ------- | ------ | -------- | ------------------------------------- |
+| `enable_backup` | `True` | `True` | A boolean to represent whether or not to run backup configurations within the app. |
+| `platform_slug_map` | `{"cisco_wlc": "cisco_aireos"}` | `None` | A dictionary in which the key is the platform slug and the value is what netutils uses in any "network_os" parameter. |
+| `per_feature_bar_width` | `0.15` | `0.15` | The width of the table bar within the overview report |

@@ -8,4 +8,7 @@ As part of the upgrade for Nautobot 2.0 it is recommended to perform a stepped u
 
 ## Upgrade Guide
 
-When a new release comes out it may be necessary to run a migration of the database to account for any changes in the data models used by this plugin. Execute the command `nautobot-server post-upgrade` within the runtime environment of your Nautobot installation after updating the `nautobot-firewall-models` package via `pip`.
+!!! warning "Developer Note - Remove Me!"
+    Add more detailed steps on how the app is upgraded in an existing Nautobot setup and any version specifics (such as upgrading between major versions with breaking changes).
+
+When a new release comes out it may be necessary to run a migration of the database to account for any changes in the data models used by this app. Execute the command `nautobot-server post-upgrade` within the runtime environment of your Nautobot installation after updating the `nautobot-firewall-models` package via `pip`.
