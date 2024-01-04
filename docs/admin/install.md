@@ -65,8 +65,27 @@ Models provided by this plugin have a `status` attribute and the default `status
 
 The app behavior can be controlled with the following list of settings:
 
-| Key     | Example | Default | Description                          |
-| ------- | ------ | -------- | ------------------------------------- |
-| `enable_backup` | `True` | `True` | A boolean to represent whether or not to run backup configurations within the app. |
-| `platform_slug_map` | `{"cisco_wlc": "cisco_aireos"}` | `None` | A dictionary in which the key is the platform slug and the value is what netutils uses in any "network_os" parameter. |
-| `per_feature_bar_width` | `0.15` | `0.15` | The width of the table bar within the overview report |
+Use the `default_status` plugin configuration setting to change the default value for the `status` attribute.
+
+```python
+PLUGINS_CONFIG = {
+    "nautobot_firewall_models": {
+        "default_status": "Active"
+        "allowed_status": ["Active"], # default shown, `[]` allows all
+        "capirca_remark_pass": True,
+        "capirca_os_map": {
+            "cisco_ios": "cisco",
+            "arista_eos": "arista",
+        },
+        # "custom_capirca": "my.custom.func", # provides ability to overide capirca logic
+    }
+}
+```
+
+The value assigned to `default_status` must match the name of an existing Nautobot Status object. That Status object must have all of the Firewall Models listed in the Content Type associations. See examples below on selecting the Content Type(s) when creating/editing a Status object and the pre-built `Active` Status with firewall content types added.
+
+> Note: In Nautobot v1.x, the `default_status` must match the slug on an existing Nautobot Status object, not the name. Nautobot v2 moved away from using slugs entirely, instead using the name as an identifier.
+
+![Custom Status](../images/custom-status.png "Custom Status")
+
+![Existing Status](../images/existing-status.png "Existing Status")

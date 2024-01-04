@@ -4,7 +4,7 @@
   <img src="https://raw.githubusercontent.com/nautobot/nautobot-app-firewall-models/develop/docs/images/icon-nautobot-firewall-models.png" class="logo" height="200px">
   <br>
   <a href="https://github.com/nautobot/nautobot-app-firewall-models/actions"><img src="https://github.com/nautobot/nautobot-app-firewall-models/actions/workflows/ci.yml/badge.svg?branch=main"></a>
-  <a href="https://docs.nautobot.com/projects/firewall-models/en/latest"><img src="https://readthedocs.org/projects/nautobot-app-firewall-models/badge/"></a>
+  <a href="https://docs.nautobot.com/projects/firewall-models/en/latest"><img src="https://readthedocs.org/projects/nautobot-plugin-firewall-models/badge/"></a>
   <a href="https://pypi.org/project/nautobot-firewall-models/"><img src="https://img.shields.io/pypi/v/nautobot-firewall-models"></a>
   <a href="https://pypi.org/project/nautobot-firewall-models/"><img src="https://img.shields.io/pypi/dm/nautobot-firewall-models"></a>
   <br>
@@ -17,13 +17,11 @@ A plugin for [Nautobot](https://github.com/nautobot/nautobot) that is meant to m
 
 ### Screenshots
 
-> Developer Note: Add any representative screenshots of the App in action. These images should also be added to the `docs/user/app_use_cases.md` section.
-
-> Developer Note: Place the files in the `docs/images/` folder and link them using only full URLs from GitHub, for example: `![Overview](https://raw.githubusercontent.com/nautobot/nautobot-app-firewall-models/develop/docs/images/app-overview.png)`. This absolute static linking is required to ensure the README renders properly in GitHub, the docs site, and any other external sites like PyPI.
-
 More screenshots can be found in the [Using the App](https://docs.nautobot.com/projects/firewall-models/en/latest/user/app_use_cases/) page in the documentation. Here's a quick overview of some of the app's added functionality:
 
-![](https://raw.githubusercontent.com/nautobot/nautobot-app-firewall-models/develop/docs/images/placeholder.png)
+![Navigation Menu](https://raw.githubusercontent.com/nautobot/nautobot-app-firewall-models/develop/docs/images/navmenu.png "Navigation Menu")
+
+![Policy View](https://raw.githubusercontent.com/nautobot/nautobot-app-firewall-models/develop/docs/images/policy.png "Policy View")
 
 ## Try it out!
 

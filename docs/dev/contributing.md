@@ -38,13 +38,3 @@ All pull requests to `next` or `develop` must include a changelog fragment file 
     ```plaintext title="changes/1234.changed"
     Changed release notes generation.
     ```
-
-## Branching Policy
-
-!!! warning "Developer Note - Remove Me!"
-    What branching policy is used for this project and where contributions should be made.
-
-## Release Policy
-
-!!! warning "Developer Note - Remove Me!"
-    How new versions are released.
