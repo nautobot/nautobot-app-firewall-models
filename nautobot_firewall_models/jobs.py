@@ -23,6 +23,7 @@ class RunCapircaJob(Job):  # pylint disable=too-few-public-method
         name = "Generate FW Config via Capirca."
         description = "Generate FW Config via Capirca and update the models."
         commit_default = True
+        has_sensitive_variables = False
 
     def run(self, device):  # pylint: disable=arguments-differ
         """Run a job to remove legacy reservations."""
@@ -48,7 +49,7 @@ class RunCapircaJob(Job):  # pylint disable=too-few-public-method
             device_obj = Device.objects.get(pk=dev)
             logger.debug("Running against Device: `%s`", str(device_obj))
             CapircaPolicy.objects.update_or_create(device=device_obj)
-            logger.info(obj=device_obj, message=f"{device_obj} Updated")
+            logger.info(f"{device_obj} Updated", extra={"object": device_obj})
 
 
 jobs = [RunCapircaJob]
