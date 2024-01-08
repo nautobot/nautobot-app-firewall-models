@@ -1,61 +1,66 @@
 [tool.poetry]
 name = "nautobot-firewall-models"
-version = "2.0.1"
-description = "Nautobot plugin to model firewall objects."
-authors = ["Network to Code, LLC <info@networktocode.com>"]
+version = "2.0.2"
+description = "Nautobot app to model firewall objects."
+authors = ["Network to Code, LLC <opensource@networktocode.com>"]
 license = "Apache-2.0"
 readme = "README.md"
-homepage = "https://github.com/nautobot/nautobot-plugin-firewall-models"
-repository = "https://github.com/nautobot/nautobot-plugin-firewall-models"
-keywords = ["nautobot", "nautobot-plugin"]
-include = [
-    "LICENSE",
-    "README.md",
-    # Poetry by default will exclude files that are in .gitignore
-    "nautobot_firewall_models/static/nautobot_firewall_models/docs/**/*",
+homepage = "https://github.com/nautobot/nautobot-app-firewall-models"
+repository = "https://github.com/nautobot/nautobot-app-firewall-models"
+keywords = ["nautobot", "nautobot-app", "nautobot-plugin"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
 ]
-packages = [{ include = "nautobot_firewall_models" }]
+packages = [
+    { include = "nautobot_firewall_models" },
+]
 
 [tool.poetry.dependencies]
+python = ">=3.8,<3.12"
 # Used for local development
-python = "^3.8,<3.12"
 nautobot = "^2.0.0"
 netutils = "^1.0.0"
 capirca = "^2.0.6"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 bandit = "*"
 black = "*"
 coverage = "*"
 django-debug-toolbar = "*"
-# we need to pin flake8 because of package dependencies that cause it to downgrade and 
-# therefore cause issues with linting since older versions do not take .flake8 as config
-flake8 = "^3.9.2"
+flake8 = "*"
 invoke = "*"
 ipython = "*"
-mkdocs = "1.3.1"
-mkdocs-material = "8.4.2"
-mkdocstrings = "0.19"
-mkdocstrings-python = "0.7.1"
-mkdocs-version-annotations = "1.0.0"
-mkdocs-include-markdown-plugin = "3.9.1"
 pydocstyle = "*"
 pylint = "*"
 pylint-django = "*"
-pytest = "*"
+pylint-nautobot = "*"
 yamllint = "*"
-Markdown = "*"
 toml = "*"
+Markdown = "*"
+# Rendering docs to HTML
+mkdocs = "1.5.2"
+# Material for MkDocs theme
+mkdocs-material = "9.1.15"
+# Render custom markdown for version added/changed/remove notes
+mkdocs-version-annotations = "1.0.0"
+# Automatic documentation from sources, for MkDocs
+mkdocstrings = "0.22.0"
+mkdocstrings-python = "1.5.2"
+towncrier = "~23.6.0"
 
 [tool.poetry.extras]
-nautobot = ["nautobot"]
-
-[tool.poetry.group.dev.dependencies]
-pylint-nautobot = "^0.2.1"
+all = [
+]
 
 [tool.black]
 line-length = 120
-target-version = ['py37']
+target-version = ['py38', 'py39', 'py310', 'py311']
 include = '\.pyi?$'
 exclude = '''
 (
@@ -79,17 +84,11 @@ exclude = '''
 [tool.pylint.master]
 # Include the pylint_django plugin to avoid spurious warnings about Django patterns
 load-plugins="pylint_django, pylint_nautobot"
-ignore = ".venv"
-
-[tool.pylint-nautobot]
-supported_nautobot_versions = [
-    "2"
-]
+ignore=".venv"
 
 [tool.pylint.basic]
 # No docstrings required for private methods (Pylint default), or for test_ functions, or for inner Meta classes.
-no-docstring-rgx = "^(_|test_|Meta$)"
-min-similarity-lines = 6
+no-docstring-rgx="^(_|test_|Meta$)"
 
 [tool.pylint.messages_control]
 # Line length is enforced by Black, so pylint doesn't need to check it.
@@ -107,6 +106,11 @@ notes = """,
     XXX,
     """
 
+[tool.pylint-nautobot]
+supported_nautobot_versions = [
+    "2.0.0"
+]
+
 [tool.pydocstyle]
 convention = "google"
 inherit = false
@@ -123,6 +127,55 @@ add_ignore = "D212"
 requires = ["poetry_core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = "-vv --doctest-modules"
+[tool.towncrier]
+package = "nautobot"
+directory = "changes"
+filename = "docs/admin/release_notes/version_2.1.md"
+template = "development/towncrier_template.j2"
+start_string = "<!-- towncrier release notes start -->"
+issue_format = "[#{issue}](https://github.com/nautobot/nautobot/issues/{issue})"
+
+[[tool.towncrier.type]]
+directory = "security"
+name = "Security"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "added"
+name = "Added"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "changed"
+name = "Changed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "deprecated"
+name = "Deprecated"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "removed"
+name = "Removed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "fixed"
+name = "Fixed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "dependencies"
+name = "Dependencies"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "documentation"
+name = "Documentation"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "housekeeping"
+name = "Housekeeping"
+showcontent = true

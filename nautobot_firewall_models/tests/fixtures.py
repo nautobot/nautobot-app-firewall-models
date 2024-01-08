@@ -365,6 +365,14 @@ def assign_policies():  # pylint: disable=too-many-locals
         status=status,
         platform=jun_platform,
     )
+    Device.objects.get_or_create(
+        name="DFW02-WAN01",
+        role=dev_role,
+        device_type=jun_dev_type,
+        location=site1,
+        status=status,
+        platform=jun_platform,
+    )
     dev2, _ = Device.objects.get_or_create(
         name="HOU02-WAN00",
         role=dev_role,

@@ -1,9 +1,10 @@
 """Extensions of baseline Nautobot views."""
-from nautobot.extras.plugins import PluginTemplateExtension
+from nautobot.apps.ui import TemplateExtension
+
 from nautobot_firewall_models.models import CapircaPolicy
 
 
-class DevicePolicies(PluginTemplateExtension):  # pylint: disable=abstract-method
+class DevicePolicies(TemplateExtension):  # pylint: disable=abstract-method
     """Add Policy to the right side of the Device page."""
 
     model = "dcim.device"
@@ -19,7 +20,7 @@ class DevicePolicies(PluginTemplateExtension):  # pylint: disable=abstract-metho
         )
 
 
-class DynamicGroupDevicePolicies(PluginTemplateExtension):  # pylint: disable=abstract-method
+class DynamicGroupDevicePolicies(TemplateExtension):  # pylint: disable=abstract-method
     """Add Policy to the right side of the Device page."""
 
     model = "dcim.device"
@@ -32,7 +33,7 @@ class DynamicGroupDevicePolicies(PluginTemplateExtension):  # pylint: disable=ab
         )
 
 
-class DynamicGroupPolicies(PluginTemplateExtension):  # pylint: disable=abstract-method
+class DynamicGroupPolicies(TemplateExtension):  # pylint: disable=abstract-method
     """Add Policy to the right side of the Device page."""
 
     model = "extras.dynamicgroup"
@@ -48,7 +49,7 @@ class DynamicGroupPolicies(PluginTemplateExtension):  # pylint: disable=abstract
         )
 
 
-class CapircaPolicies(PluginTemplateExtension):  # pylint: disable=abstract-method
+class CapircaPolicies(TemplateExtension):  # pylint: disable=abstract-method
     """Add Policy to the right side of the Device page."""
 
     model = "dcim.device"

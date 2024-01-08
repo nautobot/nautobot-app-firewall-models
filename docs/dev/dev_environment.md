@@ -13,9 +13,9 @@ This is a quick reference guide if you're already familiar with the development 
 
 The [Invoke](http://www.pyinvoke.org/) library is used to provide some helper commands based on the environment. There are a few configuration parameters which can be passed to Invoke to override the default configuration:
 
-- `nautobot_ver`: the version of Nautobot to use as a base for any built docker containers (default: latest)
-- `project_name`: the default docker compose project name (default: `nautobot_firewall_models`)
-- `python_ver`: the version of Python to use as a base for any built docker containers (default: 3.8)
+- `nautobot_ver`: the version of Nautobot to use as a base for any built docker containers (default: 2.0.0)
+- `project_name`: the default docker compose project name (default: `nautobot-firewall-models`)
+- `python_ver`: the version of Python to use as a base for any built docker containers (default: 3.11)
 - `local`: a boolean flag indicating if invoke tasks should be run on the host or inside the docker containers (default: False, commands will be run in docker containers)
 - `compose_dir`: the full path to a directory containing the project compose files
 - `compose_files`: a list of compose files applied in order (see [Multiple Compose files](https://docs.docker.com/compose/extends/#multiple-compose-files) for more information)
@@ -29,8 +29,9 @@ Using **Invoke** these configuration options can be overridden using [several me
 
 This project is managed by [Python Poetry](https://python-poetry.org/) and has a few requirements to setup your development environment:
 
-1. Install Poetry, see the [Poetry Documentation](https://python-poetry.org/docs/#installation) for your operating system.
+1. Install Poetry, see the [Poetry documentation](https://python-poetry.org/docs/#installation) for your operating system.
 2. Install Docker, see the [Docker documentation](https://docs.docker.com/get-docker/) for your operating system.
+3. Install Docker-compose, see the [Docker-compose documentation](https://github.com/docker/compose) for your operation system.
 
 Once you have Poetry and Docker installed you can run the following commands (in the root of the repository) to install all other development dependencies in an isolated Python virtual environment:
 
@@ -57,8 +58,6 @@ To either stop or destroy the development environment use the following options.
 ---
 nautobot_firewall_models:
   local: true
-  compose_files:
-    - "docker-compose.requirements.yml"
 ```
 
 Run the following commands:
@@ -66,7 +65,7 @@ Run the following commands:
 ```shell
 poetry shell
 poetry install --extras nautobot
-export $(cat development/dev.env | xargs)
+export $(cat development/development.env | xargs)
 export $(cat development/creds.env | xargs)
 invoke start && sleep 5
 nautobot-server migrate
@@ -101,9 +100,6 @@ The project features a CLI helper based on [Invoke](https://www.pyinvoke.org/) t
 
 Each command can be executed with `invoke <command>`. All commands support the arguments `--nautobot-ver` and `--python-ver` if you want to manually define the version of Python and Nautobot to use. Each command also has its own help `invoke <command> --help`
 
-!!! note
-    To run the mysql (mariadb) development environment, set the environment variable as such `export NAUTOBOT_USE_MYSQL=1`.
-
 #### Local Development Environment
 
 ```
@@ -132,10 +128,9 @@ Each command can be executed with `invoke <command>`. All commands support the a
   flake8           Run flake8 to check that Python files adhere to its style standards.
   pydocstyle       Run pydocstyle to validate docstring formatting adheres to NTC defined standards.
   pylint           Run pylint code analysis.
-  tests            Run all tests for this plugin.
-  unittest         Run Django unit tests for the plugin.
+  tests            Run all tests for this app.
+  unittest         Run Django unit tests for the app.
 ```
-
 
 ## Project Overview
 
@@ -155,7 +150,7 @@ Poetry is used in lieu of the "virtualenv" commands and is leveraged in both env
 The `pyproject.toml` file outlines all of the relevant dependencies for the project:
 
 - `tool.poetry.dependencies` - the main list of dependencies.
-- `tool.poetry.dev-dependencies` - development dependencies, to facilitate linting, testing, and documentation building.
+- `tool.poetry.group.dev.dependencies` - development dependencies, to facilitate linting, testing, and documentation building.
 
 The `poetry shell` command is used to create and enable a virtual environment managed by Poetry, so all commands ran going forward are executed within the virtual environment. This is similar to running the `source venv/bin/activate` command with virtualenvs. To install project dependencies in the virtual environment, you should run `poetry install` - this will install **both** project and development dependencies.
 
@@ -185,7 +180,7 @@ The first thing you need to do is build the necessary Docker image for Nautobot 
 #14 exporting layers
 #14 exporting layers 1.2s done
 #14 writing image sha256:2d524bc1665327faa0d34001b0a9d2ccf450612bf8feeb969312e96a2d3e3503 done
-#14 naming to docker.io/nautobot-firewall-models/nautobot:latest-py3.7 done
+#14 naming to docker.io/nautobot-firewall-models/nautobot:2.0.0-py3.11 done
 ```
 
 ### Invoke - Starting the Development Environment
@@ -216,9 +211,9 @@ This will start all of the Docker containers used for hosting Nautobot. You shou
 ```bash
 ➜ docker ps
 ****CONTAINER ID   IMAGE                            COMMAND                  CREATED          STATUS          PORTS                                       NAMES
-ee90fbfabd77   nautobot-firewall-models/nautobot:latest-py3.7   "nautobot-server rqw…"   16 seconds ago   Up 13 seconds                                               nautobot_firewall_models_worker_1
-b8adb781d013   nautobot-firewall-models/nautobot:latest-py3.7   "/docker-entrypoint.…"   20 seconds ago   Up 15 seconds   0.0.0.0:8080->8080/tcp, :::8080->8080/tcp   nautobot_firewall_models_nautobot_1
-d64ebd60675d   nautobot-firewall-models/nautobot:latest-py3.7   "mkdocs serve -v -a …"   25 seconds ago   Up 18 seconds   0.0.0.0:8001->8080/tcp, :::8001->8080/tcp   nautobot_firewall_models_docs_1
+ee90fbfabd77   nautobot-firewall-models/nautobot:2.0.0-py3.11  "nautobot-server rqw…"   16 seconds ago   Up 13 seconds                                               nautobot_firewall_models_worker_1
+b8adb781d013   nautobot-firewall-models/nautobot:2.0.0-py3.11  "/docker-entrypoint.…"   20 seconds ago   Up 15 seconds   0.0.0.0:8080->8080/tcp, :::8080->8080/tcp   nautobot_firewall_models_nautobot_1
+d64ebd60675d   nautobot-firewall-models/nautobot:2.0.0-py3.11  "mkdocs serve -v -a …"   25 seconds ago   Up 18 seconds   0.0.0.0:8001->8080/tcp, :::8001->8080/tcp   nautobot_firewall_models_docs_1
 e72d63129b36   postgres:13-alpine               "docker-entrypoint.s…"   25 seconds ago   Up 19 seconds   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp   nautobot_firewall_models_postgres_1
 96c6ff66997c   redis:6-alpine                   "docker-entrypoint.s…"   25 seconds ago   Up 21 seconds   0.0.0.0:6379->6379/tcp, :::6379->6379/tcp   nautobot_firewall_models_redis_1
 ```
@@ -296,9 +291,9 @@ This will safely shut down all of your running Docker containers for this projec
 
 Your environment should now be fully setup, all necessary Docker containers are created and running, and you're logged into Nautobot in your web browser. Now what?
 
-Now you can start developing your plugin in the project folder!
+Now you can start developing your app in the project folder!
 
-The magic here is the root directory is mounted inside your Docker containers when built and ran, so **any** changes made to the files in here are directly updated to the Nautobot plugin code running in Docker. This means that as you modify the code in your plugin folder, the changes will be instantly updated in Nautobot.
+The magic here is the root directory is mounted inside your Docker containers when built and ran, so **any** changes made to the files in here are directly updated to the Nautobot app code running in Docker. This means that as you modify the code in your app folder, the changes will be instantly updated in Nautobot.
 
 !!! warning
 	There are a few exceptions to this, as outlined in the section [To Rebuild or Not To Rebuild](#to-rebuild-or-not-to-rebuild).
@@ -319,7 +314,10 @@ When trying to debug an issue, one helpful thing you can look at are the logs wi
 !!! note
 	The `-f` tag will keep the logs open, and output them in realtime as they are generated.
 
-So for example, our plugin is named `nautobot-firewall-models`, the command would most likely be `docker logs nautobot_firewall_models_nautobot_1 -f`. You can find the name of all running containers via `docker ps`.
+!!! info
+    Want to limit the log output even further? Use the `--tail <#>` command line argument in conjunction with `-f`.
+
+So for example, our app is named `nautobot-firewall-models`, the command would most likely be `docker logs nautobot_firewall_models_nautobot_1 -f`. You can find the name of all running containers via `docker ps`.
 
 If you want to view the logs specific to the worker container, simply use the name of that container instead.
 
@@ -345,7 +343,7 @@ Once completed, the new/updated environment variables should now be live.
 
 ### Installing Additional Python Packages
 
-If you want your plugin to leverage another available Nautobot plugin or another Python package, you can easily add them into your Docker environment.
+If you want your app to leverage another available Nautobot app or another Python package, you can easily add them into your Docker environment.
 
 ```bash
 ➜ poetry shell
@@ -360,18 +358,18 @@ Once the dependencies are resolved, stop the existing containers, rebuild the Do
 ➜ invoke start
 ```
 
-### Installing Additional Nautobot Plugins
+### Installing Additional Nautobot Apps
 
-Let's say for example you want the new plugin you're creating to integrate into Slack. To do this, you will want to integrate into the existing Nautobot ChatOps Plugin.
+Let's say for example you want the new app you're creating to integrate into Slack. To do this, you will want to integrate into the existing Nautobot ChatOps App.
 
 ```bash
 ➜ poetry shell
 ➜ poetry add nautobot-chatops
 ```
 
-Once you activate the virtual environment via Poetry, you then tell Poetry to install the new plugin.
+Once you activate the virtual environment via Poetry, you then tell Poetry to install the new app.
 
-Before you continue, you'll need to update the file `development/nautobot_config.py` accordingly with the name of the new plugin under `PLUGINS` and any relevant settings as necessary for the plugin under `PLUGINS_CONFIG`. Since you're modifying the underlying OS (not just Django files), you need to rebuild the image. This is a similar process to updating environment variables, which was explained earlier.
+Before you continue, you'll need to update the file `development/nautobot_config.py` accordingly with the name of the new app under `PLUGINS` and any relevant settings as necessary for the app under `PLUGINS_CONFIG`. Since you're modifying the underlying OS (not just Django files), you need to rebuild the image. This is a similar process to updating environment variables, which was explained earlier.
 
 ```bash
 ➜ invoke stop
@@ -379,7 +377,7 @@ Before you continue, you'll need to update the file `development/nautobot_config
 ➜ invoke start
 ```
 
-Once the containers are up and running, you should now see the new plugin installed in your Nautobot instance.
+Once the containers are up and running, you should now see the new app installed in your Nautobot instance.
 
 !!! note
     You can even launch an `ngrok` service locally on your laptop, pointing to port 8080 (such as for chatops development), and it will point traffic directly to your Docker images.
@@ -394,14 +392,14 @@ namespace.configure(
     {
         "nautobot_firewall_models": {
             ...
-            "python_ver": "3.7",
+            "python_ver": "3.11",
 	    ...
         }
     }
 )
 ```
 
-Or set the `INVOKE_NAUTOBOT_GOLDEN_CONFIG_PYTHON_VER` variable.
+Or set the `INVOKE_NAUTOBOT_FIREWALL_MODELS_PYTHON_VER` variable.
 
 ### Updating Nautobot Version
 
@@ -413,7 +411,7 @@ namespace.configure(
     {
         "nautobot_firewall_models": {
             ...
-            "nautobot_ver": "1.0.2",
+            "nautobot_ver": "2.0.0",
 	    ...
         }
     }

@@ -1,6 +1,8 @@
 """Unit tests for views."""
 # flake8: noqa: F403,405
 # pylint: disable=invalid-name
+# pylint: disable=duplicate-code
+from nautobot.dcim.models import Device
 from nautobot.extras.models.statuses import Status
 from nautobot.apps.testing import ViewTestCases
 
@@ -383,3 +385,16 @@ class NATPolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             f'csvrule2,"{nat_pol_rule.id}",Active',
             f'csvrule3,"{nat_pol_rule.id}",Active',
         )
+
+
+class CapircaPolicyUIViewTest(ViewTestCases.GetObjectViewTestCase, ViewTestCases.ListObjectsViewTestCase):
+    """Test the Policy viewsets."""
+
+    model = CapircaPolicy
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data."""
+        fixtures.create_capirca_env()
+        for device in Device.objects.all():
+            CapircaPolicy.objects.create(device=device)

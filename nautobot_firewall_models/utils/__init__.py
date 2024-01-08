@@ -1,4 +1,4 @@
-"""Help funcs for firewall models plugin."""
+"""Help funcs for firewall models app."""
 import json
 from django.conf import settings
 from django.utils.module_loading import import_string

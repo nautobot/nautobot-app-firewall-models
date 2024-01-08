@@ -1,1 +1,1 @@
-"""REST API module for nautobot_firewall_models plugin."""
+"""REST API module for nautobot_firewall_models app."""

@@ -1,4 +1,4 @@
-"""Adds plugin items to homepage."""
+"""Adds App items to homepage."""
 from nautobot.core.apps import HomePageItem, HomePagePanel
 
 from nautobot_firewall_models.models import Policy, PolicyRule, CapircaPolicy, NATPolicy, NATPolicyRule

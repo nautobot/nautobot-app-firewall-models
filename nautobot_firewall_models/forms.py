@@ -1,4 +1,4 @@
-"""Forms for the Firewall plugin."""
+"""Forms for the Firewall app."""
 
 from django import forms
 from nautobot.dcim.models import Device, Interface
