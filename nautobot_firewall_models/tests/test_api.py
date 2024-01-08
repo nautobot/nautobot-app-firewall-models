@@ -21,7 +21,6 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-
         cls.create_data = [
             {"start_address": "10.0.0.1", "end_address": "10.0.0.3"},
             {"start_address": "10.0.0.4", "end_address": "10.0.0.10"},
@@ -39,7 +38,6 @@ class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-
         cls.create_data = [
             {"name": "test.local"},
             {"name": "sub.test.local"},
@@ -181,7 +179,6 @@ class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-
         cls.create_data = [
             {"username": "test1", "name": "Foo"},
             {"username": "test2", "name": "Bar"},
@@ -222,7 +219,6 @@ class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
     @classmethod
     def setUpTestData(cls):
         """Create test data for API calls."""
-
         cls.create_data = [
             {"name": "trust"},
             {"name": "untrust"},
