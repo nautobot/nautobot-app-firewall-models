@@ -269,7 +269,7 @@ class TestBasicCapirca(TestCase):
         create_capirca_env()
 
     def test_generate_capirca_config(self):
-        """Test the implementation of capirca"""
+        """Test the implementation of capirca."""
         # This partially tests the underlying library, but kept since it helps ensure that overloading
         # ParseServiceList and ParseNetworkList continue to work. As well as provides an easy place to test locally.
         # Such as running `invoke unittest -l nautobot_firewall_models.tests.test_capirca.TestBasicCapirca` and
@@ -311,7 +311,6 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
 
     def test_address_skip(self):
         """Check that address objects are found with status active and not found when other."""
-
         self.pol_rule6.source_addresses.set([self.addr_obj4, self.addr_obj5])
         self.pol_rule6.validated_save()
         _, networkdata, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
@@ -350,7 +349,6 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
 
     def test_address_fqdn(self):
         """Test that validation fails on creating an FQDN when using capirca."""
-
         fqdn1 = FQDN.objects.create(name="test.other", status=self.active)
         self.addr_obj5.ip_address = None
         self.addr_obj5.fqdn = fqdn1
@@ -371,7 +369,6 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
 
     def test_address_group_skip(self):
         """Check that address group objects are found with status active and not found when other."""
-
         self.pol_rule6.source_address_groups.set([self.addr_grp3, self.addr_grp4])
         self.pol_rule6.validated_save()
         _, networkdata, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
@@ -576,6 +573,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         self.assertNotIn("other-value", pol[1]["headers"])
 
     def test_policy_ctd_allow_list(self):
+        """Test terms can be allowed and not allowed based on custom field."""
         self.pol_rule6._custom_field_data = {"ctd_test-custom": "unique-value", "ctd_test-other": "other-value"}
         self.pol_rule6.save()
         self.device_obj.platform._custom_field_data = {"capirca_allow": ["ctd_test-custom"]}
@@ -633,7 +631,7 @@ class TestDevicePolicyToCapirca(TestCase):
 
     @skip("Not implemented until policy method provided to merge queries provided")
     def test_dynamic_group_and_device(self):
-        pass
+        """Test that dynamic groups are created and device is added to it, disabled."""
 
     def test_multi_policy_capirca_config(self):
         """Verify that generating full config for a device is as expected."""

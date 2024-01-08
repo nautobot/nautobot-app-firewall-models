@@ -2,6 +2,6 @@
     <div class="panel-heading">
         <strong>Capirca Firewall Configurations</strong> - 
         <a href="{% url 'plugins:nautobot_firewall_models:capircapolicy_devicedetail' pk=object.pk %}"><i class="mdi mdi-file-document-outline"></i></a>
-        <a href="{% url 'extras:job' class_path='plugins-nautobot_firewall_models-jobs-runcapircajob/run' %}?device={{ object.pk }}"><i class="mdi mdi-play-circle" title="Execute Capirca Jobs"></i></a>
+        <a href="{% url 'extras:job_run_by_class_path' class_path='nautobot_firewall_models.jobs.RunCapircaJob' %}?device={{ object.pk }}"><i class="mdi mdi-play-circle" title="Execute Capirca Jobs"></i></a>
     </div>
 </div> 
