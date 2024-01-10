@@ -71,7 +71,7 @@ jobs:
       pull-requests: "write"
     container: "ghcr.io/nautobot/cookiecutter-nautobot-app-drift-manager/prod:${{ github.event.inputs.drift-manager-tag }}"
     env:
-      GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      GITHUB_TOKEN: "${{ secrets.GH_NAUTOBOT_BOT_TOKEN }}"
     steps:
       - name: "Configure Rebake Arguments"
         id: "config"
