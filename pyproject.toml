@@ -140,6 +140,9 @@ ignore = [
     "D416",  # Section name ends in colon
 ]
 
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
 [tool.ruff.per-file-ignores]
 "nautobot_firewall_models/migrations/*" = [
     "D1",  # pydocstyle
