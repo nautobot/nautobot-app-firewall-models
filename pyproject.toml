@@ -114,9 +114,6 @@ supported_nautobot_versions = [
 [tool.ruff]
 line-length = 120
 target-version = "py38"
-exclude = [
-    "migrations",
-]
 
 [tool.ruff.lint]
 select = [
@@ -137,8 +134,24 @@ ignore = [
     "D212",  # Multi-line docstring summary should start at the first line
     "D213",  # Multi-line docstring summary should start at the second line
 
-    # Produces a lot of issues in the current codebase.
+    # Produces issues in the current codebase.
     "D401",  # First line of docstring should be in imperative mood
+    "D407",  # Missing dashed underline after section
+    "D416",  # Section name ends in colon
+]
+
+[tool.ruff.per-file-ignores]
+"nautobot_firewall_models/migrations/*" = [
+    "D1",  # pydocstyle
+    "D2",  # pydocstyle
+    "D3",  # pydocstyle
+    "D4",  # pydocstyle
+]
+"nautobot_firewall_models/tests/*" = [
+    "D1",  # pydocstyle
+    "D2",  # pydocstyle
+    "D3",  # pydocstyle
+    "D4",  # pydocstyle
 ]
 
 [build-system]
