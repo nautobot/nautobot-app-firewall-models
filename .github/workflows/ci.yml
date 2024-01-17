@@ -136,8 +136,8 @@ jobs:
         run: "cp development/creds.example.env development/creds.env"
       - name: "Linting: pylint"
         run: "poetry run invoke pylint"
-      - name: "Checking: app-config-schema"
-        run: "poetry run invoke check-app-config-schema"
+      - name: "Checking: App Config"
+        run: "poetry run invoke validate-app-config"
       - name: "Checking: migrations"
         run: "poetry run invoke check-migrations"
   unittest:
