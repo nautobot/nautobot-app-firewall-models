@@ -53,6 +53,8 @@ mkdocs-version-annotations = "1.0.0"
 mkdocstrings = "0.22.0"
 mkdocstrings-python = "1.5.2"
 towncrier = "~23.6.0"
+to-json-schema = "*"
+jsonschema = "*"
 
 [tool.poetry.extras]
 all = [
