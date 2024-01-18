@@ -833,8 +833,8 @@ def generate_app_config_schema(context):
 
     - The current configuration in `PLUGINS_CONFIG`
     - `NautobotAppConfig.default_settings`
-    - `NautobotAppConfig.required_settings`"""
-
+    - `NautobotAppConfig.required_settings`
+    """
     start(context, service="nautobot")
     nbshell(context, file="development/app_config_schema.py", env={"APP_CONFIG_SCHEMA_COMMAND": "generate"})
 
