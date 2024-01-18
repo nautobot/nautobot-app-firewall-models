@@ -4,24 +4,6 @@
     "$comment": "TBD: Update $id, replace `develop` with the future release tag",
     "type": "object",
     "properties": {
-        "capirca_os_map": {
-            "type": "object",
-            "properties": {
-                "cisco_ios": {
-                    "type": "string",
-                    "default": {}
-                },
-                "arista_eos": {
-                    "type": "string",
-                    "default": {}
-                }
-            },
-            "additionalProperties": false
-        },
-        "capirca_remark_pass": {
-            "type": "boolean",
-            "default": true
-        },
         "allowed_status": {
             "type": "array",
             "items": {
@@ -30,6 +12,14 @@
             "default": [
                 "Active"
             ]
+        },
+        "capirca_remark_pass": {
+            "type": "boolean",
+            "default": true
+        },
+        "capirca_os_map": {
+            "type": "object",
+            "default": {}
         },
         "protect_on_delete": {
             "type": "boolean",

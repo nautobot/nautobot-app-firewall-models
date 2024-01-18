@@ -40,8 +40,17 @@ def _main():
         }
         app_config = import_module(package_name).config
         _enrich_object_schema(schema, app_config.default_settings, app_config.required_settings)
-        schema_path.write_text(json.dumps(schema, indent=4))
-        print(f"\n==================\nGenerated schema:\n{schema_path}\nVerify the file manually and commit it.")
+        schema_path.write_text(json.dumps(schema, indent=4) + "\n")
+        print(f"\n==================\nGenerated schema:\n\n{schema_path}\n")
+        print(
+            "WARNING: Review and edit the generated file before committing.\n"
+            "\n"
+            "Its content is inferred from:\n"
+            "\n"
+            "- The current configuration in `PLUGINS_CONFIG`\n"
+            "- `NautobotAppConfig.default_settings`\n"
+            "- `NautobotAppConfig.required_settings`"
+        )
     elif command == "validate":
         schema = json.loads(schema_path.read_text())
         jsonschema.validate(app_config, schema)

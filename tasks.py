@@ -825,7 +825,16 @@ def tests(context, failfast=False, keepdb=False, lint_only=False):
 
 @task
 def generate_app_config_schema(context):
-    """Generate the app config schema based on the app config."""
+    """Generate the app config schema from the current app config.
+
+    WARNING: Review and edit the generated file before committing.
+
+    Its content is inferred from:
+
+    - The current configuration in `PLUGINS_CONFIG`
+    - `NautobotAppConfig.default_settings`
+    - `NautobotAppConfig.required_settings`"""
+
     start(context, service="nautobot")
     nbshell(context, file="development/app_config_schema.py", env={"APP_CONFIG_SCHEMA_COMMAND": "generate"})
 
