@@ -117,10 +117,7 @@ target-version = "py38"
 
 [tool.ruff.lint]
 select = [
-    "D1",  # pydocstyle
-    "D2",  # pydocstyle
-    "D3",  # pydocstyle
-    "D4",  # pydocstyle
+    "D",  # pydocstyle
 ]
 ignore = [
     # warning: `one-blank-line-before-class` (D203) and `no-blank-line-before-class` (D211) are incompatible.
@@ -145,16 +142,10 @@ convention = "google"
 
 [tool.ruff.per-file-ignores]
 "nautobot_firewall_models/migrations/*" = [
-    "D1",  # pydocstyle
-    "D2",  # pydocstyle
-    "D3",  # pydocstyle
-    "D4",  # pydocstyle
+    "D",  # pydocstyle
 ]
 "nautobot_firewall_models/tests/*" = [
-    "D1",  # pydocstyle
-    "D2",  # pydocstyle
-    "D3",  # pydocstyle
-    "D4",  # pydocstyle
+    "D",  # pydocstyle
 ]
 
 [build-system]
