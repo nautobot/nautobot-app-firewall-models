@@ -70,7 +70,7 @@ Use the `default_status` plugin configuration setting to change the default valu
 ```python
 PLUGINS_CONFIG = {
     "nautobot_firewall_models": {
-        "default_status": "Active"
+        "default_status": "Active",
         "allowed_status": ["Active"], # default shown, `[]` allows all
         "capirca_remark_pass": True,
         "capirca_os_map": {
