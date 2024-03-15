@@ -137,7 +137,7 @@ ignore = [
     "D212",  # Multi-line docstring summary should start at the first line
     "D213",  # Multi-line docstring summary should start at the second line
 
-    # Produces a lot of issues in the current codebase.
+    # Produces issues in the current codebase.
     "D401",  # First line of docstring should be in imperative mood
     "D407",  # Missing dashed underline after section
     "D416",  # Section name ends in colon
