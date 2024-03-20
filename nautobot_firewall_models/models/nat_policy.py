@@ -32,7 +32,7 @@ class NATPolicyRule(PrimaryModel):
     """
 
     # Metadata
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, blank=True)
     remark = models.BooleanField(default=False)
     log = models.BooleanField(default=False)
     status = StatusField(

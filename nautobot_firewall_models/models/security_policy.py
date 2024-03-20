@@ -32,7 +32,7 @@ class PolicyRule(PrimaryModel):
     Firewall policies are typically made up of several individual rules.
     """
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, blank=True)
     source_users = models.ManyToManyField(
         blank=True, to="nautobot_firewall_models.UserObject", related_name="policy_rules"
     )
