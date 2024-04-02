@@ -24,6 +24,18 @@
                 </td>
             </tr>
             <tr>
+                <td>Address Object Groups</td>
+                <td>
+                    <ul>
+                        {% for i in object.address_object_groups.all %}
+                            <li><a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a></li>
+                        {% empty %}
+                            None
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
                 <td>Status</td>
                 <td><span class="label" style="color: {{ object.status.color|fgcolor }}; background-color: #{{ object.status.color }}">{{ object.get_status_display }}</span></td>
             </tr>
