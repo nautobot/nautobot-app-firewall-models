@@ -170,12 +170,13 @@ class AddressObjectGroupForm(LocalContextModelForm, NautobotModelForm):
     """AddressObjectGroup creation/edit form."""
 
     address_objects = DynamicModelMultipleChoiceField(queryset=models.AddressObject.objects.all(), required=False)
+    address_object_groups = DynamicModelMultipleChoiceField(queryset=models.AddressObjectGroup.objects.all(), required=False)
 
     class Meta:
         """Meta attributes."""
 
         model = models.AddressObjectGroup
-        fields = ["name", "description", "address_objects", "status", "tags"]
+        fields = ["name", "description", "address_objects", "address_object_groups", "status", "tags"]
 
 
 class AddressObjectGroupBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):

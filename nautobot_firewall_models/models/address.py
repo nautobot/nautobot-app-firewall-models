@@ -242,6 +242,11 @@ class AddressObjectGroup(PrimaryModel):
         related_name="address_object_groups",
         blank=True,
     )
+    address_object_groups = models.ManyToManyField(
+        to="self",
+        related_name="address_object_groups",
+        blank=True,
+    )
     status = StatusField(
         on_delete=models.PROTECT,
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related

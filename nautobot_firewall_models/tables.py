@@ -61,7 +61,7 @@ class AddressObjectGroupTable(StatusTableMixin, BaseTable):
         """Meta attributes."""
 
         model = models.AddressObjectGroup
-        fields = ("pk", "name", "description", "address_objects", "status")
+        fields = ("pk", "name", "description", "address_objects", "address_object_groups", "status")
 
 
 class ApplicationObjectTable(StatusTableMixin, BaseTable):
