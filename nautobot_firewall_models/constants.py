@@ -23,103 +23,103 @@ LOGGING_MAP = {"true": "true", "false": "disable"}
 # This is used to provide hints (for type), and dotted string back (for lib) to Capirca
 CAPIRCA_MAPPER = {
     "arista": {
-        "lib": "capirca.lib.arista.Arista",
+        "lib": "aerleon.lib.arista.Arista",
         "type": "filter-name",
     },
     "aruba": {
-        "lib": "capirca.lib.aruba.Aruba",
+        "lib": "aerleon.lib.aruba.Aruba",
         "type": "filter-name",
     },
     "brocade": {
-        "lib": "capirca.lib.brocade.Brocade",
+        "lib": "aerleon.lib.brocade.Brocade",
         "type": "filter-name",
     },
     "cisco": {
-        "lib": "capirca.lib.cisco.Cisco",
+        "lib": "aerleon.lib.cisco.Cisco",
         "type": "filter-name",
     },
     "ciscoasa": {
-        "lib": "capirca.lib.ciscoasa.CiscoASA",
+        "lib": "aerleon.lib.ciscoasa.CiscoASA",
         "type": "filter-name",
     },
     "cisconx": {
-        "lib": "capirca.lib.cisconx.ciscoNX",
+        "lib": "aerleon.lib.cisconx.ciscoNX",
         "type": "filter-name",
     },
     "cloudarmor": {
-        "lib": "capirca.lib.cloudarmor.CloudArmor",
+        "lib": "aerleon.lib.cloudarmor.CloudArmor",
         "type": "filter_type",
     },
     "gce": {
-        "lib": "capirca.lib.gce.GCE",
+        "lib": "aerleon.lib.gce.GCE",
         "type": "filter-name",
     },
     "gcp_hf": {
-        "lib": "capirca.lib.gcp.GCP",
+        "lib": "aerleon.lib.gcp.GCP",
         "type": "filter-name",
     },
     "ipset": {
-        "lib": "capirca.lib.ipset.Ipset",
+        "lib": "aerleon.lib.ipset.Ipset",
         "type": "direction",
     },
     "iptables": {
-        "lib": "capirca.lib.iptables.Iptables",
+        "lib": "aerleon.lib.iptables.Iptables",
         "type": "direction",
     },
     "juniper": {
-        "lib": "capirca.lib.juniper.Juniper",
+        "lib": "aerleon.lib.juniper.Juniper",
         "type": "filter-name",
     },
     "juniperevo": {
-        "lib": "capirca.lib.juniperevo.JuniperEvo",
+        "lib": "aerleon.lib.juniperevo.JuniperEvo",
         "type": "filter-name",
     },
     "junipermsmpc": {
-        "lib": "capirca.lib.junipermsmpc.JuniperMSMPC",
+        "lib": "aerleon.lib.junipermsmpc.JuniperMSMPC",
         "type": "filter-name",
     },
     "srx": {
-        "lib": "capirca.lib.junipersrx.JuniperSRX",
+        "lib": "aerleon.lib.junipersrx.JuniperSRX",
         "type": "zone",
     },
     "k8s": {
-        "lib": "capirca.lib.k8s.K8s",
+        "lib": "aerleon.lib.k8s.K8s",
         "type": "direction",
     },
     "nftables": {
-        "lib": "capirca.lib.nftables.Nftables",
+        "lib": "aerleon.lib.nftables.Nftables",
         "type": "address_family",
     },
     "nsxv": {
-        "lib": "capirca.lib.nsxv.Nsxv",
+        "lib": "aerleon.lib.nsxv.Nsxv",
         "type": "filter-name",
     },
     "packetfilter": {
-        "lib": "capirca.lib.packetfilter.PacketFilter",
+        "lib": "aerleon.lib.packetfilter.PacketFilter",
         "type": "filter-name",
     },
     "paloalto": {
-        "lib": "capirca.lib.paloaltofw.PaloAltoFW",
+        "lib": "aerleon.lib.paloaltofw.PaloAltoFW",
         "type": "zone",
     },
     "pcap": {
-        "lib": "capirca.lib.pcap.PcapFilter",
+        "lib": "aerleon.lib.pcap.PcapFilter",
         "type": "filter-name",
     },
     "speedway": {
-        "lib": "capirca.lib.speedway.Speedway",
+        "lib": "aerleon.lib.speedway.Speedway",
         "type": "direction",
     },
     "srxlo": {
-        "lib": "capirca.lib.srxlo.SRXlo",
+        "lib": "aerleon.lib.srxlo.SRXlo",
         "type": "filter-name",
     },
     "windows_advfirewall": {
-        "lib": "capirca.lib.windows_advfirewall.WindowsAdvFirewall",
+        "lib": "aerleon.lib.windows_advfirewall.WindowsAdvFirewall",
         "type": "direction",
     },
     "windows_ipsec": {
-        "lib": "capirca.lib.windows_ipsec.WindowsIPSec",
+        "lib": "aerleon.lib.windows_ipsec.WindowsIPSec",
         "type": "filter-name",
     },
 }
