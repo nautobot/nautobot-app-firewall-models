@@ -32,7 +32,7 @@ python = ">=3.8,<3.13"
 # Used for local development
 nautobot = "^2.0.0"
 netutils = "^1.0.0"
-capirca = "^2.0.6"
+aerleon = "^1.7.0"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "*"

@@ -4,9 +4,9 @@
 import logging
 import re
 import unicodedata
+from aerleon.lib.naming import Naming
+from aerleon.lib import policy
 
-from capirca.lib import policy
-from capirca.lib.naming import Naming
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.utils.module_loading import import_string
