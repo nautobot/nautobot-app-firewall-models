@@ -2,26 +2,26 @@
 
 from django.conf import settings
 
-# This is used to map the slug of the platform in the customers environment to the expected name that Capirca is looking for
-CAPIRCA_OS_MAPPER = {}
+# This is used to map the slug of the platform in the customers environment to the expected name that Aerleon is looking for
+AERLEON_OS_MAPPER = {}
 
 PLUGIN_CFG = settings.PLUGINS_CONFIG.get("nautobot_firewall_models", {})
 
-if PLUGIN_CFG.get("capirca_os_map"):
-    CAPIRCA_OS_MAPPER = PLUGIN_CFG["capirca_os_map"]
+if PLUGIN_CFG.get("aerleon_os_map"):
+    AERLEON_OS_MAPPER = PLUGIN_CFG["aerleon_os_map"]
 
 # This is used to determine which status slug names are valid
 ALLOW_STATUS = ["Active"]
 if PLUGIN_CFG.get("allowed_status"):
     ALLOW_STATUS = PLUGIN_CFG["allowed_status"]
 
-# This is used to whitelist actions that align with Capirca
+# This is used to whitelist actions that align with Aerleon
 ACTION_MAP = {"allow": "accept", "deny": "deny", "drop": "reject"}  # no next or reject-with-tcp-rst
-# This is used to transpose string booleans to Capirca expectations
+# This is used to transpose string booleans to Aerleon expectations
 LOGGING_MAP = {"true": "true", "false": "disable"}
 
-# This is used to provide hints (for type), and dotted string back (for lib) to Capirca
-CAPIRCA_MAPPER = {
+# This is used to provide hints (for type), and dotted string back (for lib) to Aerleon
+AERLEON_MAPPER = {
     "arista": {
         "lib": "aerleon.lib.arista.Arista",
         "type": "filter-name",

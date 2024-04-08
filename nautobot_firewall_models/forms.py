@@ -889,18 +889,18 @@ class NATPolicyBulkEditForm(NautobotBulkEditForm):
         ]
 
 
-# CapircaPolicy
+# AerleonPolicy
 
 
-class CapircaPolicyForm(NautobotModelForm):
-    """Filter Form for CapircaPolicy instances."""
+class AerleonPolicyForm(NautobotModelForm):
+    """Filter Form for AerleonPolicy instances."""
 
     device = DynamicModelChoiceField(queryset=Device.objects.all())
 
     class Meta:
         """Boilerplate form Meta data for compliance rule."""
 
-        model = models.CapircaPolicy
+        model = models.AerleonPolicy
         fields = (
             "device",
             "pol",
@@ -910,30 +910,30 @@ class CapircaPolicyForm(NautobotModelForm):
         )
 
 
-class CapircaPolicyFilterForm(NautobotFilterForm):
-    """Form for CapircaPolicy instances."""
+class AerleonPolicyFilterForm(NautobotFilterForm):
+    """Form for AerleonPolicy instances."""
 
-    model = models.CapircaPolicy
+    model = models.AerleonPolicy
 
     q = forms.CharField(required=False, label="Search")
 
 
-class CapircaPolicyBulkEditForm(NautobotBulkEditForm):
-    """BulkEdit form for CapircaPolicy instances."""
+class AerleonPolicyBulkEditForm(NautobotBulkEditForm):
+    """BulkEdit form for AerleonPolicy instances."""
 
-    pk = forms.ModelMultipleChoiceField(queryset=models.CapircaPolicy.objects.all(), widget=forms.MultipleHiddenInput)
+    pk = forms.ModelMultipleChoiceField(queryset=models.AerleonPolicy.objects.all(), widget=forms.MultipleHiddenInput)
 
     class Meta:
-        """Boilerplate form Meta data for CapircaPolicy."""
+        """Boilerplate form Meta data for AerleonPolicy."""
 
         nullable_fields = []
 
 
-class CapircaPolicyCSVForm(CustomFieldModelCSVForm):
-    """CSV Form for CapircaPolicy instances."""
+class AerleonPolicyCSVForm(CustomFieldModelCSVForm):
+    """CSV Form for AerleonPolicy instances."""
 
     class Meta:
-        """Boilerplate form Meta data for CapircaPolicy."""
+        """Boilerplate form Meta data for AerleonPolicy."""
 
-        model = models.CapircaPolicy
-        fields = models.CapircaPolicy.csv_headers
+        model = models.AerleonPolicy
+        fields = models.AerleonPolicy.csv_headers
