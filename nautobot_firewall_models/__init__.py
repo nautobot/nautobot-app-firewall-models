@@ -22,8 +22,8 @@ class NautobotFirewallModelsConfig(NautobotAppConfig):
     min_version = "2.0.0"
     max_version = "2.9999"
     default_settings = {
-        "capirca_remark_pass": True,
-        "capirca_os_map": {},
+        "aerleon_remark_pass": True,
+        "aerleon_os_map": {},
         "allowed_status": ["Active"],
         "default_status": "Active",
         "protect_on_delete": True,
