@@ -211,8 +211,8 @@ class NATPolicyFilterSet(BaseFilterSet, NautobotFilterSet):
         fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
-class CapircaPolicyFilterSet(NautobotFilterSet):
-    """Filter for CapircaPolicy."""
+class AerleonPolicyFilterSet(NautobotFilterSet):
+    """Filter for AerleonPolicy."""
 
     device = NaturalKeyOrPKMultipleChoiceFilter(
         field_name="device",
@@ -224,7 +224,7 @@ class CapircaPolicyFilterSet(NautobotFilterSet):
     class Meta:
         """Meta attributes for filter."""
 
-        model = models.CapircaPolicy
+        model = models.AerleonPolicy
         fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 

@@ -331,16 +331,16 @@ class NATPolicyTable(StatusTableMixin, BaseTable):
         )
 
 
-class CapircaPolicyTable(BaseTable):
+class AerleonPolicyTable(BaseTable):
     """Table for list view."""
 
     pk = ToggleColumn()
     device = tables.TemplateColumn(
-        template_code="""<a href="{% url 'plugins:nautobot_firewall_models:capircapolicy' pk=record.pk  %}" <strong>{{ record.device }}</strong></a> """
+        template_code="""<a href="{% url 'plugins:nautobot_firewall_models:aerleonpolicy' pk=record.pk  %}" <strong>{{ record.device }}</strong></a> """
     )
 
     class Meta(BaseTable.Meta):
         """Meta attributes."""
 
-        model = models.CapircaPolicy
+        model = models.AerleonPolicy
         fields = ("pk", "device")

@@ -337,17 +337,17 @@ class TestNATPolicyModels(TestCase):
         )
 
 
-class TestCapircaModels(TestCase):
-    """Test the Capirca model."""
+class TestAerleonModels(TestCase):
+    """Test the Aerleon model."""
 
     def setUp(self) -> None:
         """Create the data."""
-        fixtures.create_capirca_env()
+        fixtures.create_aerleon_env()
 
-    def test_capirca_creates_model(self):
+    def test_aerleon_creates_model(self):
         """Test method to create model."""
         device_obj = Device.objects.get(name="DFW02-WAN00")
-        cap_obj = CapircaPolicy.objects.create(device=device_obj)
+        cap_obj = AerleonPolicy.objects.create(device=device_obj)
         svc = "PGSQL = 5432/tcp"
         self.assertIn(svc, cap_obj.svc)
         net = "printer = 10.0.0.100/32"

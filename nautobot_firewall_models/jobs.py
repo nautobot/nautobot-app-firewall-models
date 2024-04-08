@@ -3,16 +3,16 @@ from nautobot.extras.jobs import Job, MultiObjectVar, get_task_logger
 from nautobot.core.celery import register_jobs
 
 from nautobot.dcim.models import Device
-from nautobot_firewall_models.models import CapircaPolicy
+from nautobot_firewall_models.models import AerleonPolicy
 from nautobot_firewall_models.models import Policy
 
 logger = get_task_logger(__name__)
 
 
-name = "Capirca Jobs"  # pylint: disable=invalid-name
+name = "Aerleon Jobs"  # pylint: disable=invalid-name
 
 
-class RunCapircaJob(Job):  # pylint disable=too-few-public-method
+class RunAerleonJob(Job):  # pylint disable=too-few-public-method
     """Class definition to use as Mixin for form definitions."""
 
     device = MultiObjectVar(model=Device, required=False)
@@ -20,8 +20,8 @@ class RunCapircaJob(Job):  # pylint disable=too-few-public-method
     class Meta:
         """Meta object boilerplate for reservations."""
 
-        name = "Generate FW Config via Capirca."
-        description = "Generate FW Config via Capirca and update the models."
+        name = "Generate FW Config via Aerleon."
+        description = "Generate FW Config via Aerleon and update the models."
         commit_default = True
         has_sensitive_variables = False
 
@@ -48,9 +48,9 @@ class RunCapircaJob(Job):  # pylint disable=too-few-public-method
         for dev in devices:
             device_obj = Device.objects.get(pk=dev)
             logger.debug("Running against Device: `%s`", str(device_obj))
-            CapircaPolicy.objects.update_or_create(device=device_obj)
+            AerleonPolicy.objects.update_or_create(device=device_obj)
             logger.info(f"{device_obj} Updated", extra={"object": device_obj})
 
 
-jobs = [RunCapircaJob]
+jobs = [RunAerleonJob]
 register_jobs(*jobs)
