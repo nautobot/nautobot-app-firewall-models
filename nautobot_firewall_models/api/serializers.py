@@ -160,13 +160,13 @@ class NATPolicySerializer(NautobotModelSerializer):
         fields = "__all__"
 
 
-class CapircaPolicySerializer(NautobotModelSerializer):
-    """CapircaPolicy Serializer."""
+class AerleonPolicySerializer(NautobotModelSerializer):
+    """AerleonPolicy Serializer."""
 
     class Meta:
         """Meta attributes."""
 
-        model = models.CapircaPolicy
+        model = models.AerleonPolicy
         fields = "__all__"
 
 

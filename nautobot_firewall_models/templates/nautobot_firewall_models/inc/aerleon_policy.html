@@ -1,0 +1,7 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Aerleon Firewall Configurations</strong> - 
+        <a href="{% url 'plugins:nautobot_firewall_models:aerleonpolicy_devicedetail' pk=object.pk %}"><i class="mdi mdi-file-document-outline"></i></a>
+        <a href="{% url 'extras:job_run_by_class_path' class_path='nautobot_firewall_models.jobs.RunAerleonJob' %}?device={{ object.pk }}"><i class="mdi mdi-play-circle" title="Execute Aerleon Jobs"></i></a>
+    </div>
+</div> 

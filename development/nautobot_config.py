@@ -132,7 +132,7 @@ PLUGINS = ["nautobot_firewall_models"]
 # Each key in the dictionary is the name of an installed App and its value is a dictionary of settings.
 # PLUGINS_CONFIG = {
 #     "nautobot_firewall_models": {
-#         "capirca_os_map": {
+#         "aerleon_os_map": {
 #             "cisco_ios": "cisco",
 #             "arista_eos": "arista",
 #         }

@@ -396,8 +396,8 @@ def assign_policies():  # pylint: disable=too-many-locals
     NATPolicyDynamicGroupM2M.objects.get_or_create(nat_policy=nat_policy_3, dynamic_group=dynamic_group, weight=1000)
 
 
-def create_capirca_env():
-    """Create objects that are Capirca Ready."""  # pylint: disable=too-many-locals, too-many-statements
+def create_aerleon_env():
+    """Create objects that are Aerleon Ready."""  # pylint: disable=too-many-locals, too-many-statements
     assign_policies()
     namespace, _ = Namespace.objects.get_or_create(name="global")
     status = Status.objects.get(name="Active")
@@ -433,6 +433,6 @@ def create_capirca_env():
     addr_obj4.prefix = prefix
     addr_obj4.validated_save()
 
-    job = Job.objects.get(name="Generate FW Config via Capirca.")
+    job = Job.objects.get(name="Generate FW Config via Aerleon.")
     job.enabled = True
     job.validated_save()

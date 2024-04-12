@@ -13,11 +13,11 @@
                 "Active"
             ]
         },
-        "capirca_remark_pass": {
+        "aerleon_remark_pass": {
             "type": "boolean",
             "default": true
         },
-        "capirca_os_map": {
+        "caerleon_os_map": {
             "type": "object",
             "default": {}
         },

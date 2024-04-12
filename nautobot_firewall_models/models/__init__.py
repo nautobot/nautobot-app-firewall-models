@@ -6,8 +6,8 @@ from .address import (
     FQDN,
     IPRange,
 )
-from .capirca_policy import (
-    CapircaPolicy,
+from .aerleon_policy import (
+    AerleonPolicy,
 )
 from .nat_policy import (
     NATPolicy,
@@ -33,9 +33,9 @@ from .zone import Zone
 __all__ = (
     "AddressObject",
     "AddressObjectGroup",
+    "AerleonPolicy",
     "ApplicationObject",
     "ApplicationObjectGroup",
-    "CapircaPolicy",
     "FQDN",
     "IPRange",
     "NATPolicy",

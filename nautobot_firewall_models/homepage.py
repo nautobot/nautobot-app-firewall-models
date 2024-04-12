@@ -1,7 +1,7 @@
 """Adds App items to homepage."""
 from nautobot.core.apps import HomePageItem, HomePagePanel
 
-from nautobot_firewall_models.models import Policy, PolicyRule, CapircaPolicy, NATPolicy, NATPolicyRule
+from nautobot_firewall_models.models import Policy, PolicyRule, AerleonPolicy, NATPolicy, NATPolicyRule
 
 layout = (
     HomePagePanel(
@@ -25,12 +25,12 @@ layout = (
                 permissions=["nautobot_firewall_models.view_natpolicy"],
             ),
             HomePageItem(
-                name="Capirca Policies",
-                model=CapircaPolicy,
+                name="Aerleon Policies",
+                model=AerleonPolicy,
                 weight=300,
-                link="plugins:nautobot_firewall_models:capircapolicy_list",
+                link="plugins:nautobot_firewall_models:aerleonpolicy_list",
                 description="Firewall Policies",
-                permissions=["nautobot_firewall_models.view_capircapolicy"],
+                permissions=["nautobot_firewall_models.view_aerleonpolicy"],
             ),
             HomePageItem(
                 name="Security Rules",
