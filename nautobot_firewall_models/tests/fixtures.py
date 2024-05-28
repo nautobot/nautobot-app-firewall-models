@@ -1,4 +1,5 @@
 """Create basic objects for use in test class setup."""
+
 # flake8: noqa: F403,405
 from django.contrib.contenttypes.models import ContentType
 from nautobot.dcim.models import Device, DeviceType, Manufacturer, Platform, Location, LocationType
@@ -14,9 +15,10 @@ from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard
 def create_ip_range():
     """Creates 3 IPRange objects."""
     status = Status.objects.get(name="Active")
-    vrf, _ = VRF.objects.get_or_create(name="random_vrf")
-    IPRange.objects.get_or_create(start_address="192.168.0.1", end_address="192.168.0.10", vrf=None, status=status)
-    IPRange.objects.get_or_create(start_address="192.168.0.1", end_address="192.168.0.10", vrf=vrf, status=status)
+    vrf1, _ = VRF.objects.get_or_create(name="random_vrf")
+    vrf2, _ = VRF.objects.get_or_create(name="another_random_vrf")
+    IPRange.objects.get_or_create(start_address="192.168.0.1", end_address="192.168.0.10", vrf=vrf1, status=status)
+    IPRange.objects.get_or_create(start_address="192.168.0.1", end_address="192.168.0.10", vrf=vrf2, status=status)
     return IPRange.objects.get_or_create(start_address="192.168.0.11", end_address="192.168.0.20", status=status)[0]
 
 
