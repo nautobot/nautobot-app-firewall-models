@@ -1,6 +1,6 @@
 ---
 name: "CI"
-concurrency:  # Cancel any existing runs of this workflow for this same PR
+concurrency: # Cancel any existing runs of this workflow for this same PR
   group: "${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: true
 on: # yamllint disable-line rule:truthy rule:comments
@@ -153,9 +153,9 @@ jobs:
           - python-version: "3.11"
             db-backend: "postgresql"
             nautobot-version: "2.0.0"
-          # - python-version: "3.11"
-          #   db-backend: "mysql"
-          #   nautobot-version: "stable"
+          - python-version: "3.11"
+            db-backend: "mysql"
+            nautobot-version: "stable"
     runs-on: "ubuntu-22.04"
     env:
       INVOKE_NAUTOBOT_FIREWALL_MODELS_PYTHON_VER: "${{ matrix.python-version }}"
