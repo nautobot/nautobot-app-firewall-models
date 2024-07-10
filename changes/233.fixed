@@ -1,1 +1,1 @@
-Fixed PolicyRule and NATPolicyRule breaking if 
+Fixed PolicyRule and NATPolicyRule breaking if name is blank.
