@@ -1,4 +1,5 @@
 """Unit tests for API views."""
+
 # flake8: noqa: F403,405
 # pylint: disable=invalid-name
 # pylint: disable=duplicate-code
@@ -15,7 +16,7 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
     """Test the IPRange viewsets."""
 
     model = models.IPRange
-    brief_fields = ["display", "end_address", "id", "start_address", "url"]
+    brief_fields = ["display", "end_address", "id", "start_address", "url", "vrf"]
     bulk_update_data = {"description": "test update description"}
 
     @classmethod
