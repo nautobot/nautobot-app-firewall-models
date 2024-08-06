@@ -8,7 +8,6 @@ import nautobot_firewall_models.utils
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("extras", "0113_saved_views"),
         ("nautobot_firewall_models", "0020_field_cleanups"),
     ]
 

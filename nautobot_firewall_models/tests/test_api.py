@@ -9,7 +9,7 @@ from nautobot.dcim.models import Location, Platform, DeviceType, Device
 from nautobot.extras.models import Status, Role
 from nautobot.ipam.models import Prefix, VRF
 from nautobot.users.models import ObjectPermission
-from rest_framework import status
+from rest_framework import status as drf_status
 
 from nautobot_firewall_models import models
 from . import fixtures
@@ -55,14 +55,14 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
         with disable_warnings("django.request"):
             data = {"start_address": "1.0.0.1", "end_address": "1.0.0.8", "vrf": vrfs[1].pk}
             response = self.client.post(url, data, format="json", **self.header)
-            self.assertHttpStatus(response, status.HTTP_201_CREATED)
+            self.assertHttpStatus(response, drf_status.HTTP_201_CREATED)
             self.assertEqual(self._get_queryset().count(), initial_count + 1)
 
         # Creating an IPRange object with the same start and end address and the same vrf fails
         with disable_warnings("django.request"):
             data = {"start_address": "1.0.0.1", "end_address": "1.0.0.8", "vrf": vrfs[0].pk}
             response = self.client.post(url, data, format="json", **self.header)
-            self.assertHttpStatus(response, status.HTTP_400_BAD_REQUEST)
+            self.assertHttpStatus(response, drf_status.HTTP_400_BAD_REQUEST)
             self.assertIn("non_field_errors", response.data)
             self.assertEqual(
                 "The fields start_address, end_address, vrf must make a unique set.",
@@ -77,7 +77,7 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
         with disable_warnings("django.request"):
             data = {"start_address": "2.0.0.1", "end_address": "2.0.0.8"}
             response = self.client.post(url, data, format="json", **self.header)
-            self.assertHttpStatus(response, status.HTTP_400_BAD_REQUEST)
+            self.assertHttpStatus(response, drf_status.HTTP_400_BAD_REQUEST)
             self.assertIn("non_field_errors", response.data)
             self.assertEqual(
                 "The fields start_address, end_address must make a unique set.",
@@ -89,7 +89,7 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
         with disable_warnings("django.request"):
             data = {"start_address": "2.0.0.1", "end_address": "2.0.0.8", "vrf": vrfs[0].pk}
             response = self.client.post(url, data, format="json", **self.header)
-            self.assertHttpStatus(response, status.HTTP_201_CREATED)
+            self.assertHttpStatus(response, drf_status.HTTP_201_CREATED)
             self.assertEqual(self._get_queryset().count(), initial_count + 3)
 
 
