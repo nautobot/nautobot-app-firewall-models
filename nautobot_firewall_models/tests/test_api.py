@@ -10,7 +10,6 @@ from nautobot.extras.models import Status, Role
 from nautobot.ipam.models import Prefix, VRF
 from nautobot.users.models import ObjectPermission
 from rest_framework import status
-from rest_framework.exceptions import ErrorDetail
 
 from nautobot_firewall_models import models
 from . import fixtures
