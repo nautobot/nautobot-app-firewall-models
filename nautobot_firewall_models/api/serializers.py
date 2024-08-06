@@ -1,5 +1,7 @@
 """API serializers for firewall models."""
+
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator, UniqueValidator
 from nautobot.apps.api import NautobotModelSerializer, ValidatedModelSerializer
 
 from nautobot_firewall_models import models
@@ -16,6 +18,30 @@ class IPRangeSerializer(NautobotModelSerializer):
 
         model = models.IPRange
         fields = "__all__"
+
+        # Omit the UniqueTogetherValidators that would be automatically added to validate (start_address, end_address, vrf).
+        # This prevents vrf from being interpreted as a required field.
+        validators = []
+
+    def validate(self, data):
+        """Custom validate method to enforce unique constraints on IPRange model."""
+        # Validate uniqueness of (start_address, end_address, vrf) since we omitted the automatically-created validator above.
+        if data.get("vrf", None):
+            validator = UniqueTogetherValidator(
+                queryset=models.IPRange.objects.all(), fields=("start_address", "end_address", "vrf")
+            )
+            validator(data, self)
+
+        else:
+            validator = UniqueTogetherValidator(
+                queryset=models.IPRange.objects.filter(vrf__isnull=True), fields=("start_address", "end_address")
+            )
+            validator(data, self)
+
+        # Enforce model validation
+        super().validate(data)
+
+        return data
 
 
 class FQDNSerializer(NautobotModelSerializer):

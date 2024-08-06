@@ -1,11 +1,16 @@
 """Unit tests for API views."""
+
 # flake8: noqa: F403,405
 # pylint: disable=invalid-name
 # pylint: disable=duplicate-code
-from nautobot.apps.testing import APIViewTestCases
+from django.contrib.contenttypes.models import ContentType
+from nautobot.apps.testing import APIViewTestCases, disable_warnings
 from nautobot.dcim.models import Location, Platform, DeviceType, Device
 from nautobot.extras.models import Status, Role
-from nautobot.ipam.models import Prefix
+from nautobot.ipam.models import Prefix, VRF
+from nautobot.users.models import ObjectPermission
+from rest_framework import status
+from rest_framework.exceptions import ErrorDetail
 
 from nautobot_firewall_models import models
 from . import fixtures
@@ -26,6 +31,67 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
             {"start_address": "10.0.0.4", "end_address": "10.0.0.10"},
         ]
         fixtures.create_ip_range()
+
+    def test_unique_validators(self):
+        """Test the unique validators for IPRange."""
+        # Add object-level permission
+        obj_perm = ObjectPermission(name="Test permission", actions=["add"])
+        obj_perm.save()
+        obj_perm.users.add(self.user)
+        obj_perm.object_types.add(ContentType.objects.get_for_model(self.model))
+
+        vrfs = (
+            VRF.objects.create(name="test vrf 1"),
+            VRF.objects.create(name="test vrf 2"),
+        )
+
+        url = self._get_list_url()
+
+        # Create an IPRange object with a vrf
+        models.IPRange.objects.create(start_address="1.0.0.1", end_address="1.0.0.8", vrf=vrfs[0])
+
+        initial_count = self._get_queryset().count()
+
+        # Create an IPRange object with the same start and end address but a different vrf
+        with disable_warnings("django.request"):
+            data = {"start_address": "1.0.0.1", "end_address": "1.0.0.8", "vrf": vrfs[1].pk}
+            response = self.client.post(url, data, format="json", **self.header)
+            self.assertHttpStatus(response, status.HTTP_201_CREATED)
+            self.assertEqual(self._get_queryset().count(), initial_count + 1)
+
+        # Creating an IPRange object with the same start and end address and the same vrf fails
+        with disable_warnings("django.request"):
+            data = {"start_address": "1.0.0.1", "end_address": "1.0.0.8", "vrf": vrfs[0].pk}
+            response = self.client.post(url, data, format="json", **self.header)
+            self.assertHttpStatus(response, status.HTTP_400_BAD_REQUEST)
+            self.assertIn("non_field_errors", response.data)
+            self.assertEqual(
+                "The fields start_address, end_address, vrf must make a unique set.",
+                response.data["non_field_errors"][0],
+            )
+            self.assertEqual(self._get_queryset().count(), initial_count + 1)
+
+        # Create another IPRange object with no vrf
+        models.IPRange.objects.create(start_address="2.0.0.1", end_address="2.0.0.8")
+
+        # Creating an IPRange object with the same start and end address with no vrf fails
+        with disable_warnings("django.request"):
+            data = {"start_address": "2.0.0.1", "end_address": "2.0.0.8"}
+            response = self.client.post(url, data, format="json", **self.header)
+            self.assertHttpStatus(response, status.HTTP_400_BAD_REQUEST)
+            self.assertIn("non_field_errors", response.data)
+            self.assertEqual(
+                "The fields start_address, end_address must make a unique set.",
+                response.data["non_field_errors"][0],
+            )
+            self.assertEqual(self._get_queryset().count(), initial_count + 2)
+
+        # Create an IPRange object with the same start and end address with a vrf
+        with disable_warnings("django.request"):
+            data = {"start_address": "2.0.0.1", "end_address": "2.0.0.8", "vrf": vrfs[0].pk}
+            response = self.client.post(url, data, format="json", **self.header)
+            self.assertHttpStatus(response, status.HTTP_201_CREATED)
+            self.assertEqual(self._get_queryset().count(), initial_count + 3)
 
 
 class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):
