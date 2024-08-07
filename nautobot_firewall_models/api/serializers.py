@@ -26,22 +26,29 @@ class IPRangeSerializer(NautobotModelSerializer):
     def validate(self, data):
         """Custom validate method to enforce unique constraints on IPRange model."""
         # Validate uniqueness of (start_address, end_address, vrf) since we omitted the automatically-created validator above.
-        if data.get("vrf", None):
-            validator = UniqueTogetherValidator(
-                queryset=models.IPRange.objects.all(), fields=("start_address", "end_address", "vrf")
-            )
-            validator(data, self)
+        start_address = data.get("start_address")
+        end_address = data.get("end_address")
+        vrf = data.get("vrf")
+        if not any([start_address is not None, end_address is not None, vrf is not None]):
+            return super().validate(data)
 
+        # Use existing object's attributes for partial updates
+        if self.instance:
+            start_address = start_address or self.instance.start_address
+            end_address = end_address or self.instance.end_address
+            vrf = vrf or self.instance.vrf
+            qs = models.IPRange.objects.exclude(pk=self.instance.pk)
         else:
-            validator = UniqueTogetherValidator(
-                queryset=models.IPRange.objects.filter(vrf__isnull=True), fields=("start_address", "end_address")
-            )
-            validator(data, self)
+            qs = models.IPRange.objects.all()
 
-        # Enforce model validation
-        super().validate(data)
+        if vrf is not None:
+            if qs.filter(start_address=start_address, end_address=end_address, vrf=vrf).exists():
+                raise serializers.ValidationError("The fields start_address, end_address, vrf must make a unique set.")
+        else:
+            if qs.filter(start_address=start_address, end_address=end_address, vrf__isnull=True).exists():
+                raise serializers.ValidationError("The fields start_address, end_address must make a unique set.")
 
-        return data
+        return super().validate(data)
 
 
 class FQDNSerializer(NautobotModelSerializer):

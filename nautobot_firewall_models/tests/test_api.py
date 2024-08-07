@@ -34,7 +34,7 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_unique_validators(self):
         """Test the unique validators for IPRange."""
         # Add object-level permission
-        obj_perm = ObjectPermission(name="Test permission", actions=["add"])
+        obj_perm = ObjectPermission(name="Test permission", actions=["add", "change"])
         obj_perm.save()
         obj_perm.users.add(self.user)
         obj_perm.object_types.add(ContentType.objects.get_for_model(self.model))
@@ -91,6 +91,29 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
             response = self.client.post(url, data, format="json", **self.header)
             self.assertHttpStatus(response, drf_status.HTTP_201_CREATED)
             self.assertEqual(self._get_queryset().count(), initial_count + 3)
+
+        # Patching an existing object to violate uniqueness constraints also fails validation
+        ip_ranges = (
+            models.IPRange.objects.create(start_address="123.0.0.1", end_address="123.0.0.10"),
+            models.IPRange.objects.create(start_address="123.0.0.11", end_address="123.0.0.20"),
+        )
+        with disable_warnings("django.request"):
+            data = {"start_address": ip_ranges[0].start_address, "end_address": ip_ranges[0].end_address}
+            url = self._get_detail_url(ip_ranges[1])
+
+            response = self.client.patch(url, data, format="json", **self.header)
+            self.assertHttpStatus(response, drf_status.HTTP_400_BAD_REQUEST)
+            self.assertIn("non_field_errors", response.data)
+            self.assertEqual(
+                "The fields start_address, end_address must make a unique set.",
+                response.data["non_field_errors"][0],
+            )
+
+            # Using a different vrf works
+            data["vrf"] = vrfs[0].pk
+            response = self.client.patch(url, data, format="json", **self.header)
+            self.assertHttpStatus(response, drf_status.HTTP_200_OK)
+            self.assertEqual(response.data["vrf"]["id"], vrfs[0].pk)
 
 
 class FQDNAPIViewTest(APIViewTestCases.APIViewTestCase):

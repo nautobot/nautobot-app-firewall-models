@@ -1,4 +1,5 @@
 """Unit tests for views."""
+
 # flake8: noqa: F403,405
 # pylint: disable=invalid-name
 # pylint: disable=duplicate-code
