@@ -1,4 +1,5 @@
 """Jobs to run backups, intended config, and compliance."""
+
 from nautobot.extras.jobs import Job, MultiObjectVar, get_task_logger
 from nautobot.core.celery import register_jobs
 
@@ -49,7 +50,7 @@ class RunCapircaJob(Job):  # pylint disable=too-few-public-method
             device_obj = Device.objects.get(pk=dev)
             logger.debug("Running against Device: `%s`", str(device_obj))
             CapircaPolicy.objects.update_or_create(device=device_obj)
-            logger.info(f"{device_obj} Updated", extra={"object": device_obj})
+            logger.info("%s Updated", device_obj, extra={"object": device_obj})
 
 
 jobs = [RunCapircaJob]
