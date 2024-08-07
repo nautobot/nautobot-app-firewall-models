@@ -1,1 +1,0 @@
-Fixed ruff excludes to use per-file excludes instead of global excludes.
