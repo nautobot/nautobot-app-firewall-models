@@ -1,12 +1,13 @@
 [tool.poetry]
 name = "nautobot-firewall-models"
-version = "2.0.3"
+version = "2.1.0"
 description = "Nautobot app to model firewall objects."
 authors = ["Network to Code, LLC <opensource@networktocode.com>"]
 license = "Apache-2.0"
 readme = "README.md"
 homepage = "https://github.com/nautobot/nautobot-app-firewall-models"
 repository = "https://github.com/nautobot/nautobot-app-firewall-models"
+documentation = "https://docs.nautobot.com/projects/firewall-models/en/latest/"
 keywords = ["nautobot", "nautobot-app", "nautobot-plugin"]
 classifiers = [
     "Intended Audience :: Developers",
@@ -19,6 +20,10 @@ classifiers = [
 ]
 packages = [
     { include = "nautobot_firewall_models" },
+]
+include = [
+    # Poetry by default will exclude files that are in .gitignore
+    "nautobot_firewall_models/static/nautobot_firewall_models/docs/**/*",
 ]
 
 [tool.poetry.dependencies]
@@ -39,7 +44,7 @@ ipython = "*"
 pylint = "*"
 pylint-django = "*"
 pylint-nautobot = "*"
-ruff = "~0.1.10"
+ruff = "*"
 yamllint = "*"
 toml = "*"
 Markdown = "*"
@@ -53,6 +58,8 @@ mkdocs-version-annotations = "1.0.0"
 mkdocstrings = "0.22.0"
 mkdocstrings-python = "1.5.2"
 towncrier = "~23.6.0"
+to-json-schema = "*"
+jsonschema = "*"
 
 [tool.poetry.extras]
 all = [
@@ -114,16 +121,10 @@ supported_nautobot_versions = [
 [tool.ruff]
 line-length = 120
 target-version = "py38"
-exclude = [
-    "migrations",
-]
 
 [tool.ruff.lint]
 select = [
-    "D1",  # pydocstyle
-    "D2",  # pydocstyle
-    "D3",  # pydocstyle
-    "D4",  # pydocstyle
+    "D",  # pydocstyle
 ]
 ignore = [
     # warning: `one-blank-line-before-class` (D203) and `no-blank-line-before-class` (D211) are incompatible.
@@ -137,8 +138,21 @@ ignore = [
     "D212",  # Multi-line docstring summary should start at the first line
     "D213",  # Multi-line docstring summary should start at the second line
 
-    # Produces a lot of issues in the current codebase.
+    # Produces issues in the current codebase.
     "D401",  # First line of docstring should be in imperative mood
+    "D407",  # Missing dashed underline after section
+    "D416",  # Section name ends in colon
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.per-file-ignores]
+"nautobot_firewall_models/migrations/*" = [
+    "D",  # pydocstyle
+]
+"nautobot_firewall_models/tests/*" = [
+    "D",  # pydocstyle
 ]
 
 [build-system]
@@ -146,12 +160,12 @@ requires = ["poetry_core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.towncrier]
-package = "nautobot"
+package = "nautobot_firewall_models"
 directory = "changes"
 filename = "docs/admin/release_notes/version_2.1.md"
 template = "development/towncrier_template.j2"
 start_string = "<!-- towncrier release notes start -->"
-issue_format = "[#{issue}](https://github.com/nautobot/nautobot/issues/{issue})"
+issue_format = "[#{issue}](https://github.com/nautobot/nautobot-app-firewall-models/issues/{issue})"
 
 [[tool.towncrier.type]]
 directory = "security"

@@ -13,7 +13,7 @@ Here you will find detailed instructions on how to **install** and **configure**
 ## Install Guide
 
 !!! note
-    Apps can be installed manually or using Python's `pip`. See the [nautobot documentation](https://nautobot.readthedocs.io/en/latest/plugins/#install-the-package) for more details. The pip package name for this app is [`nautobot-firewall-models`](https://pypi.org/project/nautobot-firewall-models/).
+    Apps can be installed from the [Python Package Index](https://pypi.org/) or locally. See the [Nautobot documentation](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/installation/app-install/) for more details. The pip package name for this app is [`nautobot-firewall-models`](https://pypi.org/project/nautobot-firewall-models/).
 
 The app is available as a Python package via PyPI and can be installed with `pip`:
 
@@ -70,7 +70,7 @@ Use the `default_status` plugin configuration setting to change the default valu
 ```python
 PLUGINS_CONFIG = {
     "nautobot_firewall_models": {
-        "default_status": "Active"
+        "default_status": "Active",
         "allowed_status": ["Active"], # default shown, `[]` allows all
         "capirca_remark_pass": True,
         "capirca_os_map": {
