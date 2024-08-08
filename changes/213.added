@@ -1,3 +1,0 @@
-Added `invoke generate-app-config-schema` command to generate a JSON schema for the App config.
-Added `invoke validate-app-config` command to validate the App config against the schema.
-Added App config JSON schema.
