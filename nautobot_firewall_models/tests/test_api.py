@@ -1,18 +1,13 @@
-"""Unit tests for API views."""
+"""Unit tests for nautobot_firewall_models."""
 
-# flake8: noqa: F403,405
-# pylint: disable=invalid-name
-# pylint: disable=duplicate-code
-from django.contrib.contenttypes.models import ContentType
-from nautobot.apps.testing import APIViewTestCases, disable_warnings
-from nautobot.dcim.models import Location, Platform, DeviceType, Device
-from nautobot.extras.models import Status, Role
-from nautobot.ipam.models import Prefix, VRF
-from nautobot.users.models import ObjectPermission
-from rest_framework import status as drf_status
+from django.contrib.auth import get_user_model
+from django.test import TestCase
+from django.urls import reverse
+from nautobot.users.models import Token
+from rest_framework import status
+from rest_framework.test import APIClient
 
-from nautobot_firewall_models import models
-from . import fixtures
+User = get_user_model()
 
 
 class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
