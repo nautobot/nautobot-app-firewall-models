@@ -2,7 +2,6 @@
 
 from django.db import migrations
 
-
 affected_models = [
     {"model": "nautobot_firewall_models.AddressObjectGroup", "old": "address_objects", "new": "new_address_objects"},
     {"model": "nautobot_firewall_models.FQDN", "old": "ip_addresses", "new": "new_ip_addresses"},

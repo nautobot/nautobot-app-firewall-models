@@ -1,9 +1,9 @@
 """Load models."""
 
 from .address import (
+    FQDN,
     AddressObject,
     AddressObjectGroup,
-    FQDN,
     IPRange,
 )
 from .capirca_policy import (
@@ -11,9 +11,9 @@ from .capirca_policy import (
 )
 from .nat_policy import (
     NATPolicy,
-    NATPolicyRule,
     NATPolicyDeviceM2M,
     NATPolicyDynamicGroupM2M,
+    NATPolicyRule,
 )
 from .security_policy import (
     Policy,

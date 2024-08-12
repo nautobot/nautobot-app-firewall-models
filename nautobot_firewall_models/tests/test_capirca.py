@@ -1,8 +1,10 @@
 """Test Capirca Utils."""
-# flake8: noqa: F403,405
+
+# flake8: noqa: F403, F405
 # pylint: disable=protected-access
 from unittest import skip
 from unittest.mock import patch
+
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from nautobot.dcim.models import Device, Platform
@@ -10,7 +12,7 @@ from nautobot.extras.models import Status
 from nautobot.ipam.models import IPAddress, Namespace
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
-from nautobot_firewall_models.utils.capirca import generate_capirca_config, PolicyToCapirca, DevicePolicyToCapirca
+from nautobot_firewall_models.utils.capirca import DevicePolicyToCapirca, PolicyToCapirca, generate_capirca_config
 
 from .fixtures import create_capirca_env
 

@@ -13,7 +13,6 @@ from netaddr import IPAddress
 
 from nautobot_firewall_models.utils import get_default_status
 
-
 ###########################
 # Core Models
 ###########################

@@ -1,7 +1,6 @@
 """Creating fields for IPRange models."""
 
 from django import forms
-
 from nautobot.ipam.formfields import IPAddressFormField
 
 

@@ -1,13 +1,13 @@
 """Configurable signals."""
+
 from django.core.exceptions import ValidationError
-from django.dispatch import receiver
 from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from nautobot.dcim.models import Interface
-from nautobot.ipam.models import IPAddress, Prefix, VRF
+from nautobot.ipam.models import VRF, IPAddress, Prefix
 
 from nautobot_firewall_models import models
 from nautobot_firewall_models.constants import PLUGIN_CFG
-
 
 ON_DELETE = {
     IPAddress: ["fqdns", "address_objects"],
