@@ -1,6 +1,6 @@
 """Create basic objects for use in test class setup."""
 
-# flake8: noqa: F403, F405
+# noqa: F403, F405
 from django.contrib.contenttypes.models import ContentType
 from nautobot.dcim.models import Device, DeviceType, Location, LocationType, Manufacturer, Platform
 from nautobot.extras.models import DynamicGroup, Job, Role
