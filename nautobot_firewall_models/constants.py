@@ -1,4 +1,5 @@
 """Constants file."""
+
 from django.conf import settings
 
 # This is used to map the slug of the platform in the customers environment to the expected name that Capirca is looking for

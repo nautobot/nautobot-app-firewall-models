@@ -8,7 +8,6 @@ from nautobot.extras.utils import extras_features
 
 from nautobot_firewall_models.utils import get_default_status, model_to_json
 
-
 ###########################
 # Core Models
 ###########################

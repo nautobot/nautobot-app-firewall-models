@@ -1,6 +1,12 @@
 """Forms for the Firewall app."""
 
 from django import forms
+from nautobot.apps.forms import (
+    DynamicModelChoiceField,
+    DynamicModelMultipleChoiceField,
+    TagFilterField,
+    add_blank_choice,
+)
 from nautobot.dcim.models import Device, Interface
 from nautobot.extras.forms import (
     CustomFieldModelCSVForm,
@@ -15,12 +21,6 @@ from nautobot.extras.models import DynamicGroup, Tag
 from nautobot.ipam.models import VRF, IPAddress, Prefix
 from nautobot.tenancy.forms import TenancyFilterForm, TenancyForm
 from nautobot.tenancy.models import Tenant
-from nautobot.apps.forms import (
-    DynamicModelChoiceField,
-    DynamicModelMultipleChoiceField,
-    TagFilterField,
-    add_blank_choice,
-)
 
 from nautobot_firewall_models import choices, fields, models
 

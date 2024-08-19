@@ -1,13 +1,14 @@
 """Filtering for Firewall Model App."""
+
+import django_filters
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-import django_filters
 from nautobot.apps.filters import (
-    NautobotFilterSet,
-    StatusModelFilterSetMixin,
     MultiValueCharFilter,
     NaturalKeyOrPKMultipleChoiceFilter,
+    NautobotFilterSet,
+    StatusModelFilterSetMixin,
 )
 from nautobot.dcim.models import Device
 

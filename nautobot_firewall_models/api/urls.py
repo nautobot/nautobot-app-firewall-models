@@ -4,7 +4,6 @@ from nautobot.apps.api import OrderedDefaultRouter
 
 from nautobot_firewall_models.api import views
 
-
 router = OrderedDefaultRouter()
 router.register("address-object", views.AddressObjectViewSet)
 router.register("address-object-group", views.AddressObjectGroupViewSet)

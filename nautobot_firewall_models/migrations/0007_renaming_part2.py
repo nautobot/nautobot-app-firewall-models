@@ -1,4 +1,5 @@
 """Custom migration for moving index to the PolicyRule."""
+
 from django.db import migrations
 from django.db.models import Count
 

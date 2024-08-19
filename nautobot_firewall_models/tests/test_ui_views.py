@@ -1,13 +1,14 @@
 """Unit tests for views."""
 
-# flake8: noqa: F403,405
+# noqa: F403, F405
 # pylint: disable=invalid-name
 # pylint: disable=duplicate-code
+from nautobot.apps.testing import ViewTestCases
 from nautobot.dcim.models import Device
 from nautobot.extras.models.statuses import Status
-from nautobot.apps.testing import ViewTestCases
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
+
 from . import fixtures
 
 

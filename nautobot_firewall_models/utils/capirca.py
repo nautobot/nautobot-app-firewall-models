@@ -1,23 +1,23 @@
 """Management command to bootstrap dummy data for firewall model app."""
+
 # pylint: disable=too-many-instance-attributes,too-many-locals
 import logging
 import re
 import unicodedata
-from capirca.lib.naming import Naming
-from capirca.lib import policy
 
+from capirca.lib import policy
+from capirca.lib.naming import Naming
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.utils.module_loading import import_string
-
 from nautobot.dcim.models import Platform
 
 from nautobot_firewall_models.constants import (
-    ALLOW_STATUS,
-    CAPIRCA_OS_MAPPER,
     ACTION_MAP,
-    LOGGING_MAP,
+    ALLOW_STATUS,
     CAPIRCA_MAPPER,
+    CAPIRCA_OS_MAPPER,
+    LOGGING_MAP,
     PLUGIN_CFG,
 )
 from nautobot_firewall_models.utils import model_to_json

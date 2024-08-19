@@ -1,11 +1,10 @@
 """Jobs to run backups, intended config, and compliance."""
 
-from nautobot.extras.jobs import Job, MultiObjectVar, get_task_logger
 from nautobot.core.celery import register_jobs
-
 from nautobot.dcim.models import Device
-from nautobot_firewall_models.models import CapircaPolicy
-from nautobot_firewall_models.models import Policy
+from nautobot.extras.jobs import Job, MultiObjectVar, get_task_logger
+
+from nautobot_firewall_models.models import CapircaPolicy, Policy
 
 logger = get_task_logger(__name__)
 

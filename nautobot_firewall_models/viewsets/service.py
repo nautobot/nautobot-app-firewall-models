@@ -2,8 +2,8 @@
 
 from nautobot.apps.views import NautobotUIViewSet
 
+from nautobot_firewall_models import filters, forms, models, tables
 from nautobot_firewall_models.api import serializers
-from nautobot_firewall_models import forms, models, tables, filters
 
 
 class ApplicationObjectUIViewSet(NautobotUIViewSet):

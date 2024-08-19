@@ -1,8 +1,8 @@
 """Table Views for Firewall Models."""
 
 import django_tables2 as tables
-from nautobot.extras.tables import StatusTableMixin
 from nautobot.apps.tables import BaseTable, ButtonsColumn, ToggleColumn
+from nautobot.extras.tables import StatusTableMixin
 
 from nautobot_firewall_models import models
 

@@ -1,4 +1,5 @@
 """Extensions of baseline Nautobot views."""
+
 from nautobot.apps.ui import TemplateExtension
 
 from nautobot_firewall_models.models import CapircaPolicy

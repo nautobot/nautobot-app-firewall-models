@@ -1,7 +1,7 @@
 """API serializers for firewall models."""
 
-from rest_framework import serializers
 from nautobot.apps.api import NautobotModelSerializer, ValidatedModelSerializer
+from rest_framework import serializers
 
 from nautobot_firewall_models import models
 
