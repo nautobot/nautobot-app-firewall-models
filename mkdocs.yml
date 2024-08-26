@@ -1,6 +1,6 @@
 ---
 dev_addr: "127.0.0.1:8001"
-edit_uri: "edit/main/nautobot-app-firewall-models/docs"
+edit_uri: "edit/main/docs"
 site_dir: "nautobot_firewall_models/static/nautobot_firewall_models/docs"
 site_name: "Nautobot Firewall Models Documentation"
 site_url: "https://docs.nautobot.com/projects/firewall-models/en/latest/"
