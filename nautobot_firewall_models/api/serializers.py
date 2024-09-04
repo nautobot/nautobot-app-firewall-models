@@ -43,9 +43,8 @@ class IPRangeSerializer(NautobotModelSerializer):
         if vrf is not None:
             if qs.filter(start_address=start_address, end_address=end_address, vrf=vrf).exists():
                 raise serializers.ValidationError("The fields start_address, end_address, vrf must make a unique set.")
-        else:
-            if qs.filter(start_address=start_address, end_address=end_address, vrf__isnull=True).exists():
-                raise serializers.ValidationError("The fields start_address, end_address must make a unique set.")
+        elif qs.filter(start_address=start_address, end_address=end_address, vrf__isnull=True).exists():
+            raise serializers.ValidationError("The fields start_address, end_address must make a unique set.")
 
         return super().validate(data)
 

@@ -1,6 +1,6 @@
 """Test Firewall models."""
 
-# noqa: F403, F405
+# ruff: noqa: F403, F405
 # pylint: disable=invalid-name
 from django.core.exceptions import ValidationError
 from django.test import TestCase
