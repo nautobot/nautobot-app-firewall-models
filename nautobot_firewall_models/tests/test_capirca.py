@@ -1,6 +1,6 @@
 """Test Capirca Utils."""
 
-# noqa: F403, F405
+# ruff: noqa: F403, F405
 # pylint: disable=protected-access
 from unittest import skip
 from unittest.mock import patch
