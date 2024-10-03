@@ -709,7 +709,6 @@ class NATPolicyRuleForm(LocalContextModelForm, NautobotModelForm):
     """NATPolicyRule creation/edit form."""
 
     # Metadata
-    name = forms.CharField(label="Name")
     tags = DynamicModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)
     request_id = forms.CharField(required=False, label="Optional field for request ticket identifier.")
 
