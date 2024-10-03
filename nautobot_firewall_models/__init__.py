@@ -4,6 +4,7 @@
 from importlib import metadata
 
 from nautobot.apps import NautobotAppConfig
+from nautobot.core.signals import nautobot_database_ready
 
 __version__ = metadata.version(__name__)
 
@@ -24,6 +25,7 @@ class NautobotFirewallModelsConfig(NautobotAppConfig):
         "capirca_remark_pass": True,
         "capirca_os_map": {},
         "allowed_status": ["Active"],
+        "default_status": "Active",
         "protect_on_delete": True,
     }
     docs_view_name = "plugins:nautobot_firewall_models:docs"
@@ -31,6 +33,8 @@ class NautobotFirewallModelsConfig(NautobotAppConfig):
     def ready(self):
         """Register custom signals."""
         import nautobot_firewall_models.signals  # noqa: F401, pylint: disable=import-outside-toplevel,unused-import
+
+        nautobot_database_ready.connect(nautobot_firewall_models.signals.create_default_status_signal, sender=self)
 
         super().ready()
 
