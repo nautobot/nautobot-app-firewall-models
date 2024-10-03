@@ -6,7 +6,7 @@
                 <strong>Assign NAT Policy Weight to Device</strong>
             </div>
             {% if object.natpolicydevicem2m_set.all %}
-                <form action="{% url 'plugins:nautobot_firewall_models:natpolicy_set_device_weight' pk=object.id %}" method="post" enctype="multipart/form-data" class="form form-horizontal">
+                <form action="{% url 'plugins:nautobot_firewall_models:natpolicy_devices' pk=object.id %}" method="post" enctype="multipart/form-data" class="form form-horizontal">
                     {% csrf_token %}
                     <table class="table table-hover panel-body">
                         <tr>
