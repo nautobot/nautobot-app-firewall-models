@@ -5,8 +5,8 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("dcim", "0062_module_data_migration"),
-        ("extras", "0114_computedfield_grouping"),
+        ("dcim", "0014_location_status_data_migration"),
+        ("extras", "0047_enforce_custom_field_slug"),
         ("nautobot_firewall_models", "0021_alter_addressobject_status_and_more"),
     ]
 
