@@ -133,7 +133,7 @@ class PolicyToCapirca:
                 "Capirca does not support the value you provided, and was removed from consideration"
             )
 
-    def _format_data(self, data, _type):
+    def _format_data(self, data, _type):  # pylint: disable=too-many-statements
         def format_address(data, name):
             """Format address objects, looking for the address type."""
             if data.get("ip_range"):
