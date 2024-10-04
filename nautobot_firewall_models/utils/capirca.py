@@ -136,15 +136,26 @@ class PolicyToCapirca:
     def _format_data(self, data, _type):
         def format_address(data, name):
             """Format address objects, looking for the address type."""
-            keys = ["ip_range", "fqdn", "prefix", "ip_address"]
-            for key in keys:
-                if data.get(key):
-                    value = data[key]["display"]
-                    if not self.address.get(name):
-                        self.address[name] = {key: value}
-                    break
+            if data.get("ip_range"):
+                value = data["ip_range"]["display"]
+                if not self.address.get(name):
+                    self.address[name] = {"ip_range": value}
+            elif data.get("fqdn"):
+                value = data["fqdn"]["display"]
+                if not self.address.get(name):
+                    self.address[name] = {"fqdn": value}
+            elif data.get("prefix"):
+                value = data["prefix"]["prefix"]
+                if not self.address.get(name):
+                    self.address[name] = {"prefix": value}
+            elif data.get("ip_address"):
+                value = data["ip_address"]["address"]
+                if not self.address.get(name):
+                    self.address[name] = {"ip_address": value}
             else:
-                raise ValidationError(f"Address object: `{name}` does not have a valid `{str(keys)}` object applied.")
+                raise ValidationError(
+                    f"Address object: `{name}` does not have a valid `ip_range`, `fqdn`, `prefix`, or `ip_address` object applied."
+                )
 
         def format_address_group(data, name):
             """Format address group objects, also adding the address objects as new ones are found."""
