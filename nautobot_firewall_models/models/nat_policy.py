@@ -252,10 +252,16 @@ class NATPolicy(PrimaryModel):
         to="nautobot_firewall_models.NATPolicyRule", blank=True, related_name="nat_policies"
     )
     assigned_devices = models.ManyToManyField(
-        to="dcim.Device", through="NATPolicyDeviceM2M", related_name="nat_policies"
+        to="dcim.Device",
+        through="NATPolicyDeviceM2M",
+        related_name="nat_policies",
+        blank=True,
     )
     assigned_dynamic_groups = models.ManyToManyField(
-        to="extras.DynamicGroup", through="NATPolicyDynamicGroupM2M", related_name="nat_policies"
+        to="extras.DynamicGroup",
+        through="NATPolicyDynamicGroupM2M",
+        related_name="nat_policies",
+        blank=True,
     )
     status = StatusField(
         on_delete=models.PROTECT,

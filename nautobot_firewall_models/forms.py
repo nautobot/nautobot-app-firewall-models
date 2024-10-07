@@ -538,7 +538,6 @@ class PolicyRuleFilterForm(LocalContextFilterForm, NautobotFilterForm):
 class PolicyRuleForm(LocalContextModelForm, NautobotModelForm):
     """PolicyRule creation/edit form."""
 
-    name = forms.CharField(required=False, label="Name")
     tags = DynamicModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)
     source_users = DynamicModelMultipleChoiceField(
         queryset=models.UserObject.objects.all(), label="Source User Objects", required=False
@@ -710,7 +709,6 @@ class NATPolicyRuleForm(LocalContextModelForm, NautobotModelForm):
     """NATPolicyRule creation/edit form."""
 
     # Metadata
-    name = forms.CharField(required=False, label="Name")
     tags = DynamicModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)
     request_id = forms.CharField(required=False, label="Optional field for request ticket identifier.")
 
