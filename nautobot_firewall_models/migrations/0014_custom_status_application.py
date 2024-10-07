@@ -2,6 +2,8 @@
 
 from django.db import migrations
 
+from nautobot_firewall_models.utils import create_configured_statuses, get_configured_status_names
+
 
 def create_app_status(apps, schema_editor):
     """Initial subset of statuses for the Application models.
@@ -9,18 +11,15 @@ def create_app_status(apps, schema_editor):
     This was added along with 0013_applications in order to associate the same set of statuses with the new Application models
     that are associated with the original set of security models.
     """
+    create_configured_statuses(apps)
 
-    statuses = ["Active", "Staged", "Decommissioned"]
     ContentType = apps.get_model("contenttypes.ContentType")
-    relevant_models = [
-        apps.get_model(model)
-        for model in ["nautobot_firewall_models.ApplicationObject", "nautobot_firewall_models.ApplicationObjectGroup"]
-    ]
-    for i in statuses:
-        status = apps.get_model("extras.Status").objects.get(name=i)
-        for model in relevant_models:
-            ct = ContentType.objects.get_for_model(model)
-            status.content_types.add(ct)
+    Status = apps.get_model("extras.Status")
+    relevant_models_ct = ContentType.objects.filter(
+        app_label="nautobot_firewall_models", model__in=["applicationobject", "applicationobjectgroup"]
+    )
+    for status in Status.objects.filter(name__in=get_configured_status_names()).iterator():
+        status.content_types.add(*relevant_models_ct)
 
 
 def remove_app_status(apps, schema_editor):
@@ -29,18 +28,13 @@ def remove_app_status(apps, schema_editor):
     This was added along with 0013_applications in order to associate the same set of statuses with the new Application models
     that are associated with the original set of security models.
     """
-
-    statuses = ["Active", "Staged", "Decommissioned"]
     ContentType = apps.get_model("contenttypes.ContentType")
-    relevant_models = [
-        apps.get_model(model)
-        for model in ["nautobot_firewall_models.ApplicationObject", "nautobot_firewall_models.ApplicationObjectGroup"]
-    ]
-    for i in statuses:
-        status = apps.get_model("extras.Status").objects.get(name=i)
-        for model in relevant_models:
-            ct = ContentType.objects.get_for_model(model)
-            status.content_types.remove(ct)
+    Status = apps.get_model("extras.Status")
+    relevant_models_ct = ContentType.objects.filter(
+        app_label="nautobot_firewall_models", model__in=["applicationobject", "applicationobjectgroup"]
+    )
+    for status in Status.objects.filter(content_types__in=relevant_models_ct).distinct().iterator():
+        status.content_types.remove(*relevant_models_ct)
 
 
 class Migration(migrations.Migration):

@@ -8,7 +8,7 @@ from nautobot.ipam.models import VRF, IPAddress, Prefix
 
 from nautobot_firewall_models import models
 from nautobot_firewall_models.constants import PLUGIN_CFG
-from nautobot_firewall_models.utils import create_default_status
+from nautobot_firewall_models.utils import create_configured_statuses
 
 ON_DELETE = {
     IPAddress: ["fqdns", "address_objects"],
@@ -105,6 +105,6 @@ if PLUGIN_CFG["protect_on_delete"]:
                 raise ValidationError(f"{instance} is assigned to an {i} & `protect_on_delete` is enabled.")
 
 
-def create_default_status_signal(sender, **kwargs):
-    """Signal handler to create default status configured in the app config."""
-    create_default_status()
+def create_configured_statuses_signal(sender, **kwargs):
+    """Signal handler to create default_status and allowed_status configured in the app config."""
+    create_configured_statuses()
