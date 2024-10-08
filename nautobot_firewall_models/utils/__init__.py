@@ -2,7 +2,7 @@
 
 import json
 
-from django.apps import apps
+from django.apps import apps as django_apps
 from django.utils.module_loading import import_string
 from nautobot.core.models.utils import serialize_object_v2
 from nautobot.extras.management import STATUS_COLOR_MAP, STATUS_DESCRIPTION_MAP
@@ -11,26 +11,26 @@ from rest_framework.renderers import JSONRenderer
 from nautobot_firewall_models.constants import PLUGIN_CFG
 
 
-def _create_status(status_name, apps=apps):
+def _create_status(status_name, apps=django_apps):
     """Create a status with the given name, using nautobot default description and color if applicable."""
-    Status = apps.get_model("extras.Status")
+    Status = apps.get_model("extras.Status")  # pylint: disable=invalid-name
     defaults = {"description": STATUS_DESCRIPTION_MAP.get(status_name, "")}
     if status_name in STATUS_COLOR_MAP:
         defaults["color"] = STATUS_COLOR_MAP[status_name]
-    status, created = Status.objects.get_or_create(name=status_name, defaults=defaults)
+    status, _ = Status.objects.get_or_create(name=status_name, defaults=defaults)
 
     # Add the status to all firewall models with a status field
     content_types = get_firewall_models_with_status_field(apps=apps)
     status.content_types.add(*content_types)
 
 
-def create_configured_statuses(apps=apps):
+def create_configured_statuses(apps=django_apps):
     """Create the configured statuses (default_status and allowed_status) for the firewall app if they don't already exist."""
     for status_name in get_configured_status_names():
         _create_status(status_name, apps=apps)
 
 
-def create_default_status(apps=apps):
+def create_default_status(apps=django_apps):
     """Create the default_status defined in the app config if it doesn't already exist."""
     default_status_name = PLUGIN_CFG.get("default_status")
     _create_status(default_status_name, apps=apps)
@@ -44,13 +44,13 @@ def get_configured_status_names():
     return configured_status_names + [get_default_status_name()]
 
 
-def get_default_status():
+def get_default_status(apps=django_apps):
     """
     Return the primary key of the default status defined in the firewall app config.
 
     Creates the default status if it doesn't exist. Used by the firewall models for the status field default.
     """
-    Status = apps.get_model("extras.Status")
+    Status = apps.get_model("extras.Status")  # pylint: disable=invalid-name
     default_status_name = PLUGIN_CFG.get("default_status")
     default_status = Status.objects.filter(name=default_status_name)
     if not default_status.exists():
@@ -65,13 +65,13 @@ def get_default_status_name():
     return default_status_name
 
 
-def get_firewall_models_with_status_field(apps=apps):
+def get_firewall_models_with_status_field(apps=django_apps):
     """Return a list of content types for all firewall models that have a status field. Usable in migrations."""
     model_content_types = []
-    ContentType = apps.get_model("contenttypes.ContentType")
+    ContentType = apps.get_model("contenttypes.ContentType")  # pylint: disable=invalid-name
     for model in apps.get_app_config("nautobot_firewall_models").get_models():
         if hasattr(model, "status"):
-            ct = ContentType.objects.get_for_model(model)
+            ct = ContentType.objects.get_for_model(model)  # pylint: disable=invalid-name
             model_content_types.append(ct)
 
     return model_content_types

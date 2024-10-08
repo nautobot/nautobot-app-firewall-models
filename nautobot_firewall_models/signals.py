@@ -106,12 +106,12 @@ if PLUGIN_CFG["protect_on_delete"]:
                 raise ValidationError(f"{instance} is assigned to an {i} & `protect_on_delete` is enabled.")
 
 
-def create_configured_statuses_signal(sender, **kwargs):
+def create_configured_statuses_signal(sender, **kwargs):  # pylint: disable=unused-argument
     """Signal handler to create default_status and allowed_status configured in the app config."""
     create_configured_statuses()
 
 
-def associate_statuses_signal(sender, **kwargs):
+def associate_statuses_signal(sender, **kwargs):  # pylint: disable=unused-argument
     """Signal handler to associate some common statuses with the firewall model content types."""
     for status in Status.objects.filter(name__in=["Active", "Staged", "Decommissioned"]):
         content_types = get_firewall_models_with_status_field()
