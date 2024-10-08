@@ -1,0 +1,1 @@
+Fixed migrations failing when no statuses exist in the database and various other migration issues.

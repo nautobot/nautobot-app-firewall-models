@@ -40,6 +40,7 @@ def remove_nat_status(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
+        ("contenttypes", "0002_remove_content_type_name"),
         ("extras", "0033_add__optimized_indexing"),
         ("nautobot_firewall_models", "0010_nat_policy"),
     ]

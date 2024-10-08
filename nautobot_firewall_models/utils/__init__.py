@@ -20,9 +20,8 @@ def _create_status(status_name, apps=apps):
     status, created = Status.objects.get_or_create(name=status_name, defaults=defaults)
 
     # Add the status to all firewall models with a status field
-    if created:
-        content_types = get_firewall_models_with_status_field(apps=apps)
-        status.content_types.add(*content_types)
+    content_types = get_firewall_models_with_status_field(apps=apps)
+    status.content_types.add(*content_types)
 
 
 def create_configured_statuses(apps=apps):

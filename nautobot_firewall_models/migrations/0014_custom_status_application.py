@@ -39,6 +39,7 @@ def remove_app_status(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
+        ("contenttypes", "0002_remove_content_type_name"),
         ("nautobot_firewall_models", "0013_applications"),
     ]
 

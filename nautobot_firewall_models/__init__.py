@@ -35,6 +35,7 @@ class NautobotFirewallModelsConfig(NautobotAppConfig):
         import nautobot_firewall_models.signals  # noqa: F401, pylint: disable=import-outside-toplevel,unused-import
 
         nautobot_database_ready.connect(nautobot_firewall_models.signals.create_configured_statuses_signal, sender=self)
+        nautobot_database_ready.connect(nautobot_firewall_models.signals.associate_statuses_signal, sender=self)
 
         super().ready()
 
