@@ -183,10 +183,16 @@ class Policy(PrimaryModel):
     name = models.CharField(max_length=100, unique=True)
     policy_rules = models.ManyToManyField(to=PolicyRule, blank=True, related_name="policies")
     assigned_devices = models.ManyToManyField(
-        to="dcim.Device", through="PolicyDeviceM2M", related_name="firewall_policies"
+        to="dcim.Device",
+        through="PolicyDeviceM2M",
+        related_name="firewall_policies",
+        blank=True,
     )
     assigned_dynamic_groups = models.ManyToManyField(
-        to="extras.DynamicGroup", through="PolicyDynamicGroupM2M", related_name="firewall_policies"
+        to="extras.DynamicGroup",
+        through="PolicyDynamicGroupM2M",
+        related_name="firewall_policies",
+        blank=True,
     )
     status = StatusField(
         on_delete=models.PROTECT,

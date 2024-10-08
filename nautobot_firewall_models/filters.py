@@ -163,6 +163,7 @@ class PolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
         """Construct Q filter for filterset."""
         if not value.strip():
             return queryset
+        # pylint: disable=unsupported-binary-operation
         return queryset.filter(
             Q(name__icontains=value) | Q(description__icontains=value) | Q(request_id__icontains=value)
         )
@@ -181,6 +182,7 @@ class NATPolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
         """Construct Q filter for filterset."""
         if not value.strip():
             return queryset
+        # pylint: disable=unsupported-binary-operation
         return queryset.filter(
             Q(name__icontains=value) | Q(description__icontains=value) | Q(request_id__icontains=value)
         )

@@ -6,7 +6,7 @@
                 <strong>Assign Policy Weight to Dynamic Group</strong>
             </div>
             {% if object.policydynamicgroupm2m_set.all %}
-                <form action="{% url 'plugins:nautobot_firewall_models:policy_set_dynamic_group_weight' pk=object.id %}" method="post" enctype="multipart/form-data" class="form form-horizontal">
+                <form action="{% url 'plugins:nautobot_firewall_models:policy_dynamic-groups' pk=object.id %}" method="post" enctype="multipart/form-data" class="form form-horizontal">
                     {% csrf_token %}
                     <table class="table table-hover panel-body">
                         <tr>
