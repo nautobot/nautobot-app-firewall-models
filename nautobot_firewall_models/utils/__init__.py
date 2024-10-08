@@ -9,8 +9,8 @@ from nautobot.core.models.utils import serialize_object_v2
 try:
     from nautobot.extras.management import STATUS_COLOR_MAP, STATUS_DESCRIPTION_MAP
 except ImportError:  # Nautobot version < v2.2.0
-    from nautobot.extras.models import COLOR_MAP as STATUS_COLOR_MAP
-    from nautobot.extras.models import DESCRIPTION_MAP as STATUS_DESCRIPTION_MAP
+    from nautobot.extras.management import COLOR_MAP as STATUS_COLOR_MAP
+    from nautobot.extras.management import DESCRIPTION_MAP as STATUS_DESCRIPTION_MAP
 from rest_framework.renderers import JSONRenderer
 
 from nautobot_firewall_models.constants import PLUGIN_CFG
