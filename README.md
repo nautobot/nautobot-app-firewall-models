@@ -4,7 +4,7 @@
   <img src="https://raw.githubusercontent.com/nautobot/nautobot-app-firewall-models/develop/docs/images/icon-nautobot-firewall-models.png" class="logo" height="200px">
   <br>
   <a href="https://github.com/nautobot/nautobot-app-firewall-models/actions"><img src="https://github.com/nautobot/nautobot-app-firewall-models/actions/workflows/ci.yml/badge.svg?branch=main"></a>
-  <a href="https://docs.nautobot.com/projects/firewall-models/en/latest/"><img src="https://readthedocs.org/projects/nautobot-app-firewall-models/badge/"></a>
+  <a href="https://docs.nautobot.com/projects/firewall-models/en/latest/"><img src="https://readthedocs.org/projects/nautobot-plugin-firewall-models/badge/"></a>
   <a href="https://pypi.org/project/nautobot-firewall-models/"><img src="https://img.shields.io/pypi/v/nautobot-firewall-models"></a>
   <a href="https://pypi.org/project/nautobot-firewall-models/"><img src="https://img.shields.io/pypi/dm/nautobot-firewall-models"></a>
   <br>
