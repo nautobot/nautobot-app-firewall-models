@@ -21,23 +21,9 @@ class NautobotFirewallModelsConfig(NautobotAppConfig):
     required_settings = []
     min_version = "2.0.0"
     max_version = "2.9999"
-    default_settings = {
-        "capirca_remark_pass": True,
-        "capirca_os_map": {},
-        "allowed_status": ["Active"],
-        "default_status": "Active",
-        "protect_on_delete": True,
-    }
+    default_settings = {}
+    caching_config = {}
     docs_view_name = "plugins:nautobot_firewall_models:docs"
-
-    def ready(self):
-        """Register custom signals."""
-        import nautobot_firewall_models.signals  # pylint: disable=import-outside-toplevel
-
-        nautobot_database_ready.connect(nautobot_firewall_models.signals.create_configured_statuses_signal, sender=self)
-        nautobot_database_ready.connect(nautobot_firewall_models.signals.associate_statuses_signal, sender=self)
-
-        super().ready()
 
 
 config = NautobotFirewallModelsConfig  # pylint:disable=invalid-name
