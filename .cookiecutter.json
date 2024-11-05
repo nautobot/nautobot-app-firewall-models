@@ -14,22 +14,23 @@
         "max_nautobot_version": "2.9999",
         "camel_name": "NautobotFirewallModels",
         "project_short_description": "Nautobot App to model firewall and security objects. Allows users to model policies in a vendor-neutral manner and use that data to drive network security automation",
-        "model_class_name": "None",
+        "model_class_name": "IPRange",
         "open_source_license": "Apache-2.0",
         "docs_base_url": "https://docs.nautobot.com",
         "docs_app_url": "https://docs.nautobot.com/projects/firewall-models/en/latest",
         "_drift_manager": {
             "template": "https://github.com/nautobot/cookiecutter-nautobot-app.git",
             "template_dir": "nautobot-app",
-            "template_ref": "refs/tags/nautobot-app-v2.2.1",
+            "template_ref": "refs/tags/nautobot-app-v2.4.0",
             "cookie_dir": "",
             "branch_prefix": "drift-manager",
             "pull_request_strategy": "create",
             "post_actions": [
-                "black"
+                "ruff",
+                "poetry"
             ],
-            "draft": true,
-            "baked_commit_ref": "1724c1ae2e9ba5efe0dc010cb84291b6269b5fa5"
+            "draft": false,
+            "baked_commit_ref": "40d9cefc5c5b9f7db4b1c9bdb3e6645a4dc4933c"
         }
     }
 }

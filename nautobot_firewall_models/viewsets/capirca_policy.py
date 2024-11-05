@@ -1,17 +1,17 @@
 """Capirca Policy Object Viewsets."""
 
 from nautobot.apps.views import (
-    ObjectListViewMixin,
     ObjectBulkDestroyViewMixin,
-    ObjectDetailViewMixin,
     ObjectChangeLogViewMixin,
     ObjectDestroyViewMixin,
+    ObjectDetailViewMixin,
+    ObjectListViewMixin,
 )
 from nautobot.dcim.models import Device
 from rest_framework.response import Response
 
+from nautobot_firewall_models import filters, forms, models, tables
 from nautobot_firewall_models.api import serializers
-from nautobot_firewall_models import forms, models, tables, filters
 
 
 class CapircaPolicyUIViewSet(

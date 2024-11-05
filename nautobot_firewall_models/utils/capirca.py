@@ -1,23 +1,23 @@
 """Management command to bootstrap dummy data for firewall model app."""
+
 # pylint: disable=too-many-instance-attributes,too-many-locals
 import logging
 import re
 import unicodedata
-from capirca.lib.naming import Naming
-from capirca.lib import policy
 
+from capirca.lib import policy
+from capirca.lib.naming import Naming
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.utils.module_loading import import_string
-
 from nautobot.dcim.models import Platform
 
 from nautobot_firewall_models.constants import (
-    ALLOW_STATUS,
-    CAPIRCA_OS_MAPPER,
     ACTION_MAP,
-    LOGGING_MAP,
+    ALLOW_STATUS,
     CAPIRCA_MAPPER,
+    CAPIRCA_OS_MAPPER,
+    LOGGING_MAP,
     PLUGIN_CFG,
 )
 from nautobot_firewall_models.utils import model_to_json
@@ -133,18 +133,29 @@ class PolicyToCapirca:
                 "Capirca does not support the value you provided, and was removed from consideration"
             )
 
-    def _format_data(self, data, _type):
+    def _format_data(self, data, _type):  # pylint: disable=too-many-statements
         def format_address(data, name):
             """Format address objects, looking for the address type."""
-            keys = ["ip_range", "fqdn", "prefix", "ip_address"]
-            for key in keys:
-                if data.get(key):
-                    value = data[key]["display"]
-                    if not self.address.get(name):
-                        self.address[name] = {key: value}
-                    break
+            if data.get("ip_range"):
+                value = data["ip_range"]["display"]
+                if not self.address.get(name):
+                    self.address[name] = {"ip_range": value}
+            elif data.get("fqdn"):
+                value = data["fqdn"]["display"]
+                if not self.address.get(name):
+                    self.address[name] = {"fqdn": value}
+            elif data.get("prefix"):
+                value = data["prefix"]["prefix"]
+                if not self.address.get(name):
+                    self.address[name] = {"prefix": value}
+            elif data.get("ip_address"):
+                value = data["ip_address"]["address"]
+                if not self.address.get(name):
+                    self.address[name] = {"ip_address": value}
             else:
-                raise ValidationError(f"Address object: `{name}` does not have a valid `{str(keys)}` object applied.")
+                raise ValidationError(
+                    f"Address object: `{name}` does not have a valid `ip_range`, `fqdn`, `prefix`, or `ip_address` object applied."
+                )
 
         def format_address_group(data, name):
             """Format address group objects, also adding the address objects as new ones are found."""

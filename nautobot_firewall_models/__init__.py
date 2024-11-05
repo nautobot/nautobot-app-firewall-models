@@ -1,8 +1,10 @@
 """App declaration for nautobot_firewall_models."""
+
 # Metadata is inherited from Nautobot. If not including Nautobot in the environment, this should be added
 from importlib import metadata
 
 from nautobot.apps import NautobotAppConfig
+from nautobot.core.signals import nautobot_database_ready
 
 __version__ = metadata.version(__name__)
 
@@ -23,13 +25,17 @@ class NautobotFirewallModelsConfig(NautobotAppConfig):
         "capirca_remark_pass": True,
         "capirca_os_map": {},
         "allowed_status": ["Active"],
+        "default_status": "Active",
         "protect_on_delete": True,
     }
     docs_view_name = "plugins:nautobot_firewall_models:docs"
 
     def ready(self):
         """Register custom signals."""
-        import nautobot_firewall_models.signals  # noqa: F401, pylint: disable=import-outside-toplevel,unused-import
+        import nautobot_firewall_models.signals  # pylint: disable=import-outside-toplevel
+
+        nautobot_database_ready.connect(nautobot_firewall_models.signals.create_configured_statuses_signal, sender=self)
+        nautobot_database_ready.connect(nautobot_firewall_models.signals.associate_statuses_signal, sender=self)
 
         super().ready()
 

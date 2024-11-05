@@ -1,12 +1,15 @@
 ---
 nautobot_firewall_models:
-  project_name: "nautobot-firewall-models"
   nautobot_ver: "2.0.0"
-  local: false
   python_ver: "3.11"
-  compose_dir: "development"
-  compose_files:
-    - "docker-compose.base.yml"
-    - "docker-compose.redis.yml"
-    - "docker-compose.postgres.yml"
-    - "docker-compose.dev.yml"
+  # local: false
+  # compose_dir: "/full/path/to/nautobot-app-firewall-models/development"
+
+# The following is an example of using MySQL as the database backend
+# ---
+# nautobot_firewall_models:
+#   compose_files:
+#     - "docker-compose.base.yml"
+#     - "docker-compose.redis.yml"
+#     - "docker-compose.mysql.yml"
+#     - "docker-compose.dev.yml"

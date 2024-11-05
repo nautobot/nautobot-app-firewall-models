@@ -1,13 +1,14 @@
 """Filtering for Firewall Model App."""
+
+import django_filters
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-import django_filters
 from nautobot.apps.filters import (
-    NautobotFilterSet,
-    StatusModelFilterSetMixin,
     MultiValueCharFilter,
     NaturalKeyOrPKMultipleChoiceFilter,
+    NautobotFilterSet,
+    StatusModelFilterSetMixin,
 )
 from nautobot.dcim.models import Device
 
@@ -162,6 +163,7 @@ class PolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
         """Construct Q filter for filterset."""
         if not value.strip():
             return queryset
+        # pylint: disable=unsupported-binary-operation
         return queryset.filter(
             Q(name__icontains=value) | Q(description__icontains=value) | Q(request_id__icontains=value)
         )
@@ -180,6 +182,7 @@ class NATPolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
         """Construct Q filter for filterset."""
         if not value.strip():
             return queryset
+        # pylint: disable=unsupported-binary-operation
         return queryset.filter(
             Q(name__icontains=value) | Q(description__icontains=value) | Q(request_id__icontains=value)
         )

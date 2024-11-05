@@ -1,7 +1,7 @@
 """API serializers for firewall models."""
 
-from rest_framework import serializers
 from nautobot.apps.api import NautobotModelSerializer, ValidatedModelSerializer
+from rest_framework import serializers
 
 from nautobot_firewall_models import models
 
@@ -43,9 +43,8 @@ class IPRangeSerializer(NautobotModelSerializer):
         if vrf is not None:
             if qs.filter(start_address=start_address, end_address=end_address, vrf=vrf).exists():
                 raise serializers.ValidationError("The fields start_address, end_address, vrf must make a unique set.")
-        else:
-            if qs.filter(start_address=start_address, end_address=end_address, vrf__isnull=True).exists():
-                raise serializers.ValidationError("The fields start_address, end_address must make a unique set.")
+        elif qs.filter(start_address=start_address, end_address=end_address, vrf__isnull=True).exists():
+            raise serializers.ValidationError("The fields start_address, end_address must make a unique set.")
 
         return super().validate(data)
 

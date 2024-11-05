@@ -1,8 +1,8 @@
 """Table Views for Firewall Models."""
 
 import django_tables2 as tables
-from nautobot.extras.tables import StatusTableMixin
 from nautobot.apps.tables import BaseTable, ButtonsColumn, ToggleColumn
+from nautobot.extras.tables import StatusTableMixin
 
 from nautobot_firewall_models import models
 
@@ -336,7 +336,7 @@ class CapircaPolicyTable(BaseTable):
 
     pk = ToggleColumn()
     device = tables.TemplateColumn(
-        template_code="""<a href="{% url 'plugins:nautobot_firewall_models:capircapolicy' pk=record.pk  %}" <strong>{{ record.device }}</strong></a> """
+        template_code="""<a href="{% url 'plugins:nautobot_firewall_models:capircapolicy' pk=record.pk %}">{{ record.device }}</a> """
     )
 
     class Meta(BaseTable.Meta):

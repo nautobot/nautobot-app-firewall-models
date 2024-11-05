@@ -2,8 +2,8 @@
 # pylint: disable=invalid-name
 
 from django.test import TestCase
-
 from nautobot.dcim.models import Device
+
 from nautobot_firewall_models import filters, models
 
 from .fixtures import create_capirca_env

@@ -1,13 +1,15 @@
 """Configurable signals."""
+
 from django.core.exceptions import ValidationError
-from django.dispatch import receiver
 from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from nautobot.dcim.models import Interface
-from nautobot.ipam.models import IPAddress, Prefix, VRF
+from nautobot.extras.models import Status
+from nautobot.ipam.models import VRF, IPAddress, Prefix
 
 from nautobot_firewall_models import models
 from nautobot_firewall_models.constants import PLUGIN_CFG
-
+from nautobot_firewall_models.utils import create_configured_statuses, get_firewall_models_with_status_field
 
 ON_DELETE = {
     IPAddress: ["fqdns", "address_objects"],
@@ -102,3 +104,15 @@ if PLUGIN_CFG["protect_on_delete"]:
         for i in ON_DELETE[instance._meta.model]:
             if hasattr(instance, i) and getattr(instance, i).exists():
                 raise ValidationError(f"{instance} is assigned to an {i} & `protect_on_delete` is enabled.")
+
+
+def create_configured_statuses_signal(sender, **kwargs):  # pylint: disable=unused-argument
+    """Signal handler to create default_status and allowed_status configured in the app config."""
+    create_configured_statuses()
+
+
+def associate_statuses_signal(sender, **kwargs):  # pylint: disable=unused-argument
+    """Signal handler to associate some common statuses with the firewall model content types."""
+    for status in Status.objects.filter(name__in=["Active", "Staged", "Decommissioned"]):
+        content_types = get_firewall_models_with_status_field()
+        status.content_types.add(*content_types)

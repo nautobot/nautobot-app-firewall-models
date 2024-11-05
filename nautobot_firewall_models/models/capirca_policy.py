@@ -1,4 +1,5 @@
 """Models for the Capirca Configurations."""
+
 # pylint: disable=duplicate-code
 import logging
 
