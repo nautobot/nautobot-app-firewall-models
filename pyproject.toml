@@ -142,7 +142,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.towncrier]
 package = "nautobot_firewall_models"
 directory = "changes"
-filename = "docs/admin/release_notes/version_2.1.md"
+filename = "docs/admin/release_notes/version_X.Y.md"
 template = "development/towncrier_template.j2"
 start_string = "<!-- towncrier release notes start -->"
 issue_format = "[#{issue}](https://github.com/nautobot/nautobot-app-firewall-models/issues/{issue})"
