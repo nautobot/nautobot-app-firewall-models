@@ -1,2 +1,0 @@
-Fixed server error when navigating to NATPolicy detail view.
-Fixed server error when updating device/dynamic group weights on NATPolicy.

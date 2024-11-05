@@ -1,2 +1,0 @@
-Fixed name fields being optional on multiple forms.
-Fixed assigned devices and assigned dynamic groups fields not marked as optional on NATPolicy and Policy.
