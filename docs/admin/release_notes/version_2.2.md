@@ -4,8 +4,7 @@ This document describes all new features and changes in the release. The format 
 
 ## Release Overview
 
-- Major features or milestones
-- Changes to compatibility with Nautobot and/or other apps, libraries etc.
+This release adds support for Python 3.12.
 
 ## [v2.2.0 (2024-11-05)](https://github.com/nautobot/nautobot-app-firewall-models/releases/tag/v2.2.0)
 
