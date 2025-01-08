@@ -1,24 +1,35 @@
-
 {% extends 'generic/object_retrieve.html' %}
 {% load helpers %}
 
 {% block content_left_page %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <strong>IPRange</strong>
+            <strong>IP Range</strong>
         </div>
         <table class="table table-hover panel-body attr-table">
             <tr>
-                <td>Name</td>
-                <td>
-                    {{ object.name }}
-                </td>
+                <td>Description</td>
+                <td>{{ object.description|placeholder }}</td>
             </tr>
             <tr>
-                <td>Description</td>
-                <td>
-                    {{ object.description|placeholder }}
-                </td>
+                <td>Start Address</td>
+                <td>{{ object.start_address }}</td>
+            </tr>
+            <tr>
+                <td>End Address</td>
+                <td>{{ object.end_address }}</td>
+            </tr>
+            <tr>
+                <td>Size</td>
+                <td>{{ object.size }}</td>
+            </tr>
+            <tr>
+                <td>VRF</td>
+                <td><a href="{{ object.vrf.get_absolute_url }}">{{ object.vrf|placeholder }}</a></td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td><span class="label" style="color: {{ object.status.color|fgcolor }}; background-color: #{{ object.status.color }}">{{ object.get_status_display }}</span></td>
             </tr>
         </table>
     </div>
