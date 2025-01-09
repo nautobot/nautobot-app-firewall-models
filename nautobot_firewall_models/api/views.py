@@ -1,4 +1,4 @@
-"""API views for firewall models."""
+"""API views for nautobot_firewall_models."""
 
 from nautobot.apps.api import ModelViewSet, NautobotModelViewSet
 

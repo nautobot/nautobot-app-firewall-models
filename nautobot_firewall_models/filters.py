@@ -1,13 +1,13 @@
-"""Filtering for Firewall Model App."""
+"""Filtering for nautobot_firewall_models."""
 
 import django_filters
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.exceptions import ValidationError
-from django.db.models import Q
 from nautobot.apps.filters import (
     MultiValueCharFilter,
     NaturalKeyOrPKMultipleChoiceFilter,
     NautobotFilterSet,
+    SearchFilter,
     StatusModelFilterSetMixin,
 )
 from nautobot.dcim.models import Device
@@ -18,19 +18,15 @@ from nautobot_firewall_models import models
 class BaseFilterSet(StatusModelFilterSetMixin, django_filters.filterset.FilterSet):
     """A base class for adding the search method to models which only expose the `name` and `description` fields."""
 
-    q = django_filters.CharFilter(
-        method="search",
-        label="Search",
+    q = SearchFilter(
+        filter_predicates={
+            "name": "icontains",
+            "description": "icontains",
+        }
     )
 
-    def search(self, queryset, name, value):  # pylint: disable=unused-argument
-        """Construct Q filter for filterset."""
-        if not value.strip():
-            return queryset
-        return queryset.filter(Q(name__icontains=value) | Q(description__icontains=value))
 
-
-class IPRangeFilterSet(BaseFilterSet, NautobotFilterSet):
+class IPRangeFilterSet(BaseFilterSet, NautobotFilterSet):  # pylint: disable=too-many-ancestors
     """Filter for IPRange."""
 
     start_address = MultiValueCharFilter(
@@ -46,6 +42,7 @@ class IPRangeFilterSet(BaseFilterSet, NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.IPRange
+
         fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
     def filter_address(self, queryset, name, value):  # pylint: disable=unused-argument
@@ -159,14 +156,13 @@ class ZoneFilterSet(BaseFilterSet, NautobotFilterSet):
 class PolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for PolicyRule."""
 
-    def search(self, queryset, name, value):  # pylint: disable=unused-argument
-        """Construct Q filter for filterset."""
-        if not value.strip():
-            return queryset
-        # pylint: disable=unsupported-binary-operation
-        return queryset.filter(
-            Q(name__icontains=value) | Q(description__icontains=value) | Q(request_id__icontains=value)
-        )
+    q = SearchFilter(
+        filter_predicates={
+            "name": "icontains",
+            "description": "icontains",
+            "request_id": "icontains",
+        }
+    )
 
     class Meta:
         """Meta attributes for filter."""
@@ -178,14 +174,13 @@ class PolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
 class NATPolicyRuleFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for NATPolicyRule."""
 
-    def search(self, queryset, name, value):  # pylint: disable=unused-argument
-        """Construct Q filter for filterset."""
-        if not value.strip():
-            return queryset
-        # pylint: disable=unsupported-binary-operation
-        return queryset.filter(
-            Q(name__icontains=value) | Q(description__icontains=value) | Q(request_id__icontains=value)
-        )
+    q = SearchFilter(
+        filter_predicates={
+            "name": "icontains",
+            "description": "icontains",
+            "request_id": "icontains",
+        }
+    )
 
     class Meta:
         """Meta attributes for filter."""
