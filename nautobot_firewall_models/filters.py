@@ -2,7 +2,6 @@
 
 import django_filters
 from django.contrib.contenttypes.fields import GenericRelation
-from django.core.exceptions import ValidationError
 from nautobot.apps.filters import (
     MultiValueCharFilter,
     NaturalKeyOrPKMultipleChoiceFilter,
@@ -30,11 +29,9 @@ class IPRangeFilterSet(BaseFilterSet, NautobotFilterSet):  # pylint: disable=too
     """Filter for IPRange."""
 
     start_address = MultiValueCharFilter(
-        method="filter_address",
         label="Address",
     )
     end_address = MultiValueCharFilter(
-        method="filter_address",
         label="Address",
     )
 
@@ -44,13 +41,6 @@ class IPRangeFilterSet(BaseFilterSet, NautobotFilterSet):  # pylint: disable=too
         model = models.IPRange
 
         fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
-
-    def filter_address(self, queryset, name, value):  # pylint: disable=unused-argument
-        """Filter method for start & end addresses."""
-        try:
-            return queryset.net_in(value)
-        except ValidationError:
-            return queryset.none()
 
 
 class FQDNFilterSet(BaseFilterSet, NautobotFilterSet):
