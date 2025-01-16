@@ -1,4 +1,4 @@
-"""Forms for the Firewall app."""
+"""Forms for nautobot_firewall_models."""
 
 from django import forms
 from nautobot.apps.forms import (

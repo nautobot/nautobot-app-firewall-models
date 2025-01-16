@@ -3,7 +3,7 @@
 from django.templatetags.static import static
 from django.urls import path
 from django.views.generic import RedirectView
-from nautobot.core.views.routers import NautobotUIViewSetRouter
+from nautobot.apps.urls import NautobotUIViewSetRouter
 
 from nautobot_firewall_models import viewsets
 
@@ -27,10 +27,7 @@ router.register("user-object-group", viewsets.UserObjectGroupUIViewSet)
 router.register("zone", viewsets.ZoneUIViewSet)
 
 urlpatterns = [
-    path(
-        "docs/",
-        RedirectView.as_view(url=static("nautobot_firewall_models/docs/index.html")),
-        name="docs",
-    ),
+    path("docs/", RedirectView.as_view(url=static("nautobot_firewall_models/docs/index.html")), name="docs"),
 ]
+
 urlpatterns += router.urls

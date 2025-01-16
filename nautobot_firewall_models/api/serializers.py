@@ -1,12 +1,12 @@
-"""API serializers for firewall models."""
+"""API serializers for nautobot_firewall_models."""
 
-from nautobot.apps.api import NautobotModelSerializer, ValidatedModelSerializer
+from nautobot.apps.api import NautobotModelSerializer, TaggedModelSerializerMixin, ValidatedModelSerializer
 from rest_framework import serializers
 
 from nautobot_firewall_models import models
 
 
-class IPRangeSerializer(NautobotModelSerializer):
+class IPRangeSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):  # pylint: disable=too-many-ancestors
     """IPRange Serializer."""
 
     start_address = serializers.CharField()
@@ -49,7 +49,7 @@ class IPRangeSerializer(NautobotModelSerializer):
         return super().validate(data)
 
 
-class FQDNSerializer(NautobotModelSerializer):
+class FQDNSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
     """FQDN Serializer."""
 
     class Meta:
@@ -59,7 +59,7 @@ class FQDNSerializer(NautobotModelSerializer):
         fields = "__all__"
 
 
-class AddressObjectSerializer(NautobotModelSerializer):
+class AddressObjectSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
     """AddressObject Serializer."""
 
     class Meta:
@@ -69,7 +69,7 @@ class AddressObjectSerializer(NautobotModelSerializer):
         fields = "__all__"
 
 
-class AddressObjectGroupSerializer(NautobotModelSerializer):
+class AddressObjectGroupSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
     """AddressObjectGroup Serializer."""
 
     class Meta:
@@ -79,7 +79,7 @@ class AddressObjectGroupSerializer(NautobotModelSerializer):
         fields = "__all__"
 
 
-class ApplicationObjectSerializer(NautobotModelSerializer):
+class ApplicationObjectSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
     """ApplicationObject Serializer."""
 
     class Meta:
@@ -89,7 +89,7 @@ class ApplicationObjectSerializer(NautobotModelSerializer):
         fields = "__all__"
 
 
-class ApplicationObjectGroupSerializer(NautobotModelSerializer):
+class ApplicationObjectGroupSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
     """ApplicationObjectGroup Serializer."""
 
     class Meta:
@@ -99,7 +99,7 @@ class ApplicationObjectGroupSerializer(NautobotModelSerializer):
         fields = "__all__"
 
 
-class ServiceObjectSerializer(NautobotModelSerializer):
+class ServiceObjectSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
     """ServiceObject Serializer."""
 
     class Meta:
@@ -109,7 +109,7 @@ class ServiceObjectSerializer(NautobotModelSerializer):
         fields = "__all__"
 
 
-class ServiceObjectGroupSerializer(NautobotModelSerializer):
+class ServiceObjectGroupSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
     """ServiceObjectGroup Serializer."""
 
     class Meta:
@@ -119,7 +119,7 @@ class ServiceObjectGroupSerializer(NautobotModelSerializer):
         fields = "__all__"
 
 
-class UserObjectSerializer(NautobotModelSerializer):
+class UserObjectSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
     """UserObject Serializer."""
 
     class Meta:
@@ -129,7 +129,7 @@ class UserObjectSerializer(NautobotModelSerializer):
         fields = "__all__"
 
 
-class UserObjectGroupSerializer(NautobotModelSerializer):
+class UserObjectGroupSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
     """UserObjectGroup Serializer."""
 
     class Meta:
@@ -139,7 +139,7 @@ class UserObjectGroupSerializer(NautobotModelSerializer):
         fields = "__all__"
 
 
-class ZoneSerializer(NautobotModelSerializer):
+class ZoneSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
     """Zone Serializer."""
 
     class Meta:
@@ -149,7 +149,7 @@ class ZoneSerializer(NautobotModelSerializer):
         fields = "__all__"
 
 
-class PolicyRuleSerializer(NautobotModelSerializer):
+class PolicyRuleSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
     """PolicyRule Serializer."""
 
     index = serializers.IntegerField(required=False, default=None)
@@ -161,7 +161,7 @@ class PolicyRuleSerializer(NautobotModelSerializer):
         fields = "__all__"
 
 
-class PolicySerializer(NautobotModelSerializer):
+class PolicySerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
     """Policy Serializer."""
 
     class Meta:
@@ -171,7 +171,7 @@ class PolicySerializer(NautobotModelSerializer):
         fields = "__all__"
 
 
-class NATPolicyRuleSerializer(NautobotModelSerializer):
+class NATPolicyRuleSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
     """PolicyRule Serializer."""
 
     class Meta:
@@ -181,7 +181,7 @@ class NATPolicyRuleSerializer(NautobotModelSerializer):
         fields = "__all__"
 
 
-class NATPolicySerializer(NautobotModelSerializer):
+class NATPolicySerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
     """NATPolicy Serializer."""
 
     class Meta:
@@ -191,7 +191,7 @@ class NATPolicySerializer(NautobotModelSerializer):
         fields = "__all__"
 
 
-class CapircaPolicySerializer(NautobotModelSerializer):
+class CapircaPolicySerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
     """CapircaPolicy Serializer."""
 
     class Meta:
