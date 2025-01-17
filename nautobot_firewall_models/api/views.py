@@ -17,7 +17,7 @@ class IPRangeViewSet(NautobotModelViewSet):
 class FQDNViewSet(NautobotModelViewSet):
     """FQDN viewset."""
 
-    queryset = models.FQDN.objects.all()
+    queryset = models.FQDN.objects.all().prefetch_related("tags")
     serializer_class = serializers.FQDNSerializer
     filterset_class = filters.FQDNFilterSet
 
@@ -25,7 +25,7 @@ class FQDNViewSet(NautobotModelViewSet):
 class AddressObjectViewSet(NautobotModelViewSet):
     """AddressObject viewset."""
 
-    queryset = models.AddressObject.objects.all()
+    queryset = models.AddressObject.objects.all().prefetch_related("tags")
     serializer_class = serializers.AddressObjectSerializer
     filterset_class = filters.AddressObjectFilterSet
 
@@ -33,7 +33,7 @@ class AddressObjectViewSet(NautobotModelViewSet):
 class AddressObjectGroupViewSet(NautobotModelViewSet):
     """AddressObjectGroup viewset."""
 
-    queryset = models.AddressObjectGroup.objects.all()
+    queryset = models.AddressObjectGroup.objects.all().prefetch_related("tags")
     serializer_class = serializers.AddressObjectGroupSerializer
     filterset_class = filters.AddressObjectGroupFilterSet
 
@@ -41,7 +41,7 @@ class AddressObjectGroupViewSet(NautobotModelViewSet):
 class ApplicationObjectViewSet(NautobotModelViewSet):
     """ApplicationObject viewset."""
 
-    queryset = models.ApplicationObject.objects.all()
+    queryset = models.ApplicationObject.objects.all().prefetch_related("tags")
     serializer_class = serializers.ApplicationObjectSerializer
     filterset_class = filters.ApplicationObjectFilterSet
 
@@ -49,7 +49,7 @@ class ApplicationObjectViewSet(NautobotModelViewSet):
 class ApplicationObjectGroupViewSet(NautobotModelViewSet):
     """ApplicationObjectGroup viewset."""
 
-    queryset = models.ApplicationObjectGroup.objects.all()
+    queryset = models.ApplicationObjectGroup.objects.all().prefetch_related("tags")
     serializer_class = serializers.ApplicationObjectGroupSerializer
     filterset_class = filters.ApplicationObjectGroupFilterSet
 
@@ -57,7 +57,7 @@ class ApplicationObjectGroupViewSet(NautobotModelViewSet):
 class ServiceObjectViewSet(NautobotModelViewSet):
     """ServiceObject viewset."""
 
-    queryset = models.ServiceObject.objects.all()
+    queryset = models.ServiceObject.objects.all().prefetch_related("tags")
     serializer_class = serializers.ServiceObjectSerializer
     filterset_class = filters.ServiceObjectFilterSet
 
@@ -65,7 +65,7 @@ class ServiceObjectViewSet(NautobotModelViewSet):
 class ServiceObjectGroupViewSet(NautobotModelViewSet):
     """ServiceObjectGroup viewset."""
 
-    queryset = models.ServiceObjectGroup.objects.all()
+    queryset = models.ServiceObjectGroup.objects.all().prefetch_related("tags")
     serializer_class = serializers.ServiceObjectGroupSerializer
     filterset_class = filters.ServiceObjectGroupFilterSet
 
@@ -73,7 +73,7 @@ class ServiceObjectGroupViewSet(NautobotModelViewSet):
 class UserObjectViewSet(NautobotModelViewSet):
     """UserObject viewset."""
 
-    queryset = models.UserObject.objects.all()
+    queryset = models.UserObject.objects.all().prefetch_related("tags")
     serializer_class = serializers.UserObjectSerializer
     filterset_class = filters.UserObjectFilterSet
 
@@ -89,7 +89,7 @@ class UserObjectGroupViewSet(NautobotModelViewSet):
 class ZoneViewSet(NautobotModelViewSet):
     """Zone viewset."""
 
-    queryset = models.Zone.objects.all()
+    queryset = models.Zone.objects.all().prefetch_related("tags")
     serializer_class = serializers.ZoneSerializer
     filterset_class = filters.ZoneFilterSet
 
@@ -97,7 +97,7 @@ class ZoneViewSet(NautobotModelViewSet):
 class PolicyRuleViewSet(NautobotModelViewSet):
     """PolicyRule viewset."""
 
-    queryset = models.PolicyRule.objects.all()
+    queryset = models.PolicyRule.objects.all().prefetch_related("tags")
     serializer_class = serializers.PolicyRuleSerializer
     filterset_class = filters.PolicyRuleFilterSet
 
@@ -105,7 +105,7 @@ class PolicyRuleViewSet(NautobotModelViewSet):
 class PolicyViewSet(NautobotModelViewSet):
     """Policy viewset."""
 
-    queryset = models.Policy.objects.all()
+    queryset = models.Policy.objects.all().prefetch_related("tags")
     serializer_class = serializers.PolicySerializer
     filterset_class = filters.PolicyFilterSet
 
@@ -113,7 +113,7 @@ class PolicyViewSet(NautobotModelViewSet):
 class NATPolicyRuleViewSet(NautobotModelViewSet):
     """NATPolicyRule viewset."""
 
-    queryset = models.NATPolicyRule.objects.all()
+    queryset = models.NATPolicyRule.objects.all().prefetch_related("tags")
     serializer_class = serializers.NATPolicyRuleSerializer
     filterset_class = filters.NATPolicyRuleFilterSet
 
@@ -121,7 +121,7 @@ class NATPolicyRuleViewSet(NautobotModelViewSet):
 class NATPolicyViewSet(NautobotModelViewSet):
     """NATPolicy viewset."""
 
-    queryset = models.NATPolicy.objects.all()
+    queryset = models.NATPolicy.objects.all().prefetch_related("tags")
     serializer_class = serializers.NATPolicySerializer
     filterset_class = filters.NATPolicyFilterSet
 
@@ -129,7 +129,7 @@ class NATPolicyViewSet(NautobotModelViewSet):
 class CapircaPolicyViewSet(ModelViewSet):
     """CapircaPolicy viewset."""
 
-    queryset = models.CapircaPolicy.objects.all()
+    queryset = models.CapircaPolicy.objects.all().prefetch_related("tags")
     serializer_class = serializers.CapircaPolicySerializer
     filterset_class = filters.CapircaPolicyFilterSet
 
