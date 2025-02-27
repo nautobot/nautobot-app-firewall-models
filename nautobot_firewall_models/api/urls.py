@@ -8,4 +8,5 @@ router = OrderedDefaultRouter()
 # add the name of your api endpoint, usually hyphenated model name in plural, e.g. "my-model-classes"
 router.register("iprange", views.IPRangeViewSet)
 
+app_name = "nautobot_firewall_models-api"
 urlpatterns = router.urls

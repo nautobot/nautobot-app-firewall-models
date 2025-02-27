@@ -9,6 +9,7 @@ from nautobot.apps.urls import NautobotUIViewSetRouter
 from nautobot_firewall_models import views
 
 
+app_name = "nautobot_firewall_models"
 router = NautobotUIViewSetRouter()
 
 router.register("iprange", views.IPRangeUIViewSet)
