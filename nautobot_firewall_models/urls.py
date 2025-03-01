@@ -7,6 +7,7 @@ from nautobot.apps.urls import NautobotUIViewSetRouter
 
 from nautobot_firewall_models import viewsets
 
+app_name = "nautobot_firewall_models"
 router = NautobotUIViewSetRouter()
 router.register("address-object", viewsets.AddressObjectUIViewSet)
 router.register("address-object-group", viewsets.AddressObjectGroupUIViewSet)
