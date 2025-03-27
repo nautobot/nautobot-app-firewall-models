@@ -16,7 +16,6 @@ class AddressObjectUIViewSet(NautobotUIViewSet):
     queryset = models.AddressObject.objects.all()
     serializer_class = serializers.AddressObjectSerializer
     table_class = tables.AddressObjectTable
-    action_buttons = ("add",)
 
     lookup_field = "pk"
 
@@ -31,7 +30,6 @@ class AddressObjectGroupUIViewSet(NautobotUIViewSet):
     queryset = models.AddressObjectGroup.objects.all()
     serializer_class = serializers.AddressObjectGroupSerializer
     table_class = tables.AddressObjectGroupTable
-    action_buttons = ("add",)
 
     lookup_field = "pk"
 
@@ -46,7 +44,6 @@ class FQDNUIViewSet(NautobotUIViewSet):
     queryset = models.FQDN.objects.all()
     serializer_class = serializers.FQDNSerializer
     table_class = tables.FQDNTable
-    action_buttons = ("add",)
 
     lookup_field = "pk"
 
@@ -61,6 +58,5 @@ class IPRangeUIViewSet(NautobotUIViewSet):
     queryset = models.IPRange.objects.all()
     serializer_class = serializers.IPRangeSerializer
     table_class = tables.IPRangeTable
-    action_buttons = ("add",)
 
     lookup_field = "pk"

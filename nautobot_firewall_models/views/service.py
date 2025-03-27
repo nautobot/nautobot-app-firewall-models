@@ -16,7 +16,6 @@ class ApplicationObjectUIViewSet(NautobotUIViewSet):
     queryset = models.ApplicationObject.objects.all()
     serializer_class = serializers.ApplicationObjectSerializer
     table_class = tables.ApplicationObjectTable
-    action_buttons = ("add",)
 
     lookup_field = "pk"
 
@@ -31,7 +30,6 @@ class ApplicationObjectGroupUIViewSet(NautobotUIViewSet):
     queryset = models.ApplicationObjectGroup.objects.all()
     serializer_class = serializers.ApplicationObjectGroupSerializer
     table_class = tables.ApplicationObjectGroupTable
-    action_buttons = ("add",)
 
     lookup_field = "pk"
 
@@ -46,7 +44,6 @@ class ServiceObjectUIViewSet(NautobotUIViewSet):
     queryset = models.ServiceObject.objects.all()
     serializer_class = serializers.ServiceObjectSerializer
     table_class = tables.ServiceObjectTable
-    action_buttons = ("add",)
 
     lookup_field = "pk"
 
@@ -61,6 +58,5 @@ class ServiceObjectGroupUIViewSet(NautobotUIViewSet):
     queryset = models.ServiceObjectGroup.objects.all()
     serializer_class = serializers.ServiceObjectGroupSerializer
     table_class = tables.ServiceObjectGroupTable
-    action_buttons = ("add",)
 
     lookup_field = "pk"

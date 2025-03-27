@@ -16,6 +16,5 @@ class ZoneUIViewSet(NautobotUIViewSet):
     queryset = models.Zone.objects.all()
     serializer_class = serializers.ZoneSerializer
     table_class = tables.ZoneTable
-    action_buttons = ("add",)
 
     lookup_field = "pk"
