@@ -30,7 +30,6 @@ class PolicyRuleUIViewSet(NautobotUIViewSet):
     queryset = PolicyRule.objects.all()
     serializer_class = PolicyRuleSerializer
     table_class = PolicyRuleTable
-    action_buttons = ("add",)
 
     lookup_field = "pk"
 
@@ -67,7 +66,6 @@ class PolicyUIViewSet(NautobotUIViewSet):
         "policy_rules__translated_destination_services",
         "policy_rules__translated_destination_service_groups",
     ]
-    action_buttons = ("add",)
 
     lookup_field = "pk"
 
