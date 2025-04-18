@@ -13,7 +13,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -28,9 +27,10 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.13"
+python = ">=3.9.2,<3.13"
 # Used for local development
-nautobot = "^2.0.0"
+nautobot = {git = "https://github.com/nautobot/nautobot.git", rev = "next"}
+# nautobot = "^3.0.0"  # TODO: Uncomment after v3.0.0 is released
 netutils = "^1.0.0"
 capirca = "^2.0.6"
 
@@ -42,22 +42,22 @@ ipython = "*"
 pylint = "*"
 pylint-django = "*"
 pylint-nautobot = "*"
-ruff = "0.5.5"
+ruff = "~0.8.6"
 yamllint = "*"
 toml = "*"
 Markdown = "*"
 # Render custom markdown for version added/changed/remove notes
 markdown-version-annotations = "1.0.1"
 # Rendering docs to HTML
-mkdocs = "1.6.0"
+mkdocs = "1.6.1"
 # Material for MkDocs theme
-mkdocs-material = "9.5.32"
+mkdocs-material = "9.5.50"
 # Automatic documentation from sources, for MkDocs
-mkdocstrings = "0.25.2"
-mkdocstrings-python = "1.10.8"
+mkdocstrings = "0.27.0"
+mkdocstrings-python = "1.13.0"
 mkdocs-autorefs = "1.2.0"
 griffe = "1.1.1"
-towncrier = "~23.6.0"
+towncrier = "~24.8.0"
 to-json-schema = "*"
 jsonschema = "*"
 
@@ -91,7 +91,7 @@ notes = """,
 
 [tool.pylint-nautobot]
 supported_nautobot_versions = [
-    "2.0.0"
+    "3.0.0"
 ]
 
 [tool.ruff]

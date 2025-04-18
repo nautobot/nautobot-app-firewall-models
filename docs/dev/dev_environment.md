@@ -408,7 +408,7 @@ namespace.configure(
     {
         "nautobot_firewall_models": {
             ...
-            "nautobot_ver": "2.0.0",
+            "nautobot_ver": "3.0.0",
 	    ...
         }
     }
