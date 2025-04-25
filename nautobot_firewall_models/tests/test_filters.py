@@ -1,16 +1,22 @@
 """Test IPRange Filter."""
 
-from django.test import TestCase
+from nautobot.apps.testing import FilterTestCases
 
 from nautobot_firewall_models import filters, models
 from nautobot_firewall_models.tests import fixtures
 
 
-class IPRangeFilterTestCase(TestCase):
+class IPRangeFilterTestCase(FilterTestCases.FilterTestCase):
     """IPRange Filter Test Case."""
 
     queryset = models.IPRange.objects.all()
     filterset = filters.IPRangeFilterSet
+    generic_filter_tests = (
+        ("id",),
+        ("created",),
+        ("last_updated",),
+        ("name",),
+    )
 
     @classmethod
     def setUpTestData(cls):

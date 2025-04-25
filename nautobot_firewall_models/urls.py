@@ -12,7 +12,9 @@ from nautobot_firewall_models import views
 app_name = "nautobot_firewall_models"
 router = NautobotUIViewSetRouter()
 
-router.register("iprange", views.IPRangeUIViewSet)
+# The standard is for the route to be the hyphenated version of the model class name plural.
+# for example, ExampleModel would be example-models.
+router.register("ip-ranges", views.IPRangeUIViewSet)
 
 
 urlpatterns = [
