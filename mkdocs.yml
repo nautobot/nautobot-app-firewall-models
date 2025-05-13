@@ -110,8 +110,6 @@ nav:
       - Capirca Integration: "user/capirca.md"
       - Frequently Asked Questions: "user/faq.md"
       - External Interactions: "user/external_interactions.md"
-      - Data Models:
-          - IP Range: "models/iprange.md"
   - Administrator Guide:
       - Install and Configure: "admin/install.md"
       - Upgrade: "admin/upgrade.md"

@@ -50,7 +50,7 @@ class IPRangeForm(fields.IPRangeFieldMixin, LocalContextModelForm, NautobotModel
         """Meta attributes."""
 
         model = models.IPRange
-        fields = "__all__"
+        fields = ["vrf", "description", "status", "tags"]
 
 
 class IPRangeBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
@@ -203,7 +203,7 @@ class ApplicationObjectFilterForm(LocalContextFilterForm, NautobotFilterForm):
     q = forms.CharField(
         required=False,
         label="Search",
-        help_text="Search within Name.",
+        help_text="Search within Name or Description.",
     )
     name = forms.CharField(required=False, label="Name")
     category = DynamicModelChoiceField(
