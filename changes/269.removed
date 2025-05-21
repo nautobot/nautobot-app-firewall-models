@@ -1,1 +1,0 @@
-Removed the filter_address method from IPRangeFilterSet to resolve issues with searching for IPRange objects through the GUI and API.
