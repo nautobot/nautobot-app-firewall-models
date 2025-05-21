@@ -30,7 +30,6 @@ class NATPolicyRuleUIViewSet(NautobotUIViewSet):
     queryset = NATPolicyRule.objects.all()
     serializer_class = NATPolicyRuleSerializer
     table_class = NATPolicyRuleTable
-    action_buttons = ("add",)
 
     lookup_field = "pk"
 
@@ -67,7 +66,6 @@ class NATPolicyUIViewSet(NautobotUIViewSet):
         "nat_policy_rules__translated_destination_services",
         "nat_policy_rules__translated_destination_service_groups",
     ]
-    action_buttons = ("add",)
 
     lookup_field = "pk"
 

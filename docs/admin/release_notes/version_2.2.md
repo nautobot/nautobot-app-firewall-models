@@ -37,3 +37,24 @@ This release adds support for Python 3.12.
 ### Housekeeping
 
 - [#1](https://github.com/nautobot/nautobot-app-firewall-models/issues/1) - Rebaked from the cookie `nautobot-app-v2.4.1`.
+
+
+## [v2.2.2 (2025-05-21)](https://github.com/nautobot/nautobot-app-firewall-models/releases/tag/v2.2.2)
+
+### Changed
+
+- [#298](https://github.com/nautobot/nautobot-app-firewall-models/issues/298) - Changed the test fixture objects to include Nautobot demo's locations.
+
+### Removed
+
+- [#269](https://github.com/nautobot/nautobot-app-firewall-models/issues/269) - Removed the filter_address method from IPRangeFilterSet to resolve issues with searching for IPRange objects through the GUI and API.
+
+### Fixed
+
+- [#271](https://github.com/nautobot/nautobot-app-firewall-models/issues/271) - CSV Import/Export are now accessible in the List Views.
+
+### Housekeeping
+
+- [#0](https://github.com/nautobot/nautobot-app-firewall-models/issues/0) - Rebaked from the cookie `nautobot-app-v2.5.0`.
+- [#1](https://github.com/nautobot/nautobot-app-firewall-models/issues/1) - Rebaked from the cookie `nautobot-app-v2.4.1`.
+- Rebaked from the cookie `nautobot-app-v2.4.2`.

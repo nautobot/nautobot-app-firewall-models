@@ -30,7 +30,7 @@ class CapircaPolicyUIViewSet(
     queryset = models.CapircaPolicy.objects.all()
     serializer_class = serializers.CapircaPolicySerializer
     table_class = tables.CapircaPolicyTable
-    action_buttons = None
+    action_buttons = []
 
     lookup_field = "pk"
 

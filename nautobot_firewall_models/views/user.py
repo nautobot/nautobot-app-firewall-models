@@ -16,7 +16,6 @@ class UserObjectUIViewSet(NautobotUIViewSet):
     queryset = models.UserObject.objects.all()
     serializer_class = serializers.UserObjectSerializer
     table_class = tables.UserObjectTable
-    action_buttons = ("add",)
 
     lookup_field = "pk"
 
@@ -31,6 +30,5 @@ class UserObjectGroupUIViewSet(NautobotUIViewSet):
     queryset = models.UserObjectGroup.objects.all()
     serializer_class = serializers.UserObjectGroupSerializer
     table_class = tables.UserObjectGroupTable
-    action_buttons = ("add",)
 
     lookup_field = "pk"
