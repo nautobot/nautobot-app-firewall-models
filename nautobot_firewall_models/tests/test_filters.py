@@ -6,22 +6,22 @@ from nautobot.dcim.models import Device
 
 from nautobot_firewall_models import filters, models
 
-from .fixtures import create_capirca_env
+from .fixtures import create_aerleon_env
 
 
-class CapircaPolicyModelTestCase(TestCase):
-    """Test filtering operations for CapircaPolicy Model."""
+class AerleonPolicyModelTestCase(TestCase):
+    """Test filtering operations for AerleonPolicy Model."""
 
-    queryset = models.CapircaPolicy.objects.all()
-    filterset = filters.CapircaPolicyFilterSet
+    queryset = models.AerleonPolicy.objects.all()
+    filterset = filters.AerleonPolicyFilterSet
 
     def setUp(self):
         """Set up base objects."""
-        create_capirca_env()
+        create_aerleon_env()
         self.dev01 = Device.objects.get(name="DFW02-WAN00")
         dev02 = Device.objects.get(name="HOU02-WAN00")
-        models.CapircaPolicy.objects.create(device=self.dev01)
-        models.CapircaPolicy.objects.create(device=dev02)
+        models.AerleonPolicy.objects.create(device=self.dev01)
+        models.AerleonPolicy.objects.create(device=dev02)
 
     def test_id(self):
         """Test filtering by ID (primary key)."""
