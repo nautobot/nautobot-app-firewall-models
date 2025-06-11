@@ -50,6 +50,10 @@ AERLEON_MAPPER = {
         "lib": "aerleon.lib.cloudarmor.CloudArmor",
         "type": "filter_type",
     },
+    "fortigate": {
+        "lib": "aerleon.lib.fortigate.Fortigate",
+        "type": "zone",
+    },
     "gce": {
         "lib": "aerleon.lib.gce.GCE",
         "type": "filter-name",
@@ -105,6 +109,10 @@ AERLEON_MAPPER = {
     "pcap": {
         "lib": "aerleon.lib.pcap.PcapFilter",
         "type": "filter-name",
+    },
+    "proxmox": {
+        "lib": "aerleon.lib.proxmox.Proxmox",
+        "type": "direction",
     },
     "speedway": {
         "lib": "aerleon.lib.speedway.Speedway",
