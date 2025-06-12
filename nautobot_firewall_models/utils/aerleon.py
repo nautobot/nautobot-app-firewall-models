@@ -103,7 +103,7 @@ class PolicyToAerleon:
         self.service_group_protocol = {}
         self.service_group = {}
         self.policy = []
-        self.cap_policy = []
+        self.aerleon_policy = []
         self.pol_file = ""
         self.svc_file = ""
         self.net_file = ""
@@ -455,7 +455,7 @@ class PolicyToAerleon:
             if any(service in servicedata for service in services):
                 servicedata[name] = services
 
-        cap_policy = []
+        aerleon_policy = []
         for pol in self.policy:
             rule_name = _slugify(pol["rule-name"])
             if pol["action"] not in ACTION_MAP:
@@ -521,15 +521,15 @@ class PolicyToAerleon:
                 if is_chd and (is_allowed_disabled or is_allowed):
                     rule_details["headers"].append(value)
                     LOGGER.debug("Updated chd_ field `%s` to value: `%s`", str(field), str(value))
-            cap_policy.append(rule_details)
+            aerleon_policy.append(rule_details)
 
-        return cap_policy, networkdata, servicedata
+        return aerleon_policy, networkdata, servicedata
 
     @staticmethod
-    def _get_aerleon_files(cap_policy, networkdata, servicedata):  # pylint: disable=too-many-branches
+    def _get_aerleon_files(aerleon_policy, networkdata, servicedata):  # pylint: disable=too-many-branches
         """Convert the data structures taken in by method to Aerleon configs."""
         pol = []
-        for index, rule in enumerate(cap_policy):
+        for index, rule in enumerate(aerleon_policy):
             LOGGER.debug("Index `%s` for rule `%s`", str(index), str(rule))
 
             pol.append("header {")
@@ -568,8 +568,8 @@ class PolicyToAerleon:
 
     def get_aerleon_cfg(self):
         """Generate Aerleon formatted data structure, convert that into Aerleon text config, run Aerleon."""
-        cap_policy, networkdata, servicedata = self.validate_aerleon_data()
-        pol, networkcfg, servicecfg = self._get_aerleon_files(cap_policy, networkdata, servicedata)
+        aerleon_policy, networkdata, servicedata = self.validate_aerleon_data()
+        pol, networkcfg, servicecfg = self._get_aerleon_files(aerleon_policy, networkdata, servicedata)
 
         self.pol_file = "\n".join(pol)
         self.net_file = "\n".join(networkcfg)

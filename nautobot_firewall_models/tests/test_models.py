@@ -348,10 +348,10 @@ class TestAerleonModels(TestCase):
     def test_aerleon_creates_model(self):
         """Test method to create model."""
         device_obj = Device.objects.get(name="DFW02-WAN00")
-        cap_obj = AerleonPolicy.objects.create(device=device_obj)
+        aerleon_obj = AerleonPolicy.objects.create(device=device_obj)
         svc = "PGSQL = 5432/tcp"
-        self.assertIn(svc, cap_obj.svc)
+        self.assertIn(svc, aerleon_obj.svc)
         net = "printer = 10.0.0.100/32"
-        self.assertIn(net, cap_obj.net)
+        self.assertIn(net, aerleon_obj.net)
         pol = "target:: srx from-zone all to-zone all"
-        self.assertIn(pol, cap_obj.pol)
+        self.assertIn(pol, aerleon_obj.pol)

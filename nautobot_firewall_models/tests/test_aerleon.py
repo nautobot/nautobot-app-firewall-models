@@ -489,9 +489,9 @@ class TestPolicyToAerleon(TestCase):  # pylint: disable=too-many-public-methods,
         svc_obj2 = ServiceObject.objects.get(name="SSH")
         self.pol_rule6.destination_services.set([svc_obj2])
         self.pol_rule6.validated_save()
-        cap_obj = PolicyToAerleon(self.dev_name, self.pol1)
-        cap_obj.validate_policy_data()
-        self.assertIn("SSH", cap_obj.service)
+        aerleon_obj = PolicyToAerleon(self.dev_name, self.pol1)
+        aerleon_obj.validate_policy_data()
+        self.assertIn("SSH", aerleon_obj.service)
 
     def test_svcs_ip_protocol_not_expected(self):
         """Check that you cannot mix and match tcp/udp that have ports with other protocols."""
@@ -586,9 +586,9 @@ class TestPolicyToAerleon(TestCase):  # pylint: disable=too-many-public-methods,
 
     def test_validate_policy_data(self):
         """Test validate_policy_data produces consistent results."""
-        cap_obj = PolicyToAerleon(self.dev_name, self.pol1)
-        cap_obj.validate_policy_data()
-        self.assertEqual(cap_obj.policy, POLICY_DATA)
+        aerleon_obj = PolicyToAerleon(self.dev_name, self.pol1)
+        aerleon_obj.validate_policy_data()
+        self.assertEqual(aerleon_obj.policy, POLICY_DATA)
 
     def test_validate_policy_data_no_policy(self):
         """Test that it fails when you do not provied ability to get policy_detail obj."""
@@ -598,9 +598,9 @@ class TestPolicyToAerleon(TestCase):  # pylint: disable=too-many-public-methods,
     def test_alt_aerleon_type(self):
         """Test non-zone Aerleon config generation."""
         Platform.objects.create(name="Cisco", network_driver="cisco")
-        cap_obj = PolicyToAerleon("cisco", self.pol1)
-        cap_obj.get_aerleon_cfg()
-        self.assertIn("cisco", cap_obj.pol_file)
+        aerleon_obj = PolicyToAerleon("cisco", self.pol1)
+        aerleon_obj.get_aerleon_cfg()
+        self.assertIn("cisco", aerleon_obj.pol_file)
 
     def test_validate_aerleon_data_bad_platform(self):
         """Ensure that an error is raised if platform is not found."""
@@ -611,16 +611,16 @@ class TestPolicyToAerleon(TestCase):  # pylint: disable=too-many-public-methods,
     @patch("nautobot_firewall_models.utils.aerleon.AERLEON_OS_MAPPER", {"srx": "paloaltofw"})
     def test_aerleon_os_map(self):
         """Verify the os config map solution works."""
-        cap_obj = PolicyToAerleon(self.dev_name, self.pol1)
-        self.assertEqual(cap_obj.platform, "paloaltofw")
+        aerleon_obj = PolicyToAerleon(self.dev_name, self.pol1)
+        self.assertEqual(aerleon_obj.platform, "paloaltofw")
 
     def test_aerleon_conversion(self):
         """Verify that generating full config for a polucy is as expected."""
-        cap_obj = PolicyToAerleon(self.dev_name, self.pol1)
-        cap_obj.get_aerleon_cfg()
-        self.assertEqual(cap_obj.net_file, NETWORKS2)
-        self.assertEqual(cap_obj.svc_file, SERVICES2)
-        self.assertEqual(cap_obj.pol_file, POLICY2)
+        aerleon_obj = PolicyToAerleon(self.dev_name, self.pol1)
+        aerleon_obj.get_aerleon_cfg()
+        self.assertEqual(aerleon_obj.net_file, NETWORKS2)
+        self.assertEqual(aerleon_obj.svc_file, SERVICES2)
+        self.assertEqual(aerleon_obj.pol_file, POLICY2)
 
 
 class TestDevicePolicyToAerleon(TestCase):
@@ -637,19 +637,19 @@ class TestDevicePolicyToAerleon(TestCase):
 
     def test_multi_policy_aerleon_config(self):
         """Verify that generating full config for a device is as expected."""
-        cap_obj = DevicePolicyToAerleon(self.device_obj)
-        cap_obj.get_all_aerleon_cfg()
-        self.assertEqual(cap_obj.pol_file, POLICYALL)
+        aerleon_obj = DevicePolicyToAerleon(self.device_obj)
+        aerleon_obj.get_all_aerleon_cfg()
+        self.assertEqual(aerleon_obj.pol_file, POLICYALL)
 
     def test_multi_policy_skipped(self):
         """Ensure that when a policy is not active, it is removed from consideration."""
-        cap_obj = DevicePolicyToAerleon(self.device_obj)
-        cap_obj.get_all_aerleon_cfg()
-        self.assertEqual(len(cap_obj.policy), 7)
+        aerleon_obj = DevicePolicyToAerleon(self.device_obj)
+        aerleon_obj.get_all_aerleon_cfg()
+        self.assertEqual(len(aerleon_obj.policy), 7)
         decomm = Status.objects.get(name="Decommissioned")
         pol3 = Policy.objects.get(name="Policy 3")
         pol3.status = decomm
         pol3.validated_save()
-        cap_obj = DevicePolicyToAerleon(self.device_obj)
-        cap_obj.get_all_aerleon_cfg()
-        self.assertEqual(len(cap_obj.policy), 3)
+        aerleon_obj = DevicePolicyToAerleon(self.device_obj)
+        aerleon_obj.get_all_aerleon_cfg()
+        self.assertEqual(len(aerleon_obj.policy), 3)
