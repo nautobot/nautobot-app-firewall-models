@@ -51,12 +51,12 @@ class AerleonPolicy(PrimaryModel):
         """Update the firewall rules as updates are made."""
         if not PLUGIN_CFG.get("custom_aerleon"):
             LOGGER.debug("Running standard Aerleon conversion")
-            cap_obj = DevicePolicyToAerleon(self.device)
-            cap_obj.get_all_aerleon_cfg()
-            self.pol = cap_obj.pol_file
-            self.svc = cap_obj.svc_file
-            self.net = cap_obj.net_file
-            self.cfg = cap_obj.cfg_file
+            aerleon_obj = DevicePolicyToAerleon(self.device)
+            aerleon_obj.get_all_aerleon_cfg()
+            self.pol = aerleon_obj.pol_file
+            self.svc = aerleon_obj.svc_file
+            self.net = aerleon_obj.net_file
+            self.cfg = aerleon_obj.cfg_file
         else:
             LOGGER.debug("Running custom conversion from function: `%s`", str(PLUGIN_CFG["custom_aerleon"]))
             self.pol, self.svc, self.net, self.cfg = import_string(PLUGIN_CFG["custom_aerleon"])(self.device)
