@@ -389,14 +389,14 @@ class NATPolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         )
 
 
-class CapircaPolicyUIViewTest(ViewTestCases.GetObjectViewTestCase, ViewTestCases.ListObjectsViewTestCase):
+class AerleonPolicyUIViewTest(ViewTestCases.GetObjectViewTestCase, ViewTestCases.ListObjectsViewTestCase):
     """Test the Policy viewsets."""
 
-    model = CapircaPolicy
+    model = AerleonPolicy
 
     @classmethod
     def setUpTestData(cls):
         """Create test data."""
-        fixtures.create_capirca_env()
+        fixtures.create_aerleon_env()
         for device in Device.objects.all():
-            CapircaPolicy.objects.create(device=device)
+            AerleonPolicy.objects.create(device=device)

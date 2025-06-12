@@ -2,7 +2,7 @@
 
 from nautobot.core.apps import HomePageItem, HomePagePanel
 
-from nautobot_firewall_models.models import CapircaPolicy, NATPolicy, NATPolicyRule, Policy, PolicyRule
+from nautobot_firewall_models.models import AerleonPolicy, NATPolicy, NATPolicyRule, Policy, PolicyRule
 
 layout = (
     HomePagePanel(
@@ -26,12 +26,12 @@ layout = (
                 permissions=["nautobot_firewall_models.view_natpolicy"],
             ),
             HomePageItem(
-                name="Capirca Policies",
-                model=CapircaPolicy,
+                name="Aerleon Policies",
+                model=AerleonPolicy,
                 weight=300,
-                link="plugins:nautobot_firewall_models:capircapolicy_list",
+                link="plugins:nautobot_firewall_models:aerleonpolicy_list",
                 description="Firewall Policies",
-                permissions=["nautobot_firewall_models.view_capircapolicy"],
+                permissions=["nautobot_firewall_models.view_aerleonpolicy"],
             ),
             HomePageItem(
                 name="Security Rules",

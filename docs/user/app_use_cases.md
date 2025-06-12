@@ -21,7 +21,7 @@ Although policies can be created without any rules it is recommended to create t
 
 For examples of REST and GraphQL API usage see the [External Interactions](external_interactions.md) page.
 
-Should you wish to integrate Nautobot data with firewall configuration policies, please read the [Capirca Integration](capirca.md) page.
+Should you wish to integrate Nautobot data with firewall configuration policies, please read the [Aerleon Integration](aerleon.md) page.
 
 ## Screenshots
 

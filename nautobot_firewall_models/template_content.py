@@ -2,7 +2,7 @@
 
 from nautobot.apps.ui import TemplateExtension
 
-from nautobot_firewall_models.models import CapircaPolicy
+from nautobot_firewall_models.models import AerleonPolicy
 
 
 class DevicePolicies(TemplateExtension):  # pylint: disable=abstract-method
@@ -50,7 +50,7 @@ class DynamicGroupPolicies(TemplateExtension):  # pylint: disable=abstract-metho
         )
 
 
-class CapircaPolicies(TemplateExtension):  # pylint: disable=abstract-method
+class AerleonPolicies(TemplateExtension):  # pylint: disable=abstract-method
     """Add Policy to the right side of the Device page."""
 
     model = "dcim.device"
@@ -58,13 +58,13 @@ class CapircaPolicies(TemplateExtension):  # pylint: disable=abstract-method
     def right_page(self):
         """Add content to the right side of the Devices detail view."""
         try:
-            obj = CapircaPolicy.objects.get(device=self.context["object"])
+            obj = AerleonPolicy.objects.get(device=self.context["object"])
             return self.render(
-                "nautobot_firewall_models/inc/capirca_policy.html",
-                extra_context={"capirca_object": obj},
+                "nautobot_firewall_models/inc/aerleon_policy.html",
+                extra_context={"aerleon_object": obj},
             )
-        except CapircaPolicy.DoesNotExist:
+        except AerleonPolicy.DoesNotExist:
             return ""
 
 
-template_extensions = [DynamicGroupDevicePolicies, DevicePolicies, DynamicGroupPolicies, CapircaPolicies]
+template_extensions = [DynamicGroupDevicePolicies, DevicePolicies, DynamicGroupPolicies, AerleonPolicies]
