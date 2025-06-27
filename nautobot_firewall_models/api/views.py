@@ -147,6 +147,14 @@ class PolicyDeviceM2MViewSet(ModelViewSet):
     filterset_class = filters.PolicyDeviceM2MFilterSet
 
 
+class PolicyVirtualMachineM2MViewSet(ModelViewSet):
+    """PolicyVirtualMachineM2M viewset."""
+
+    queryset = models.PolicyVirtualMachineM2M.objects.all()
+    serializer_class = serializers.PolicyVirtualMachineM2MSerializer
+    filterset_class = filters.PolicyVirtualMachineM2MFilterSet
+
+
 class PolicyDynamicGroupM2MViewSet(ModelViewSet):
     """PolicyDynamicGroupM2M viewset."""
 

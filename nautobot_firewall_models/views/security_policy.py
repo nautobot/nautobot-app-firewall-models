@@ -16,7 +16,13 @@ from nautobot_firewall_models.forms import (
     PolicyRuleFilterForm,
     PolicyRuleForm,
 )
-from nautobot_firewall_models.models import Policy, PolicyDeviceM2M, PolicyDynamicGroupM2M, PolicyRule
+from nautobot_firewall_models.models import (
+    Policy,
+    PolicyDeviceM2M,
+    PolicyDynamicGroupM2M,
+    PolicyRule,
+    PolicyVirtualMachineM2M,
+)
 from nautobot_firewall_models.tables import PolicyRuleTable, PolicyTable
 
 
@@ -83,6 +89,18 @@ class PolicyUIViewSet(NautobotUIViewSet):
         form_data.pop("csrfmiddlewaretoken", None)
         for device, weight in form_data.items():
             m2m = PolicyDeviceM2M.objects.get(device=device, policy=pk)
+            m2m.weight = weight[0]
+            m2m.validated_save()
+        return redirect(reverse("plugins:nautobot_firewall_models:policy", kwargs={"pk": pk}))
+
+    @action(detail=True, methods=["post"])
+    def virtual_machines(self, request, pk, *args, **kwargs):
+        """Method to set weight on a Virtual Machine & Policy Relationship."""
+        # pylint: disable=invalid-name, arguments-differ
+        form_data = dict(request.POST)
+        form_data.pop("csrfmiddlewaretoken", None)
+        for virtual_machine, weight in form_data.items():
+            m2m = PolicyVirtualMachineM2M.objects.get(virtual_machine=virtual_machine, policy=pk)
             m2m.weight = weight[0]
             m2m.validated_save()
         return redirect(reverse("plugins:nautobot_firewall_models:policy", kwargs={"pk": pk}))

@@ -20,6 +20,7 @@ from .security_policy import (
     PolicyDeviceM2M,
     PolicyDynamicGroupM2M,
     PolicyRule,
+    PolicyVirtualMachineM2M,
 )
 from .service import (
     ApplicationObject,
@@ -44,6 +45,7 @@ __all__ = (
     "NATPolicyRule",
     "Policy",
     "PolicyDeviceM2M",
+    "PolicyVirtualMachineM2M",
     "PolicyDynamicGroupM2M",
     "PolicyRule",
     "ServiceObject",

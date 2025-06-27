@@ -216,6 +216,16 @@ class PolicyDeviceM2MSerializer(ValidatedModelSerializer):
         fields = "__all__"
 
 
+class PolicyVirtualMachineM2MSerializer(ValidatedModelSerializer):
+    """PolicyVirtualMachineM2M Serializer."""
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.PolicyVirtualMachineM2M
+        fields = "__all__"
+
+
 class PolicyDynamicGroupM2MSerializer(ValidatedModelSerializer):
     """PolicyDynamicGroupM2M Serializer."""
 

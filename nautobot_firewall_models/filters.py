@@ -231,6 +231,16 @@ class PolicyDeviceM2MFilterSet(NautobotFilterSet):
         fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
+class PolicyVirtualMachineM2MFilterSet(NautobotFilterSet):
+    """Filter for PolicyVirtualMachineM2M."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.PolicyVirtualMachineM2M
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
+
+
 class PolicyDynamicGroupM2MFilterSet(NautobotFilterSet):
     """Filter for PolicyDynamicGroupM2M."""
 
