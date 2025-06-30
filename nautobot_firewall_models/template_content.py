@@ -1,5 +1,7 @@
 """Extensions of baseline Nautobot views."""
 
+from abc import ABCMeta
+
 from nautobot.apps.ui import TemplateExtension
 
 from nautobot_firewall_models.models import AerleonPolicy
@@ -21,6 +23,21 @@ class DevicePolicies(TemplateExtension):  # pylint: disable=abstract-method
         )
 
 
+class VirtualMachinePolicies(TemplateExtension):  # pylint: disable=abstract-method
+    """Add Policy to the right side of the Virtual Machine page."""
+
+    model = "virtualization.virtualmachine"
+
+    def right_page(self):
+        """Add Policy to the right side of the Virtual Machine page."""
+        return self.render(
+            "nautobot_firewall_models/inc/virtual_machine_policies.html",
+            extra_context={
+                "policies": self.context["object"].policyvirtualmachinem2m_set.all(),
+            },
+        )
+
+
 class DynamicGroupDevicePolicies(TemplateExtension):  # pylint: disable=abstract-method
     """Add Policy to the right side of the Device page."""
 
@@ -30,6 +47,19 @@ class DynamicGroupDevicePolicies(TemplateExtension):  # pylint: disable=abstract
         """Add content to the right side of the Devices detail view."""
         return self.render(
             "nautobot_firewall_models/inc/dynamic_group_device_policies.html",
+            extra_context={"dynamic_groups": self.context["object"].dynamic_groups.all()},
+        )
+
+
+class DynamicGroupVirtualMachinePolicies(TemplateExtension):  # pylint: disable=abstract-method
+    """Add Policy to the right side of the Virtual Machine page."""
+
+    model = "virtualization.virtualmachine"
+
+    def right_page(self):
+        """Add content to the right side of the Devices detail view."""
+        return self.render(
+            "nautobot_firewall_models/inc/dynamic_group_virtual_machine_policies.html",
             extra_context={"dynamic_groups": self.context["object"].dynamic_groups.all()},
         )
 
@@ -50,10 +80,8 @@ class DynamicGroupPolicies(TemplateExtension):  # pylint: disable=abstract-metho
         )
 
 
-class AerleonPolicies(TemplateExtension):  # pylint: disable=abstract-method
-    """Add Policy to the right side of the Device page."""
-
-    model = "dcim.device"
+class AbstractAerleonPolicies(TemplateExtension, metaclass=ABCMeta):  # pylint: disable=abstract-method
+    """Add Policy to the right side of the model page (has to be subclassed)."""
 
     def right_page(self):
         """Add content to the right side of the Devices detail view."""
@@ -67,4 +95,24 @@ class AerleonPolicies(TemplateExtension):  # pylint: disable=abstract-method
             return ""
 
 
-template_extensions = [DynamicGroupDevicePolicies, DevicePolicies, DynamicGroupPolicies, AerleonPolicies]
+class AerleonDevicePolicies(AbstractAerleonPolicies):  # pylint: disable=abstract-method
+    """Add Policy to the right side of the Device page."""
+
+    model = "dcim.device"
+
+
+class AerleonVirtualMachinePolicies(AbstractAerleonPolicies):  # pylint: disable=abstract-method
+    """Add Policy to the right side of the Virtual Machine page."""
+
+    model = "virtualization.virtualmachine"
+
+
+template_extensions = [
+    DynamicGroupDevicePolicies,
+    DynamicGroupVirtualMachinePolicies,
+    DevicePolicies,
+    VirtualMachinePolicies,
+    DynamicGroupPolicies,
+    AerleonDevicePolicies,
+    AerleonVirtualMachinePolicies,
+]

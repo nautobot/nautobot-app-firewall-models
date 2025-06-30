@@ -1,0 +1,35 @@
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading"><strong>Security Policies via Dynamic Groups</strong></div>
+    {% if not dynamic_groups %}
+    <div class="panel-body">
+        <span class="text-muted">None</span>
+    </div>
+    {% else %}
+    <table class="table table-hover panel-body">
+        <tr>
+            <th>Policy</th>
+            <th>Weight</th>
+            <th>Type</th>
+        </tr>
+        <tbody>
+            {% for group in dynamic_groups %}
+                {% for m2m in group.policydynamicgroupm2m_set.all %}
+                    <tr>
+                        <td>
+                            <a href="{{ m2m.policy.get_absolute_url }}">{{ m2m.policy }}</a> via <a href="{{ m2m.dynamic_group.get_absolute_url }}">{{ m2m.dynamic_group }}</a>
+                        </td>
+                        <td>
+                            {{ m2m.weight }}
+                        </td>
+                        <td>
+                            Firewall
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}
