@@ -1,0 +1,38 @@
+{% load helpers %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>Assign Policy Weight to Virtual Machine</strong>
+            </div>
+            {% if object.policyvirtualmachinem2m_set.all %}
+                <form action="{% url 'plugins:nautobot_firewall_models:policy_virtual-machines' pk=object.id %}" method="post" enctype="multipart/form-data" class="form form-horizontal">
+                    {% csrf_token %}
+                    <table class="table table-hover panel-body">
+                        <tr>
+                            <th>Weight</th>
+                            <th>Virtual Machine</th>
+                        </tr>
+                        <tbody>
+                            {% for m2m in object.policyvirtualmachinem2m_set.all %}
+                                <tr>
+                                    <td>
+                                        <input name="{{ m2m.virtual_machine.id }}" value="{{ m2m.weight }}"></input>
+                                    </td>
+                                    <td>
+                                        {{ m2m.virtual_machine }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            {% else %}
+                <div class="panel-body">
+                    <span class="text-muted">No Virtual Machines assigned</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

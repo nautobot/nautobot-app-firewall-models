@@ -21,6 +21,7 @@ from nautobot.extras.models import DynamicGroup, Tag
 from nautobot.ipam.models import VRF, IPAddress, Prefix
 from nautobot.tenancy.forms import TenancyFilterForm, TenancyForm
 from nautobot.tenancy.models import Tenant
+from nautobot.virtualization.models import VirtualMachine
 
 from nautobot_firewall_models import choices, fields, models
 
@@ -632,7 +633,7 @@ class PolicyRuleBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm
 class PolicyFilterForm(LocalContextFilterForm, NautobotFilterForm, TenancyFilterForm):
     """Filter form to filter searches."""
 
-    field_order = ["q", "name", "assigned_devices", "assigned_dynamic_groups"]
+    field_order = ["q", "name", "assigned_devices", "assigned_virtual_machines", "assigned_dynamic_groups"]
 
     model = models.Policy
     q = forms.CharField(
@@ -642,6 +643,7 @@ class PolicyFilterForm(LocalContextFilterForm, NautobotFilterForm, TenancyFilter
     )
     name = forms.CharField(required=False, label="Name")
     assigned_devices = DynamicModelChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_virtual_machines = DynamicModelChoiceField(queryset=VirtualMachine.objects.all(), required=False)
     assigned_dynamic_groups = DynamicModelChoiceField(queryset=DynamicGroup.objects.all(), required=False)
 
 
@@ -649,6 +651,7 @@ class PolicyForm(LocalContextModelForm, NautobotModelForm, TenancyForm):
     """Policy creation/edit form."""
 
     assigned_devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_virtual_machines = DynamicModelMultipleChoiceField(queryset=VirtualMachine.objects.all(), required=False)
     assigned_dynamic_groups = DynamicModelMultipleChoiceField(queryset=DynamicGroup.objects.all(), required=False)
     policy_rules = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), required=False)
 
@@ -662,6 +665,7 @@ class PolicyForm(LocalContextModelForm, NautobotModelForm, TenancyForm):
             "policy_rules",
             "status",
             "assigned_devices",
+            "assigned_virtual_machines",
             "assigned_dynamic_groups",
             "tenant_group",
             "tenant",
@@ -675,6 +679,7 @@ class PolicyBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
     pk = DynamicModelMultipleChoiceField(queryset=models.Policy.objects.all(), widget=forms.MultipleHiddenInput)
     description = forms.CharField(required=False)
     assigned_devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_virtual_machines = DynamicModelMultipleChoiceField(queryset=VirtualMachine.objects.all(), required=False)
     assigned_dynamic_groups = DynamicModelMultipleChoiceField(queryset=DynamicGroup.objects.all(), required=False)
     policy_rules = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), required=False)
     tenant = DynamicModelChoiceField(queryset=Tenant.objects.all(), required=False)

@@ -78,7 +78,12 @@ class PolicyUIViewSet(NautobotUIViewSet):
     def get_queryset(self):
         """Overload to overwrite permissiosn action map."""
         queryset = super().get_queryset()
-        _perms = {**PERMISSIONS_ACTION_MAP, "devices": "change", "dynamic_groups": "change"}
+        _perms = {
+            **PERMISSIONS_ACTION_MAP,
+            "devices": "change",
+            "virtual_machines": "change",
+            "dynamic_groups": "change",
+        }
         return queryset.restrict(self.request.user, _perms[self.action])
 
     @action(detail=True, methods=["post"])
