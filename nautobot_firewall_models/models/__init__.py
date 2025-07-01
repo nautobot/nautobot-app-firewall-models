@@ -14,6 +14,7 @@ from .nat_policy import (
     NATPolicyDeviceM2M,
     NATPolicyDynamicGroupM2M,
     NATPolicyRule,
+    NATPolicyVirtualMachineM2M,
 )
 from .security_policy import (
     Policy,
@@ -41,6 +42,7 @@ __all__ = (
     "IPRange",
     "NATPolicy",
     "NATPolicyDeviceM2M",
+    "NATPolicyVirtualMachineM2M",
     "NATPolicyDynamicGroupM2M",
     "NATPolicyRule",
     "Policy",
