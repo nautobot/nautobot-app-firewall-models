@@ -576,28 +576,36 @@ class PolicyToAerleon:
         self.cfg_file = generate_aerleon_config(servicecfg, networkcfg, self.pol_file, self.platform)
 
 
-class DevicePolicyToAerleon(PolicyToAerleon):
+class ObjectPolicyToAerleon(PolicyToAerleon):
     """Class object to convert Policy orm object to Aerleon object for a whole device."""
 
-    def __init__(self, device_obj, **kwargs):  # pylint: disable=super-init-not-called
+    def __init__(self, obj, **kwargs):  # pylint: disable=super-init-not-called
         """Overload init."""
-        super().__init__(device_obj.platform.network_driver, **kwargs)
+        super().__init__(obj.platform.network_driver, **kwargs)
         self.policy_objs = []
         policy_name = []
         LOGGER.debug("Aerleon Platform Name: `%s`", str(self.platform))
-        LOGGER.debug("Original Platform Name: `%s`", str(device_obj.platform.network_driver))
+        LOGGER.debug("Original Platform Name: `%s`", str(obj.platform.network_driver))
         LOGGER.debug("cf_allow_list_enabled: `%s`", str(self.cf_allow_list_enabled))
         LOGGER.debug("cf_allow_list: `%s`", str(self.cf_allow_list))
 
         # TODO: Determine if this can be done with weight and more efficient
-        for dynamic_group in device_obj.dynamic_groups.all():
+        for dynamic_group in obj.dynamic_groups.all():
             for policy_group in dynamic_group.policydynamicgroupm2m_set.all():
                 self.policy_objs.append(policy_group.policy)
                 policy_name.append(policy_group.policy.name)
-        for policy_group in device_obj.policydevicem2m_set.all():
-            if policy_group.policy.name not in policy_name:
-                self.policy_objs.append(policy_group.policy)
-                policy_name.append(policy_group.policy.name)
+
+        if hasattr(obj, "policydevicem2m_set"):
+            for policy_group in obj.policydevicem2m_set.all():
+                if policy_group.policy.name not in policy_name:
+                    self.policy_objs.append(policy_group.policy)
+                    policy_name.append(policy_group.policy.name)
+
+        if hasattr(obj, "policyvirtualmachinem2m_set"):
+            for policy_group in obj.policyvirtualmachinem2m_set.all():
+                if policy_group.policy.name not in policy_name:
+                    self.policy_objs.append(policy_group.policy)
+                    policy_name.append(policy_group.policy.name)
 
         self.policy_name = "__".join(policy_name)
 

@@ -3,6 +3,7 @@
 # ruff: noqa: F403, F405
 # pylint: disable=invalid-name
 # pylint: disable=duplicate-code
+from django.contrib.contenttypes.models import ContentType
 from nautobot.apps.testing import ViewTestCases
 from nautobot.dcim.models import Device
 from nautobot.extras.models.statuses import Status
@@ -399,4 +400,5 @@ class AerleonPolicyUIViewTest(ViewTestCases.GetObjectViewTestCase, ViewTestCases
         """Create test data."""
         fixtures.create_aerleon_env()
         for device in Device.objects.all():
-            AerleonPolicy.objects.create(device=device)
+            ct = ContentType.objects.get_for_model(Device)
+            AerleonPolicy.objects.create(content_type=ct, object_id=device.id)

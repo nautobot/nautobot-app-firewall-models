@@ -347,12 +347,13 @@ class AerleonPolicyTable(BaseTable):
     """Table for list view."""
 
     pk = ToggleColumn()
-    device = tables.TemplateColumn(
-        template_code="""<a href="{% url 'plugins:nautobot_firewall_models:aerleonpolicy' pk=record.pk %}">{{ record.device }}</a> """
+    attached_object = tables.TemplateColumn(
+        template_code="""<a href="{% url 'plugins:nautobot_firewall_models:aerleonpolicy' pk=record.pk %}">{{ record.attached_object }}</a> """,
+        verbose_name="Object",
     )
 
     class Meta(BaseTable.Meta):
         """Meta attributes."""
 
         model = models.AerleonPolicy
-        fields = ("pk", "device")
+        fields = ("pk",)

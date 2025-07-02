@@ -1,6 +1,7 @@
 """Unit tests for nautobot_firewall_models."""
 # pylint: disable=invalid-name
 
+from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 from nautobot.dcim.models import Device
 
@@ -18,10 +19,12 @@ class AerleonPolicyModelTestCase(TestCase):
     def setUp(self):
         """Set up base objects."""
         create_aerleon_env()
+        ct = ContentType.objects.get_for_model(Device)
+
         self.dev01 = Device.objects.get(name="DFW02-WAN00")
         dev02 = Device.objects.get(name="HOU02-WAN00")
-        models.AerleonPolicy.objects.create(device=self.dev01)
-        models.AerleonPolicy.objects.create(device=dev02)
+        models.AerleonPolicy.objects.create(content_type=ct, object_id=self.dev01.id)
+        models.AerleonPolicy.objects.create(content_type=ct, object_id=dev02.id)
 
     def test_id(self):
         """Test filtering by ID (primary key)."""
@@ -36,5 +39,5 @@ class AerleonPolicyModelTestCase(TestCase):
         """Test filtering by Device."""
         params = {"device": [self.dev01.name]}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
-        params = {"device": [self.dev01.id]}
+        params = {"device_id": [self.dev01.id]}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)

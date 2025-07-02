@@ -12,7 +12,7 @@ from nautobot.extras.models import Status
 from nautobot.ipam.models import IPAddress, Namespace
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
-from nautobot_firewall_models.utils.aerleon import DevicePolicyToAerleon, PolicyToAerleon, generate_aerleon_config
+from nautobot_firewall_models.utils.aerleon import ObjectPolicyToAerleon, PolicyToAerleon, generate_aerleon_config
 
 from .fixtures import create_aerleon_env
 
@@ -637,19 +637,19 @@ class TestDevicePolicyToAerleon(TestCase):
 
     def test_multi_policy_aerleon_config(self):
         """Verify that generating full config for a device is as expected."""
-        aerleon_obj = DevicePolicyToAerleon(self.device_obj)
+        aerleon_obj = ObjectPolicyToAerleon(self.device_obj)
         aerleon_obj.get_all_aerleon_cfg()
         self.assertEqual(aerleon_obj.pol_file, POLICYALL)
 
     def test_multi_policy_skipped(self):
         """Ensure that when a policy is not active, it is removed from consideration."""
-        aerleon_obj = DevicePolicyToAerleon(self.device_obj)
+        aerleon_obj = ObjectPolicyToAerleon(self.device_obj)
         aerleon_obj.get_all_aerleon_cfg()
         self.assertEqual(len(aerleon_obj.policy), 7)
         decomm = Status.objects.get(name="Decommissioned")
         pol3 = Policy.objects.get(name="Policy 3")
         pol3.status = decomm
         pol3.validated_save()
-        aerleon_obj = DevicePolicyToAerleon(self.device_obj)
+        aerleon_obj = ObjectPolicyToAerleon(self.device_obj)
         aerleon_obj.get_all_aerleon_cfg()
         self.assertEqual(len(aerleon_obj.policy), 3)

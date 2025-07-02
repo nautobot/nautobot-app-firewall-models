@@ -904,28 +904,15 @@ class NATPolicyBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm)
 # AerleonPolicy
 
 
-class AerleonPolicyForm(LocalContextModelForm, NautobotModelForm):
-    """Filter Form for AerleonPolicy instances."""
-
-    device = DynamicModelChoiceField(queryset=Device.objects.all())
-
-    class Meta:
-        """Boilerplate form Meta data for compliance rule."""
-
-        model = models.AerleonPolicy
-        fields = (
-            "device",
-            "pol",
-            "net",
-            "svc",
-            "cfg",
-        )
-
-
 class AerleonPolicyFilterForm(LocalContextFilterForm, NautobotFilterForm):
     """Form for AerleonPolicy instances."""
 
     model = models.AerleonPolicy
+
+    device_id = DynamicModelChoiceField(queryset=Device.objects.all(), required=False, label="Device")
+    virtual_machine_id = DynamicModelChoiceField(
+        queryset=VirtualMachine.objects.all(), required=False, label="Virtual Machine"
+    )
 
     q = forms.CharField(required=False, label="Search")
 

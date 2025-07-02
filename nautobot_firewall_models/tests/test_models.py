@@ -2,6 +2,7 @@
 
 # ruff: noqa: F403, F405
 # pylint: disable=invalid-name
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from nautobot.dcim.models import Device
@@ -348,7 +349,8 @@ class TestAerleonModels(TestCase):
     def test_aerleon_creates_model(self):
         """Test method to create model."""
         device_obj = Device.objects.get(name="DFW02-WAN00")
-        aerleon_obj = AerleonPolicy.objects.create(device=device_obj)
+        ct = ContentType.objects.get_for_model(Device)
+        aerleon_obj = AerleonPolicy.objects.create(content_type=ct, object_id=device_obj.id)
         svc = "PGSQL = 5432/tcp"
         self.assertIn(svc, aerleon_obj.svc)
         net = "printer = 10.0.0.100/32"
