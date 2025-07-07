@@ -2,6 +2,7 @@
 
 from abc import ABCMeta
 
+from django.contrib.contenttypes.models import ContentType
 from nautobot.apps.ui import TemplateExtension
 
 from nautobot_firewall_models.models import AerleonPolicy
@@ -86,10 +87,12 @@ class AbstractAerleonPolicies(TemplateExtension, metaclass=ABCMeta):  # pylint: 
     def right_page(self):
         """Add content to the right side of the Devices detail view."""
         try:
-            obj = AerleonPolicy.objects.get(device=self.context["object"])
+            obj = self.context["object"]
+            ct = ContentType.objects.get_for_model(obj)
+            aerleon_object = AerleonPolicy.objects.get(content_type=ct, object_id=obj.id)
             return self.render(
                 "nautobot_firewall_models/inc/aerleon_policy.html",
-                extra_context={"aerleon_object": obj},
+                extra_context={"aerleon_object": aerleon_object},
             )
         except AerleonPolicy.DoesNotExist:
             return ""

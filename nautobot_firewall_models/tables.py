@@ -324,6 +324,7 @@ class NATPolicyTable(StatusTableMixin, BaseTable):
     nat_policy_rules = tables.ManyToManyColumn(verbose_name="NAT policy rules", linkify_item=True)
     actions = ButtonsColumn(models.NATPolicy, buttons=("edit", "delete"))
     assigned_devices = tables.ManyToManyColumn(linkify_item=True)
+    assigned_virtual_machines = tables.ManyToManyColumn(linkify_item=True)
     assigned_dynamic_groups = tables.ManyToManyColumn(linkify_item=True)
 
     class Meta(BaseTable.Meta):
@@ -336,6 +337,7 @@ class NATPolicyTable(StatusTableMixin, BaseTable):
             "description",
             "nat_policy_rules",
             "assigned_devices",
+            "assigned_virtual_machines",
             "assigned_dynamic_groups",
             "status",
         )

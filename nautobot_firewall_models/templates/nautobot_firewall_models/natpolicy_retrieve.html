@@ -46,6 +46,18 @@
                 </td>
             </tr>
             <tr>
+                <td>Virtual Machines</td>
+                <td>
+                    <ul>
+                        {% for i in object.assigned_virtual_machines.all %}
+                            <li><a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a></li>
+                        {% empty %}
+                            None
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
                 <td>Dynamic Groups</td>
                 <td>
                     <ul>
