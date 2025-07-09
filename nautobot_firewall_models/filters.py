@@ -3,7 +3,8 @@
 import django_filters
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
-from django_filters import ModelMultipleChoiceFilter
+from django.db.models import Q
+from django_filters import ModelMultipleChoiceFilter, CharFilter
 from nautobot.apps.filters import (
     MultiValueCharFilter,
     NautobotFilterSet,
@@ -236,6 +237,11 @@ class AerleonPolicyFilterSet(BaseFilterSet, NautobotFilterSet):
         method="filter_virtual_machine",
     )
 
+    q = SearchFilter(
+        filter_predicates={},
+        method="filter_q",
+    )
+
     class Meta:
         """Meta attributes for filter."""
 
@@ -266,6 +272,25 @@ class AerleonPolicyFilterSet(BaseFilterSet, NautobotFilterSet):
 
         return queryset.filter(content_type=ct, object_id__in=[v.id for v in value])
 
+    @staticmethod
+    def filter_q(queryset, _, value):
+        if not value:
+            return queryset
+
+        device_ct = ContentType.objects.get_for_model(Device)
+        devices = Device.objects.filter(
+            Q(name__icontains=value)
+        )
+
+        vm_ct = ContentType.objects.get_for_model(VirtualMachine)
+        vms = VirtualMachine.objects.filter(
+            Q(name__icontains=value)
+        )
+
+        return queryset.filter(
+            Q(content_type=device_ct, object_id__in=[v.id for v in devices]) |
+            Q(content_type=vm_ct, object_id__in=[v.id for v in vms])
+        )
 
 ###########################
 # Through Models
