@@ -4,7 +4,7 @@ import django_filters
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
-from django_filters import ModelMultipleChoiceFilter, CharFilter
+from django_filters import ModelMultipleChoiceFilter
 from nautobot.apps.filters import (
     MultiValueCharFilter,
     NautobotFilterSet,
@@ -258,9 +258,9 @@ class AerleonPolicyFilterSet(BaseFilterSet, NautobotFilterSet):
         if not value:
             return queryset
 
-        ct = ContentType.objects.get_for_model(Device)
+        content_type = ContentType.objects.get_for_model(Device)
 
-        return queryset.filter(content_type=ct, object_id__in=[v.id for v in value])
+        return queryset.filter(content_type=content_type, object_id__in=[v.id for v in value])
 
     @staticmethod
     def filter_virtual_machine(queryset, _, value):
@@ -268,29 +268,27 @@ class AerleonPolicyFilterSet(BaseFilterSet, NautobotFilterSet):
         if not value:
             return queryset
 
-        ct = ContentType.objects.get_for_model(VirtualMachine)
+        content_type = ContentType.objects.get_for_model(VirtualMachine)
 
-        return queryset.filter(content_type=ct, object_id__in=[v.id for v in value])
+        return queryset.filter(content_type=content_type, object_id__in=[v.id for v in value])
 
     @staticmethod
     def filter_q(queryset, _, value):
+        """Custom filter method for q for handling GenericForeignKey."""
         if not value:
             return queryset
 
         device_ct = ContentType.objects.get_for_model(Device)
-        devices = Device.objects.filter(
-            Q(name__icontains=value)
-        )
+        devices = Device.objects.filter(Q(name__icontains=value))
 
         vm_ct = ContentType.objects.get_for_model(VirtualMachine)
-        vms = VirtualMachine.objects.filter(
-            Q(name__icontains=value)
-        )
+        vms = VirtualMachine.objects.filter(Q(name__icontains=value))
 
         return queryset.filter(
-            Q(content_type=device_ct, object_id__in=[v.id for v in devices]) |
-            Q(content_type=vm_ct, object_id__in=[v.id for v in vms])
+            Q(content_type=device_ct, object_id__in=[v.id for v in devices])
+            | Q(content_type=vm_ct, object_id__in=[v.id for v in vms])
         )
+
 
 ###########################
 # Through Models

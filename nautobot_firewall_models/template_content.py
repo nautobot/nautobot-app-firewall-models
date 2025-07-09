@@ -90,20 +90,20 @@ class AbstractAerleonPolicies(TemplateExtension, metaclass=ABCMeta):  # pylint: 
         """Add content to the right side of the Devices detail view."""
         try:
             obj = self.context["object"]
-            ct = ContentType.objects.get_for_model(obj)
-            aerleon_object = AerleonPolicy.objects.get(content_type=ct, object_id=obj.id)
+            content_type = ContentType.objects.get_for_model(obj)
+            aerleon_object = AerleonPolicy.objects.get(content_type=content_type, object_id=obj.id)
 
-            q = ""
-            if ct.app_label == "virtualization" and ct.model == "virtualmachine":
-                q = f"virtual_machine={obj.id}"
-            elif ct.app_label == "dcim" and ct.model == "device":
-                q = f"device={obj.id}"
+            query_string = ""
+            if content_type.app_label == "virtualization" and content_type.model == "virtualmachine":
+                query_string = f"virtual_machine={obj.id}"
+            elif content_type.app_label == "dcim" and content_type.model == "device":
+                query_string = f"device={obj.id}"
 
             return self.render(
                 "nautobot_firewall_models/inc/aerleon_policy.html",
                 extra_context={
                     "aerleon_object": aerleon_object,
-                    "run_job_link": f'{reverse_lazy("extras:job_run_by_class_path", kwargs={"class_path": "nautobot_firewall_models.jobs.RunAerleonJob"})}?{q}',
+                    "run_job_link": f'{reverse_lazy("extras:job_run_by_class_path", kwargs={"class_path": "nautobot_firewall_models.jobs.RunAerleonJob"})}?{query_string}',
                 },
             )
         except AerleonPolicy.DoesNotExist:

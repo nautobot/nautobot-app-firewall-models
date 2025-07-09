@@ -44,13 +44,13 @@ class RunAerleonJob(Job):  # pylint disable=too-few-public-method
                     objects.update(dyn.members.all())
                 for dev in policy.assigned_devices.all():
                     objects.add(dev)
-                for vm in policy.assigned_virtual_machines.all():
-                    objects.add(vm)
+                for virtual_machine in policy.assigned_virtual_machines.all():
+                    objects.add(virtual_machine)
 
         for obj in objects:
             logger.debug("Running: `%s`", str(obj))
-            ct = ContentType.objects.get_for_model(obj)
-            AerleonPolicy.objects.update_or_create(content_type=ct, object_id=obj.id)
+            content_type = ContentType.objects.get_for_model(obj)
+            AerleonPolicy.objects.update_or_create(content_type=content_type, object_id=obj.id)
             logger.info("%s Updated", obj, extra={"object": obj})
 
 
