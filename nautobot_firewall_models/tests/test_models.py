@@ -8,6 +8,7 @@ from django.test import TestCase
 from nautobot.dcim.models import Device
 from nautobot.extras.models import Status
 from nautobot.ipam.models import VRF
+from nautobot.virtualization.models import VirtualMachine
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
@@ -346,11 +347,23 @@ class TestAerleonModels(TestCase):
         """Create the data."""
         fixtures.create_aerleon_env()
 
-    def test_aerleon_creates_model(self):
+    def test_aerleon_creates_model_device(self):
         """Test method to create model."""
         device_obj = Device.objects.get(name="DFW02-WAN00")
         ct = ContentType.objects.get_for_model(Device)
         aerleon_obj = AerleonPolicy.objects.create(content_type=ct, object_id=device_obj.id)
+        svc = "PGSQL = 5432/tcp"
+        self.assertIn(svc, aerleon_obj.svc)
+        net = "printer = 10.0.0.100/32"
+        self.assertIn(net, aerleon_obj.net)
+        pol = "target:: srx from-zone all to-zone all"
+        self.assertIn(pol, aerleon_obj.pol)
+
+    def test_aerleon_creates_model_vm(self):
+        """Test method to create model."""
+        vm_obj = VirtualMachine.objects.get(name="DFW02-CLU01-VM1")
+        ct = ContentType.objects.get_for_model(VirtualMachine)
+        aerleon_obj = AerleonPolicy.objects.create(content_type=ct, object_id=vm_obj.id)
         svc = "PGSQL = 5432/tcp"
         self.assertIn(svc, aerleon_obj.svc)
         net = "printer = 10.0.0.100/32"

@@ -8,6 +8,7 @@ from nautobot.extras.models.statuses import Status
 from nautobot.ipam.models import VRF, Namespace, Prefix
 from nautobot.ipam.models import IPAddress as IPAddr
 from nautobot.tenancy.models import Tenant, TenantGroup
+from nautobot.virtualization.models import Cluster, ClusterType, VirtualMachine
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
@@ -386,18 +387,49 @@ def assign_policies():  # pylint: disable=too-many-locals
         status=status,
         platform=palo_platform,
     )
+    PolicyDeviceM2M.objects.get_or_create(policy=pol1, device=dev1, weight=150)
+    PolicyDeviceM2M.objects.get_or_create(policy=pol2, device=dev1, weight=200)
+    PolicyDeviceM2M.objects.get_or_create(policy=pol1, device=dev2)
+    NATPolicyDeviceM2M.objects.get_or_create(nat_policy=nat_policy_1, device=dev1, weight=150)
+    NATPolicyDeviceM2M.objects.get_or_create(nat_policy=nat_policy_2, device=dev1, weight=200)
+    NATPolicyDeviceM2M.objects.get_or_create(nat_policy=nat_policy_1, device=dev2)
+
+    cluster_type, _ = ClusterType.objects.get_or_create(name="Proxmox")
+    cluster1, _ = Cluster.objects.get_or_create(name="DFW02-CLU01", cluster_type=cluster_type, location=site1)
+    cluster2, _ = Cluster.objects.get_or_create(name="HOU02-CLU01", cluster_type=cluster_type, location=site2)
+    vm1, _ = VirtualMachine.objects.get_or_create(
+        name="DFW02-CLU01-VM1",
+        cluster=cluster1,
+        status=status,
+        platform=jun_platform,
+    )
+    vm2, _ = VirtualMachine.objects.get_or_create(
+        name="HOU02-CLU01-VM2",
+        cluster=cluster2,
+        status=status,
+        platform=palo_platform,
+    )
+    PolicyVirtualMachineM2M.objects.get_or_create(policy=pol1, virtual_machine=vm1, weight=150)
+    PolicyVirtualMachineM2M.objects.get_or_create(policy=pol2, virtual_machine=vm1, weight=200)
+    PolicyVirtualMachineM2M.objects.get_or_create(policy=pol1, virtual_machine=vm2)
+    NATPolicyVirtualMachineM2M.objects.get_or_create(nat_policy=nat_policy_1, virtual_machine=vm1, weight=150)
+    NATPolicyVirtualMachineM2M.objects.get_or_create(nat_policy=nat_policy_2, virtual_machine=vm1, weight=200)
+    NATPolicyVirtualMachineM2M.objects.get_or_create(nat_policy=nat_policy_1, virtual_machine=vm2)
+
     dynamic_group, _ = DynamicGroup.objects.get_or_create(
         name="North Texas", content_type=ContentType.objects.get_for_model(Device)
     )
     dynamic_group.filter = {"location": ["DFW02"]}
     dynamic_group.validated_save()
-    PolicyDeviceM2M.objects.get_or_create(policy=pol1, device=dev1, weight=150)
-    PolicyDeviceM2M.objects.get_or_create(policy=pol2, device=dev1, weight=200)
-    PolicyDeviceM2M.objects.get_or_create(policy=pol1, device=dev2)
     PolicyDynamicGroupM2M.objects.get_or_create(policy=pol3, dynamic_group=dynamic_group, weight=1000)
-    NATPolicyDeviceM2M.objects.get_or_create(nat_policy=nat_policy_1, device=dev1, weight=150)
-    NATPolicyDeviceM2M.objects.get_or_create(nat_policy=nat_policy_2, device=dev1, weight=200)
-    NATPolicyDeviceM2M.objects.get_or_create(nat_policy=nat_policy_1, device=dev2)
+    NATPolicyDynamicGroupM2M.objects.get_or_create(nat_policy=nat_policy_3, dynamic_group=dynamic_group, weight=1000)
+
+    dynamic_group, _ = DynamicGroup.objects.get_or_create(
+        name="North Texas (VM)", content_type=ContentType.objects.get_for_model(VirtualMachine)
+    )
+    dynamic_group.filter = {"location": ["DFW02"]}
+    dynamic_group.validated_save()
+    PolicyDynamicGroupM2M.objects.get_or_create(policy=pol3, dynamic_group=dynamic_group, weight=1000)
     NATPolicyDynamicGroupM2M.objects.get_or_create(nat_policy=nat_policy_3, dynamic_group=dynamic_group, weight=1000)
 
 

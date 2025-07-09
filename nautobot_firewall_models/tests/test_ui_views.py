@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from nautobot.apps.testing import ViewTestCases
 from nautobot.dcim.models import Device
 from nautobot.extras.models.statuses import Status
+from nautobot.virtualization.models import VirtualMachine
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
@@ -402,3 +403,7 @@ class AerleonPolicyUIViewTest(ViewTestCases.GetObjectViewTestCase, ViewTestCases
         for device in Device.objects.all():
             ct = ContentType.objects.get_for_model(Device)
             AerleonPolicy.objects.create(content_type=ct, object_id=device.id)
+
+        for vm in VirtualMachine.objects.all():
+            ct = ContentType.objects.get_for_model(VirtualMachine)
+            AerleonPolicy.objects.create(content_type=ct, object_id=vm.id)

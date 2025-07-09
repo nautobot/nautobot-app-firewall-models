@@ -7,6 +7,7 @@ from nautobot.dcim.models import Device, DeviceType, Location, Platform
 from nautobot.extras.models import Role, Status
 from nautobot.ipam.models import VRF, Prefix
 from nautobot.users.models import ObjectPermission
+from nautobot.virtualization.models import Cluster, ClusterType, VirtualMachine
 from rest_framework import status as drf_status
 
 from nautobot_firewall_models import models
@@ -475,4 +476,40 @@ class PolicyDeviceM2MAPIViewTest(APIViewTestCases.APIViewTestCase):
         cls.create_data = [
             {"device": dev1.id, "policy": policy.id, "weight": 100},
             {"device": dev2.id, "policy": policy.id, "weight": 200},
+        ]
+
+
+class PolicyVirtualMachineM2MAPIViewTest(APIViewTestCases.APIViewTestCase):
+    """Test the PolicyVirtualMachineM2M viewsets."""
+
+    model = models.PolicyVirtualMachineM2M
+    bulk_update_data = {"weight": 1000}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        fixtures.assign_policies()
+        policy = models.Policy.objects.first()
+        location = Location.objects.get(name="DFW02")
+        status = Status.objects.get(name="Active")
+        platform = Platform.objects.get(name="Juniper")
+
+        cluster_type, _ = ClusterType.objects.get_or_create(name="Proxmox")
+        cluster1, _ = Cluster.objects.get_or_create(name="DFW02-CLU01", cluster_type=cluster_type, location=location)
+        vm1 = VirtualMachine.objects.create(
+            name="DFW02-CLU01-VM1",
+            cluster=cluster1,
+            status=status,
+            platform=platform,
+        )
+        vm2 = VirtualMachine.objects.create(
+            name="HOU02-CLU01-VM2",
+            cluster=cluster1,
+            status=status,
+            platform=platform,
+        )
+
+        cls.create_data = [
+            {"virtual_machine": vm1.id, "policy": policy.id, "weight": 100},
+            {"virtual_machine": vm2.id, "policy": policy.id, "weight": 200},
         ]

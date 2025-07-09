@@ -10,6 +10,7 @@ from django.test import TestCase
 from nautobot.dcim.models import Device, Platform
 from nautobot.extras.models import Status
 from nautobot.ipam.models import IPAddress, Namespace
+from nautobot.virtualization.models import VirtualMachine
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 from nautobot_firewall_models.utils.aerleon import ObjectPolicyToAerleon, PolicyToAerleon, generate_aerleon_config
@@ -630,14 +631,21 @@ class TestDevicePolicyToAerleon(TestCase):
         """Setup test data."""
         create_aerleon_env()
         self.device_obj = Device.objects.get(name="DFW02-WAN00")
+        self.vm_obj = VirtualMachine.objects.get(name="DFW02-CLU01-VM1")
 
     @skip("Not implemented until policy method provided to merge queries provided")
     def test_dynamic_group_and_device(self):
         """Test that dynamic groups are created and device is added to it, disabled."""
 
-    def test_multi_policy_aerleon_config(self):
+    def test_multi_policy_aerleon_config_device(self):
         """Verify that generating full config for a device is as expected."""
         aerleon_obj = ObjectPolicyToAerleon(self.device_obj)
+        aerleon_obj.get_all_aerleon_cfg()
+        self.assertEqual(aerleon_obj.pol_file, POLICYALL)
+
+    def test_multi_policy_aerleon_config_vm(self):
+        """Verify that generating full config for a VM is as expected."""
+        aerleon_obj = ObjectPolicyToAerleon(self.vm_obj)
         aerleon_obj.get_all_aerleon_cfg()
         self.assertEqual(aerleon_obj.pol_file, POLICYALL)
 
