@@ -1,0 +1,1 @@
+Fix bug where RunCapircaJob crashes if a DynamicGroup exists.
