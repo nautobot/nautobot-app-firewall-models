@@ -171,6 +171,14 @@ class NATPolicyDeviceM2MViewSet(ModelViewSet):
     filterset_class = filters.NATPolicyDeviceM2MFilterSet
 
 
+class NATPolicyVirtualMachineM2MViewSet(ModelViewSet):
+    """NATPolicyVirtualMachineM2MViewSet viewset."""
+
+    queryset = models.NATPolicyVirtualMachineM2M.objects.all()
+    serializer_class = serializers.NATPolicyVirtualMachineM2MSerializer
+    filterset_class = filters.NATPolicyVirtualMachineM2MFilterSet
+
+
 class NATPolicyDynamicGroupM2MViewSet(ModelViewSet):
     """NATPolicyDynamicGroupM2M viewset."""
 

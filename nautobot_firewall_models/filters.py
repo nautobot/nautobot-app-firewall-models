@@ -312,6 +312,16 @@ class NATPolicyDeviceM2MFilterSet(NautobotFilterSet):
         fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
+class NATPolicyVirtualMachineM2MFilterSet(NautobotFilterSet):
+    """Filter for NATPolicyVirtualMachineM2M."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.NATPolicyVirtualMachineM2M
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
+
+
 class NATPolicyDynamicGroupM2MFilterSet(NautobotFilterSet):
     """Filter for NATPolicyDynamicGroupM2M."""
 
