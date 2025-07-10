@@ -253,7 +253,7 @@ class AerleonPolicyFilterSet(BaseFilterSet, NautobotFilterSet):
         ] + ["device", "virtual_machine"]
 
     @staticmethod
-    def filter_device(queryset, _, value):
+    def filter_device(queryset, _, value: Device):
         """Dedicated filter method for device form field (needed because of the use of ContentType)."""
         if not value:
             return queryset
@@ -263,7 +263,7 @@ class AerleonPolicyFilterSet(BaseFilterSet, NautobotFilterSet):
         return queryset.filter(content_type=content_type, object_id__in=[v.id for v in value])
 
     @staticmethod
-    def filter_virtual_machine(queryset, _, value):
+    def filter_virtual_machine(queryset, _, value: VirtualMachine):
         """Dedicated filter method for virtual_machine form field (needed because of the use of ContentType)."""
         if not value:
             return queryset
@@ -273,7 +273,7 @@ class AerleonPolicyFilterSet(BaseFilterSet, NautobotFilterSet):
         return queryset.filter(content_type=content_type, object_id__in=[v.id for v in value])
 
     @staticmethod
-    def filter_q(queryset, _, value):
+    def filter_q(queryset, _, value: str):
         """Custom filter method for q for handling GenericForeignKey."""
         if not value:
             return queryset
