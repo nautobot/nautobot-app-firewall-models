@@ -1,5 +1,7 @@
 """App declaration for nautobot_firewall_models."""
 
+import logging
+
 # Metadata is inherited from Nautobot. If not including Nautobot in the environment, this should be added
 from importlib import metadata
 
@@ -7,6 +9,7 @@ from nautobot.apps import NautobotAppConfig
 from nautobot.core.signals import nautobot_database_ready
 
 __version__ = metadata.version(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 class NautobotFirewallModelsConfig(NautobotAppConfig):
@@ -36,6 +39,22 @@ class NautobotFirewallModelsConfig(NautobotAppConfig):
 
         nautobot_database_ready.connect(nautobot_firewall_models.signals.create_configured_statuses_signal, sender=self)
         nautobot_database_ready.connect(nautobot_firewall_models.signals.associate_statuses_signal, sender=self)
+
+        from nautobot_firewall_models.constants import PLUGIN_CFG  # pylint: disable=import-outside-toplevel
+
+        # Note: If there is more than a single configuration key wrong, we want to print the log messages for all of
+        # them and fail later.
+        capirca_config_found = False
+        for key in PLUGIN_CFG.keys():
+            if key.startswith("capirca"):
+                LOGGER.error(
+                    "%s is invalid: nautobot-firewall-models moved from capirca to aerleon, please adapt your configuration.",
+                    key,
+                )
+                capirca_config_found = True
+
+        if capirca_config_found:
+            raise RuntimeError("capirca plugin configuration detected, failing..")
 
         super().ready()
 
