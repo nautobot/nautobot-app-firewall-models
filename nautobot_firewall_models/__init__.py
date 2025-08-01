@@ -44,7 +44,7 @@ class NautobotFirewallModelsConfig(NautobotAppConfig):
         # them and fail later.
         capirca_config_found = False
         for key in PLUGIN_CFG.keys():
-            if key.startswith("capirca"):
+            if key in ("capirca", "custom_capirca") or key.startswith("capirca"):
                 LOGGER.error(
                     "%s is invalid: nautobot-firewall-models moved from capirca to aerleon, please adapt your configuration.",
                     key,
