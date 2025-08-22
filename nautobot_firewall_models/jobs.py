@@ -50,7 +50,9 @@ class RunAerleonJob(Job):  # pylint disable=too-few-public-method
         for obj in objects:
             logger.debug("Running: `%s`", str(obj))
             content_type = ContentType.objects.get_for_model(obj)
-            AerleonPolicy.objects.update_or_create(content_type=content_type, object_id=obj.id)
+            policy, _ = AerleonPolicy.objects.get_or_create(content_type=content_type, object_id=obj.id)
+            # Note: We explicitly have to save the policy to make sure the content of the AerleonPolicy gets regenerated.
+            policy.save()
             logger.info("%s Updated", obj, extra={"object": obj})
 
 
