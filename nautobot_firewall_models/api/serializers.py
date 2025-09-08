@@ -191,13 +191,13 @@ class NATPolicySerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
         fields = "__all__"
 
 
-class CapircaPolicySerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
-    """CapircaPolicy Serializer."""
+class AerleonPolicySerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
+    """AerleonPolicy Serializer."""
 
     class Meta:
         """Meta attributes."""
 
-        model = models.CapircaPolicy
+        model = models.AerleonPolicy
         fields = "__all__"
 
 
@@ -213,6 +213,16 @@ class PolicyDeviceM2MSerializer(ValidatedModelSerializer):
         """Meta attributes."""
 
         model = models.PolicyDeviceM2M
+        fields = "__all__"
+
+
+class PolicyVirtualMachineM2MSerializer(ValidatedModelSerializer):
+    """PolicyVirtualMachineM2M Serializer."""
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.PolicyVirtualMachineM2M
         fields = "__all__"
 
 
@@ -233,6 +243,16 @@ class NATPolicyDeviceM2MSerializer(ValidatedModelSerializer):
         """Meta attributes."""
 
         model = models.NATPolicyDeviceM2M
+        fields = "__all__"
+
+
+class NATPolicyVirtualMachineM2MSerializer(ValidatedModelSerializer):
+    """NATPolicyDeviceM2M Serializer."""
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.NATPolicyVirtualMachineM2M
         fields = "__all__"
 
 

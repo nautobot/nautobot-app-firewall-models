@@ -229,13 +229,23 @@ class PolicyTable(StatusTableMixin, BaseTable):
     name = tables.Column(linkify=True)
     actions = ButtonsColumn(models.Policy, buttons=("edit", "delete"))
     assigned_devices = tables.ManyToManyColumn(linkify_item=True)
+    assigned_virtual_machines = tables.ManyToManyColumn(linkify_item=True)
     assigned_dynamic_groups = tables.ManyToManyColumn(linkify_item=True)
 
     class Meta(BaseTable.Meta):
         """Meta attributes."""
 
         model = models.Policy
-        fields = ("pk", "name", "description", "policy_rules", "assigned_devices", "assigned_dynamic_groups", "status")
+        fields = (
+            "pk",
+            "name",
+            "description",
+            "policy_rules",
+            "assigned_devices",
+            "assigned_virtual_machines",
+            "assigned_dynamic_groups",
+            "status",
+        )
 
 
 # TODO: refactor
@@ -314,6 +324,7 @@ class NATPolicyTable(StatusTableMixin, BaseTable):
     nat_policy_rules = tables.ManyToManyColumn(verbose_name="NAT policy rules", linkify_item=True)
     actions = ButtonsColumn(models.NATPolicy, buttons=("edit", "delete"))
     assigned_devices = tables.ManyToManyColumn(linkify_item=True)
+    assigned_virtual_machines = tables.ManyToManyColumn(linkify_item=True)
     assigned_dynamic_groups = tables.ManyToManyColumn(linkify_item=True)
 
     class Meta(BaseTable.Meta):
@@ -326,21 +337,23 @@ class NATPolicyTable(StatusTableMixin, BaseTable):
             "description",
             "nat_policy_rules",
             "assigned_devices",
+            "assigned_virtual_machines",
             "assigned_dynamic_groups",
             "status",
         )
 
 
-class CapircaPolicyTable(BaseTable):
+class AerleonPolicyTable(BaseTable):
     """Table for list view."""
 
     pk = ToggleColumn()
-    device = tables.TemplateColumn(
-        template_code="""<a href="{% url 'plugins:nautobot_firewall_models:capircapolicy' pk=record.pk %}">{{ record.device }}</a> """
+    attached_object = tables.TemplateColumn(
+        template_code="""<a href="{% url 'plugins:nautobot_firewall_models:aerleonpolicy' pk=record.pk %}">{{ record.attached_object }}</a> """,
+        verbose_name="Object",
     )
 
     class Meta(BaseTable.Meta):
         """Meta attributes."""
 
-        model = models.CapircaPolicy
-        fields = ("pk", "device")
+        model = models.AerleonPolicy
+        fields = ("pk",)

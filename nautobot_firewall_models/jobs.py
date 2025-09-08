@@ -1,56 +1,60 @@
 """Jobs to run backups, intended config, and compliance."""
 
+from django.contrib.contenttypes.models import ContentType
 from nautobot.core.celery import register_jobs
 from nautobot.dcim.models import Device
 from nautobot.extras.jobs import Job, MultiObjectVar, get_task_logger
+from nautobot.virtualization.models import VirtualMachine
 
-from nautobot_firewall_models.models import CapircaPolicy, Policy
+from nautobot_firewall_models.models import AerleonPolicy, Policy
 
 logger = get_task_logger(__name__)
 
+name = "Aerleon Jobs"  # pylint: disable=invalid-name
 
-name = "Capirca Jobs"  # pylint: disable=invalid-name
 
-
-class RunCapircaJob(Job):  # pylint disable=too-few-public-method
+class RunAerleonJob(Job):  # pylint disable=too-few-public-method
     """Class definition to use as Mixin for form definitions."""
 
-    device = MultiObjectVar(model=Device, required=False)
+    devices = MultiObjectVar(model=Device, required=False)
+    virtual_machines = MultiObjectVar(model=VirtualMachine, required=False)
 
     class Meta:
         """Meta object boilerplate for reservations."""
 
-        name = "Generate FW Config via Capirca."
-        description = "Generate FW Config via Capirca and update the models."
+        name = "Generate FW Config via Aerleon."
+        description = "Generate FW Config via Aerleon and update the models."
         commit_default = True
         has_sensitive_variables = False
 
-    def run(self, device):  # pylint: disable=arguments-differ
+    def run(self, devices, virtual_machines):  # pylint: disable=arguments-differ
         """Run a job to remove legacy reservations."""
-        queryset = []
-        devices = []
-        if device:
-            queryset = device
+        objects = set()
+
+        # Note: devices and virtual_machines are QuerySets at this point.
+        if devices or virtual_machines:
+            if devices:
+                objects.update(devices.all())
+            if virtual_machines:
+                objects.update(virtual_machines.all())
         else:
             # TODO: see if this logic can be optimized
             for policy in Policy.objects.all():
                 for dyn in policy.assigned_dynamic_groups.get_queryset():
-                    if not queryset:
-                        queryset = dyn.get_queryset()
-                    else:
-                        queryset.union(dyn.get_queryset())  # pylint: disable=no-member
+                    objects.update(dyn.members.all())
                 for dev in policy.assigned_devices.all():
-                    devices.append(dev.pk)
-        for dev in queryset:
-            devices.append(dev.pk)
+                    objects.add(dev)
+                for virtual_machine in policy.assigned_virtual_machines.all():
+                    objects.add(virtual_machine)
 
-        devices = list(set(devices))
-        for dev in devices:
-            device_obj = Device.objects.get(pk=dev)
-            logger.debug("Running against Device: `%s`", str(device_obj))
-            CapircaPolicy.objects.update_or_create(device=device_obj)
-            logger.info("%s Updated", device_obj, extra={"object": device_obj})
+        for obj in objects:
+            logger.debug("Running: `%s`", str(obj))
+            content_type = ContentType.objects.get_for_model(obj)
+            policy, _ = AerleonPolicy.objects.get_or_create(content_type=content_type, object_id=obj.id)
+            # Note: We explicitly have to save the policy to make sure the content of the AerleonPolicy gets regenerated.
+            policy.save()
+            logger.info("%s Updated", obj, extra={"object": obj})
 
 
-jobs = [RunCapircaJob]
+jobs = [RunAerleonJob]
 register_jobs(*jobs)

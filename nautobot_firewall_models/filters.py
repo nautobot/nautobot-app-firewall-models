@@ -1,15 +1,18 @@
 """Filtering for nautobot_firewall_models."""
 
 import django_filters
-from django.contrib.contenttypes.fields import GenericRelation
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
+from django_filters import ModelMultipleChoiceFilter
 from nautobot.apps.filters import (
     MultiValueCharFilter,
-    NaturalKeyOrPKMultipleChoiceFilter,
     NautobotFilterSet,
     SearchFilter,
     StatusModelFilterSetMixin,
 )
 from nautobot.dcim.models import Device
+from nautobot.virtualization.models import VirtualMachine
 
 from nautobot_firewall_models import models
 
@@ -199,21 +202,92 @@ class NATPolicyFilterSet(BaseFilterSet, NautobotFilterSet):
         fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
-class CapircaPolicyFilterSet(NautobotFilterSet):
-    """Filter for CapircaPolicy."""
+class AerleonPolicyFilterSet(BaseFilterSet, NautobotFilterSet):
+    """Filter for AerleonPolicy."""
 
-    device = NaturalKeyOrPKMultipleChoiceFilter(
+    device_id = ModelMultipleChoiceFilter(
+        field_name="device",
+        queryset=Device.objects.all(),
+        to_field_name="pk",
+        label="Device (name or PK)",
+        method="filter_device",
+    )
+
+    device = ModelMultipleChoiceFilter(
         field_name="device",
         queryset=Device.objects.all(),
         to_field_name="name",
-        label="Schema (name or PK)",
+        label="Device (name or PK)",
+        method="filter_device",
+    )
+
+    virtual_machine_id = ModelMultipleChoiceFilter(
+        field_name="virtual_machine",
+        queryset=VirtualMachine.objects.all(),
+        to_field_name="pk",
+        label="Virtual Machine (name or PK)",
+        method="filter_virtual_machine",
+    )
+
+    virtual_machine = ModelMultipleChoiceFilter(
+        field_name="virtual_machine",
+        queryset=VirtualMachine.objects.all(),
+        to_field_name="name",
+        label="Virtual Machine (name or PK)",
+        method="filter_virtual_machine",
+    )
+
+    q = SearchFilter(
+        filter_predicates={},
+        method="filter_q",
     )
 
     class Meta:
         """Meta attributes for filter."""
 
-        model = models.CapircaPolicy
-        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
+        model = models.AerleonPolicy
+        fields = [
+            i.name
+            for i in model._meta.get_fields()
+            if not isinstance(i, GenericRelation) and not isinstance(i, GenericForeignKey)
+        ] + ["device", "virtual_machine"]
+
+    @staticmethod
+    def filter_device(queryset, _, value: Device):
+        """Dedicated filter method for device form field (needed because of the use of ContentType)."""
+        if not value:
+            return queryset
+
+        content_type = ContentType.objects.get_for_model(Device)
+
+        return queryset.filter(content_type=content_type, object_id__in=[v.id for v in value])
+
+    @staticmethod
+    def filter_virtual_machine(queryset, _, value: VirtualMachine):
+        """Dedicated filter method for virtual_machine form field (needed because of the use of ContentType)."""
+        if not value:
+            return queryset
+
+        content_type = ContentType.objects.get_for_model(VirtualMachine)
+
+        return queryset.filter(content_type=content_type, object_id__in=[v.id for v in value])
+
+    @staticmethod
+    def filter_q(queryset, _, value: str):
+        """Custom filter method for q for handling GenericForeignKey."""
+        if not value:
+            return queryset
+
+        device_ct = ContentType.objects.get_for_model(Device)
+        devices = Device.objects.filter(Q(name__icontains=value))
+
+        vm_ct = ContentType.objects.get_for_model(VirtualMachine)
+        vms = VirtualMachine.objects.filter(Q(name__icontains=value))
+
+        return queryset.filter(
+            Q(content_type=device_ct, object_id__in=[v.id for v in devices])
+            | Q(content_type=vm_ct, object_id__in=[v.id for v in vms])
+        )
 
 
 ###########################
@@ -228,6 +302,16 @@ class PolicyDeviceM2MFilterSet(NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.PolicyDeviceM2M
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
+
+
+class PolicyVirtualMachineM2MFilterSet(NautobotFilterSet):
+    """Filter for PolicyVirtualMachineM2M."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.PolicyVirtualMachineM2M
         fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
@@ -248,6 +332,16 @@ class NATPolicyDeviceM2MFilterSet(NautobotFilterSet):
         """Meta attributes for filter."""
 
         model = models.NATPolicyDeviceM2M
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
+
+
+class NATPolicyVirtualMachineM2MFilterSet(NautobotFilterSet):
+    """Filter for NATPolicyVirtualMachineM2M."""
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.NATPolicyVirtualMachineM2M
         fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 

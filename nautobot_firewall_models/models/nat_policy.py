@@ -257,6 +257,12 @@ class NATPolicy(PrimaryModel):
         related_name="nat_policies",
         blank=True,
     )
+    assigned_virtual_machines = models.ManyToManyField(
+        to="virtualization.VirtualMachine",
+        through="NATPolicyVirtualMachineM2M",
+        related_name="nat_policies",
+        blank=True,
+    )
     assigned_dynamic_groups = models.ManyToManyField(
         to="extras.DynamicGroup",
         through="NATPolicyDynamicGroupM2M",
@@ -318,6 +324,24 @@ class NATPolicyDeviceM2M(BaseModel):
     def __str__(self):
         """Stringify instance."""
         return f"{self.nat_policy.name} - {self.device.name} - {self.weight}"
+
+
+class NATPolicyVirtualMachineM2M(BaseModel):
+    """Through model to add weight to the NATPolicy & VirtualMachine relationship."""
+
+    nat_policy = models.ForeignKey("nautobot_firewall_models.NATPolicy", on_delete=models.CASCADE)
+    virtual_machine = models.ForeignKey("virtualization.VirtualMachine", on_delete=models.PROTECT)
+    weight = models.PositiveSmallIntegerField(default=100)
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["weight"]
+        unique_together = ["nat_policy", "virtual_machine"]
+
+    def __str__(self):
+        """Stringify instance."""
+        return f"{self.nat_policy.name} - {self.virtual_machine.name} - {self.weight}"
 
 
 class NATPolicyDynamicGroupM2M(BaseModel):

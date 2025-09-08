@@ -209,13 +209,13 @@ menu_items = (
                 ],
             ),
             NavMenuGroup(
-                name="Capirca",
+                name="Aerleon",
                 weight=200,
                 items=[
                     NavMenuItem(
-                        link="plugins:nautobot_firewall_models:capircapolicy_list",
-                        name="Capirca Policy Rules",
-                        permissions=["nautobot_firewall_models.view_capircapolicy"],
+                        link="plugins:nautobot_firewall_models:aerleonpolicy_list",
+                        name="Aerleon Policy Rules",
+                        permissions=["nautobot_firewall_models.view_aerleonpolicy"],
                     ),
                 ],
             ),

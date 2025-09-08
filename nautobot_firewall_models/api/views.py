@@ -126,12 +126,12 @@ class NATPolicyViewSet(NautobotModelViewSet):
     filterset_class = filters.NATPolicyFilterSet
 
 
-class CapircaPolicyViewSet(ModelViewSet):
-    """CapircaPolicy viewset."""
+class AerleonPolicyViewSet(ModelViewSet):
+    """AerleonPolicy viewset."""
 
-    queryset = models.CapircaPolicy.objects.all().prefetch_related("tags")
-    serializer_class = serializers.CapircaPolicySerializer
-    filterset_class = filters.CapircaPolicyFilterSet
+    queryset = models.AerleonPolicy.objects.all().prefetch_related("tags")
+    serializer_class = serializers.AerleonPolicySerializer
+    filterset_class = filters.AerleonPolicyFilterSet
 
 
 ###########################
@@ -145,6 +145,14 @@ class PolicyDeviceM2MViewSet(ModelViewSet):
     queryset = models.PolicyDeviceM2M.objects.all()
     serializer_class = serializers.PolicyDeviceM2MSerializer
     filterset_class = filters.PolicyDeviceM2MFilterSet
+
+
+class PolicyVirtualMachineM2MViewSet(ModelViewSet):
+    """PolicyVirtualMachineM2M viewset."""
+
+    queryset = models.PolicyVirtualMachineM2M.objects.all()
+    serializer_class = serializers.PolicyVirtualMachineM2MSerializer
+    filterset_class = filters.PolicyVirtualMachineM2MFilterSet
 
 
 class PolicyDynamicGroupM2MViewSet(ModelViewSet):
@@ -161,6 +169,14 @@ class NATPolicyDeviceM2MViewSet(ModelViewSet):
     queryset = models.NATPolicyDeviceM2M.objects.all()
     serializer_class = serializers.NATPolicyDeviceM2MSerializer
     filterset_class = filters.NATPolicyDeviceM2MFilterSet
+
+
+class NATPolicyVirtualMachineM2MViewSet(ModelViewSet):
+    """NATPolicyVirtualMachineM2MViewSet viewset."""
+
+    queryset = models.NATPolicyVirtualMachineM2M.objects.all()
+    serializer_class = serializers.NATPolicyVirtualMachineM2MSerializer
+    filterset_class = filters.NATPolicyVirtualMachineM2MFilterSet
 
 
 class NATPolicyDynamicGroupM2MViewSet(ModelViewSet):

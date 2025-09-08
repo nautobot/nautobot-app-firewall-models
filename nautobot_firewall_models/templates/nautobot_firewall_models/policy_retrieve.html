@@ -15,6 +15,13 @@
         </li>
     {% endif %}
     {% if perms.nautobot_firewall_models.edit_policy %}
+       <li role="presentation"{% if request.GET.tab == 'edit-policy-virtual-machine-weight' %} class="active" {% endif %}>
+           <a href="{{ object.get_absolute_url }}#edit-policy-virtual-machine-weight" onclick="switch_tab(this.href)" aria-controls="advanced" role="tab" data-toggle="tab">
+               Edit Policy Weight On Assigned Virtual Machine
+           </a>
+       </li>
+    {% endif %}
+    {% if perms.nautobot_firewall_models.edit_policy %}
         <li role="presentation"{% if request.GET.tab == 'edit-policy-dynamic-group-weight' %} class="active"{% endif %}>
             <a href="{{ object.get_absolute_url }}#edit-policy-dynamic-group-weight" onclick="switch_tab(this.href)" aria-controls="advanced" role="tab" data-toggle="tab">
                 Edit Policy Weight On Assigned Dynamic Group
@@ -41,6 +48,18 @@
                             <li><a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a></li>
                         {% empty %}
                             None
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Virtual Machines</td>
+                <td>
+                    <ul>
+                        {% for i in object.assigned_virtual_machines.all %}
+                        <li><a href="{{ i.get_absolute_url }}">{{ i|placeholder }}</a></li>
+                        {% empty %}
+                        None
                         {% endfor %}
                     </ul>
                 </td>
@@ -79,6 +98,9 @@
     </div>
     <div id="edit-policy-device-weight" role="tabpanel" class="tab-pane {% if request.GET.tab == 'edit-policy-device-weight' %}active{% else %}fade{% endif %}">
         {% include 'nautobot_firewall_models/inc/policy_device_weight.html' %}
+    </div>
+    <div id="edit-policy-virtual-machine-weight" role="tabpanel" class="tab-pane {% if request.GET.tab == 'edit-policy-virtual-machine-weight' %}active{% else %}fade{% endif %}">
+        {% include 'nautobot_firewall_models/inc/policy_virtual_machine_weight.html' %}
     </div>
     <div id="edit-policy-dynamic-group-weight" role="tabpanel" class="tab-pane {% if request.GET.tab == 'edit-policy-dynamic-group-weight' %}active{% else %}fade{% endif %}">
         {% include 'nautobot_firewall_models/inc/policy_dynamic_group_weight.html' %}

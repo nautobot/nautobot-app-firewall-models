@@ -1,4 +1,4 @@
-"""Test Capirca Utils."""
+"""Test Aerleon Utils."""
 
 # ruff: noqa: F403, F405
 # pylint: disable=protected-access
@@ -10,11 +10,12 @@ from django.test import TestCase
 from nautobot.dcim.models import Device, Platform
 from nautobot.extras.models import Status
 from nautobot.ipam.models import IPAddress, Namespace
+from nautobot.virtualization.models import VirtualMachine
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
-from nautobot_firewall_models.utils.capirca import DevicePolicyToCapirca, PolicyToCapirca, generate_capirca_config
+from nautobot_firewall_models.utils.aerleon import ObjectPolicyToAerleon, PolicyToAerleon, generate_aerleon_config
 
-from .fixtures import create_capirca_env
+from .fixtures import create_aerleon_env
 
 POLICY = """header {
   target:: cisco 150 extended
@@ -263,29 +264,29 @@ POLICY_DATA = [
 ]
 
 
-class TestBasicCapirca(TestCase):
+class TestBasicAerleon(TestCase):
     """Test models."""
 
     def setUp(self) -> None:
         """Setup test data."""
-        create_capirca_env()
+        create_aerleon_env()
 
-    def test_generate_capirca_config(self):
-        """Test the implementation of capirca."""
+    def test_generate_aerleon_config(self):
+        """Test the implementation of aerleon."""
         # This partially tests the underlying library, but kept since it helps ensure that overloading
         # ParseServiceList and ParseNetworkList continue to work. As well as provides an easy place to test locally.
-        # Such as running `invoke unittest -l nautobot_firewall_models.tests.test_capirca.TestBasicCapirca` and
+        # Such as running `invoke unittest -l nautobot_firewall_models.tests.test_aerleon.TestBasicAerleon` and
         # modifying data within test
-        actual_cfg = generate_capirca_config(SERVICES.split("\n"), NETWORKS.split("\n"), POLICY, "cisco")
+        actual_cfg = generate_aerleon_config(SERVICES.split("\n"), NETWORKS.split("\n"), POLICY, "cisco")
         self.assertEqual(actual_cfg, CFG)
 
 
-class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,too-many-instance-attributes
+class TestPolicyToAerleon(TestCase):  # pylint: disable=too-many-public-methods,too-many-instance-attributes
     """Test models."""
 
     def setUp(self) -> None:
         """Setup test data."""
-        create_capirca_env()
+        create_aerleon_env()
         self.active = Status.objects.get(name="Active")
         self.decomm = Status.objects.get(name="Decommissioned")
         self.device_obj = Device.objects.get(name="DFW02-WAN00")
@@ -315,12 +316,12 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         """Check that address objects are found with status active and not found when other."""
         self.pol_rule6.source_addresses.set([self.addr_obj4, self.addr_obj5])
         self.pol_rule6.validated_save()
-        _, networkdata, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        _, networkdata, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertIn("test-name", networkdata)
 
         self.addr_obj5.status = self.decomm
         self.addr_obj5.validated_save()
-        _, networkdata, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        _, networkdata, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertNotIn("test-name", networkdata)
 
         self.pol_rule6.source_addresses.clear()
@@ -329,12 +330,12 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
 
         self.pol_rule6.destination_addresses.set([self.addr_obj4, self.addr_obj5])
         self.pol_rule6.validated_save()
-        _, networkdata, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        _, networkdata, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertIn("test-name", networkdata)
 
         self.addr_obj5.status = self.decomm
         self.addr_obj5.validated_save()
-        _, networkdata, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        _, networkdata, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertNotIn("test-name", networkdata)
 
     def test_address_empty(self):
@@ -343,42 +344,42 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         self.addr_obj5.status = self.decomm
         self.addr_obj5.validated_save()
         with self.assertRaises(ValidationError):
-            PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+            PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.pol_rule6.source_addresses.clear()
         self.pol_rule6.destination_addresses.set([self.addr_obj5])
         with self.assertRaises(ValidationError):
-            PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+            PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
 
     def test_address_fqdn(self):
-        """Test that validation fails on creating an FQDN when using capirca."""
+        """Test that validation fails on creating an FQDN when using aerleon."""
         fqdn1 = FQDN.objects.create(name="test.other", status=self.active)
         self.addr_obj5.ip_address = None
         self.addr_obj5.fqdn = fqdn1
         self.addr_obj5.validated_save()
         self.pol_rule6.source_addresses.set([self.addr_obj5])
         with self.assertRaises(ValidationError):
-            PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+            PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
 
     def test_address_ip_range(self):
-        """Test that validation fails on creating an IP range when using capirca."""
+        """Test that validation fails on creating an IP range when using aerleon."""
         iprange1 = IPRange.objects.create(start_address="192.168.0.21", end_address="192.168.0.30", status=self.active)
         self.addr_obj5.ip_address = None
         self.addr_obj5.ip_range = iprange1
         self.addr_obj5.validated_save()
         self.pol_rule6.source_addresses.set([self.addr_obj5])
         with self.assertRaises(ValidationError):
-            PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+            PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
 
     def test_address_group_skip(self):
         """Check that address group objects are found with status active and not found when other."""
         self.pol_rule6.source_address_groups.set([self.addr_grp3, self.addr_grp4])
         self.pol_rule6.validated_save()
-        _, networkdata, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        _, networkdata, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertIn("test-group", networkdata)
 
         self.addr_grp4.status = self.decomm
         self.addr_grp4.validated_save()
-        _, networkdata, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        _, networkdata, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertNotIn("test-group", networkdata)
 
         self.pol_rule6.source_address_groups.clear()
@@ -387,12 +388,12 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
 
         self.pol_rule6.destination_address_groups.set([self.addr_grp3, self.addr_grp4])
         self.pol_rule6.validated_save()
-        _, networkdata, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        _, networkdata, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertIn("test-group", networkdata)
 
         self.addr_grp4.status = self.decomm
         self.addr_grp4.validated_save()
-        _, networkdata, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        _, networkdata, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertNotIn("test-group", networkdata)
 
     def test_address_group_empty(self):
@@ -401,20 +402,20 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         self.addr_grp4.status = self.decomm
         self.addr_grp4.validated_save()
         with self.assertRaises(ValidationError):
-            PolicyToCapirca(self.dev_name, self.pol1).validate_policy_data()
+            PolicyToAerleon(self.dev_name, self.pol1).validate_policy_data()
         self.pol_rule6.source_addresses.set([self.addr_obj5])
         self.pol_rule6.validated_save()
-        obj = PolicyToCapirca(self.dev_name, self.pol1)
+        obj = PolicyToAerleon(self.dev_name, self.pol1)
         obj.validate_policy_data()
         self.assertIn("test-name", obj.address)
         self.pol_rule6.destination_address_groups.clear()
         self.pol_rule6.destination_address_groups.set([self.addr_grp4])
         self.pol_rule6.validated_save()
         with self.assertRaises(ValidationError):
-            PolicyToCapirca(self.dev_name, self.pol1).validate_policy_data()
+            PolicyToAerleon(self.dev_name, self.pol1).validate_policy_data()
         self.pol_rule6.destination_addresses.set([self.addr_obj5])
         self.pol_rule6.validated_save()
-        obj = PolicyToCapirca(self.dev_name, self.pol1)
+        obj = PolicyToAerleon(self.dev_name, self.pol1)
         obj.validate_policy_data()
         self.assertIn("test-name", obj.address)
 
@@ -428,25 +429,25 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         self.pol_rule6.source_address_groups.set([addr_grp6])
         self.pol_rule6.validated_save()
         with self.assertRaises(ValidationError):
-            PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+            PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
 
         self.pol_rule6.source_address_groups.clear()
         self.pol_rule6.destination_address_groups.set([addr_grp6])
         self.pol_rule6.validated_save()
         with self.assertRaises(ValidationError):
-            PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+            PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
 
     def test_svcs_skip(self):
         """Check that service objects are found with status active and not found when other."""
         svc_obj2 = ServiceObject.objects.get(name="SSH")
         self.pol_rule6.destination_services.set([self.svc_obj4, svc_obj2])
         self.pol_rule6.validated_save()
-        _, _, servicedata = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        _, _, servicedata = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertIn("test-service", servicedata)
 
         self.svc_obj4.status = self.decomm
         self.svc_obj4.validated_save()
-        _, _, servicedata = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        _, _, servicedata = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertNotIn("test-service", servicedata)
 
     def test_svcs_skip_empty(self):
@@ -455,19 +456,19 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         self.svc_obj4.status = self.decomm
         self.svc_obj4.validated_save()
         with self.assertRaises(ValidationError):
-            PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+            PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
 
     def test_svcs_group_skip(self):
         """Check that service objects are found with status active and not found when other."""
         svc_grp1 = ServiceObjectGroup.objects.get(name="svc group1")
         self.pol_rule6.destination_service_groups.set([self.svc_grp4, svc_grp1])
         self.pol_rule6.validated_save()
-        _, _, servicedata = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        _, _, servicedata = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertIn("test-service-group", servicedata)
 
         self.svc_grp4.status = self.decomm
         self.svc_grp4.validated_save()
-        _, _, servicedata = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        _, _, servicedata = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertNotIn("test-service-group", servicedata)
 
     def test_svcs_group_skip_empty(self):
@@ -476,7 +477,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         self.svc_grp4.status = self.decomm
         self.svc_grp4.validated_save()
         with self.assertRaises(ValidationError):
-            PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+            PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
 
     def test_svcs_group_skipped_member(self):
         """Check that a service group whose members are all inactive gets cleared."""
@@ -485,13 +486,13 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         self.pol_rule6.destination_service_groups.set([self.svc_grp4])
         self.pol_rule6.validated_save()
         with self.assertRaises(ValidationError):
-            PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+            PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         svc_obj2 = ServiceObject.objects.get(name="SSH")
         self.pol_rule6.destination_services.set([svc_obj2])
         self.pol_rule6.validated_save()
-        cap_obj = PolicyToCapirca(self.dev_name, self.pol1)
-        cap_obj.validate_policy_data()
-        self.assertIn("SSH", cap_obj.service)
+        aerleon_obj = PolicyToAerleon(self.dev_name, self.pol1)
+        aerleon_obj.validate_policy_data()
+        self.assertIn("SSH", aerleon_obj.service)
 
     def test_svcs_ip_protocol_not_expected(self):
         """Check that you cannot mix and match tcp/udp that have ports with other protocols."""
@@ -499,7 +500,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         self.pol_rule6.destination_services.set([self.svc_obj4, svc_obj5])
         self.pol_rule6.validated_save()
         with self.assertRaises(ValidationError):
-            PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+            PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
 
     def test_svcs_multi_proto_no_port(self):
         """Check that you can mix and match tcp/udp with other protocols, as long as no port."""
@@ -507,7 +508,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         svc_obj6 = ServiceObject.objects.create(name="TCP", ip_protocol="TCP", status=self.active)
         self.pol_rule6.destination_services.set([svc_obj5, svc_obj6])
         self.pol_rule6.validated_save()
-        pol, _, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        pol, _, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertEqual(len(pol[1]["terms"]["destination-port"]), 0)
         self.assertEqual(pol[1]["terms"]["protocol"], ["icmp", "tcp"])
 
@@ -515,12 +516,12 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         """Check that policy rules are found with status active and not found when other."""
         pol_rule5 = PolicyRule.objects.get(name="DENY ALL")
         self.pol1.policy_rules.add(pol_rule5)
-        pol, _, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        pol, _, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertIn("Test", [i["rule-name"] for i in pol])
 
         self.pol_rule6.status = self.decomm
         self.pol_rule6.validated_save()
-        pol, _, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        pol, _, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertNotIn("Test", [i["rule-name"] for i in pol])
 
     def test_policy_skip_empty(self):
@@ -531,46 +532,46 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         pol1.status = self.decomm
         pol1.validated_save()
         with self.assertRaises(ValidationError):
-            PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+            PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
 
     def test_policy_remark_skipped(self):
         """Test when remaek is skipped over."""
-        pol, _, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        pol, _, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertIn("Test", [i["rule-name"] for i in pol])
         self.pol_rule6.action = "remark"
         self.pol_rule6.validated_save()
-        pol, _, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        pol, _, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertNotIn("Test", [i["rule-name"] for i in pol])
 
-    @patch("nautobot_firewall_models.utils.capirca.PLUGIN_CFG", {"capirca_remark_pass": False})
+    @patch("nautobot_firewall_models.utils.aerleon.PLUGIN_CFG", {"aerleon_remark_pass": False})
     def test_policy_remark_fail(self):
         """Test when user configures to fail on remark."""
         self.pol_rule6.action = "remark"
         self.pol_rule6.validated_save()
         with self.assertRaises(ValidationError):
-            PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+            PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
 
     def test_policy_chd(self):
         """Test ability to inject custom headers."""
         self.pol_rule6._custom_field_data = {"chd_test-custom": "unique-value"}
         self.pol_rule6.save()
-        pol, _, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        pol, _, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertIn("unique-value", pol[1]["headers"])
 
     def test_policy_ctd(self):
         """Test ability to inject custom terms."""
         self.pol_rule6._custom_field_data = {"ctd_test-custom": "unique-value"}
         self.pol_rule6.save()
-        pol, _, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        pol, _, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertIn("test-custom", pol[1]["terms"])
 
     def test_policy_chd_allow_list(self):
         """Test headers can be allowed and not allowed based on custom field."""
         self.pol_rule6._custom_field_data = {"chd_test-custom": "unique-value", "chd_test-other": "other-value"}
         self.pol_rule6.save()
-        self.device_obj.platform._custom_field_data = {"capirca_allow": ["chd_test-custom"]}
+        self.device_obj.platform._custom_field_data = {"aerleon_allow": ["chd_test-custom"]}
         self.device_obj.platform.save()
-        pol, _, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        pol, _, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertIn("unique-value", pol[1]["headers"])
         self.assertNotIn("other-value", pol[1]["headers"])
 
@@ -578,78 +579,85 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         """Test terms can be allowed and not allowed based on custom field."""
         self.pol_rule6._custom_field_data = {"ctd_test-custom": "unique-value", "ctd_test-other": "other-value"}
         self.pol_rule6.save()
-        self.device_obj.platform._custom_field_data = {"capirca_allow": ["ctd_test-custom"]}
+        self.device_obj.platform._custom_field_data = {"aerleon_allow": ["ctd_test-custom"]}
         self.device_obj.platform.save()
-        pol, _, _ = PolicyToCapirca(self.dev_name, self.pol1).validate_capirca_data()
+        pol, _, _ = PolicyToAerleon(self.dev_name, self.pol1).validate_aerleon_data()
         self.assertIn("test-custom", pol[1]["terms"])
         self.assertNotIn("test-other", pol[1]["terms"])
 
     def test_validate_policy_data(self):
         """Test validate_policy_data produces consistent results."""
-        cap_obj = PolicyToCapirca(self.dev_name, self.pol1)
-        cap_obj.validate_policy_data()
-        self.assertEqual(cap_obj.policy, POLICY_DATA)
+        aerleon_obj = PolicyToAerleon(self.dev_name, self.pol1)
+        aerleon_obj.validate_policy_data()
+        self.assertEqual(aerleon_obj.policy, POLICY_DATA)
 
     def test_validate_policy_data_no_policy(self):
         """Test that it fails when you do not provied ability to get policy_detail obj."""
         with self.assertRaises(ValidationError):
-            PolicyToCapirca(self.dev_name).validate_policy_data()
+            PolicyToAerleon(self.dev_name).validate_policy_data()
 
-    def test_alt_capirca_type(self):
-        """Test non-zone Capirca config generation."""
+    def test_alt_aerleon_type(self):
+        """Test non-zone Aerleon config generation."""
         Platform.objects.create(name="Cisco", network_driver="cisco")
-        cap_obj = PolicyToCapirca("cisco", self.pol1)
-        cap_obj.get_capirca_cfg()
-        self.assertIn("cisco", cap_obj.pol_file)
+        aerleon_obj = PolicyToAerleon("cisco", self.pol1)
+        aerleon_obj.get_aerleon_cfg()
+        self.assertIn("cisco", aerleon_obj.pol_file)
 
-    def test_validate_capirca_data_bad_platform(self):
+    def test_validate_aerleon_data_bad_platform(self):
         """Ensure that an error is raised if platform is not found."""
         Platform.objects.create(name="Fake Platform", network_driver="fake")
         with self.assertRaises(ValidationError):
-            PolicyToCapirca("fake", self.pol1).validate_capirca_data()
+            PolicyToAerleon("fake", self.pol1).validate_aerleon_data()
 
-    @patch("nautobot_firewall_models.utils.capirca.CAPIRCA_OS_MAPPER", {"srx": "paloaltofw"})
-    def test_capirca_os_map(self):
+    @patch("nautobot_firewall_models.utils.aerleon.AERLEON_OS_MAPPER", {"srx": "paloaltofw"})
+    def test_aerleon_os_map(self):
         """Verify the os config map solution works."""
-        cap_obj = PolicyToCapirca(self.dev_name, self.pol1)
-        self.assertEqual(cap_obj.platform, "paloaltofw")
+        aerleon_obj = PolicyToAerleon(self.dev_name, self.pol1)
+        self.assertEqual(aerleon_obj.platform, "paloaltofw")
 
-    def test_capirca_conversion(self):
+    def test_aerleon_conversion(self):
         """Verify that generating full config for a polucy is as expected."""
-        cap_obj = PolicyToCapirca(self.dev_name, self.pol1)
-        cap_obj.get_capirca_cfg()
-        self.assertEqual(cap_obj.net_file, NETWORKS2)
-        self.assertEqual(cap_obj.svc_file, SERVICES2)
-        self.assertEqual(cap_obj.pol_file, POLICY2)
+        aerleon_obj = PolicyToAerleon(self.dev_name, self.pol1)
+        aerleon_obj.get_aerleon_cfg()
+        self.assertEqual(aerleon_obj.net_file, NETWORKS2)
+        self.assertEqual(aerleon_obj.svc_file, SERVICES2)
+        self.assertEqual(aerleon_obj.pol_file, POLICY2)
 
 
-class TestDevicePolicyToCapirca(TestCase):
+class TestDevicePolicyToAerleon(TestCase):
     """Test models."""
 
     def setUp(self) -> None:
         """Setup test data."""
-        create_capirca_env()
+        create_aerleon_env()
         self.device_obj = Device.objects.get(name="DFW02-WAN00")
+        self.vm_obj = VirtualMachine.objects.get(name="DFW02-CLU01-VM1")
 
     @skip("Not implemented until policy method provided to merge queries provided")
     def test_dynamic_group_and_device(self):
         """Test that dynamic groups are created and device is added to it, disabled."""
 
-    def test_multi_policy_capirca_config(self):
+    def test_multi_policy_aerleon_config_device(self):
         """Verify that generating full config for a device is as expected."""
-        cap_obj = DevicePolicyToCapirca(self.device_obj)
-        cap_obj.get_all_capirca_cfg()
-        self.assertEqual(cap_obj.pol_file, POLICYALL)
+        aerleon_obj = ObjectPolicyToAerleon(self.device_obj)
+        aerleon_obj.get_all_aerleon_cfg()
+        self.assertEqual(aerleon_obj.pol_file, POLICYALL)
+
+    def test_multi_policy_aerleon_config_vm(self):
+        """Verify that generating full config for a VM is as expected."""
+        aerleon_obj = ObjectPolicyToAerleon(self.vm_obj)
+        aerleon_obj.get_all_aerleon_cfg()
+        self.assertEqual(aerleon_obj.pol_file, POLICYALL)
 
     def test_multi_policy_skipped(self):
         """Ensure that when a policy is not active, it is removed from consideration."""
-        cap_obj = DevicePolicyToCapirca(self.device_obj)
-        cap_obj.get_all_capirca_cfg()
-        self.assertEqual(len(cap_obj.policy), 7)
+        aerleon_obj = ObjectPolicyToAerleon(self.device_obj)
+        aerleon_obj.get_all_aerleon_cfg()
+        self.assertEqual(len(aerleon_obj.policy), 7)
         decomm = Status.objects.get(name="Decommissioned")
         pol3 = Policy.objects.get(name="Policy 3")
         pol3.status = decomm
         pol3.validated_save()
-        cap_obj = DevicePolicyToCapirca(self.device_obj)
-        cap_obj.get_all_capirca_cfg()
-        self.assertEqual(len(cap_obj.policy), 3)
+        aerleon_obj = ObjectPolicyToAerleon(self.device_obj)
+        aerleon_obj.get_all_aerleon_cfg()
+        self.assertEqual(len(aerleon_obj.policy), 3)

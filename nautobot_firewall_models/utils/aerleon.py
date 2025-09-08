@@ -5,8 +5,8 @@ import logging
 import re
 import unicodedata
 
-from capirca.lib import policy
-from capirca.lib.naming import Naming
+from aerleon.lib import policy
+from aerleon.lib.naming import Naming
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.utils.module_loading import import_string
@@ -14,9 +14,9 @@ from nautobot.dcim.models import Platform
 
 from nautobot_firewall_models.constants import (
     ACTION_MAP,
+    AERLEON_MAPPER,
+    AERLEON_OS_MAPPER,
     ALLOW_STATUS,
-    CAPIRCA_MAPPER,
-    CAPIRCA_OS_MAPPER,
     LOGGING_MAP,
     PLUGIN_CFG,
 )
@@ -70,8 +70,8 @@ def _check_status(status):
     return False
 
 
-def generate_capirca_config(servicedata, networkdata, pol, platform):
-    """Given platform with pol, net, svc files have Capirca generate config."""
+def generate_aerleon_config(servicedata, networkdata, pol, platform):
+    """Given platform with pol, net, svc files have Aerleon generate config."""
     defs = Naming(None)
     LOGGER.debug("Parsing Service List")
     defs.ParseServiceList(servicedata)
@@ -81,18 +81,18 @@ def generate_capirca_config(servicedata, networkdata, pol, platform):
     pol = policy.ParsePolicy(pol, defs, optimize=True)
     LOGGER.debug("Parsing Policy Completed")
 
-    LOGGER.debug("Running Capirca Against: %s", str(CAPIRCA_MAPPER[platform]["lib"]))
-    return str(import_string(CAPIRCA_MAPPER[platform]["lib"])(pol, 0))
+    LOGGER.debug("Running Aerleon Against: %s", str(AERLEON_MAPPER[platform]["lib"]))
+    return str(import_string(AERLEON_MAPPER[platform]["lib"])(pol, 0))
 
 
-class PolicyToCapirca:
-    """Class object to convert Policy orm object to Capirca object."""
+class PolicyToAerleon:
+    """Class object to convert Policy orm object to Aerleon object."""
 
     def __init__(self, platform, policy_obj=None, **kwargs):
         """Overload init to account for computed field."""
         self.policy_name = str(policy_obj)
         self.platform_obj = Platform.objects.get(network_driver=platform)
-        self.platform = CAPIRCA_OS_MAPPER.get(platform, platform)
+        self.platform = AERLEON_OS_MAPPER.get(platform, platform)
         self.policy_details = None
         if policy_obj:
             self.policy_details = policy_obj.policy_details
@@ -103,20 +103,20 @@ class PolicyToCapirca:
         self.service_group_protocol = {}
         self.service_group = {}
         self.policy = []
-        self.cap_policy = []
+        self.aerleon_policy = []
         self.pol_file = ""
         self.svc_file = ""
         self.net_file = ""
         self.cfg_file = ""
         # TODO: Evaluate if this is the best way to manage
         # Currently this hints as to when to use additional terms or headers
-        _allow_list = self.platform_obj.custom_field_data.get("capirca_allow")
-        self.cf_allow_list_enabled = bool("capirca_allow" in self.platform_obj.custom_field_data)
+        _allow_list = self.platform_obj.custom_field_data.get("aerleon_allow")
+        self.cf_allow_list_enabled = bool("aerleon_allow" in self.platform_obj.custom_field_data)
         self.cf_allow_list = _allow_list if _allow_list else []
 
         LOGGER.debug("Processing Policy: `%s`", str(self.policy_name))
         LOGGER.debug("Original Platform Name: `%s`", str(platform))
-        LOGGER.debug("Capirca Platform Name: `%s`", str(self.platform))
+        LOGGER.debug("Aerleon Platform Name: `%s`", str(self.platform))
         LOGGER.debug("cf_allow_list_enabled: `%s`", str(self.cf_allow_list_enabled))
         LOGGER.debug("cf_allow_list: `%s`", str(self.cf_allow_list))
 
@@ -130,7 +130,7 @@ class PolicyToCapirca:
             raise ValidationError(
                 f"{_type} with values of `{data}` had all instances removed."
                 "The likely cause of this is either the status was not active or "
-                "Capirca does not support the value you provided, and was removed from consideration"
+                "Aerleon does not support the value you provided, and was removed from consideration"
             )
 
     def _format_data(self, data, _type):  # pylint: disable=too-many-statements
@@ -230,7 +230,7 @@ class PolicyToCapirca:
             if _check_status(rule["rule"].status.name):
                 LOGGER.debug("Skipped due to status: `%s`", str(rule["rule"]))
                 continue
-            if rule["action"] == "remark" and PLUGIN_CFG["capirca_remark_pass"] is True:
+            if rule["action"] == "remark" and PLUGIN_CFG["aerleon_remark_pass"] is True:
                 continue
             rule_src_addr = []
             rule_src_addr_group = []
@@ -385,10 +385,10 @@ class PolicyToCapirca:
                 " is empty or the status of all rules was not active."
             )
 
-    def validate_capirca_data(self):  # pylint: disable=too-many-statements,too-many-branches
-        """Helper method to get data in format required for Capirca.
+    def validate_aerleon_data(self):  # pylint: disable=too-many-statements,too-many-branches
+        """Helper method to get data in format required for Aerleon.
 
-        This provides the Capirca checking that should, specifically
+        This provides the Aerleon checking that should, specifically
           * Combine address|address group, service|service group objects
           * Lowercase the protocol
           * Nomalize port format
@@ -405,9 +405,9 @@ class PolicyToCapirca:
         if not self.policy:
             self.validate_policy_data()
 
-        if not CAPIRCA_MAPPER.get(self.platform):
+        if not AERLEON_MAPPER.get(self.platform):
             raise ValidationError(
-                f"The platform network driver {self.platform} was not one of the supported options {list(CAPIRCA_MAPPER.keys())}."
+                f"The platform network driver {self.platform} was not one of the supported options {list(AERLEON_MAPPER.keys())}."
             )
 
         networkdata = {}
@@ -415,11 +415,11 @@ class PolicyToCapirca:
             name = _slugify(name)
             if addresses.get("ip_range"):
                 raise ValidationError(
-                    f"The ip_range object `{addresses['ip_range']}` was attempted which is not supported by Capirca."
+                    f"The ip_range object `{addresses['ip_range']}` was attempted which is not supported by Aerleon."
                 )
             if addresses.get("fqdn"):
                 raise ValidationError(
-                    f"The fqdn object `{addresses['fqdn']}` was attempted which is not supported by Capirca."
+                    f"The fqdn object `{addresses['fqdn']}` was attempted which is not supported by Aerleon."
                 )
             if addresses.get("ip_address"):
                 networkdata[name] = [addresses["ip_address"]]
@@ -446,14 +446,14 @@ class PolicyToCapirca:
         for name, services in self.service_group.items():
             name = _slugify(name)
             services = _clean_list(services, True)
-            # A service in Capirca is TCP/UDP, What if all child services
+            # A service in Aerleon is TCP/UDP, What if all child services
             # had not TCP/UDP Ports. Since servicedata is only populated if
             # in fact there is a port, procede if any of the child objects
             # have a port, otherwise pass
             if any(service in servicedata for service in services):
                 servicedata[name] = services
 
-        cap_policy = []
+        aerleon_policy = []
         for pol in self.policy:
             rule_name = _slugify(pol["rule-name"])
             if pol["action"] not in ACTION_MAP:
@@ -497,12 +497,12 @@ class PolicyToCapirca:
                 )
 
             rule_details["headers"].append(self.platform)
-            if CAPIRCA_MAPPER[self.platform]["type"] == "zone":
+            if AERLEON_MAPPER[self.platform]["type"] == "zone":
                 from_zone = _slugify(pol["from-zone"])
                 to_zone = _slugify(pol["to-zone"])
                 rule_details["headers"].extend(["from-zone", from_zone, "to-zone", to_zone])
                 LOGGER.debug("Zone Logic hit, from-zone: `%s` to-zone: `%s`", from_zone, to_zone)
-            if CAPIRCA_MAPPER[self.platform]["type"] == "filter-name":
+            if AERLEON_MAPPER[self.platform]["type"] == "filter-name":
                 rule_details["headers"].append(rule_details["rule-name"])
                 LOGGER.debug("Filter Name Logic hit for: `%s`", str(rule_details["rule-name"]))
 
@@ -519,15 +519,15 @@ class PolicyToCapirca:
                 if is_chd and (is_allowed_disabled or is_allowed):
                     rule_details["headers"].append(value)
                     LOGGER.debug("Updated chd_ field `%s` to value: `%s`", str(field), str(value))
-            cap_policy.append(rule_details)
+            aerleon_policy.append(rule_details)
 
-        return cap_policy, networkdata, servicedata
+        return aerleon_policy, networkdata, servicedata
 
     @staticmethod
-    def _get_capirca_files(cap_policy, networkdata, servicedata):  # pylint: disable=too-many-branches
-        """Convert the data structures taken in by method to Capirca configs."""
+    def _get_aerleon_files(aerleon_policy, networkdata, servicedata):  # pylint: disable=too-many-branches
+        """Convert the data structures taken in by method to Aerleon configs."""
         pol = []
-        for index, rule in enumerate(cap_policy):
+        for index, rule in enumerate(aerleon_policy):
             LOGGER.debug("Index `%s` for rule `%s`", str(index), str(rule))
 
             pol.append("header {")
@@ -564,45 +564,53 @@ class PolicyToCapirca:
                     servicecfg.append(" " * (len(name) + 3) + service)
         return pol, networkcfg, servicecfg
 
-    def get_capirca_cfg(self):
-        """Generate Capirca formatted data structure, convert that into Capirca text config, run Capirca."""
-        cap_policy, networkdata, servicedata = self.validate_capirca_data()
-        pol, networkcfg, servicecfg = self._get_capirca_files(cap_policy, networkdata, servicedata)
+    def get_aerleon_cfg(self):
+        """Generate Aerleon formatted data structure, convert that into Aerleon text config, run Aerleon."""
+        aerleon_policy, networkdata, servicedata = self.validate_aerleon_data()
+        pol, networkcfg, servicecfg = self._get_aerleon_files(aerleon_policy, networkdata, servicedata)
 
         self.pol_file = "\n".join(pol)
         self.net_file = "\n".join(networkcfg)
         self.svc_file = "\n".join(servicecfg)
 
-        self.cfg_file = generate_capirca_config(servicecfg, networkcfg, self.pol_file, self.platform)
+        self.cfg_file = generate_aerleon_config(servicecfg, networkcfg, self.pol_file, self.platform)
 
 
-class DevicePolicyToCapirca(PolicyToCapirca):
-    """Class object to convert Policy orm object to Capirca object for a whole device."""
+class ObjectPolicyToAerleon(PolicyToAerleon):
+    """Class object to convert Policy orm object to Aerleon object for a whole device."""
 
-    def __init__(self, device_obj, **kwargs):  # pylint: disable=super-init-not-called
+    def __init__(self, obj, **kwargs):  # pylint: disable=super-init-not-called
         """Overload init."""
-        super().__init__(device_obj.platform.network_driver, **kwargs)
+        super().__init__(obj.platform.network_driver, **kwargs)
         self.policy_objs = []
         policy_name = []
-        LOGGER.debug("Capirca Platform Name: `%s`", str(self.platform))
-        LOGGER.debug("Original Platform Name: `%s`", str(device_obj.platform.network_driver))
+        LOGGER.debug("Aerleon Platform Name: `%s`", str(self.platform))
+        LOGGER.debug("Original Platform Name: `%s`", str(obj.platform.network_driver))
         LOGGER.debug("cf_allow_list_enabled: `%s`", str(self.cf_allow_list_enabled))
         LOGGER.debug("cf_allow_list: `%s`", str(self.cf_allow_list))
 
         # TODO: Determine if this can be done with weight and more efficient
-        for dynamic_group in device_obj.dynamic_groups.all():
+        for dynamic_group in obj.dynamic_groups.all():
             for policy_group in dynamic_group.policydynamicgroupm2m_set.all():
                 self.policy_objs.append(policy_group.policy)
                 policy_name.append(policy_group.policy.name)
-        for policy_group in device_obj.policydevicem2m_set.all():
-            if policy_group.policy.name not in policy_name:
-                self.policy_objs.append(policy_group.policy)
-                policy_name.append(policy_group.policy.name)
+
+        if hasattr(obj, "policydevicem2m_set"):
+            for policy_group in obj.policydevicem2m_set.all():
+                if policy_group.policy.name not in policy_name:
+                    self.policy_objs.append(policy_group.policy)
+                    policy_name.append(policy_group.policy.name)
+
+        if hasattr(obj, "policyvirtualmachinem2m_set"):
+            for policy_group in obj.policyvirtualmachinem2m_set.all():
+                if policy_group.policy.name not in policy_name:
+                    self.policy_objs.append(policy_group.policy)
+                    policy_name.append(policy_group.policy.name)
 
         self.policy_name = "__".join(policy_name)
 
-    def get_all_capirca_cfg(self):
-        """Aggregate off of the Capirca Configurations for a device."""
+    def get_all_aerleon_cfg(self):
+        """Aggregate off of the Aerleon Configurations for a device."""
         for pol in self.policy_objs:
             if _check_status(pol.status.name):
                 LOGGER.debug("Policy Skipped due to status: `%s`", str(pol))
@@ -610,4 +618,4 @@ class DevicePolicyToCapirca(PolicyToCapirca):
             self.policy_details = pol.policy_details
             self.validate_policy_data()
 
-        self.get_capirca_cfg()
+        self.get_aerleon_cfg()
