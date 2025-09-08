@@ -7,8 +7,8 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("extras", "0114_computedfield_grouping"),
-        ("dcim", "0062_module_data_migration"),
+        ("dcim", "0049_remove_slugs_and_change_device_primary_ip_fields"),
+        ("extras", "0098_rename_data_jobresult_result"),
         ("nautobot_firewall_models", "0022_fix_policy_natpolicy_m2ms"),
     ]
 
