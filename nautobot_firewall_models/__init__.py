@@ -19,6 +19,7 @@ class NautobotFirewallModelsConfig(NautobotAppConfig):
     description = "Nautobot App to model firewall and security objects. Allows users to model policies in a vendor-neutral manner and use that data to drive network security automation."
     base_url = "firewall"
     required_settings = []
+<<<<<<< HEAD
     min_version = "2.0.0"
     max_version = "2.9999"
     default_settings = {
@@ -28,7 +29,12 @@ class NautobotFirewallModelsConfig(NautobotAppConfig):
         "default_status": "Active",
         "protect_on_delete": True,
     }
+=======
+    default_settings = {}
+    caching_config = {}
+>>>>>>> 8445d33 (Cookie updated by NetworkToCode Cookie Drift Manager Tool)
     docs_view_name = "plugins:nautobot_firewall_models:docs"
+    searchable_models = ["iprange"]
 
     def ready(self):
         """Register custom signals."""
