@@ -10,9 +10,6 @@ from nautobot.apps.forms import (
 from nautobot.dcim.models import Device, Interface
 from nautobot.extras.forms import (
     CustomFieldModelCSVForm,
-    LocalContextFilterForm,
-    LocalContextModelBulkEditForm,
-    LocalContextModelForm,
     NautobotBulkEditForm,
     NautobotFilterForm,
     NautobotModelForm,
@@ -25,7 +22,7 @@ from nautobot.tenancy.models import Tenant
 from nautobot_firewall_models import choices, fields, models
 
 
-class IPRangeFilterForm(LocalContextFilterForm, NautobotFilterForm):
+class IPRangeFilterForm(NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "start_address", "end_address", "vrf"]
@@ -41,7 +38,7 @@ class IPRangeFilterForm(LocalContextFilterForm, NautobotFilterForm):
     vrf = DynamicModelChoiceField(queryset=VRF.objects.all(), label="VRF", required=False)
 
 
-class IPRangeForm(fields.IPRangeFieldMixin, LocalContextModelForm, NautobotModelForm):
+class IPRangeForm(fields.IPRangeFieldMixin, NautobotModelForm):
     """IPRange creation/edit form."""
 
     vrf = DynamicModelChoiceField(queryset=VRF.objects.all(), label="VRF", required=False)
@@ -53,7 +50,7 @@ class IPRangeForm(fields.IPRangeFieldMixin, LocalContextModelForm, NautobotModel
         fields = ["vrf", "description", "status", "tags"]
 
 
-class IPRangeBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
+class IPRangeBulkEditForm(NautobotBulkEditForm):
     """IPRange bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.IPRange.objects.all(), widget=forms.MultipleHiddenInput)
@@ -68,7 +65,7 @@ class IPRangeBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
         nullable_fields = ["description", "vrf"]
 
 
-class FQDNFilterForm(LocalContextFilterForm, NautobotFilterForm):
+class FQDNFilterForm(NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -82,7 +79,7 @@ class FQDNFilterForm(LocalContextFilterForm, NautobotFilterForm):
     name = forms.CharField(required=False, label="Name")
 
 
-class FQDNForm(LocalContextModelForm, NautobotModelForm):
+class FQDNForm(NautobotModelForm):
     """FQDN creation/edit form."""
 
     ip_addresses = DynamicModelMultipleChoiceField(queryset=IPAddress.objects.all(), required=False)
@@ -94,7 +91,7 @@ class FQDNForm(LocalContextModelForm, NautobotModelForm):
         fields = ["name", "description", "ip_addresses", "status", "tags"]
 
 
-class FQDNBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
+class FQDNBulkEditForm(NautobotBulkEditForm):
     """FQDN bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.FQDN.objects.all(), widget=forms.MultipleHiddenInput)
@@ -107,7 +104,7 @@ class FQDNBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
         nullable_fields = ["description", "ip_addresses"]
 
 
-class AddressObjectFilterForm(LocalContextFilterForm, NautobotFilterForm):
+class AddressObjectFilterForm(NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -125,7 +122,7 @@ class AddressObjectFilterForm(LocalContextFilterForm, NautobotFilterForm):
     fqdn = DynamicModelChoiceField(queryset=models.FQDN.objects.all(), required=False, label="FQDN")
 
 
-class AddressObjectForm(LocalContextModelForm, NautobotModelForm):
+class AddressObjectForm(NautobotModelForm):
     """AddressObject creation/edit form."""
 
     ip_address = DynamicModelChoiceField(queryset=IPAddress.objects.all(), required=False, label="IP Address")
@@ -140,7 +137,7 @@ class AddressObjectForm(LocalContextModelForm, NautobotModelForm):
         fields = ["name", "description", "fqdn", "ip_range", "ip_address", "prefix", "status", "tags"]
 
 
-class AddressObjectBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
+class AddressObjectBulkEditForm(NautobotBulkEditForm):
     """AddressObject bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.AddressObject.objects.all(), widget=forms.MultipleHiddenInput)
@@ -152,7 +149,7 @@ class AddressObjectBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditF
         nullable_fields = ["description", "fqdn", "ip_range", "ip_address", "prefix"]
 
 
-class AddressObjectGroupFilterForm(LocalContextFilterForm, NautobotFilterForm):
+class AddressObjectGroupFilterForm(NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -166,7 +163,7 @@ class AddressObjectGroupFilterForm(LocalContextFilterForm, NautobotFilterForm):
     name = forms.CharField(required=False, label="Name")
 
 
-class AddressObjectGroupForm(LocalContextModelForm, NautobotModelForm):
+class AddressObjectGroupForm(NautobotModelForm):
     """AddressObjectGroup creation/edit form."""
 
     address_objects = DynamicModelMultipleChoiceField(queryset=models.AddressObject.objects.all(), required=False)
@@ -178,7 +175,7 @@ class AddressObjectGroupForm(LocalContextModelForm, NautobotModelForm):
         fields = ["name", "description", "address_objects", "status", "tags"]
 
 
-class AddressObjectGroupBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
+class AddressObjectGroupBulkEditForm(NautobotBulkEditForm):
     """AddressObjectGroup bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(
@@ -194,7 +191,7 @@ class AddressObjectGroupBulkEditForm(LocalContextModelBulkEditForm, NautobotBulk
         ]
 
 
-class ApplicationObjectFilterForm(LocalContextFilterForm, NautobotFilterForm):
+class ApplicationObjectFilterForm(NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -211,7 +208,7 @@ class ApplicationObjectFilterForm(LocalContextFilterForm, NautobotFilterForm):
     )
 
 
-class ApplicationObjectForm(LocalContextModelForm, NautobotModelForm):
+class ApplicationObjectForm(NautobotModelForm):
     """ApplicationObject creation/edit form."""
 
     class Meta:
@@ -231,7 +228,7 @@ class ApplicationObjectForm(LocalContextModelForm, NautobotModelForm):
         ]
 
 
-class ApplicationObjectBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
+class ApplicationObjectBulkEditForm(NautobotBulkEditForm):
     """ApplicationObject bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(
@@ -256,7 +253,7 @@ class ApplicationObjectBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkE
         ]
 
 
-class ApplicationObjectGroupFilterForm(LocalContextFilterForm, NautobotFilterForm):
+class ApplicationObjectGroupFilterForm(NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -270,7 +267,7 @@ class ApplicationObjectGroupFilterForm(LocalContextFilterForm, NautobotFilterFor
     name = forms.CharField(required=False, label="Name")
 
 
-class ApplicationObjectGroupForm(LocalContextModelForm, NautobotModelForm):
+class ApplicationObjectGroupForm(NautobotModelForm):
     """ApplicationObjectGroup creation/edit form."""
 
     application_objects = DynamicModelMultipleChoiceField(queryset=models.ApplicationObject.objects.all())
@@ -282,7 +279,7 @@ class ApplicationObjectGroupForm(LocalContextModelForm, NautobotModelForm):
         fields = ["name", "description", "application_objects", "status", "tags"]
 
 
-class ApplicationObjectGroupBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
+class ApplicationObjectGroupBulkEditForm(NautobotBulkEditForm):
     """ApplicationObjectGroup bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(
@@ -298,7 +295,7 @@ class ApplicationObjectGroupBulkEditForm(LocalContextModelBulkEditForm, Nautobot
         ]
 
 
-class ServiceObjectFilterForm(LocalContextFilterForm, NautobotFilterForm):
+class ServiceObjectFilterForm(NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -314,7 +311,7 @@ class ServiceObjectFilterForm(LocalContextFilterForm, NautobotFilterForm):
     ip_protocol = forms.ChoiceField(choices=add_blank_choice(choices.IP_PROTOCOL_CHOICES), required=False)
 
 
-class ServiceObjectForm(LocalContextModelForm, NautobotModelForm):
+class ServiceObjectForm(NautobotModelForm):
     """ServiceObject creation/edit form."""
 
     port = forms.CharField(
@@ -329,7 +326,7 @@ class ServiceObjectForm(LocalContextModelForm, NautobotModelForm):
         fields = ["name", "description", "port", "ip_protocol", "status", "tags"]
 
 
-class ServiceObjectBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
+class ServiceObjectBulkEditForm(NautobotBulkEditForm):
     """ServiceObject bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.ServiceObject.objects.all(), widget=forms.MultipleHiddenInput)
@@ -345,7 +342,7 @@ class ServiceObjectBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditF
         nullable_fields = ["description", "port"]
 
 
-class ServiceObjectGroupFilterForm(LocalContextFilterForm, NautobotFilterForm):
+class ServiceObjectGroupFilterForm(NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -359,7 +356,7 @@ class ServiceObjectGroupFilterForm(LocalContextFilterForm, NautobotFilterForm):
     name = forms.CharField(required=False, label="Name")
 
 
-class ServiceObjectGroupForm(LocalContextModelForm, NautobotModelForm):
+class ServiceObjectGroupForm(NautobotModelForm):
     """ServiceObjectGroup creation/edit form."""
 
     service_objects = DynamicModelMultipleChoiceField(queryset=models.ServiceObject.objects.all(), required=False)
@@ -371,7 +368,7 @@ class ServiceObjectGroupForm(LocalContextModelForm, NautobotModelForm):
         fields = ["name", "description", "service_objects", "status", "tags"]
 
 
-class ServiceObjectGroupBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
+class ServiceObjectGroupBulkEditForm(NautobotBulkEditForm):
     """ServiceObjectGroup bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(
@@ -387,7 +384,7 @@ class ServiceObjectGroupBulkEditForm(LocalContextModelBulkEditForm, NautobotBulk
         ]
 
 
-class UserObjectFilterForm(LocalContextFilterForm, NautobotFilterForm):
+class UserObjectFilterForm(NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "username", "name"]
@@ -402,7 +399,7 @@ class UserObjectFilterForm(LocalContextFilterForm, NautobotFilterForm):
     username = forms.CharField(required=False, label="Username")
 
 
-class UserObjectForm(LocalContextModelForm, NautobotModelForm):
+class UserObjectForm(NautobotModelForm):
     """UserObject creation/edit form."""
 
     username = forms.CharField(label="Username")
@@ -418,7 +415,7 @@ class UserObjectForm(LocalContextModelForm, NautobotModelForm):
         fields = ["username", "name", "status", "tags"]
 
 
-class UserObjectBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
+class UserObjectBulkEditForm(NautobotBulkEditForm):
     """UserObject bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.UserObject.objects.all(), widget=forms.MultipleHiddenInput)
@@ -432,7 +429,7 @@ class UserObjectBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm
         ]
 
 
-class UserObjectGroupFilterForm(LocalContextFilterForm, NautobotFilterForm):
+class UserObjectGroupFilterForm(NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -446,7 +443,7 @@ class UserObjectGroupFilterForm(LocalContextFilterForm, NautobotFilterForm):
     name = forms.CharField(required=False, label="Name")
 
 
-class UserObjectGroupForm(LocalContextModelForm, NautobotModelForm):
+class UserObjectGroupForm(NautobotModelForm):
     """UserObjectGroup creation/edit form."""
 
     user_objects = DynamicModelMultipleChoiceField(queryset=models.UserObject.objects.all(), required=False)
@@ -458,7 +455,7 @@ class UserObjectGroupForm(LocalContextModelForm, NautobotModelForm):
         fields = ["name", "description", "user_objects", "status", "tags"]
 
 
-class UserObjectGroupBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
+class UserObjectGroupBulkEditForm(NautobotBulkEditForm):
     """UserObjectGroup bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(
@@ -474,7 +471,7 @@ class UserObjectGroupBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEdi
         ]
 
 
-class ZoneFilterForm(LocalContextFilterForm, NautobotFilterForm):
+class ZoneFilterForm(NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -490,7 +487,7 @@ class ZoneFilterForm(LocalContextFilterForm, NautobotFilterForm):
     interfaces = DynamicModelChoiceField(queryset=Interface.objects.all(), label="Interface")
 
 
-class ZoneForm(LocalContextModelForm, NautobotModelForm):
+class ZoneForm(NautobotModelForm):
     """Zone creation/edit form."""
 
     vrfs = DynamicModelMultipleChoiceField(queryset=VRF.objects.all(), required=False, label="VRF")
@@ -506,7 +503,7 @@ class ZoneForm(LocalContextModelForm, NautobotModelForm):
         fields = ["name", "description", "vrfs", "device", "interfaces", "status", "tags"]
 
 
-class ZoneBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
+class ZoneBulkEditForm(NautobotBulkEditForm):
     """Zone bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.Zone.objects.all(), widget=forms.MultipleHiddenInput)
@@ -520,7 +517,7 @@ class ZoneBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
         nullable_fields = ["description", "vrfs", "interfaces"]
 
 
-class PolicyRuleFilterForm(LocalContextFilterForm, NautobotFilterForm):
+class PolicyRuleFilterForm(NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -535,7 +532,7 @@ class PolicyRuleFilterForm(LocalContextFilterForm, NautobotFilterForm):
     tag = TagFilterField(models.PolicyRule)
 
 
-class PolicyRuleForm(LocalContextModelForm, NautobotModelForm):
+class PolicyRuleForm(NautobotModelForm):
     """PolicyRule creation/edit form."""
 
     tags = DynamicModelMultipleChoiceField(queryset=Tag.objects.all(), required=False)
@@ -615,7 +612,7 @@ class PolicyRuleForm(LocalContextModelForm, NautobotModelForm):
 
 
 # TODO: Refactor
-class PolicyRuleBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
+class PolicyRuleBulkEditForm(NautobotBulkEditForm):
     """PolicyRule bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), widget=forms.MultipleHiddenInput)
@@ -629,7 +626,7 @@ class PolicyRuleBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm
         nullable_fields = ["description", "tags"]
 
 
-class PolicyFilterForm(LocalContextFilterForm, NautobotFilterForm, TenancyFilterForm):
+class PolicyFilterForm(NautobotFilterForm, TenancyFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name", "assigned_devices", "assigned_dynamic_groups"]
@@ -645,7 +642,7 @@ class PolicyFilterForm(LocalContextFilterForm, NautobotFilterForm, TenancyFilter
     assigned_dynamic_groups = DynamicModelChoiceField(queryset=DynamicGroup.objects.all(), required=False)
 
 
-class PolicyForm(LocalContextModelForm, NautobotModelForm, TenancyForm):
+class PolicyForm(NautobotModelForm, TenancyForm):
     """Policy creation/edit form."""
 
     assigned_devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
@@ -669,7 +666,7 @@ class PolicyForm(LocalContextModelForm, NautobotModelForm, TenancyForm):
         ]
 
 
-class PolicyBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
+class PolicyBulkEditForm(NautobotBulkEditForm):
     """Policy bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.Policy.objects.all(), widget=forms.MultipleHiddenInput)
@@ -690,7 +687,7 @@ class PolicyBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
 # NATPolicy
 
 
-class NATPolicyRuleFilterForm(LocalContextFilterForm, NautobotFilterForm):
+class NATPolicyRuleFilterForm(NautobotFilterForm):
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
@@ -705,7 +702,7 @@ class NATPolicyRuleFilterForm(LocalContextFilterForm, NautobotFilterForm):
     tag = TagFilterField(models.NATPolicyRule)
 
 
-class NATPolicyRuleForm(LocalContextModelForm, NautobotModelForm):
+class NATPolicyRuleForm(NautobotModelForm):
     """NATPolicyRule creation/edit form."""
 
     # Metadata
@@ -850,7 +847,7 @@ class NATPolicyFilterForm(NautobotFilterForm, TenancyFilterForm):
     assigned_dynamic_groups = DynamicModelChoiceField(queryset=DynamicGroup.objects.all(), required=False)
 
 
-class NATPolicyForm(LocalContextModelForm, NautobotModelForm, TenancyForm):
+class NATPolicyForm(NautobotModelForm, TenancyForm):
     """NATPolicy creation/edit form."""
 
     assigned_devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
@@ -874,7 +871,7 @@ class NATPolicyForm(LocalContextModelForm, NautobotModelForm, TenancyForm):
         ]
 
 
-class NATPolicyBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
+class NATPolicyBulkEditForm(NautobotBulkEditForm):
     """NATPolicy bulk edit form."""
 
     pk = DynamicModelMultipleChoiceField(queryset=models.NATPolicy.objects.all(), widget=forms.MultipleHiddenInput)
@@ -895,7 +892,7 @@ class NATPolicyBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm)
 # CapircaPolicy
 
 
-class CapircaPolicyForm(LocalContextModelForm, NautobotModelForm):
+class CapircaPolicyForm(NautobotModelForm):
     """Filter Form for CapircaPolicy instances."""
 
     device = DynamicModelChoiceField(queryset=Device.objects.all())
@@ -913,7 +910,7 @@ class CapircaPolicyForm(LocalContextModelForm, NautobotModelForm):
         )
 
 
-class CapircaPolicyFilterForm(LocalContextFilterForm, NautobotFilterForm):
+class CapircaPolicyFilterForm(NautobotFilterForm):
     """Form for CapircaPolicy instances."""
 
     model = models.CapircaPolicy
@@ -921,7 +918,7 @@ class CapircaPolicyFilterForm(LocalContextFilterForm, NautobotFilterForm):
     q = forms.CharField(required=False, label="Search")
 
 
-class CapircaPolicyBulkEditForm(LocalContextModelBulkEditForm, NautobotBulkEditForm):
+class CapircaPolicyBulkEditForm(NautobotBulkEditForm):
     """BulkEdit form for CapircaPolicy instances."""
 
     pk = forms.ModelMultipleChoiceField(queryset=models.CapircaPolicy.objects.all(), widget=forms.MultipleHiddenInput)
