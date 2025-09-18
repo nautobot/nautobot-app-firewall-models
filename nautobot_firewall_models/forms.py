@@ -1,7 +1,6 @@
 """Forms for nautobot_firewall_models."""
 
 from django import forms
-<<<<<<< HEAD
 from nautobot.apps.forms import (
     DynamicModelChoiceField,
     DynamicModelMultipleChoiceField,
@@ -19,10 +18,6 @@ from nautobot.extras.models import DynamicGroup, Tag
 from nautobot.ipam.models import VRF, IPAddress, Prefix
 from nautobot.tenancy.forms import TenancyFilterForm, TenancyForm
 from nautobot.tenancy.models import Tenant
-=======
-from nautobot.apps.constants import CHARFIELD_MAX_LENGTH
-from nautobot.apps.forms import NautobotBulkEditForm, NautobotFilterForm, NautobotModelForm, TagsBulkEditFormMixin
->>>>>>> 8445d33 (Cookie updated by NetworkToCode Cookie Drift Manager Tool)
 
 from nautobot_firewall_models import choices, fields, models
 
@@ -58,7 +53,6 @@ class IPRangeForm(fields.IPRangeFieldMixin, NautobotModelForm):
 class IPRangeBulkEditForm(NautobotBulkEditForm):
     """IPRange bulk edit form."""
 
-<<<<<<< HEAD
     pk = DynamicModelMultipleChoiceField(queryset=models.IPRange.objects.all(), widget=forms.MultipleHiddenInput)
     description = forms.CharField(required=False)
     # start_address = forms.CharField(required=False)
@@ -188,10 +182,6 @@ class AddressObjectGroupBulkEditForm(NautobotBulkEditForm):
         queryset=models.AddressObjectGroup.objects.all(), widget=forms.MultipleHiddenInput
     )
     description = forms.CharField(required=False)
-=======
-    pk = forms.ModelMultipleChoiceField(queryset=models.IPRange.objects.all(), widget=forms.MultipleHiddenInput)
-    description = forms.CharField(required=False, max_length=CHARFIELD_MAX_LENGTH)
->>>>>>> 8445d33 (Cookie updated by NetworkToCode Cookie Drift Manager Tool)
 
     class Meta:
         """Meta attributes."""

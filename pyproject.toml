@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nautobot-firewall-models"
-version = "2.2.3a0"
+version = "2.3.0a0"
 description = "Nautobot app to model firewall objects."
 authors = ["Network to Code, LLC <opensource@networktocode.com>"]
 license = "Apache-2.0"
@@ -29,13 +29,9 @@ include = [
 [tool.poetry.dependencies]
 python = ">=3.9.2,<3.13"
 # Used for local development
-<<<<<<< HEAD
-nautobot = "^2.0.0"
+nautobot = ">=2.4.2,<3.0.0"
 netutils = "^1.0.0"
 capirca = "^2.0.6"
-=======
-nautobot = ">=2.4.2,<3.0.0"
->>>>>>> 8445d33 (Cookie updated by NetworkToCode Cookie Drift Manager Tool)
 
 [tool.poetry.group.dev.dependencies]
 coverage = "*"
@@ -50,11 +46,7 @@ ruff = "0.5.5"
 yamllint = "*"
 toml = "*"
 # Python implementation of markdownlint
-<<<<<<< HEAD
-pymarkdownlnt = "~0.9.29"
-=======
 pymarkdownlnt = "~0.9.30"
->>>>>>> 8445d33 (Cookie updated by NetworkToCode Cookie Drift Manager Tool)
 Markdown = "*"
 towncrier = ">=23.6.0,<=24.8.0"
 to-json-schema = "*"
@@ -91,18 +83,14 @@ no-docstring-rgx = "^(_|test_|Meta$)"
 [tool.pylint.messages_control]
 disable = """,
     line-too-long,
-<<<<<<< HEAD
     nb-use-fields-all,
     too-few-public-methods,
     too-many-ancestors
-    """
-=======
     too-many-positional-arguments,
     nb-warn-dunder-filter-field,
     nb-no-search-function,
     nb-no-char-filter-q,
 """
->>>>>>> 8445d33 (Cookie updated by NetworkToCode Cookie Drift Manager Tool)
 
 [tool.pylint.miscellaneous]
 # Don't flag TODO as a failure, let us commit with things that still need to be done in the code

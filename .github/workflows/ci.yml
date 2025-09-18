@@ -159,19 +159,11 @@ jobs:
         include:
           - python-version: "3.11"
             db-backend: "postgresql"
-<<<<<<< HEAD
-            nautobot-version: "2.0.0"
-            # - python-version: "3.12"
-            #   db-backend: "mysql"
-            #   nautobot-version: "stable"
-    runs-on: "ubuntu-22.04"
-=======
             nautobot-version: "2.4.2"
-          - python-version: "3.12"
-            db-backend: "mysql"
-            nautobot-version: "stable"
+          # - python-version: "3.12"
+          #   db-backend: "mysql"
+          #   nautobot-version: "stable"
     runs-on: "ubuntu-latest"
->>>>>>> 8445d33 (Cookie updated by NetworkToCode Cookie Drift Manager Tool)
     env:
       INVOKE_NAUTOBOT_FIREWALL_MODELS_PYTHON_VER: "${{ matrix.python-version }}"
       INVOKE_NAUTOBOT_FIREWALL_MODELS_NAUTOBOT_VER: "${{ matrix.nautobot-version }}"
