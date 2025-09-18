@@ -26,7 +26,6 @@ class NautobotFirewallModelsConfig(NautobotAppConfig):
         "default_status": "Active",
         "protect_on_delete": True,
     }
-    caching_config = {}
     docs_view_name = "plugins:nautobot_firewall_models:docs"
     searchable_models = ["iprange"]
 
