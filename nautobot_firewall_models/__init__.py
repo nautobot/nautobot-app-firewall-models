@@ -27,7 +27,6 @@ class NautobotFirewallModelsConfig(NautobotAppConfig):
         "protect_on_delete": True,
     }
     docs_view_name = "plugins:nautobot_firewall_models:docs"
-    searchable_models = ["iprange"]
 
     def ready(self):
         """Register custom signals."""
