@@ -2,6 +2,7 @@
 # pylint: disable=duplicate-code, too-many-lines
 
 from django.db import models
+from nautobot.apps.constants import CHARFIELD_MAX_LENGTH
 from nautobot.core.models.generics import BaseModel, PrimaryModel
 from nautobot.extras.models import StatusField
 from nautobot.extras.utils import extras_features
@@ -31,7 +32,7 @@ class PolicyRule(PrimaryModel):
     Firewall policies are typically made up of several individual rules.
     """
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=CHARFIELD_MAX_LENGTH)
     source_users = models.ManyToManyField(
         blank=True, to="nautobot_firewall_models.UserObject", related_name="policy_rules"
     )
@@ -80,7 +81,7 @@ class PolicyRule(PrimaryModel):
         to="nautobot_firewall_models.ServiceObjectGroup",
         related_name="destination_policy_rules",
     )
-    action = models.CharField(choices=choices.ACTION_CHOICES, max_length=20)
+    action = models.CharField(choices=choices.ACTION_CHOICES, max_length=CHARFIELD_MAX_LENGTH)
     log = models.BooleanField(default=False)
     status = StatusField(
         on_delete=models.PROTECT,
@@ -93,8 +94,8 @@ class PolicyRule(PrimaryModel):
     application_groups = models.ManyToManyField(
         blank=True, to="nautobot_firewall_models.ApplicationObjectGroup", related_name="policy_rules"
     )
-    request_id = models.CharField(max_length=100, blank=True)
-    description = models.CharField(max_length=200, blank=True)
+    request_id = models.CharField(max_length=CHARFIELD_MAX_LENGTH, blank=True)
+    description = models.CharField(max_length=1024, blank=True)
     index = models.PositiveSmallIntegerField(null=True, blank=True)
 
     clone_fields = [
@@ -177,10 +178,10 @@ class Policy(PrimaryModel):
     """
 
     description = models.CharField(
-        max_length=200,
+        max_length=1024,
         blank=True,
     )
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=CHARFIELD_MAX_LENGTH, unique=True)
     policy_rules = models.ManyToManyField(to=PolicyRule, blank=True, related_name="policies")
     assigned_devices = models.ManyToManyField(
         to="dcim.Device",
