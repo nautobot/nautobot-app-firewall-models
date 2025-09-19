@@ -1,3 +1,1 @@
-Standardize model fields max character limit
-Names to 255 characters
-Descriptions to 1024 characters
+Standardized the object description fields to max 1024 characters and all other charfields to max 255 characters.
