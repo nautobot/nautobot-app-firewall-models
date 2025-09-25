@@ -13,10 +13,10 @@ classifiers = [
     "Intended Audience :: Developers",
     "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 packages = [
     { include = "nautobot_firewall_models" },
@@ -27,7 +27,7 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9.2,<3.13"
+python = ">=3.10,<3.14"
 # Used for local development
 nautobot = {git = "https://github.com/nautobot/nautobot.git", rev = "next"}
 # nautobot = "^3.0.0"  # TODO: Uncomment after v3.0.0 is released
