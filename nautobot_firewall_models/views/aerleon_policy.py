@@ -1,4 +1,4 @@
-"""Capirca Policy Object Viewsets."""
+"""Aerleon Policy Object Viewsets."""
 
 from nautobot.apps.views import (
     ObjectBulkDestroyViewMixin,
@@ -14,41 +14,41 @@ from nautobot_firewall_models import filters, forms, models, tables
 from nautobot_firewall_models.api import serializers
 
 
-class CapircaPolicyUIViewSet(
+class AerleonPolicyUIViewSet(
     ObjectListViewMixin,
     ObjectBulkDestroyViewMixin,
     ObjectDetailViewMixin,
     ObjectChangeLogViewMixin,
     ObjectDestroyViewMixin,
 ):  # pylint: disable=abstract-method
-    """ViewSet for the CapircaPolicy model."""
+    """ViewSet for the AerleonPolicy model."""
 
-    bulk_update_form_class = forms.CapircaPolicyBulkEditForm
-    filterset_class = filters.CapircaPolicyFilterSet
-    filterset_form_class = forms.CapircaPolicyFilterForm
-    form_class = forms.CapircaPolicyForm
-    queryset = models.CapircaPolicy.objects.all()
-    serializer_class = serializers.CapircaPolicySerializer
-    table_class = tables.CapircaPolicyTable
+    bulk_update_form_class = forms.AerleonPolicyBulkEditForm
+    filterset_class = filters.AerleonPolicyFilterSet
+    filterset_form_class = forms.AerleonPolicyFilterForm
+    form_class = forms.AerleonPolicyForm
+    queryset = models.AerleonPolicy.objects.all()
+    serializer_class = serializers.AerleonPolicySerializer
+    table_class = tables.AerleonPolicyTable
     action_buttons = []
 
     lookup_field = "pk"
 
 
-class CapircaPolicyDeviceUIViewSet(ObjectDetailViewMixin):  # pylint: disable=abstract-method
-    """ViewSet for the CapircaPolicy Device Details."""
+class AerleonPolicyDeviceUIViewSet(ObjectDetailViewMixin):  # pylint: disable=abstract-method
+    """ViewSet for the AerleonPolicy Device Details."""
 
     queryset = Device.objects.all()
     lookup_field = "pk"
 
     def get_template_name(self):
         """Set template name."""
-        return "nautobot_firewall_models/capircapolicy_details.html"
+        return "nautobot_firewall_models/aerleonpolicy_details.html"
 
     def retrieve(self, request, *args, **kwargs):
         """Retrieve a model instance."""
         device = self.get_object()
-        policy = models.CapircaPolicy.objects.get(device=device)
+        policy = models.AerleonPolicy.objects.get(device=device)
         context = {"object": policy, "device": device}
         context["use_new_ui"] = True
         return Response(context)
