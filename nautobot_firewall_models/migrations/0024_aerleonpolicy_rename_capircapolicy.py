@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ("dcim", "0049_remove_slugs_and_change_device_primary_ip_fields"),
         ("extras", "0098_rename_data_jobresult_result"),
-        ("nautobot_firewall_models", "0022_fix_policy_natpolicy_m2ms"),
+        ("nautobot_firewall_models", "0023_alter_addressobject_description_and_more"),
     ]
 
     operations = [
