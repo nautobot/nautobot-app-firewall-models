@@ -7,10 +7,10 @@ from nautobot.apps.views import (
     ObjectDetailViewMixin,
     ObjectListViewMixin,
 )
-from nautobot.dcim.models import Device
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from nautobot_firewall_models import filters, forms, models, tables
+from nautobot_firewall_models import details, filters, forms, models, tables
 from nautobot_firewall_models.api import serializers
 
 
@@ -31,24 +31,16 @@ class CapircaPolicyUIViewSet(
     serializer_class = serializers.CapircaPolicySerializer
     table_class = tables.CapircaPolicyTable
     action_buttons = []
+    object_detail_content = details.capirca_policy
 
     lookup_field = "pk"
 
-
-class CapircaPolicyDeviceUIViewSet(ObjectDetailViewMixin):  # pylint: disable=abstract-method
-    """ViewSet for the CapircaPolicy Device Details."""
-
-    queryset = Device.objects.all()
-    lookup_field = "pk"
-
-    def get_template_name(self):
-        """Set template name."""
-        return "nautobot_firewall_models/capircapolicy_details.html"
-
-    def retrieve(self, request, *args, **kwargs):
-        """Retrieve a model instance."""
-        device = self.get_object()
+    @action(detail=True, methods=["get"])
+    def devicedetail(self, request, pk, *args, **kwargs):
+        # pylint: disable=invalid-name, arguments-differ, unused-argument
+        """Action method to see the full configuration."""
+        obj = self.get_object()
+        device = obj.device
         policy = models.CapircaPolicy.objects.get(device=device)
-        context = {"object": policy, "device": device}
-        context["use_new_ui"] = True
+        context = {"object": policy, "device": device, "active_tab": "devicedetail"}
         return Response(context)

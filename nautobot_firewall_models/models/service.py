@@ -34,20 +34,29 @@ class ApplicationObject(PrimaryModel):
     )
     category = models.CharField(max_length=CHARFIELD_MAX_LENGTH, blank=True, help_text="Category of application.")
     subcategory = models.CharField(
-        max_length=CHARFIELD_MAX_LENGTH, blank=True, help_text="Sub-category of application."
+        max_length=CHARFIELD_MAX_LENGTH,
+        blank=True,
+        help_text="Sub-category of application.",
+        verbose_name="Sub-Category",
     )
     technology = models.CharField(
         max_length=CHARFIELD_MAX_LENGTH, blank=True, help_text="Type of application technology."
     )
     risk = models.PositiveIntegerField(blank=True, null=True, help_text="Assessed risk of the application.")
     default_type = models.CharField(
-        max_length=CHARFIELD_MAX_LENGTH, blank=True, help_text="Default type, i.e. port or app-id."
+        max_length=CHARFIELD_MAX_LENGTH,
+        blank=True,
+        help_text="Default type, i.e. port or app-id.",
+        verbose_name="Default Type",
     )
     name = models.CharField(
         max_length=CHARFIELD_MAX_LENGTH, unique=True, help_text="Name descriptor for an application object type."
     )
     default_ip_protocol = models.CharField(
-        max_length=CHARFIELD_MAX_LENGTH, blank=True, help_text="Name descriptor for an application object type."
+        max_length=CHARFIELD_MAX_LENGTH,
+        blank=True,
+        help_text="Name descriptor for an application object type.",
+        verbose_name="Default IP Protocol",
     )
     status = StatusField(
         on_delete=models.PROTECT,
@@ -102,6 +111,7 @@ class ApplicationObjectGroup(PrimaryModel):
         to="nautobot_firewall_models.ApplicationObject",
         blank=True,
         related_name="application_object_groups",
+        verbose_name="Application Objects",
     )
     status = StatusField(
         on_delete=models.PROTECT,
@@ -148,6 +158,7 @@ class ServiceObject(PrimaryModel):
         choices=choices.IP_PROTOCOL_CHOICES,
         max_length=CHARFIELD_MAX_LENGTH,
         help_text="IANA IP Protocol (e.g. TCP UDP ICMP)",
+        verbose_name="IP Protocol",
     )
     status = StatusField(
         on_delete=models.PROTECT,
@@ -197,6 +208,7 @@ class ServiceObjectGroup(PrimaryModel):
         to="nautobot_firewall_models.ServiceObject",
         blank=True,
         related_name="service_object_groups",
+        verbose_name="Service Objects",
     )
     status = StatusField(
         on_delete=models.PROTECT,

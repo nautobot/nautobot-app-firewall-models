@@ -6,30 +6,21 @@ from nautobot.apps.views import NautobotUIViewSet
 from nautobot.core.views.mixins import PERMISSIONS_ACTION_MAP
 from rest_framework.decorators import action
 
-from nautobot_firewall_models.api.serializers import NATPolicyRuleSerializer, NATPolicySerializer
-from nautobot_firewall_models.filters import NATPolicyFilterSet, NATPolicyRuleFilterSet
-from nautobot_firewall_models.forms import (
-    NATPolicyBulkEditForm,
-    NATPolicyFilterForm,
-    NATPolicyForm,
-    NATPolicyRuleBulkEditForm,
-    NATPolicyRuleFilterForm,
-    NATPolicyRuleForm,
-)
-from nautobot_firewall_models.models import NATPolicy, NATPolicyDeviceM2M, NATPolicyDynamicGroupM2M, NATPolicyRule
-from nautobot_firewall_models.tables import NATPolicyRuleTable, NATPolicyTable
+from nautobot_firewall_models import details, filters, forms, models, tables
+from nautobot_firewall_models.api import serializers
 
 
 class NATPolicyRuleUIViewSet(NautobotUIViewSet):
     """ViewSet for the NATPolicyRule model."""
 
-    bulk_update_form_class = NATPolicyRuleBulkEditForm
-    filterset_class = NATPolicyRuleFilterSet
-    filterset_form_class = NATPolicyRuleFilterForm
-    form_class = NATPolicyRuleForm
-    queryset = NATPolicyRule.objects.all()
-    serializer_class = NATPolicyRuleSerializer
-    table_class = NATPolicyRuleTable
+    bulk_update_form_class = forms.NATPolicyRuleBulkEditForm
+    filterset_class = filters.NATPolicyRuleFilterSet
+    filterset_form_class = forms.NATPolicyRuleFilterForm
+    form_class = forms.NATPolicyRuleForm
+    queryset = models.NATPolicyRule.objects.all()
+    serializer_class = serializers.NATPolicyRuleSerializer
+    table_class = tables.NATPolicyRuleTable
+    object_detail_content = details.nat_policy_rule
 
     lookup_field = "pk"
 
@@ -37,13 +28,14 @@ class NATPolicyRuleUIViewSet(NautobotUIViewSet):
 class NATPolicyUIViewSet(NautobotUIViewSet):
     """ViewSet for the NATPolicy model."""
 
-    bulk_update_form_class = NATPolicyBulkEditForm
-    filterset_class = NATPolicyFilterSet
-    filterset_form_class = NATPolicyFilterForm
-    form_class = NATPolicyForm
-    queryset = NATPolicy.objects.all()
-    serializer_class = NATPolicySerializer
-    table_class = NATPolicyTable
+    bulk_update_form_class = forms.NATPolicyBulkEditForm
+    filterset_class = filters.NATPolicyFilterSet
+    filterset_form_class = forms.NATPolicyFilterForm
+    form_class = forms.NATPolicyForm
+    queryset = models.NATPolicy.objects.all()
+    serializer_class = serializers.NATPolicySerializer
+    table_class = tables.NATPolicyTable
+    object_detail_content = details.nat_policy
     prefetch_related = [
         "nat_policy_rules__source_users",
         "nat_policy_rules__source_user_groups",
@@ -76,7 +68,7 @@ class NATPolicyUIViewSet(NautobotUIViewSet):
         form_data = dict(request.POST)
         form_data.pop("csrfmiddlewaretoken", None)
         for device, weight in form_data.items():
-            m2m = NATPolicyDeviceM2M.objects.get(device=device, nat_policy=pk)
+            m2m = models.NATPolicyDeviceM2M.objects.get(device=device, nat_policy=pk)
             m2m.weight = weight[0]
             m2m.validated_save()
         return redirect(reverse("plugins:nautobot_firewall_models:natpolicy", kwargs={"pk": pk}))
@@ -88,7 +80,7 @@ class NATPolicyUIViewSet(NautobotUIViewSet):
         form_data = dict(request.POST)
         form_data.pop("csrfmiddlewaretoken", None)
         for group, weight in form_data.items():
-            m2m = NATPolicyDynamicGroupM2M.objects.get(dynamic_group=group, nat_policy=pk)
+            m2m = models.NATPolicyDynamicGroupM2M.objects.get(dynamic_group=group, nat_policy=pk)
             m2m.weight = weight[0]
             m2m.validated_save()
         return redirect(reverse("plugins:nautobot_firewall_models:natpolicy", kwargs={"pk": pk}))

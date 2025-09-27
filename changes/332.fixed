@@ -1,0 +1,2 @@
+Fixed several places where rendering of `verbose_name` was incorrect.
+Fixed failing linting issues.

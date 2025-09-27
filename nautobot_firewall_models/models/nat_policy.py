@@ -40,7 +40,7 @@ class NATPolicyRule(PrimaryModel):
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
         default=get_default_status,
     )
-    request_id = models.CharField(max_length=CHARFIELD_MAX_LENGTH, blank=True)
+    request_id = models.CharField(max_length=CHARFIELD_MAX_LENGTH, blank=True, verbose_name="Request ID")
     description = models.CharField(max_length=1024, blank=True)
     index = models.PositiveSmallIntegerField(null=True, blank=True)
 
@@ -51,6 +51,7 @@ class NATPolicyRule(PrimaryModel):
         blank=True,
         on_delete=models.SET_NULL,
         related_name="source_nat_policy_rules",
+        verbose_name="Source Zone",
     )
     destination_zone = models.ForeignKey(
         to="nautobot_firewall_models.Zone",
@@ -58,6 +59,7 @@ class NATPolicyRule(PrimaryModel):
         null=True,
         blank=True,
         related_name="destination_nat_policy_rules",
+        verbose_name="Destination Zone",
     )
 
     # Original source data
@@ -65,21 +67,25 @@ class NATPolicyRule(PrimaryModel):
         to="nautobot_firewall_models.AddressObject",
         blank=True,
         related_name="original_source_nat_policy_rules",
+        verbose_name="Original Source Addresses",
     )
     original_source_address_groups = models.ManyToManyField(
         to="nautobot_firewall_models.AddressObjectGroup",
         blank=True,
         related_name="original_source_nat_policy_rules",
+        verbose_name="Original Source Address Groups",
     )
     original_source_services = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObject",
         blank=True,
         related_name="original_source_nat_policy_rules",
+        verbose_name="Original Source Services",
     )
     original_source_service_groups = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObjectGroup",
         blank=True,
         related_name="original_source_nat_policy_rules",
+        verbose_name="Original Source Service Groups",
     )
 
     # Translated source data
@@ -87,21 +93,25 @@ class NATPolicyRule(PrimaryModel):
         to="nautobot_firewall_models.AddressObject",
         blank=True,
         related_name="translated_source_nat_policy_rules",
+        verbose_name="Translated Source Addresses",
     )
     translated_source_address_groups = models.ManyToManyField(
         to="nautobot_firewall_models.AddressObjectGroup",
         blank=True,
         related_name="translated_source_nat_policy_rules",
+        verbose_name="Translated Source Address Groups",
     )
     translated_source_services = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObject",
         blank=True,
         related_name="translated_source_nat_policy_rules",
+        verbose_name="Translated Source Services",
     )
     translated_source_service_groups = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObjectGroup",
         blank=True,
         related_name="translated_source_nat_policy_rules",
+        verbose_name="Translated Source Service Groups",
     )
 
     # Original destination data
@@ -109,21 +119,25 @@ class NATPolicyRule(PrimaryModel):
         to="nautobot_firewall_models.AddressObject",
         blank=True,
         related_name="original_destination_nat_policy_rules",
+        verbose_name="Original Destination Addresses",
     )
     original_destination_address_groups = models.ManyToManyField(
         to="nautobot_firewall_models.AddressObjectGroup",
         blank=True,
         related_name="original_destination_nat_policy_rules",
+        verbose_name="Original Destination Address Groups",
     )
     original_destination_services = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObject",
         blank=True,
         related_name="original_destination_nat_policy_rules",
+        verbose_name="Original Destination Services",
     )
     original_destination_service_groups = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObjectGroup",
         blank=True,
         related_name="original_destination_nat_policy_rules",
+        verbose_name="Original Destination Service Groups",
     )
 
     # Translated destination data
@@ -131,21 +145,25 @@ class NATPolicyRule(PrimaryModel):
         to="nautobot_firewall_models.AddressObject",
         blank=True,
         related_name="translated_destination_nat_policy_rules",
+        verbose_name="Translated Destination Addresses",
     )
     translated_destination_address_groups = models.ManyToManyField(
         to="nautobot_firewall_models.AddressObjectGroup",
         blank=True,
         related_name="translated_destination_nat_policy_rules",
+        verbose_name="Translated Destination Address Groups",
     )
     translated_destination_services = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObject",
         blank=True,
         related_name="translated_destination_nat_policy_rules",
+        verbose_name="Translated Destination Services",
     )
     translated_destination_service_groups = models.ManyToManyField(
         to="nautobot_firewall_models.ServiceObjectGroup",
         blank=True,
         related_name="translated_destination_nat_policy_rules",
+        verbose_name="Translated Destination Service Groups",
     )
 
     clone_fields = [
@@ -250,19 +268,24 @@ class NATPolicy(PrimaryModel):
     )
     name = models.CharField(max_length=CHARFIELD_MAX_LENGTH, unique=True)
     nat_policy_rules = models.ManyToManyField(
-        to="nautobot_firewall_models.NATPolicyRule", blank=True, related_name="nat_policies"
+        to="nautobot_firewall_models.NATPolicyRule",
+        blank=True,
+        related_name="nat_policies",
+        verbose_name="NAT Policy Rules",
     )
     assigned_devices = models.ManyToManyField(
         to="dcim.Device",
         through="NATPolicyDeviceM2M",
         related_name="nat_policies",
         blank=True,
+        verbose_name="Assigned Devices",
     )
     assigned_dynamic_groups = models.ManyToManyField(
         to="extras.DynamicGroup",
         through="NATPolicyDynamicGroupM2M",
         related_name="nat_policies",
         blank=True,
+        verbose_name="Assigned Dynamic Groups",
     )
     status = StatusField(
         on_delete=models.PROTECT,
@@ -325,7 +348,7 @@ class NATPolicyDynamicGroupM2M(BaseModel):
     """Through model to add weight to the NATPolicy & DynamicGroup relationship."""
 
     nat_policy = models.ForeignKey("nautobot_firewall_models.NATPolicy", on_delete=models.CASCADE)
-    dynamic_group = models.ForeignKey("extras.DynamicGroup", on_delete=models.PROTECT)
+    dynamic_group = models.ForeignKey("extras.DynamicGroup", on_delete=models.PROTECT, verbose_name="Dynamic Group")
     weight = models.PositiveSmallIntegerField(default=100)
 
     class Meta:

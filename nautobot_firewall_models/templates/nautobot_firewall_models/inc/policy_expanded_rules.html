@@ -1,10 +1,8 @@
-
 {% load buttons %}
 {% load static %}
 {% load custom_links %}
 {% load helpers %}
 {% load plugins %}
-
 
 <div class="row">
     <div class="col-md-12">
@@ -13,10 +11,16 @@
                 <strong>Policy Rule Expanded</strong>
             </div>
             <table class="table table-hover panel-body">
-                {% include 'nautobot_firewall_models/inc/policyrule_tablehead.html' with parent_policy=True %}
-                {% for rule in object.policy_rules.all %}
-                {% include 'nautobot_firewall_models/inc/policy_rules_tablerow.html' with rule=rule parent_policy=True %}
-                {% endfor %}
+                {% include "nautobot_firewall_models/inc/policyrule_tablehead.html" %}
+                {% if object.policy_rules %}
+                    {% with rules=object.policy_rules.all %}
+                        {% for rule in rules %}
+                            {% include "nautobot_firewall_models/inc/policy_rules_tablerow.html" with rule=rule %}
+                        {% endfor %}
+                    {% endwith %}
+                {% else %}
+                    {% include "nautobot_firewall_models/inc/policy_rules_tablerow.html" with rule=object %}
+                {% endif %}
             </table>
         </div>
     </div>
