@@ -431,7 +431,9 @@ class PolicyToCapirca:
                 )
         for name, addresses in self.address_group.items():
             name = _slugify(name)
-            networkdata[name] = _clean_list(addresses, True)
+            # Note: This list only contains address names. Those names are slugified above,
+            # so we also have to slugify the list.
+            networkdata[name] = _list_slugify(_clean_list(addresses, True))
 
         servicedata = {}
         servicedata_ports = {}

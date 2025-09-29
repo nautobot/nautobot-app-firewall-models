@@ -2,6 +2,7 @@
 # pylint: disable=duplicate-code
 
 from django.db import models
+from nautobot.apps.constants import CHARFIELD_MAX_LENGTH
 from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.models import StatusField
 from nautobot.extras.utils import extras_features
@@ -27,10 +28,12 @@ class UserObject(PrimaryModel):
     """Source users can be used to identify the origin of traffic for a user on some firewalls."""
 
     username = models.CharField(
-        max_length=100, unique=True, help_text="Signifies the username in identify provider (e.g. john.smith)"
+        max_length=CHARFIELD_MAX_LENGTH,
+        unique=True,
+        help_text="Signifies the username in identify provider (e.g. john.smith)",
     )
     name = models.CharField(
-        max_length=100,
+        max_length=CHARFIELD_MAX_LENGTH,
         blank=True,
         help_text="Signifies the name of the user, commonly first & last name (e.g. John Smith)",
     )
@@ -65,10 +68,10 @@ class UserObjectGroup(PrimaryModel):
     """Grouping of individual user objects, does NOT have any relationship to AD groups or any other IDP group."""
 
     description = models.CharField(
-        max_length=200,
+        max_length=1024,
         blank=True,
     )
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=CHARFIELD_MAX_LENGTH, unique=True)
     user_objects = models.ManyToManyField(
         to="nautobot_firewall_models.UserObject",
         blank=True,

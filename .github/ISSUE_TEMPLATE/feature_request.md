@@ -1,11 +1,12 @@
 ---
 name: ✨ Feature Request
 about: Propose a new feature or enhancement
-
+labels:
+  - "type: feature"
 ---
 
 ### Environment
-* Nautobot version:  <!-- Example: 2.0.0 -->
+* Nautobot version:  <!-- Example: 2.4.2 -->
 * nautobot-firewall-models version:  <!-- Example: 2.0.1 -->
 
 <!--
@@ -19,4 +20,3 @@ about: Propose a new feature or enhancement
     functionality and describe how.
 --->
 ### Use Case
-

@@ -33,10 +33,11 @@ class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
     def test_unique_validators(self):
         """Test the unique validators for IPRange."""
         # Add object-level permission
-        obj_perm = ObjectPermission(name="Test permission", actions=["add", "change"])
+        obj_perm = ObjectPermission(name="Test permission", actions=["add", "change", "view"])
         obj_perm.save()
         obj_perm.users.add(self.user)
         obj_perm.object_types.add(ContentType.objects.get_for_model(self.model))
+        obj_perm.object_types.add(ContentType.objects.get_for_model(VRF))
 
         vrfs = (
             VRF.objects.create(name="test vrf 1"),

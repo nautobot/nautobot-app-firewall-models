@@ -2,6 +2,7 @@
 # pylint: disable=duplicate-code, too-many-lines
 
 from django.db import models
+from nautobot.apps.constants import CHARFIELD_MAX_LENGTH
 from nautobot.core.models.generics import BaseModel, PrimaryModel
 from nautobot.extras.models import StatusField
 from nautobot.extras.utils import extras_features
@@ -31,7 +32,7 @@ class NATPolicyRule(PrimaryModel):
     """
 
     # Metadata
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=CHARFIELD_MAX_LENGTH)
     remark = models.BooleanField(default=False)
     log = models.BooleanField(default=False)
     status = StatusField(
@@ -39,8 +40,8 @@ class NATPolicyRule(PrimaryModel):
         related_name="%(app_label)s_%(class)s_related",  # e.g. dcim_device_related
         default=get_default_status,
     )
-    request_id = models.CharField(max_length=100, blank=True)
-    description = models.CharField(max_length=200, blank=True)
+    request_id = models.CharField(max_length=CHARFIELD_MAX_LENGTH, blank=True)
+    description = models.CharField(max_length=1024, blank=True)
     index = models.PositiveSmallIntegerField(null=True, blank=True)
 
     # Data that can not undergo a translation
@@ -244,10 +245,10 @@ class NATPolicy(PrimaryModel):
     """
 
     description = models.CharField(
-        max_length=200,
+        max_length=1024,
         blank=True,
     )
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=CHARFIELD_MAX_LENGTH, unique=True)
     nat_policy_rules = models.ManyToManyField(
         to="nautobot_firewall_models.NATPolicyRule", blank=True, related_name="nat_policies"
     )
