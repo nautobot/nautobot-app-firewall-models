@@ -8,7 +8,7 @@ This document describes all new features and changes in the release. The format 
 - Dropped support for Python 3.8 and Python 3.9.0 - 3.9.1.
 - Changed minimum Nautobot version to 2.4.2.
 
-## [v2.3.0 (2025-09-25)](https://github.com/nautobot/nautobot-app-firewall-models/releases/tag/v2.3.0)
+## [v2.3.0 (2025-09-30)](https://github.com/nautobot/nautobot-app-firewall-models/releases/tag/v2.3.0)
 
 ### Removed
 
