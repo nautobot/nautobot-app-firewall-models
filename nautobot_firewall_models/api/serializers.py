@@ -22,14 +22,14 @@ class IPRangeSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):  #
         # This prevents vrf from being interpreted as a required field.
         validators = []
 
-    def validate(self, data):
+    def validate(self, attrs):
         """Custom validate method to enforce unique constraints on IPRange model."""
         # Validate uniqueness of (start_address, end_address, vrf) since we omitted the automatically-created validator above.
-        start_address = data.get("start_address")
-        end_address = data.get("end_address")
-        vrf = data.get("vrf")
+        start_address = attrs.get("start_address")
+        end_address = attrs.get("end_address")
+        vrf = attrs.get("vrf")
         if not any([start_address is not None, end_address is not None, vrf is not None]):
-            return super().validate(data)
+            return super().validate(attrs)
 
         # Use existing object's attributes for partial updates
         if self.instance:
@@ -46,7 +46,7 @@ class IPRangeSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):  #
         elif qs.filter(start_address=start_address, end_address=end_address, vrf__isnull=True).exists():
             raise serializers.ValidationError("The fields start_address, end_address must make a unique set.")
 
-        return super().validate(data)
+        return super().validate(attrs)
 
 
 class FQDNSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):

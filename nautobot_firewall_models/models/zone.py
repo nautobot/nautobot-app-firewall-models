@@ -2,6 +2,7 @@
 # pylint: disable=duplicate-code
 
 from django.db import models
+from nautobot.apps.constants import CHARFIELD_MAX_LENGTH
 from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.models import StatusField
 from nautobot.extras.utils import extras_features
@@ -27,10 +28,10 @@ class Zone(PrimaryModel):
     """Zones common on firewalls and are typically seen as representations of area (e.g. DMZ trust untrust)."""
 
     description = models.CharField(
-        max_length=200,
+        max_length=1024,
         blank=True,
     )
-    name = models.CharField(max_length=100, unique=True, help_text="Name of the zone (e.g. trust)")
+    name = models.CharField(max_length=CHARFIELD_MAX_LENGTH, unique=True, help_text="Name of the zone (e.g. trust)")
     vrfs = models.ManyToManyField(to="ipam.VRF", blank=True, related_name="zones")
     interfaces = models.ManyToManyField(to="dcim.Interface", blank=True, related_name="zones")
     status = StatusField(

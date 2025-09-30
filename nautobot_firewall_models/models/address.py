@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
+from nautobot.apps.constants import CHARFIELD_MAX_LENGTH
 from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.models import StatusField
 from nautobot.extras.utils import extras_features
@@ -45,7 +46,7 @@ class IPRange(PrimaryModel):
         to="ipam.VRF", on_delete=models.PROTECT, related_name="ip_ranges", blank=True, null=True, verbose_name="VRF"
     )
     description = models.CharField(
-        max_length=200,
+        max_length=1024,
         blank=True,
     )
     size = models.PositiveIntegerField(editable=False)
@@ -101,11 +102,13 @@ class FQDN(PrimaryModel):
     """Models fully qualified domain names, can be used on some firewall in place of a static IP."""
 
     description = models.CharField(
-        max_length=200,
+        max_length=1024,
         blank=True,
     )
     name = models.CharField(
-        max_length=254, unique=True, help_text="Resolvable fully qualified domain name (e.g. networktocode.com)"
+        max_length=CHARFIELD_MAX_LENGTH,
+        unique=True,
+        help_text="Resolvable fully qualified domain name (e.g. networktocode.com)",
     )
     ip_addresses = models.ManyToManyField(
         to="ipam.IPAddress",
@@ -145,10 +148,12 @@ class AddressObject(PrimaryModel):
     """Intermediate model to aggregate underlying address items, to allow for easier management."""
 
     description = models.CharField(
-        max_length=200,
+        max_length=1024,
         blank=True,
     )
-    name = models.CharField(max_length=100, unique=True, help_text="Name descriptor for an address object type.")
+    name = models.CharField(
+        max_length=CHARFIELD_MAX_LENGTH, unique=True, help_text="Name descriptor for an address object type."
+    )
     fqdn = models.ForeignKey(
         to="nautobot_firewall_models.FQDN",
         on_delete=models.PROTECT,
@@ -232,10 +237,12 @@ class AddressObjectGroup(PrimaryModel):
     """Groups together AddressObjects to better mimic grouping sets of address objects that have a some commonality."""
 
     description = models.CharField(
-        max_length=200,
+        max_length=1024,
         blank=True,
     )
-    name = models.CharField(max_length=100, unique=True, help_text="Name descriptor for a group address objects.")
+    name = models.CharField(
+        max_length=CHARFIELD_MAX_LENGTH, unique=True, help_text="Name descriptor for a group address objects."
+    )
     address_objects = models.ManyToManyField(
         to="nautobot_firewall_models.AddressObject",
         related_name="address_object_groups",
