@@ -1,6 +1,6 @@
 ---
 nautobot_firewall_models:
-  nautobot_ver: "2.4.18"
+  nautobot_ver: "2.4.19"
   python_ver: "3.11"
   # local: false
   # compose_dir: "/full/path/to/nautobot-app-firewall-models/development"

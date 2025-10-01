@@ -4,7 +4,7 @@ Here you will find detailed instructions on how to **install** and **configure**
 
 ## Prerequisites
 
-- The app is compatible with Nautobot 2.4.18 and higher.
+- The app is compatible with Nautobot 2.4.19 and higher.
 - Databases supported: PostgreSQL, MySQL
 
 !!! note
