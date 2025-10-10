@@ -6,8 +6,8 @@
 # -------------------------------------------------------------------------------------
 # !!! USE CAUTION WHEN MODIFYING LINES BELOW
 
-# Accepts a desired Nautobot version as build argument, default to 2.4.19
-ARG NAUTOBOT_VER="2.4.19"
+# Accepts a desired Nautobot version as build argument, default to 2.4.20
+ARG NAUTOBOT_VER="2.4.20"
 
 # Accepts a desired Python version as build argument, default to 3.11
 ARG PYTHON_VER="3.11"

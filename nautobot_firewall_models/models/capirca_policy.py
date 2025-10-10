@@ -4,7 +4,6 @@
 import logging
 
 from django.db import models
-from django.urls import reverse
 from django.utils.module_loading import import_string
 from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.utils import extras_features
@@ -63,11 +62,3 @@ class CapircaPolicy(PrimaryModel):
             self.pol, self.svc, self.net, self.cfg = import_string(PLUGIN_CFG["custom_capirca"])(self.device)
 
         super().save(*args, **kwargs)
-
-    @property
-    def get_device_detail_url(self):
-        """Return the plugin device detail URL for this CapircaPolicy's device."""
-        return reverse(
-            "plugins:nautobot_firewall_models:capircapolicy_devicedetail",
-            kwargs={"pk": self.pk},
-        )

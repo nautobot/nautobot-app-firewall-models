@@ -41,6 +41,5 @@ class CapircaPolicyUIViewSet(
         """Action method to see the full configuration."""
         obj = self.get_object()
         device = obj.device
-        policy = models.CapircaPolicy.objects.get(device=device)
-        context = {"object": policy, "device": device, "active_tab": "devicedetail"}
+        context = {"object": obj, "device": device, "active_tab": "devicedetail"}
         return Response(context)
