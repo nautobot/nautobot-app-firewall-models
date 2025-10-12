@@ -9,6 +9,9 @@ from .address import (
 from .capirca_policy import (
     CapircaPolicy,
 )
+from .firewall_config import (
+    FirewallConfig,
+)
 from .nat_policy import (
     NATPolicy,
     NATPolicyDeviceM2M,
@@ -36,6 +39,7 @@ __all__ = (
     "ApplicationObject",
     "ApplicationObjectGroup",
     "CapircaPolicy",
+    "FirewallConfig",
     "FQDN",
     "IPRange",
     "NATPolicy",

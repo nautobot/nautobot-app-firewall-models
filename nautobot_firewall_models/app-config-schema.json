@@ -21,6 +21,19 @@
             "type": "object",
             "default": {}
         },
+        "default_status": {
+            "type": "string",
+            "default": "Active"
+        },
+        "default_driver": {
+            "type": "string",
+            "enum": ["aerleon", "capirca", "custom_firewall_config"],
+            "default": "aerleon"
+        },
+        "aerleon_remark_pass": {
+            "type": "boolean",
+            "default": true
+        },
         "protect_on_delete": {
             "type": "boolean",
             "default": true

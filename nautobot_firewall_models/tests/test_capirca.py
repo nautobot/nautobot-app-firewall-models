@@ -2,11 +2,12 @@
 
 # ruff: noqa: F403, F405
 # pylint: disable=protected-access
+# TODO: Remove this file once 3.0 is released and CapircaPolicy is removed. The equivalent tests are already in test_firewall_config.py.
 from unittest import skip
 from unittest.mock import patch
 
 from django.core.exceptions import ValidationError
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from nautobot.dcim.models import Device, Platform
 from nautobot.extras.models import Status
 from nautobot.ipam.models import IPAddress, Namespace
@@ -276,7 +277,9 @@ class TestBasicCapirca(TestCase):
         # ParseServiceList and ParseNetworkList continue to work. As well as provides an easy place to test locally.
         # Such as running `invoke unittest -l nautobot_firewall_models.tests.test_capirca.TestBasicCapirca` and
         # modifying data within test
-        actual_cfg = generate_capirca_config(SERVICES.split("\n"), NETWORKS.split("\n"), POLICY, "cisco")
+        actual_cfg = generate_capirca_config(
+            SERVICES.split("\n"), NETWORKS.split("\n"), POLICY, "capirca.lib.cisco.Cisco"
+        )
         self.assertEqual(actual_cfg, CFG)
 
 
@@ -288,7 +291,7 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         create_capirca_env()
         self.active = Status.objects.get(name="Active")
         self.decomm = Status.objects.get(name="Decommissioned")
-        self.device_obj = Device.objects.get(name="DFW02-WAN00")
+        self.device_obj = Device.objects.get(name="nyc-fw01")
         namespace = Namespace.objects.get(name="global")
 
         self.dev_name = self.device_obj.platform.network_driver
@@ -608,12 +611,13 @@ class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,
         with self.assertRaises(ValidationError):
             PolicyToCapirca("fake", self.pol1).validate_capirca_data()
 
-    @patch("nautobot_firewall_models.utils.capirca.CAPIRCA_OS_MAPPER", {"srx": "paloaltofw"})
+    @patch("nautobot_firewall_models.utils.capirca.CAPIRCA_OS_MAPPER", {"juniper_junos": "paloalto"})
     def test_capirca_os_map(self):
         """Verify the os config map solution works."""
         cap_obj = PolicyToCapirca(self.dev_name, self.pol1)
-        self.assertEqual(cap_obj.platform, "paloaltofw")
+        self.assertEqual(cap_obj.platform, "paloalto")
 
+    @override_settings(NETWORK_DRIVERS={"capirca": {"juniper_junos": "srx"}})
     def test_capirca_conversion(self):
         """Verify that generating full config for a polucy is as expected."""
         cap_obj = PolicyToCapirca(self.dev_name, self.pol1)
@@ -629,12 +633,13 @@ class TestDevicePolicyToCapirca(TestCase):
     def setUp(self) -> None:
         """Setup test data."""
         create_capirca_env()
-        self.device_obj = Device.objects.get(name="DFW02-WAN00")
+        self.device_obj = Device.objects.get(name="nyc-fw01")
 
     @skip("Not implemented until policy method provided to merge queries provided")
     def test_dynamic_group_and_device(self):
         """Test that dynamic groups are created and device is added to it, disabled."""
 
+    @override_settings(NETWORK_DRIVERS={"capirca": {"juniper_junos": "srx"}})
     def test_multi_policy_capirca_config(self):
         """Verify that generating full config for a device is as expected."""
         cap_obj = DevicePolicyToCapirca(self.device_obj)

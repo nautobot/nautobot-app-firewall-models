@@ -12,6 +12,12 @@ from nautobot.tenancy.models import Tenant, TenantGroup
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
 
+def _ensure_set(related_manager, obj):
+    """Idempotently add obj to a related manager if not already present."""
+    if not related_manager.filter(pk=obj.pk).exists():
+        related_manager.add(obj)
+
+
 def create_ip_range():
     """Creates 3 IPRange objects."""
     status = Status.objects.get(name="Active")
@@ -40,10 +46,10 @@ def create_addr_obj():
     # Plugin Models
     ip_range = create_ip_range()
     fqdn = create_fqdn()
-    addr_obj1, _ = AddressObject.objects.get_or_create(name="printer", ip_range=ip_range, status=status)
-    addr_obj2, _ = AddressObject.objects.get_or_create(name="voice", ip_address=ip_address, status=status)
-    addr_obj3, _ = AddressObject.objects.get_or_create(name="storage", prefix=prefix, status=status)
-    addr_obj4, _ = AddressObject.objects.get_or_create(name="server", fqdn=fqdn, status=status)
+    addr_obj1, _ = AddressObject.objects.get_or_create(name="printer", status=status, defaults={"ip_range": ip_range})
+    addr_obj2, _ = AddressObject.objects.get_or_create(name="voice", status=status, defaults={"ip_address": ip_address})
+    addr_obj3, _ = AddressObject.objects.get_or_create(name="storage", status=status, defaults={"prefix": prefix})
+    addr_obj4, _ = AddressObject.objects.get_or_create(name="server", status=status, defaults={"fqdn": fqdn})
     return addr_obj1, addr_obj2, addr_obj3, addr_obj4
 
 
@@ -299,12 +305,12 @@ def create_natpolicy_rule():  # pylint: disable=too-many-locals
     nat_policy_rule_1_1, _ = NATPolicyRule.objects.get_or_create(
         name="NAT Policy Rule 1.1", log=True, request_id="req1"
     )
-    nat_policy_rule_1_1.original_source_addresses.add(original_source)
-    nat_policy_rule_1_1.translated_source_addresses.add(translated_source)
-    nat_policy_rule_1_1.original_destination_addresses.add(destination)
-    nat_policy_rule_1_1.translated_destination_addresses.add(destination)
-    nat_policy_rule_1_1.original_destination_services.add(nat_orig_dest_service)
-    nat_policy_rule_1_1.translated_destination_services.add(nat_trans_dest_service)
+    _ensure_set(nat_policy_rule_1_1.original_source_addresses, original_source)
+    _ensure_set(nat_policy_rule_1_1.translated_source_addresses, translated_source)
+    _ensure_set(nat_policy_rule_1_1.original_destination_addresses, destination)
+    _ensure_set(nat_policy_rule_1_1.translated_destination_addresses, destination)
+    _ensure_set(nat_policy_rule_1_1.original_destination_services, nat_orig_dest_service)
+    _ensure_set(nat_policy_rule_1_1.translated_destination_services, nat_trans_dest_service)
 
     nat_policy_rule_1_2, _ = NATPolicyRule.objects.get_or_create(
         name="END OF NAT POLICY", request_id="req2", remark=True, log=True
@@ -314,17 +320,17 @@ def create_natpolicy_rule():  # pylint: disable=too-many-locals
         name="NAT Policy Rule 2.1", log=True, request_id="req3"
     )
     nat_policy_rule_2_1.original_source_addresses.set([addr_obj1, addr_obj2])
-    nat_policy_rule_2_1.translated_source_addresses.add(translated_source)
-    nat_policy_rule_2_1.original_destination_addresses.add(destination)
-    nat_policy_rule_2_1.original_destination_services.add(nat_orig_dest_service)
+    _ensure_set(nat_policy_rule_2_1.translated_source_addresses, translated_source)
+    _ensure_set(nat_policy_rule_2_1.original_destination_addresses, destination)
+    _ensure_set(nat_policy_rule_2_1.original_destination_services, nat_orig_dest_service)
 
     nat_policy_rule_3_1, _ = NATPolicyRule.objects.get_or_create(
         name="NAT Policy Rule 3.1", log=True, request_id="req4"
     )
     nat_policy_rule_3_1.original_source_addresses.set([addr_obj3, addr_obj4])
-    nat_policy_rule_3_1.translated_source_addresses.add(translated_source)
-    nat_policy_rule_3_1.original_destination_addresses.add(destination)
-    nat_policy_rule_3_1.original_destination_services.add(nat_orig_dest_service)
+    _ensure_set(nat_policy_rule_3_1.translated_source_addresses, translated_source)
+    _ensure_set(nat_policy_rule_3_1.original_destination_addresses, destination)
+    _ensure_set(nat_policy_rule_3_1.original_destination_services, nat_orig_dest_service)
     return nat_policy_rule_1_1, nat_policy_rule_1_2, nat_policy_rule_2_1, nat_policy_rule_3_1
 
 
@@ -334,10 +340,10 @@ def create_natpolicy():
     nat_policy_1, _ = NATPolicy.objects.get_or_create(name="NAT Policy 1")
     nat_policy_2, _ = NATPolicy.objects.get_or_create(name="NAT Policy 2")
     nat_policy_3, _ = NATPolicy.objects.get_or_create(name="NAT Policy 3")
-    nat_policy_1.nat_policy_rules.add(nat_policy_rule_1_1)
-    nat_policy_1.nat_policy_rules.add(nat_policy_rule_1_2)
-    nat_policy_2.nat_policy_rules.add(nat_policy_rule_2_1)
-    nat_policy_2.nat_policy_rules.add(nat_policy_rule_3_1)
+    _ensure_set(nat_policy_1.nat_policy_rules, nat_policy_rule_1_1)
+    _ensure_set(nat_policy_1.nat_policy_rules, nat_policy_rule_1_2)
+    _ensure_set(nat_policy_2.nat_policy_rules, nat_policy_rule_2_1)
+    _ensure_set(nat_policy_2.nat_policy_rules, nat_policy_rule_3_1)
     return nat_policy_1, nat_policy_2, nat_policy_3
 
 
@@ -352,18 +358,18 @@ def assign_policies():  # pylint: disable=too-many-locals
     branch_type, _ = LocationType.objects.get_or_create(name="Branch", parent=subregion_type)
     amer, _ = Location.objects.get_or_create(name="AMER", location_type=region_type, status=status)
     usa, _ = Location.objects.get_or_create(name="USA", location_type=subregion_type, status=status, parent=amer)
-    site1, _ = Location.objects.get_or_create(name="DFW02", location_type=branch_type, status=status, parent=usa)
-    site2, _ = Location.objects.get_or_create(name="HOU02", location_type=branch_type, status=status, parent=usa)
+    site1, _ = Location.objects.get_or_create(name="nyc", location_type=branch_type, status=status, parent=usa)
+    site2, _ = Location.objects.get_or_create(name="jcy", location_type=branch_type, status=status, parent=usa)
     jun_manufacturer, _ = Manufacturer.objects.get_or_create(name="Juniper")
-    jun_platform, _ = Platform.objects.get_or_create(name="Juniper", network_driver="srx")
+    jun_platform, _ = Platform.objects.get_or_create(name="Juniper", network_driver="juniper_junos")
     jun_dev_type, _ = DeviceType.objects.get_or_create(manufacturer=jun_manufacturer, model="SRX300")
     palo_manufacturer, _ = Manufacturer.objects.get_or_create(name="Palo Alto")
-    palo_platform, _ = Platform.objects.get_or_create(name="Palo Alto", network_driver="paloalto")
+    palo_platform, _ = Platform.objects.get_or_create(name="Palo Alto", network_driver="paloalto_panos")
     palo_dev_type, _ = DeviceType.objects.get_or_create(manufacturer=palo_manufacturer, model="PA-3020")
-    dev_role, _ = Role.objects.get_or_create(name="WAN")
-    dev_role.content_types.add(ContentType.objects.get_for_model(Device))
+    dev_role, _ = Role.objects.get_or_create(name="fw")
+    _ensure_set(dev_role.content_types, ContentType.objects.get_for_model(Device))
     dev1, _ = Device.objects.get_or_create(
-        name="DFW02-WAN00",
+        name="nyc-fw01",
         role=dev_role,
         device_type=jun_dev_type,
         location=site1,
@@ -371,7 +377,7 @@ def assign_policies():  # pylint: disable=too-many-locals
         platform=jun_platform,
     )
     Device.objects.get_or_create(
-        name="DFW02-WAN01",
+        name="nyc-fw02",
         role=dev_role,
         device_type=jun_dev_type,
         location=site1,
@@ -379,7 +385,7 @@ def assign_policies():  # pylint: disable=too-many-locals
         platform=jun_platform,
     )
     dev2, _ = Device.objects.get_or_create(
-        name="HOU02-WAN00",
+        name="jcy-fw01",
         role=dev_role,
         device_type=palo_dev_type,
         location=site2,
@@ -387,9 +393,9 @@ def assign_policies():  # pylint: disable=too-many-locals
         platform=palo_platform,
     )
     dynamic_group, _ = DynamicGroup.objects.get_or_create(
-        name="North Texas", content_type=ContentType.objects.get_for_model(Device)
+        name="North East", content_type=ContentType.objects.get_for_model(Device)
     )
-    dynamic_group.filter = {"location": ["DFW02"]}
+    dynamic_group.filter = {"location": ["nyc"], "role": ["fw"]}
     dynamic_group.validated_save()
     PolicyDeviceM2M.objects.get_or_create(policy=pol1, device=dev1, weight=150)
     PolicyDeviceM2M.objects.get_or_create(policy=pol2, device=dev1, weight=200)
@@ -438,6 +444,48 @@ def create_capirca_env():
     addr_obj4.prefix = prefix
     addr_obj4.validated_save()
 
-    job = Job.objects.get(name="Generate FW Config via Capirca.")
+    job = Job.objects.get(job_class_name="RunCapircaJob")
+    job.enabled = True
+    job.validated_save()
+
+
+def create_firewall_config_env():
+    """Create objects that are Firewall Config Ready."""  # pylint: disable=too-many-locals, too-many-statements
+    assign_policies()
+    namespace, _ = Namespace.objects.get_or_create(name="global")
+    status = Status.objects.get(name="Active")
+    zoneall, _ = Zone.objects.get_or_create(name="all", status=status)
+
+    pol_rule1 = PolicyRule.objects.get(name="Policy Rule 1")
+    pol_rule1.source_zone = Zone.objects.get(name="DMZ")
+    pol_rule1.destination_zone = Zone.objects.get(name="WAN")
+    pol_rule1.validated_save()
+
+    pol_rule4 = PolicyRule.objects.get(name="END OF ACCESS LIST")
+    pol_rule4.source_zone = zoneall
+    pol_rule4.destination_zone = zoneall
+    pol_rule4.validated_save()
+
+    pol_rule5 = PolicyRule.objects.get(name="DENY ALL")
+    pol_rule5.source_zone = zoneall
+    pol_rule5.destination_zone = zoneall
+    pol_rule5.validated_save()
+
+    ip_address, _ = IPAddr.objects.get_or_create(
+        address="10.0.0.100", status=status, parent=Prefix.objects.get(network="10.0.0.0", namespace=namespace)
+    )
+    prefix, _ = Prefix.objects.get_or_create(network="10.1.0.0", prefix_length=24, status=status, namespace=namespace)
+
+    addr_obj1 = AddressObject.objects.get(name="printer")
+    addr_obj1.ip_range = None
+    addr_obj1.ip_address = ip_address
+    addr_obj1.validated_save()
+
+    addr_obj4 = AddressObject.objects.get(name="server")
+    addr_obj4.fqdn = None
+    addr_obj4.prefix = prefix
+    addr_obj4.validated_save()
+
+    job = Job.objects.get(job_class_name="RunFirewallConfigJob")
     job.enabled = True
     job.validated_save()

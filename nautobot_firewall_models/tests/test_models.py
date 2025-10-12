@@ -3,7 +3,7 @@
 # ruff: noqa: F403, F405
 # pylint: disable=invalid-name
 from django.core.exceptions import ValidationError
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from nautobot.dcim.models import Device
 from nautobot.extras.models import Status
 from nautobot.ipam.models import VRF
@@ -345,10 +345,43 @@ class TestCapircaModels(TestCase):
         """Create the data."""
         fixtures.create_capirca_env()
 
+    @override_settings(NETWORK_DRIVERS={"capirca": {"juniper_junos": "srx"}})
     def test_capirca_creates_model(self):
         """Test method to create model."""
-        device_obj = Device.objects.get(name="DFW02-WAN00")
+        device_obj = Device.objects.get(name="nyc-fw01")
         cap_obj = CapircaPolicy.objects.create(device=device_obj)
+        svc = "PGSQL = 5432/tcp"
+        self.assertIn(svc, cap_obj.svc)
+        net = "printer = 10.0.0.100/32"
+        self.assertIn(net, cap_obj.net)
+        pol = "target:: srx from-zone all to-zone all"
+        self.assertIn(pol, cap_obj.pol)
+
+
+class TestFirewallConfigModels(TestCase):
+    """Test the Firewall Config model."""
+
+    def setUp(self) -> None:
+        """Create the data."""
+        fixtures.create_firewall_config_env()
+
+    @override_settings(NETWORK_DRIVERS={"capirca": {"juniper_junos": "srx"}})
+    def test_capirca_creates_model(self):
+        """Test method to create model."""
+        device_obj = Device.objects.get(name="nyc-fw01")
+        cap_obj = FirewallConfig.objects.create(device=device_obj, firewall_config_type="capirca")
+        svc = "PGSQL = 5432/tcp"
+        self.assertIn(svc, cap_obj.svc)
+        net = "printer = 10.0.0.100/32"
+        self.assertIn(net, cap_obj.net)
+        pol = "target:: srx from-zone all to-zone all"
+        self.assertIn(pol, cap_obj.pol)
+
+    @override_settings(NETWORK_DRIVERS={"aerleon": {"juniper_junos": "srx"}})
+    def test_aerleon_creates_model(self):
+        """Test method to create model."""
+        device_obj = Device.objects.get(name="nyc-fw01")
+        cap_obj = FirewallConfig.objects.create(device=device_obj, firewall_config_type="aerleon")
         svc = "PGSQL = 5432/tcp"
         self.assertIn(svc, cap_obj.svc)
         net = "printer = 10.0.0.100/32"

@@ -108,7 +108,10 @@ nav:
       - App Overview: "user/app_overview.md"
       - Getting Started: "user/app_getting_started.md"
       - Using the App: "user/app_use_cases.md"
-      - Capirca Integration: "user/capirca.md"
+      - Generating Configurations:
+          - Firewall Config Integration: "user/firewall_config.md"
+          - Aerleon Integration: "user/aerleon.md"
+          - Capirca Integration: "user/capirca.md"
       - Frequently Asked Questions: "user/faq.md"
       - External Interactions: "user/external_interactions.md"
       - Data Models:

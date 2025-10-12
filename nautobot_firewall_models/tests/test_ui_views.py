@@ -401,3 +401,17 @@ class CapircaPolicyUIViewTest(ViewTestCases.GetObjectViewTestCase, ViewTestCases
         fixtures.create_capirca_env()
         for device in Device.objects.all():
             CapircaPolicy.objects.create(device=device)
+
+
+class FirewallConfigUIViewTest(ViewTestCases.GetObjectViewTestCase, ViewTestCases.ListObjectsViewTestCase):
+    """Test the Policy viewsets."""
+
+    model = FirewallConfig
+    allowed_number_of_tree_queries_per_view_type = {"retrieve": 1}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data."""
+        fixtures.create_firewall_config_env()
+        for device in Device.objects.all():
+            FirewallConfig.objects.create(device=device)

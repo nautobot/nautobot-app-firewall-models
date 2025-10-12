@@ -344,3 +344,20 @@ class CapircaPolicyTable(BaseTable):
 
         model = models.CapircaPolicy
         fields = ("pk", "device")
+
+
+class FirewallConfigTable(BaseTable):
+    """Table for list view."""
+
+    pk = ToggleColumn()
+    device = tables.TemplateColumn(
+        template_code="""<a href="{% url 'plugins:nautobot_firewall_models:firewallconfig' pk=record.pk %}">{{ record.device }}</a> """
+    )
+    platform = tables.Column(accessor="device.platform", verbose_name="Platform", linkify=True)
+    actions = ButtonsColumn(models.FirewallConfig, buttons=("edit", "delete"))
+
+    class Meta(BaseTable.Meta):
+        """Meta attributes."""
+
+        model = models.FirewallConfig
+        fields = ("pk", "device", "platform", "firewall_config_type")

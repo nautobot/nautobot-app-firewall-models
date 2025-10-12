@@ -22,8 +22,10 @@ class NautobotFirewallModelsConfig(NautobotAppConfig):
     default_settings = {
         "capirca_remark_pass": True,
         "capirca_os_map": {},
+        "aerleon_remark_pass": True,
         "allowed_status": ["Active"],
         "default_status": "Active",
+        "default_driver": "aerleon",
         "protect_on_delete": True,
     }
     docs_view_name = "plugins:nautobot_firewall_models:docs"
@@ -34,6 +36,18 @@ class NautobotFirewallModelsConfig(NautobotAppConfig):
 
         nautobot_database_ready.connect(nautobot_firewall_models.signals.create_configured_statuses_signal, sender=self)
         nautobot_database_ready.connect(nautobot_firewall_models.signals.associate_statuses_signal, sender=self)
+
+        from nautobot_firewall_models.choices import FirewallConfigChoice  # pylint: disable=import-outside-toplevel
+        from nautobot_firewall_models.constants import PLUGIN_CFG  # pylint: disable=import-outside-toplevel
+
+        if PLUGIN_CFG["default_driver"] not in [
+            FirewallConfigChoice.TYPE_AERLEON,
+            FirewallConfigChoice.TYPE_CAPIRCA,
+            FirewallConfigChoice.TYPE_CUSTOM,
+        ]:
+            raise RuntimeError(
+                "The setting 'default_driver' must be one of 'aerleon', 'capirca', or 'custom_firewall_config'"
+            )
 
         super().ready()
 

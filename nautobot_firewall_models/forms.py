@@ -1,9 +1,11 @@
 """Forms for nautobot_firewall_models."""
+# pylint: disable=too-many-lines
 
 from django import forms
 from nautobot.apps.forms import (
     DynamicModelChoiceField,
     DynamicModelMultipleChoiceField,
+    StaticSelect2Multiple,
     TagFilterField,
     add_blank_choice,
 )
@@ -14,6 +16,7 @@ from nautobot.extras.forms import (
     NautobotFilterForm,
     NautobotModelForm,
 )
+from nautobot.extras.forms.mixins import TagsBulkEditFormMixin
 from nautobot.extras.models import DynamicGroup, Tag
 from nautobot.ipam.models import VRF, IPAddress, Prefix
 from nautobot.tenancy.forms import TenancyFilterForm, TenancyForm
@@ -938,3 +941,72 @@ class CapircaPolicyCSVForm(CustomFieldModelCSVForm):
 
         model = models.CapircaPolicy
         fields = models.CapircaPolicy.csv_headers
+
+
+# FirewallConfig
+
+
+class FirewallConfigForm(NautobotModelForm):
+    """Filter Form for FirewallConfig instances."""
+
+    device = DynamicModelChoiceField(queryset=Device.objects.all())
+    pol = forms.CharField(widget=forms.Textarea(attrs={"readonly": "readonly"}), required=False)
+    net = forms.CharField(widget=forms.Textarea(attrs={"readonly": "readonly"}), required=False)
+    svc = forms.CharField(widget=forms.Textarea(attrs={"readonly": "readonly"}), required=False)
+    cfg = forms.CharField(widget=forms.Textarea(attrs={"readonly": "readonly"}), required=False)
+
+    class Meta:
+        """Boilerplate form Meta data for compliance rule."""
+
+        model = models.FirewallConfig
+        fields = (
+            "device",
+            "firewall_config_type",
+            "pol",
+            "net",
+            "svc",
+            "cfg",
+        )
+
+    def save(self, *args, **kwargs):
+        """Check for custom config type errors."""
+        try:
+            return super().save(*args, **kwargs)
+        except ValueError as error:
+            if "Custom Config set, but not found in either" in str(error):
+                raise forms.ValidationError({"firewall_config_type": (str(error))})
+            raise
+
+
+class FirewallConfigFilterForm(NautobotFilterForm):
+    """Form for FirewallConfig instances."""
+
+    model = models.FirewallConfig
+    q = forms.CharField(required=False, label="Search")
+
+    device = DynamicModelMultipleChoiceField(queryset=Device.objects.all())
+    firewall_config_type = forms.MultipleChoiceField(
+        choices=add_blank_choice(choices.FirewallConfigChoice), required=False, widget=StaticSelect2Multiple()
+    )
+
+
+class FirewallConfigBulkEditForm(TagsBulkEditFormMixin, NautobotBulkEditForm):
+    """BulkEdit form for FirewallConfig instances."""
+
+    pk = forms.ModelMultipleChoiceField(queryset=models.FirewallConfig.objects.all(), widget=forms.MultipleHiddenInput)
+    firewall_config_type = forms.ChoiceField(choices=add_blank_choice(choices.FirewallConfigChoice), required=False)
+
+    class Meta:
+        """Boilerplate form Meta data for FirewallConfig."""
+
+        nullable_fields = []
+
+
+class FirewallConfigCSVForm(CustomFieldModelCSVForm):
+    """CSV Form for FirewallConfig instances."""
+
+    class Meta:
+        """Boilerplate form Meta data for FirewallConfig."""
+
+        model = models.FirewallConfig
+        fields = models.FirewallConfig.csv_headers

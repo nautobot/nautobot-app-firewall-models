@@ -99,10 +99,10 @@ Example GraphQL query showing how to get instances for each of the models provid
         "name": "Policy 1",
         "assigned_devices": [
           {
-            "name": "DFW-WAN00"
+            "name": "dfw-fw01"
           },
           {
-            "name": "HOU-WAN00"
+            "name": "hou-fw01"
           }
         ],
         "assigned_dynamic_groups": [],

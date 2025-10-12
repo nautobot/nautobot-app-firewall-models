@@ -2,7 +2,7 @@
 
 from nautobot.core.apps import HomePageItem, HomePagePanel
 
-from nautobot_firewall_models.models import CapircaPolicy, NATPolicy, NATPolicyRule, Policy, PolicyRule
+from nautobot_firewall_models.models import CapircaPolicy, FirewallConfig, NATPolicy, NATPolicyRule, Policy, PolicyRule
 
 layout = (
     HomePagePanel(
@@ -24,6 +24,14 @@ layout = (
                 link="plugins:nautobot_firewall_models:natpolicy_list",
                 description="NAT Policies",
                 permissions=["nautobot_firewall_models.view_natpolicy"],
+            ),
+            HomePageItem(
+                name="Firewall Config",
+                model=FirewallConfig,
+                weight=300,
+                link="plugins:nautobot_firewall_models:firewallconfig_list",
+                description="Firewall Configurations",
+                permissions=["nautobot_firewall_models.view_firewallconfig"],
             ),
             HomePageItem(
                 name="Capirca Policies",
