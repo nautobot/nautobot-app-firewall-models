@@ -2,7 +2,7 @@
 
 from nautobot.apps.views import NautobotUIViewSet
 
-from nautobot_firewall_models import filters, forms, models, tables
+from nautobot_firewall_models import details, filters, forms, models, tables
 from nautobot_firewall_models.api import serializers
 
 
@@ -16,6 +16,7 @@ class ApplicationObjectUIViewSet(NautobotUIViewSet):
     queryset = models.ApplicationObject.objects.all()
     serializer_class = serializers.ApplicationObjectSerializer
     table_class = tables.ApplicationObjectTable
+    object_detail_content = details.application_object
 
     lookup_field = "pk"
 
@@ -30,6 +31,7 @@ class ApplicationObjectGroupUIViewSet(NautobotUIViewSet):
     queryset = models.ApplicationObjectGroup.objects.all()
     serializer_class = serializers.ApplicationObjectGroupSerializer
     table_class = tables.ApplicationObjectGroupTable
+    object_detail_content = details.application_object_group
 
     lookup_field = "pk"
 
@@ -44,6 +46,7 @@ class ServiceObjectUIViewSet(NautobotUIViewSet):
     queryset = models.ServiceObject.objects.all()
     serializer_class = serializers.ServiceObjectSerializer
     table_class = tables.ServiceObjectTable
+    object_detail_content = details.service_object
 
     lookup_field = "pk"
 
@@ -58,5 +61,6 @@ class ServiceObjectGroupUIViewSet(NautobotUIViewSet):
     queryset = models.ServiceObjectGroup.objects.all()
     serializer_class = serializers.ServiceObjectGroupSerializer
     table_class = tables.ServiceObjectGroupTable
+    object_detail_content = details.service_object_group
 
     lookup_field = "pk"

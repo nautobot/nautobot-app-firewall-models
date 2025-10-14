@@ -115,6 +115,7 @@ class FQDN(PrimaryModel):
         related_name="fqdns",
         blank=True,
         help_text="IP(s) an FQDN should resolve to.",
+        verbose_name="IP Addresses",
     )
     status = StatusField(
         on_delete=models.PROTECT,
@@ -160,6 +161,7 @@ class AddressObject(PrimaryModel):
         null=True,
         blank=True,
         related_name="address_objects",
+        verbose_name="FQDN",
     )
     ip_range = models.ForeignKey(
         to="nautobot_firewall_models.IPRange",
@@ -167,9 +169,15 @@ class AddressObject(PrimaryModel):
         null=True,
         blank=True,
         related_name="address_objects",
+        verbose_name="IP Range",
     )
     ip_address = models.ForeignKey(
-        to="ipam.IPAddress", on_delete=models.PROTECT, null=True, blank=True, related_name="address_objects"
+        to="ipam.IPAddress",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="address_objects",
+        verbose_name="IP Address",
     )
     prefix = models.ForeignKey(
         to="ipam.Prefix", on_delete=models.PROTECT, null=True, blank=True, related_name="address_objects"
@@ -247,6 +255,7 @@ class AddressObjectGroup(PrimaryModel):
         to="nautobot_firewall_models.AddressObject",
         related_name="address_object_groups",
         blank=True,
+        verbose_name="Address Objects",
     )
     status = StatusField(
         on_delete=models.PROTECT,
