@@ -6,6 +6,8 @@
             </div>
             <table class="table table-hover panel-body">
                 {% include "nautobot_firewall_models/inc/natpolicyrule_tablehead.html" %}
+                {% comment %}This template is used in two places: the Policy detail view (where object is a Policy instance) and the PolicyRule detail view (where object is a PolicyRule instance). 
+                If we're in the Policy detail view, loop through all associated PolicyRules. If we're in the PolicyRule detail view, just display that single rule.{% endcomment %}
                 {% if object.nat_policy_rules %}
                     {% with rules=object.nat_policy_rules.all %}
                         {% for rule in rules %}
