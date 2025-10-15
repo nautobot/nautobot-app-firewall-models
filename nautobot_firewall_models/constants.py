@@ -12,10 +12,6 @@ if PLUGIN_CFG.get("capirca_os_map"):
     CAPIRCA_OS_MAPPER = PLUGIN_CFG["capirca_os_map"]
 
 
-FIREWALL_CONFIG_OS_MAPPER = {}
-if PLUGIN_CFG.get("firewall_config_os_map"):
-    FIREWALL_CONFIG_OS_MAPPER = PLUGIN_CFG["firewall_config_os_map"]
-
 # This is used to determine which status slug names are valid
 ALLOW_STATUS = ["Active"]
 if PLUGIN_CFG.get("allowed_status"):

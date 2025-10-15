@@ -1122,6 +1122,56 @@ class TestCapircaToFirewallConfigMigration(TestCase):
         """Test migration for custom driver."""
         self._migration_helper(FirewallConfigChoice.TYPE_CUSTOM)
 
+    @override_settings(
+        PLUGINS_CONFIG={
+            "nautobot_firewall_models": {
+                "default_driver": FirewallConfigChoice.TYPE_CUSTOM,
+                "custom_capirca": "nautobot_firewall_models.tests.test_firewall_config._fake_custom_driver",
+            }
+        }
+    )
+    @patch(
+        "nautobot_firewall_models.constants.PLUGIN_CFG",
+        {
+            "default_driver": FirewallConfigChoice.TYPE_CUSTOM,
+            "custom_capirca": "nautobot_firewall_models.tests.test_firewall_config._fake_custom_driver",
+        },
+    )
+    @patch(
+        "nautobot_firewall_models.models.firewall_config.PLUGIN_CFG",
+        {
+            "default_driver": FirewallConfigChoice.TYPE_CUSTOM,
+            "custom_capirca": "nautobot_firewall_models.tests.test_firewall_config._fake_custom_driver",
+        },
+    )
+    def test_migration_for_custom_with_custom_capirca_setting(self):
+        """Test migration for custom driver with custom_capirca setting."""
+        self._migration_helper(FirewallConfigChoice.TYPE_CUSTOM)
+
+    @override_settings(
+        PLUGINS_CONFIG={
+            "nautobot_firewall_models": {
+                "default_driver": FirewallConfigChoice.TYPE_CUSTOM,
+            }
+        }
+    )
+    @patch(
+        "nautobot_firewall_models.constants.PLUGIN_CFG",
+        {
+            "default_driver": FirewallConfigChoice.TYPE_CUSTOM,
+        },
+    )
+    @patch(
+        "nautobot_firewall_models.models.firewall_config.PLUGIN_CFG",
+        {
+            "default_driver": FirewallConfigChoice.TYPE_CUSTOM,
+        },
+    )
+    def test_migration_for_custom_raises_error(self):
+        """Test migration for custom driver."""
+        with self.assertRaises(ValueError):
+            self._migration_helper(FirewallConfigChoice.TYPE_CUSTOM)
+
     def _migration_helper(self, driver):
         device = Device.objects.get(name="nyc-fw01")
         models.FirewallConfig.objects.filter(device=device).delete()
