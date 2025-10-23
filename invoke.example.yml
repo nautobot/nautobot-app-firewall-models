@@ -1,11 +1,7 @@
 ---
 nautobot_firewall_models:
   nautobot_ver: "2.4.20"
-<<<<<<< HEAD
-  python_ver: "3.11"
-=======
   python_ver: "3.12"
->>>>>>> 2c15322 (Cookie updated by NetworkToCode Cookie Drift Manager Tool)
   # local: false
   # compose_dir: "/full/path/to/nautobot-app-firewall-models/development"
 
