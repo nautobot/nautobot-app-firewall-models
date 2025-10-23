@@ -19,7 +19,6 @@ class NautobotFirewallModelsConfig(NautobotAppConfig):
     base_url = "firewall-models"
     required_settings = []
     default_settings = {}
-    caching_config = {}
     docs_view_name = "plugins:nautobot_firewall_models:docs"
     searchable_models = ["iprange"]
 
