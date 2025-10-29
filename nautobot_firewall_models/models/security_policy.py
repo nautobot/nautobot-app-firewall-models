@@ -255,7 +255,7 @@ class Policy(PrimaryModel):
 
     def to_json(self):
         """Convience method to convert to json."""
-        return model_to_json(self, "nautobot_firewall_models.api.serializers.PolicySerializer")
+        return model_to_json(self)
 
     def __str__(self):
         """Stringify instance."""
