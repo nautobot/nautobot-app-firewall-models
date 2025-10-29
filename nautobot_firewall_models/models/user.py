@@ -76,6 +76,7 @@ class UserObjectGroup(PrimaryModel):
         to="nautobot_firewall_models.UserObject",
         blank=True,
         related_name="user_object_groups",
+        verbose_name="User Objects",
     )
     status = StatusField(
         on_delete=models.PROTECT,

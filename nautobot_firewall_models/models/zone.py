@@ -32,7 +32,7 @@ class Zone(PrimaryModel):
         blank=True,
     )
     name = models.CharField(max_length=CHARFIELD_MAX_LENGTH, unique=True, help_text="Name of the zone (e.g. trust)")
-    vrfs = models.ManyToManyField(to="ipam.VRF", blank=True, related_name="zones")
+    vrfs = models.ManyToManyField(to="ipam.VRF", blank=True, related_name="zones", verbose_name="VRFs")
     interfaces = models.ManyToManyField(to="dcim.Interface", blank=True, related_name="zones")
     status = StatusField(
         on_delete=models.PROTECT,
