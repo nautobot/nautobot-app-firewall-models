@@ -1,4 +1,4 @@
-{% extends 'generic/object_create.html' %}
+{% extends "generic/object_create.html" %}
 {% load form_helpers %}
 {% load helpers %}
 
@@ -47,7 +47,7 @@
         var status = $("#id_status").val();
         var tags = $("#id_tags").children().clone();
         $.get(
-          "{% url 'plugins-api:nautobot_firewall_models-api:serviceobject-list' %}", 
+          "{% url 'plugins-api:nautobot_firewall_models-api:serviceobject-list' %}",
           {port: port, ip_protocol: ip_protocol}
         ).done(function(data){
           if (data.count > 0) {
@@ -74,4 +74,4 @@
       });
     </script>
     {% endif %}
-{% endblock %}
+{% endblock javascript %}

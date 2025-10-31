@@ -1,6 +1,8 @@
 """Unit tests for nautobot_firewall_models."""
 
 # pylint: disable=invalid-name, duplicate-code
+from unittest import mock
+
 from django.contrib.contenttypes.models import ContentType
 from nautobot.apps.testing import APIViewTestCases, disable_warnings
 from nautobot.dcim.models import Device, DeviceType, Location, Platform
@@ -12,6 +14,22 @@ from rest_framework import status as drf_status
 from nautobot_firewall_models import models
 
 from . import fixtures
+
+
+class IncludeM2MAPITestCaseMixin:
+    """Mixin to enable m2m fields in the test_bulk_create_objects test.
+
+    The REST API no longer returns m2m fields by default in Nautobot v3.0.0+.
+    This mixin restores the m2m field so that the test_bulk_create_objects test
+    can find them.
+    """
+
+    def _patched_get_list_url(self):
+        return super()._get_list_url() + "?exclude_m2m=false"
+
+    def test_bulk_create_objects(self):
+        with mock.patch.object(self, "_get_list_url", self._patched_get_list_url):
+            return super().test_bulk_create_objects()
 
 
 class IPRangeAPIViewTest(APIViewTestCases.APIViewTestCase):
@@ -152,7 +170,7 @@ class ApplicationObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
         ]
 
 
-class ApplicationObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
+class ApplicationObjectGroupAPIViewTest(IncludeM2MAPITestCaseMixin, APIViewTestCases.APIViewTestCase):
     """Test the ApplicationObjectGroup viewsets."""
 
     model = models.ApplicationObjectGroup
@@ -195,7 +213,7 @@ class AddressObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
         ]
 
 
-class AddressObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
+class AddressObjectGroupAPIViewTest(IncludeM2MAPITestCaseMixin, APIViewTestCases.APIViewTestCase):
     """Test the AddressObjectGroup viewsets."""
 
     model = models.AddressObjectGroup
@@ -237,7 +255,7 @@ class ServiceObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
         fixtures.create_svc_obj()
 
 
-class ServiceGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
+class ServiceGroupAPIViewTest(IncludeM2MAPITestCaseMixin, APIViewTestCases.APIViewTestCase):
     """Test the ServiceGroup viewsets."""
 
     model = models.ServiceObjectGroup
@@ -277,7 +295,7 @@ class UserObjectAPIViewTest(APIViewTestCases.APIViewTestCase):
         fixtures.create_user_obj()
 
 
-class UserObjectGroupAPIViewTest(APIViewTestCases.APIViewTestCase):
+class UserObjectGroupAPIViewTest(IncludeM2MAPITestCaseMixin, APIViewTestCases.APIViewTestCase):
     """Test the UserGroup viewsets."""
 
     model = models.UserObjectGroup
@@ -317,7 +335,7 @@ class ZoneAPIViewTest(APIViewTestCases.APIViewTestCase):
         fixtures.create_zone()
 
 
-class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
+class PolicyRuleAPIViewTest(IncludeM2MAPITestCaseMixin, APIViewTestCases.APIViewTestCase):
     """Test the PolicyRule viewsets."""
 
     model = models.PolicyRule
@@ -358,7 +376,7 @@ class PolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
         ]
 
 
-class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
+class PolicyAPIViewTest(IncludeM2MAPITestCaseMixin, APIViewTestCases.APIViewTestCase):
     """Test the Policy viewsets."""
 
     model = models.Policy
@@ -379,7 +397,7 @@ class PolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
         ]
 
 
-class NATPolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
+class NATPolicyRuleAPIViewTest(IncludeM2MAPITestCaseMixin, APIViewTestCases.APIViewTestCase):
     """Test the PolicyRule viewsets."""
 
     model = models.NATPolicyRule
@@ -415,7 +433,7 @@ class NATPolicyRuleAPIViewTest(APIViewTestCases.APIViewTestCase):
         ]
 
 
-class NATPolicyAPIViewTest(APIViewTestCases.APIViewTestCase):
+class NATPolicyAPIViewTest(IncludeM2MAPITestCaseMixin, APIViewTestCases.APIViewTestCase):
     """Test the Policy viewsets."""
 
     model = models.NATPolicy

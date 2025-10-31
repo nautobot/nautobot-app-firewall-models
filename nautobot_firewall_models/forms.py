@@ -216,6 +216,7 @@ class ApplicationObjectForm(NautobotModelForm):
 
         model = models.ApplicationObject
         fields = [
+            # pylint: disable=duplicate-code
             "name",
             "description",
             "category",
