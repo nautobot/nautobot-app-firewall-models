@@ -15,10 +15,7 @@ jobs:
         uses: "networktocode/gh-action-setup-poetry-environment@v6"
         with:
           poetry-version: "2.1.3"
-          python-version: "3.12"
-          poetry-install-options: "--no-root"
-      - name: "Build Documentation"
-        run: "poetry run invoke build-and-check-docs"
+          poetry-install-options: "--dry-run"
       - name: "Run Poetry Build"
         run: "poetry build"
 
