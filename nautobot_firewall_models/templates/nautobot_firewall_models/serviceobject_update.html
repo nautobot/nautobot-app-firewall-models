@@ -35,7 +35,7 @@
       </div>
     </div>
     <script>
-      $("form[action='']").submit(function(event) {
+      $("form[action='']").on("submit", function(event) {
         event.preventDefault();
         $("button[name='_create']").prop("disabled", true);
         $("button[name='_addanother']").prop("disabled", true);

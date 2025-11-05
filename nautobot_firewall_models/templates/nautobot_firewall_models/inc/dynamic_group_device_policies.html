@@ -1,12 +1,12 @@
 {% block content %}
-<div class="panel panel-default">
-    <div class="panel-heading"><strong>Security Policies via Dynamic Groups</strong></div>
+<div class="card">
+    <div class="card-header"><strong>Security Policies via Dynamic Groups</strong></div>
     {% if not dynamic_groups %}
-    <div class="panel-body">
-        <span class="text-muted">None</span>
+    <div class="card-body">
+        <span class="text-secondary">None</span>
     </div>
     {% else %}
-    <table class="table table-hover panel-body">
+    <table class="table table-hover card-body">
         <tr>
             <th>Policy</th>
             <th>Weight</th>
