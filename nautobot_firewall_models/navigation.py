@@ -27,19 +27,19 @@ menu_items = (
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:iprange_list",
                         name="IP Ranges",
-                        weight=150,
+                        weight=200,
                         permissions=["nautobot_firewall_models.view_iprange"],
                     ),
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:addressobject_list",
                         name="Address Objects",
-                        weight=200,
+                        weight=300,
                         permissions=["nautobot_firewall_models.view_addressobject"],
                     ),
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:addressobjectgroup_list",
                         name="Address Object Groups",
-                        weight=250,
+                        weight=400,
                         permissions=["nautobot_firewall_models.view_addressobjectgroup"],
                     ),
                 ],
@@ -57,26 +57,26 @@ menu_items = (
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:applicationobjectgroup_list",
                         name="Application Groups",
-                        weight=150,
+                        weight=200,
                         permissions=["nautobot_firewall_models.view_applicationobjectgroup"],
                     ),
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:serviceobject_list",
                         name="Service Objects",
-                        weight=200,
+                        weight=300,
                         permissions=["nautobot_firewall_models.view_serviceobject"],
                     ),
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:serviceobjectgroup_list",
                         name="Service Object Groups",
-                        weight=250,
+                        weight=400,
                         permissions=["nautobot_firewall_models.view_serviceobjectgroup"],
                     ),
                 ],
             ),
             NavMenuGroup(
                 name="User",
-                weight=200,
+                weight=300,
                 items=[
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:userobject_list",
@@ -87,14 +87,14 @@ menu_items = (
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:userobjectgroup_list",
                         name="User Object Groups",
-                        weight=150,
+                        weight=200,
                         permissions=["nautobot_firewall_models.view_userobjectgroup"],
                     ),
                 ],
             ),
             NavMenuGroup(
                 name="Zone",
-                weight=200,
+                weight=400,
                 items=[
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:zone_list",
@@ -106,7 +106,7 @@ menu_items = (
             ),
             NavMenuGroup(
                 name="Policy",
-                weight=200,
+                weight=500,
                 items=[
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:policyrule_list",
@@ -117,14 +117,14 @@ menu_items = (
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:policy_list",
                         name="Policies",
-                        weight=150,
+                        weight=200,
                         permissions=["nautobot_firewall_models.view_policy"],
                     ),
                 ],
             ),
             NavMenuGroup(
                 name="NAT Policy",
-                weight=200,
+                weight=600,
                 items=[
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:natpolicyrule_list",
@@ -135,14 +135,14 @@ menu_items = (
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:natpolicy_list",
                         name="NAT Policies",
-                        weight=150,
+                        weight=200,
                         permissions=["nautobot_firewall_models.view_natpolicy"],
                     ),
                 ],
             ),
             NavMenuGroup(
                 name="Capirca",
-                weight=200,
+                weight=700,
                 items=[
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:capircapolicy_list",
