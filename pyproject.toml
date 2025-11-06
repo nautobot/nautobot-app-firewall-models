@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nautobot-firewall-models"
-version = "2.4.0a0"
+version = "3.0.0a1"
 description = "Nautobot app to model firewall objects."
 authors = ["Network to Code, LLC <opensource@networktocode.com>"]
 license = "Apache-2.0"
@@ -29,7 +29,7 @@ include = [
 [tool.poetry.dependencies]
 python = ">=3.10,<3.14"
 # Used for local development
-nautobot = {git = "https://github.com/nautobot/nautobot.git", rev = "next"}
+nautobot = ">=3.0.0a2,<3.0.0rc99"
 # nautobot = ">=3.0.0,<4.0.0"  # TODO: Uncomment after v3.0.0 is released
 capirca = "^2.0.6"
 
