@@ -165,7 +165,7 @@ application_object_group = ui.ObjectDetailContent(
             section=ui.SectionChoices.FULL_WIDTH,
             table_class=tables.ApplicationObjectTable,
             table_filter="application_object_groups",
-            related_field_name="application_objects",
+            related_field_name="application_object_groups",
             add_button_route=None,
         ),
     ),
