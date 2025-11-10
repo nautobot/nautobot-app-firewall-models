@@ -1,8 +1,12 @@
 """Unit tests for nautobot_firewall_models."""
+
 # pylint: disable=invalid-name
 
 from django.test import TestCase
+from nautobot.apps.testing import FilterTestCases
 from nautobot.dcim.models import Device
+from nautobot.extras.models import Status
+from nautobot.ipam.models import IPAddress, Namespace, Prefix
 
 from nautobot_firewall_models import filters, models
 
@@ -38,3 +42,51 @@ class CapircaPolicyModelTestCase(TestCase):
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
         params = {"device": [self.dev01.id]}
         self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
+
+
+class AddressObjectTestCase(FilterTestCases.FilterTestCase):
+    """Test filtering operations for AddressObject Model."""
+
+    queryset = models.AddressObject.objects.all()
+    filterset = filters.AddressObjectFilterSet
+    generic_filter_tests = (
+        ("address_object_groups", "address_object_groups__id"),
+        ("address_object_groups", "address_object_groups__name"),
+    )
+
+    @classmethod
+    def setUpTestData(cls):
+        """Set up test data."""
+        status_active = Status.objects.get(name="Active")
+        global_namespace = Namespace.objects.get(name="Global")
+        Prefix.objects.create(prefix="0.0.0.0/0", namespace=global_namespace, status=status_active)
+        ip_addresses = (
+            IPAddress.objects.create(address="10.0.0.1", status=status_active, namespace=global_namespace),
+            IPAddress.objects.create(address="10.0.0.2", status=status_active, namespace=global_namespace),
+            IPAddress.objects.create(address="10.0.0.3", status=status_active, namespace=global_namespace),
+        )
+        address_objects = (
+            models.AddressObject.objects.create(
+                name="test-address-object",
+                status=status_active,
+                ip_address=ip_addresses[0],
+            ),
+            models.AddressObject.objects.create(
+                name="test-address-object-2",
+                status=status_active,
+                ip_address=ip_addresses[1],
+            ),
+            models.AddressObject.objects.create(
+                name="test-address-object-3",
+                status=status_active,
+                ip_address=ip_addresses[2],
+            ),
+        )
+        address_object_groups = (
+            models.AddressObjectGroup.objects.create(name="test-address-object-group", status=status_active),
+            models.AddressObjectGroup.objects.create(name="test-address-object-group-2", status=status_active),
+            models.AddressObjectGroup.objects.create(name="test-address-object-group-3", status=status_active),
+        )
+        address_object_groups[0].address_objects.set([address_objects[0]])
+        address_object_groups[1].address_objects.set([address_objects[1]])
+        address_object_groups[2].address_objects.set([address_objects[2]])
