@@ -125,7 +125,7 @@ address_object_group = ui.ObjectDetailContent(
             section=ui.SectionChoices.FULL_WIDTH,
             table_class=tables.AddressObjectTable,
             table_filter="address_object_groups",
-            related_field_name="address_objects",
+            related_field_name="address_object_groups",
             add_button_route=None,
         ),
     ),

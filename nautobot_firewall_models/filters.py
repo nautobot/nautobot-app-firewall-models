@@ -56,6 +56,12 @@ class FQDNFilterSet(BaseFilterSet, NautobotFilterSet):
 class AddressObjectFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for AddressObject."""
 
+    address_object_groups = NaturalKeyOrPKMultipleChoiceFilter(
+        field_name="address_object_groups",
+        queryset=models.AddressObjectGroup.objects.all(),
+        label="Address Object Group",
+    )
+
     class Meta:
         """Meta attributes for filter."""
 
