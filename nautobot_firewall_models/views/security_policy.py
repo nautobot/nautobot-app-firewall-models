@@ -71,21 +71,12 @@ class PolicyUIViewSet(NautobotUIViewSet):
 
         return context
 
-    def get_required_permission(self):
-        """Custom permissions for custom actions."""
-        queryset = self.get_queryset()
-        actions = [self.get_action()]
-        permissions = self.get_permissions_for_model(queryset.model, actions)
-        if "devices" in actions:
-            permissions.remove("nautobot_firewall_models.devices_policy")
-            permissions.extend(["dcim.change_device", "nautobot_firewall_models.change_policy"])
-        if "dynamic_groups" in actions:
-            permissions.remove("nautobot_firewall_models.dynamic_groups_policy")
-            permissions.extend(["extras.change_dynamicgroup", "nautobot_firewall_models.change_policy"])
-
-        return permissions
-
-    @action(detail=True, methods=["post"])
+    @action(
+        detail=True,
+        methods=["post"],
+        custom_view_base_action="change",
+        custom_view_additional_permissions=["dcim.change_device"],
+    )
     def devices(self, request, pk, *args, **kwargs):
         # pylint: disable=invalid-name, arguments-differ
         """Method to set weight on a Device & Policy Relationship."""
@@ -97,7 +88,12 @@ class PolicyUIViewSet(NautobotUIViewSet):
             m2m.validated_save()
         return redirect(reverse("plugins:nautobot_firewall_models:policy", kwargs={"pk": pk}))
 
-    @action(detail=True, methods=["post"])
+    @action(
+        detail=True,
+        methods=["post"],
+        custom_view_base_action="change",
+        custom_view_additional_permissions=["extras.change_dynamicgroup"],
+    )
     def dynamic_groups(self, request, pk, *args, **kwargs):
         # pylint: disable=invalid-name, arguments-differ
         """Method to set weight on a DynamicGroup & Policy Relationship."""
