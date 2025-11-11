@@ -61,6 +61,31 @@ class NATPolicyUIViewSet(NautobotUIViewSet):
 
     lookup_field = "pk"
 
+    def get_extra_context(self, request, instance=None):
+        """Add extra permissions for edit-device-weight and edit-dynamicgroup-weight tabs."""
+        context = super().get_extra_context(request, instance)
+        context["device_weight_tab_perms"] = ["dcim.change_device", "nautobot_firewall_models.change_natpolicy"]
+        context["dynamicgroup_weight_tab_perms"] = [
+            "extras.change_dynamicgroup",
+            "nautobot_firewall_models.change_natpolicy",
+        ]
+
+        return context
+
+    def get_required_permission(self):
+        """Custom permissions for custom actions."""
+        queryset = self.get_queryset()
+        actions = [self.get_action()]
+        permissions = self.get_permissions_for_model(queryset.model, actions)
+        if "devices" in actions:
+            permissions.remove("nautobot_firewall_models.devices_natpolicy")
+            permissions.extend(["dcim.change_device", "nautobot_firewall_models.change_natpolicy"])
+        if "dynamic_groups" in actions:
+            permissions.remove("nautobot_firewall_models.dynamic_groups_natpolicy")
+            permissions.extend(["extras.change_dynamicgroup", "nautobot_firewall_models.change_natpolicy"])
+
+        return permissions
+
     @action(detail=True, methods=["post"])
     def devices(self, request, pk, *args, **kwargs):
         # pylint: disable=invalid-name, arguments-differ

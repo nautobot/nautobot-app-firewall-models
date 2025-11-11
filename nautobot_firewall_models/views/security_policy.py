@@ -3,7 +3,6 @@
 from django.shortcuts import redirect
 from django.urls import reverse
 from nautobot.apps.views import NautobotUIViewSet
-from nautobot.core.views.mixins import PERMISSIONS_ACTION_MAP
 from rest_framework.decorators import action
 
 from nautobot_firewall_models import details, filters, forms, models, tables
@@ -61,11 +60,30 @@ class PolicyUIViewSet(NautobotUIViewSet):
 
     lookup_field = "pk"
 
-    def get_queryset(self):
-        """Overload to overwrite permissiosn action map."""
-        queryset = super().get_queryset()
-        _perms = {**PERMISSIONS_ACTION_MAP, "devices": "change", "dynamic_groups": "change"}
-        return queryset.restrict(self.request.user, _perms[self.action])
+    def get_extra_context(self, request, instance=None):
+        """Add extra permissions for edit-device-weight and edit-dynamicgroup-weight tabs."""
+        context = super().get_extra_context(request, instance)
+        context["device_weight_tab_perms"] = ["dcim.change_device", "nautobot_firewall_models.change_policy"]
+        context["dynamicgroup_weight_tab_perms"] = [
+            "extras.change_dynamicgroup",
+            "nautobot_firewall_models.change_policy",
+        ]
+
+        return context
+
+    def get_required_permission(self):
+        """Custom permissions for custom actions."""
+        queryset = self.get_queryset()
+        actions = [self.get_action()]
+        permissions = self.get_permissions_for_model(queryset.model, actions)
+        if "devices" in actions:
+            permissions.remove("nautobot_firewall_models.devices_policy")
+            permissions.extend(["dcim.change_device", "nautobot_firewall_models.change_policy"])
+        if "dynamic_groups" in actions:
+            permissions.remove("nautobot_firewall_models.dynamic_groups_policy")
+            permissions.extend(["extras.change_dynamicgroup", "nautobot_firewall_models.change_policy"])
+
+        return permissions
 
     @action(detail=True, methods=["post"])
     def devices(self, request, pk, *args, **kwargs):
