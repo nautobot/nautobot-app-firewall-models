@@ -82,6 +82,12 @@ class AddressObjectGroupFilterSet(BaseFilterSet, NautobotFilterSet):
 class ApplicationObjectFilterSet(BaseFilterSet, NautobotFilterSet):
     """Filter for ApplicationObject."""
 
+    application_object_groups = NaturalKeyOrPKMultipleChoiceFilter(
+        field_name="application_object_groups",
+        queryset=models.ApplicationObjectGroup.objects.all(),
+        label="Application Object Group",
+    )
+
     class Meta:
         """Meta attributes for filter."""
 

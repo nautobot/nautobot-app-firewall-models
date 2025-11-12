@@ -90,3 +90,41 @@ class AddressObjectTestCase(FilterTestCases.FilterTestCase):
         address_object_groups[0].address_objects.set([address_objects[0]])
         address_object_groups[1].address_objects.set([address_objects[1]])
         address_object_groups[2].address_objects.set([address_objects[2]])
+
+
+class ApplicationObjectTestCase(FilterTestCases.FilterTestCase):
+    """Test filtering operations for ApplicationObject Model."""
+
+    queryset = models.ApplicationObject.objects.all()
+    filterset = filters.ApplicationObjectFilterSet
+    generic_filter_tests = (
+        ("application_object_groups", "application_object_groups__id"),
+        ("application_object_groups", "application_object_groups__name"),
+    )
+
+    @classmethod
+    def setUpTestData(cls):
+        """Set up test data."""
+        status_active = Status.objects.get(name="Active")
+        application_objects = (
+            models.ApplicationObject.objects.create(
+                name="test-application-object",
+                status=status_active,
+            ),
+            models.ApplicationObject.objects.create(
+                name="test-application-object-2",
+                status=status_active,
+            ),
+            models.ApplicationObject.objects.create(
+                name="test-application-object-3",
+                status=status_active,
+            ),
+        )
+        application_object_groups = (
+            models.ApplicationObjectGroup.objects.create(name="test-application-object-group", status=status_active),
+            models.ApplicationObjectGroup.objects.create(name="test-application-object-group-2", status=status_active),
+            models.ApplicationObjectGroup.objects.create(name="test-application-object-group-3", status=status_active),
+        )
+        application_object_groups[0].application_objects.set([application_objects[0]])
+        application_object_groups[1].application_objects.set([application_objects[1]])
+        application_object_groups[2].application_objects.set([application_objects[2]])
