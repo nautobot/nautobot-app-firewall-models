@@ -59,7 +59,7 @@ class AddressObjectFilterSet(BaseFilterSet, NautobotFilterSet):
     address_object_groups = NaturalKeyOrPKMultipleChoiceFilter(
         field_name="address_object_groups",
         queryset=models.AddressObjectGroup.objects.all(),
-        label="Address Object Group",
+        label="Address Object Groups (name or ID)",
     )
 
     class Meta:
@@ -85,7 +85,7 @@ class ApplicationObjectFilterSet(BaseFilterSet, NautobotFilterSet):
     application_object_groups = NaturalKeyOrPKMultipleChoiceFilter(
         field_name="application_object_groups",
         queryset=models.ApplicationObjectGroup.objects.all(),
-        label="Application Object Group",
+        label="Application Object Groups (name or ID)",
     )
 
     class Meta:
