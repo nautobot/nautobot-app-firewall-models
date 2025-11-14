@@ -226,7 +226,7 @@ ip_range = ui.ObjectDetailContent(
             section=ui.SectionChoices.LEFT_HALF,
             weight=100,
             # Replace with `__all__` once order is fixed
-            fields=["description", "start_address", "end_address", "vrf", "status"],
+            fields=["description", "start_address", "end_address", "size", "vrf", "status"],
         ),
     ),
 )
