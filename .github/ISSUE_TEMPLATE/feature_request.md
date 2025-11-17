@@ -6,8 +6,8 @@ labels:
 ---
 
 ### Environment
-* Nautobot version:  <!-- Example: 2.4.2 -->
-* nautobot-firewall-models version:  <!-- Example: 2.0.1 -->
+* Nautobot version:  <!-- Example: 2.4.20 -->
+* nautobot-firewall-models version:  <!-- Example: 1.0.0 -->
 
 <!--
     Describe in detail the new functionality you are proposing.

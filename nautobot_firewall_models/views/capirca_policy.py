@@ -35,7 +35,12 @@ class CapircaPolicyUIViewSet(
 
     lookup_field = "pk"
 
-    @action(detail=True, methods=["get"])
+    @action(
+        detail=True,
+        methods=["get"],
+        custom_view_base_action="view",
+        custom_view_additional_permissions=["dcim.view_device"],
+    )
     def devicedetail(self, request, pk, *args, **kwargs):
         # pylint: disable=invalid-name, arguments-differ, unused-argument
         """Action method to see the full configuration."""
