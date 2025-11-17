@@ -3,9 +3,11 @@
 # ruff: noqa: F403, F405
 # pylint: disable=invalid-name
 # pylint: disable=duplicate-code
-from nautobot.apps.testing import ViewTestCases
+from django.urls import reverse
+from nautobot.apps.testing import ViewTestCases, post_data
 from nautobot.dcim.models import Device
-from nautobot.extras.models.statuses import Status
+from nautobot.extras.models import Status
+from nautobot.users.models import ObjectPermission
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
@@ -330,6 +332,85 @@ class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             f'csvobj3,"{pol_rule.id}",Active',
         )
 
+    def test_device_weight_permissions(self):
+        """Test that the device weights cannot be updated without dcim.change_device and nautobot_firewall_models.change_policy permissions."""
+        # Remove all user permissions and add view permissions for dcim.device and nautobot_firewall_models.policy
+        ObjectPermission.objects.all().delete()
+        self.add_permissions("dcim.view_device", "nautobot_firewall_models.view_policy")
+
+        # Retrieve the policy view and assert that the weight form field is disabled
+        fixtures.assign_policies()
+        policy = Policy.objects.get(name="Policy 2")
+
+        weight = policy.policydevicem2m_set.first().weight
+        response = self.client.get(policy.get_absolute_url())
+        self.assertContains(
+            response,
+            f'<input id="device-weight-input1" type="number" name="{policy.assigned_devices.first().pk}" value="{weight}" disabled>',
+            html=True,
+        )
+
+        # Assert that trying to submit the form with insufficient permissions fails
+        post_request = {
+            "path": reverse("plugins:nautobot_firewall_models:policy_devices", kwargs={"pk": policy.pk}),
+            "data": post_data({str(policy.assigned_devices.first().pk): "150"}),
+        }
+        self.assertHttpStatus(self.client.post(**post_request), 403)
+
+        # Give the user "change" permissions
+        self.add_permissions("dcim.change_device", "nautobot_firewall_models.change_policy")
+
+        # Form field is no longer disabled
+        response = self.client.get(policy.get_absolute_url())
+        self.assertContains(
+            response,
+            f'<input id="device-weight-input1" type="number" name="{policy.assigned_devices.first().pk}" value="{weight}">',
+            html=True,
+        )
+
+        # Post succeeds
+        self.assertHttpStatus(self.client.post(**post_request), 302)
+
+    def test_dynamicgroup_weight_permissions(self):
+        """Test that the dynamicgroup weights cannot be updated without dcim.change_dynamicgroup and nautobot_firewall_models.change_policy permissions."""
+
+        # Remove all user permissions and add view permissions for dcim.device and nautobot_firewall_models.policy
+        ObjectPermission.objects.all().delete()
+        self.add_permissions("extras.view_dynamicgroup", "nautobot_firewall_models.view_policy")
+
+        # Retrieve the policy view and assert that the weight form field is disabled
+        fixtures.assign_policies()
+        policy = Policy.objects.get(name="Policy 3")
+
+        weight = policy.policydynamicgroupm2m_set.first().weight
+        response = self.client.get(policy.get_absolute_url())
+        self.assertContains(
+            response,
+            f'<input id="dynamicgroup-weight-input1" type="number" name="{policy.assigned_dynamic_groups.first().pk}" value="{weight}" disabled>',
+            html=True,
+        )
+
+        # Assert that trying to submit the form with insufficient permissions fails
+        post_request = {
+            "path": reverse("plugins:nautobot_firewall_models:policy_dynamic-groups", kwargs={"pk": policy.pk}),
+            "data": post_data({str(policy.assigned_dynamic_groups.first().pk): "150"}),
+        }
+        self.assertHttpStatus(self.client.post(**post_request), 403)
+
+        # Give the user "change" permissions
+        self.add_permissions("extras.change_dynamicgroup", "nautobot_firewall_models.change_policy")
+
+        # Form field is no longer disabled
+        response = self.client.get(policy.get_absolute_url())
+        self.assertContains(
+            response,
+            f'<input id="dynamicgroup-weight-input1" type="number" name="{policy.assigned_dynamic_groups.first().pk}" value="{weight}">',
+            html=True,
+        )
+
+        # Post succeeds
+        self.assertHttpStatus(self.client.post(**post_request), 302)
+
 
 class NATPolicyRuleUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
     """Test the Policy viewsets."""
@@ -387,6 +468,85 @@ class NATPolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
             f'csvrule2,"{nat_pol_rule.id}",Active',
             f'csvrule3,"{nat_pol_rule.id}",Active',
         )
+
+    def test_device_weight_permissions(self):
+        """Test that the device weights cannot be updated without dcim.change_device and nautobot_firewall_models.change_natpolicy permissions."""
+        # Remove all user permissions and add view permissions for dcim.device and nautobot_firewall_models.natpolicy
+        ObjectPermission.objects.all().delete()
+        self.add_permissions("dcim.view_device", "nautobot_firewall_models.view_natpolicy")
+
+        # Retrieve the policy view and assert that the weight form field is disabled
+        fixtures.assign_policies()
+        policy = NATPolicy.objects.get(name="NAT Policy 2")
+
+        weight = policy.natpolicydevicem2m_set.first().weight
+        response = self.client.get(policy.get_absolute_url())
+        self.assertContains(
+            response,
+            f'<input id="device-weight-input1" type="number" name="{policy.assigned_devices.first().pk}" value="{weight}" disabled>',
+            html=True,
+        )
+
+        # Assert that trying to submit the form with insufficient permissions fails
+        post_request = {
+            "path": reverse("plugins:nautobot_firewall_models:natpolicy_devices", kwargs={"pk": policy.pk}),
+            "data": post_data({str(policy.assigned_devices.first().pk): "150"}),
+        }
+        self.assertHttpStatus(self.client.post(**post_request), 403)
+
+        # Give the user "change" permissions
+        self.add_permissions("dcim.change_device", "nautobot_firewall_models.change_natpolicy")
+
+        # Form field is no longer disabled
+        response = self.client.get(policy.get_absolute_url())
+        self.assertContains(
+            response,
+            f'<input id="device-weight-input1" type="number" name="{policy.assigned_devices.first().pk}" value="{weight}">',
+            html=True,
+        )
+
+        # Post succeeds
+        self.assertHttpStatus(self.client.post(**post_request), 302)
+
+    def test_dynamicgroup_weight_permissions(self):
+        """Test that the dynamicgroup weights cannot be updated without dcim.change_dynamicgroup and nautobot_firewall_models.change_natpolicy permissions."""
+
+        # Remove all user permissions and add view permissions for dcim.device and nautobot_firewall_models.natpolicy
+        ObjectPermission.objects.all().delete()
+        self.add_permissions("extras.view_dynamicgroup", "nautobot_firewall_models.view_natpolicy")
+
+        # Retrieve the policy view and assert that the weight form field is disabled
+        fixtures.assign_policies()
+        policy = NATPolicy.objects.get(name="NAT Policy 3")
+
+        weight = policy.natpolicydynamicgroupm2m_set.first().weight
+        response = self.client.get(policy.get_absolute_url())
+        self.assertContains(
+            response,
+            f'<input id="dynamicgroup-weight-input1" type="number" name="{policy.assigned_dynamic_groups.first().pk}" value="{weight}" disabled>',
+            html=True,
+        )
+
+        # Assert that trying to submit the form with insufficient permissions fails
+        post_request = {
+            "path": reverse("plugins:nautobot_firewall_models:natpolicy_dynamic-groups", kwargs={"pk": policy.pk}),
+            "data": post_data({str(policy.assigned_dynamic_groups.first().pk): "150"}),
+        }
+        self.assertHttpStatus(self.client.post(**post_request), 403)
+
+        # Give the user "change" permissions
+        self.add_permissions("extras.change_dynamicgroup", "nautobot_firewall_models.change_natpolicy")
+
+        # Form field is no longer disabled
+        response = self.client.get(policy.get_absolute_url())
+        self.assertContains(
+            response,
+            f'<input id="dynamicgroup-weight-input1" type="number" name="{policy.assigned_dynamic_groups.first().pk}" value="{weight}">',
+            html=True,
+        )
+
+        # Post succeeds
+        self.assertHttpStatus(self.client.post(**post_request), 302)
 
 
 class CapircaPolicyUIViewTest(ViewTestCases.GetObjectViewTestCase, ViewTestCases.ListObjectsViewTestCase):
