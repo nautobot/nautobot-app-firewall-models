@@ -3,7 +3,6 @@
 from django.shortcuts import redirect
 from django.urls import reverse
 from nautobot.apps.views import NautobotUIViewSet
-from nautobot.core.views.mixins import PERMISSIONS_ACTION_MAP
 from rest_framework.decorators import action
 
 from nautobot_firewall_models import details, filters, forms, models, tables
