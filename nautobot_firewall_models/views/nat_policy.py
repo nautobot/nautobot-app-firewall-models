@@ -105,9 +105,3 @@ class NATPolicyUIViewSet(NautobotUIViewSet):
             m2m.weight = weight[0]
             m2m.validated_save()
         return redirect(reverse("plugins:nautobot_firewall_models:natpolicy", kwargs={"pk": pk}))
-
-    def get_queryset(self):
-        """Overload to overwrite permissiosn action map."""
-        queryset = super().get_queryset()
-        _perms = {**PERMISSIONS_ACTION_MAP, "devices": "change", "dynamic_groups": "change"}
-        return queryset.restrict(self.request.user, _perms[self.action])
