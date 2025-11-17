@@ -72,12 +72,14 @@ PLUGINS_CONFIG = {
     "nautobot_firewall_models": {
         "default_status": "Active",
         "allowed_status": ["Active"], # default shown, `[]` allows all
+        "default_driver": "aerleon",  # Options are 'aerleon', 'capirca', or 'custom_firewall_config'
         "capirca_remark_pass": True,
-        "capirca_os_map": {
+        "capirca_os_map": {           # Note: currently deprecated
             "cisco_ios": "cisco",
             "arista_eos": "arista",
         },
-        # "custom_capirca": "my.custom.func", # provides ability to overide capirca logic
+        "aerleon_remark_pass": True,
+        # "custom_firewall_config": "my.custom.func", # provides ability to create a custom configuration engine
     }
 }
 ```

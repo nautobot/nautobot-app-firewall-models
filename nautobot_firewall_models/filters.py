@@ -228,6 +228,23 @@ class CapircaPolicyFilterSet(NautobotFilterSet):
         fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
+class FirewallConfigFilterSet(NautobotFilterSet):
+    """Filter for FirewallConfig."""
+
+    device = NaturalKeyOrPKMultipleChoiceFilter(
+        field_name="device",
+        queryset=Device.objects.all(),
+        to_field_name="name",
+        label="Schema (name or PK)",
+    )
+
+    class Meta:
+        """Meta attributes for filter."""
+
+        model = models.FirewallConfig
+        fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
+
+
 ###########################
 # Through Models
 ###########################

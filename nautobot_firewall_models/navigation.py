@@ -209,9 +209,14 @@ menu_items = (
                 ],
             ),
             NavMenuGroup(
-                name="Capirca",
+                name="Firewall Config",
                 weight=200,
                 items=[
+                    NavMenuItem(
+                        link="plugins:nautobot_firewall_models:firewallconfig_list",
+                        name="Firewall Config Rules",
+                        permissions=["nautobot_firewall_models.view_firewallconfig"],
+                    ),
                     NavMenuItem(
                         link="plugins:nautobot_firewall_models:capircapolicy_list",
                         name="Capirca Policy Rules",

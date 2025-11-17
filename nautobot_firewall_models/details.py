@@ -208,6 +208,44 @@ capirca_policy = ui.ObjectDetailContent(
     ),
 )
 
+
+firewall_config = ui.ObjectDetailContent(
+    panels=(
+        ui.ObjectFieldsPanel(
+            section=ui.SectionChoices.LEFT_HALF,
+            weight=100,
+            fields="__all__",
+            value_transforms={
+                "pol": [render_truncate, helpers.pre_tag],
+                "net": [render_truncate, helpers.pre_tag],
+                "svc": [render_truncate, helpers.pre_tag],
+                "cfg": [render_truncate, helpers.pre_tag],
+            },
+        ),
+    ),
+    extra_tabs=(
+        ui.DistinctViewTab(
+            weight=ui.Tab.WEIGHT_CHANGELOG_TAB + 150,
+            tab_id="devicedetail",
+            label="Config Details",
+            url_name="plugins:nautobot_firewall_models:firewallconfig_devicedetail",
+            panels=(
+                ui.ObjectFieldsPanel(
+                    section=ui.SectionChoices.FULL_WIDTH,
+                    weight=100,
+                    fields=["pol", "net", "svc", "cfg"],
+                    value_transforms={
+                        "pol": [helpers.pre_tag],
+                        "net": [helpers.pre_tag],
+                        "svc": [helpers.pre_tag],
+                        "cfg": [helpers.pre_tag],
+                    },
+                ),
+            ),
+        ),
+    ),
+)
+
 fqdn = ui.ObjectDetailContent(
     panels=(
         FQDNFieldsPanel(

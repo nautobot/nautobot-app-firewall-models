@@ -1,0 +1,4 @@
+Added the `FirewallConfig` model that will replace `CapircaPolicy`.
+Added an Aerleon configuration generation workflow.
+Added a management command to migrate data from `CapircaPolicy` to `FirewallConfig`.
+Added a `default_driver` setting for choosing your primary strategy.

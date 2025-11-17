@@ -201,6 +201,16 @@ class CapircaPolicySerializer(NautobotModelSerializer, TaggedModelSerializerMixi
         fields = "__all__"
 
 
+class FirewallConfigSerializer(NautobotModelSerializer, TaggedModelSerializerMixin):
+    """FirewallConfig Serializer."""
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.FirewallConfig
+        fields = "__all__"
+
+
 ###########################
 # Through Models
 ###########################

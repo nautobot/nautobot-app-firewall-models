@@ -1,9 +1,8 @@
 """Management command to bootstrap dummy data for firewall model app."""
 
 from django.core.management.base import BaseCommand
-from django.db.utils import IntegrityError
 
-from nautobot_firewall_models.tests.fixtures import create_capirca_env
+from nautobot_firewall_models.tests.fixtures import create_capirca_env, create_firewall_config_env
 
 
 class Command(BaseCommand):
@@ -12,12 +11,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         """Publish command to bootstrap dummy data."""
         self.stdout.write("Attempting to populate dummy data.")
-        try:
-            create_capirca_env()
-            self.stdout.write(self.style.SUCCESS("Successfully populated dummy data!"))
-        except IntegrityError:
-            self.stdout.write(
-                self.style.ERROR(
-                    "Unable to populate data, command is not idempotent. Please validate objects do not already exist."
-                )
-            )
+        create_capirca_env()
+        create_firewall_config_env()
+        self.stdout.write(self.style.SUCCESS("Successfully populated dummy data!"))

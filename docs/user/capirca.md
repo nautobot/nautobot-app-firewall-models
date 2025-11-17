@@ -20,6 +20,9 @@ Service Group               | *.svc
 !!! note
     If this terminology is not familiar, please review the documentation at [Capirca](https://github.com/google/capirca).
 
+!!! note
+	While the Capirca data model is being deprecated, the functionality will exist under the more generic "Firewall Config" integration.
+
 ## Special Considerations
 
 * Capirca does not allow special characters in a majority of the named objects, as such named objects are modified to the ouput used when processed via a modified (to allow for capital letters) [Django slugify](https://docs.djangoproject.com/en/4.0/ref/utils/#django.utils.text.slugify), this includes:
@@ -35,9 +38,13 @@ Service Group               | *.svc
 * An object (policy, policy rule, src-addr, dst-addr, etc.) is put into and out of use based on whether or not the status is `active` or as defined in your plugin configuration
     * Anything other than active or defined in plugin setting `allowed_status` is ignored
 * Removing the last active object in an source-address, destination-address, or service will fail the process to avoid your policy failing open
-* The Platform `network_driver` must match the Capirca generator name
-    * You can optionally provide a mapping in the settings `capirca_os_map` to map from the current platform name, to the Capirca generator name
-* The action of "remark" on a rule is not conidered, you can set the setting `capirca_remark_pass=False` if you want it to fail by default rather than silently skipping
+* **Deprecated**: The Platform `network_driver` has to match the Capirca generator name, which is still supported under the Capirca data model integration
+    * **Deprecated**: You can optionally provide a mapping in the settings `capirca_os_map` to map from the current platform name, to the Capirca generator name, which is still supported under the Capirca data model integration
+    * The Capirca driver relies on `network_driver` and the associated `network_driver_mappings`, if the native mappings do not work, [you can update them](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/configuration/settings/#network_drivers).
+* The action of "remark" on a rule is not considered, you can set the setting `capirca_remark_pass=False` if you want it to fail by default rather than silently skipping
+
+!!! warning
+    Please note that the exact match `platform` and `capirca_os_map` driver settings are being deprecated as described above.
 
 In addition to the above, you can add to any header or term by creating specific custom fields on the `PolicyRule` data model. They must start with:
 
@@ -54,11 +61,7 @@ capirca_allow = ['ctd_pan-application', 'ctd_expiration']
 
 As previously mentioned, there is only a small opinion that is applied from the translation between the model and Capirca. That being said, Capirca has an opinion on how rules and objects are deployed, and within this project there is no consideration for how that may not align with anyone's intention on how Capirca should work. All such considerations should be referred to the Capirca project. There is no intention to modify the output that Capirca creates **in any situation** within this plugin.
 
-That being said, in an effort to provide flexibility, you can override the translation process. However, you would be responsible for that implementation. You can provide within your setting, a dotted path [import_string](https://docs.djangoproject.com/en/4.0/ref/utils/#django.utils.module_loading.import_string) to your own function. This is provided in the `custom_capirca` setting within your Plugin Configurations. The signature takes a `Device` object instance and must return a tuple of `(pol, svc, net, cfg)`, none of which are required to have data.
-
-```python
-self.pol, self.svc, self.net, self.cfg = import_string(PLUGIN_CFG["custom_capirca"])(self.device)
-```
+For any additional consideration, review the [firewall config](./firewall_config.md) for details.
 
 ## Summary
 

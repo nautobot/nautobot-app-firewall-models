@@ -134,6 +134,14 @@ class CapircaPolicyViewSet(ModelViewSet):
     filterset_class = filters.CapircaPolicyFilterSet
 
 
+class FirewallConfigViewSet(ModelViewSet):
+    """FirewallConfig viewset."""
+
+    queryset = models.FirewallConfig.objects.all().prefetch_related("tags")
+    serializer_class = serializers.FirewallConfigSerializer
+    filterset_class = filters.FirewallConfigFilterSet
+
+
 ###########################
 # Through Models
 ###########################

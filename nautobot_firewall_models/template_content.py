@@ -3,6 +3,7 @@
 from nautobot.apps.ui import TemplateExtension
 
 from nautobot_firewall_models.models import CapircaPolicy
+from nautobot_firewall_models.models.firewall_config import FirewallConfig
 
 
 class DevicePolicies(TemplateExtension):  # pylint: disable=abstract-method
@@ -67,4 +68,27 @@ class CapircaPolicies(TemplateExtension):  # pylint: disable=abstract-method
             return ""
 
 
-template_extensions = [DynamicGroupDevicePolicies, DevicePolicies, DynamicGroupPolicies, CapircaPolicies]
+class FirewallConfigTemplateExtension(TemplateExtension):  # pylint: disable=abstract-method
+    """Add Firewall Config to the right side of the Device page."""
+
+    model = "dcim.device"
+
+    def right_page(self):
+        """Add content to the right side of the Devices detail view."""
+        try:
+            obj = FirewallConfig.objects.get(device=self.context["object"])
+            return self.render(
+                "nautobot_firewall_models/inc/firewall_config.html",
+                extra_context={"firewall_config": obj},
+            )
+        except FirewallConfig.DoesNotExist:
+            return ""
+
+
+template_extensions = [
+    DynamicGroupDevicePolicies,
+    DevicePolicies,
+    DynamicGroupPolicies,
+    CapircaPolicies,
+    FirewallConfigTemplateExtension,
+]
