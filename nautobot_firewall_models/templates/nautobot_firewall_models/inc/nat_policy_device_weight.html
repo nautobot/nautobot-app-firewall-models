@@ -17,7 +17,7 @@
                             {% for m2m in object.natpolicydevicem2m_set.all %}
                                 <tr>
                                     <td>
-                                        <input type="number" name="{{ m2m.device.id }}" value="{{ m2m.weight }}">
+                                        <input id="device-weight-input{{ forloop.counter }}" type="number" name="{{ m2m.device.id }}" value="{{ m2m.weight }}"{% if not request.user|has_perms:device_weight_tab_perms %} disabled{% endif %}>
                                     </td>
                                     <td>
                                         {{ m2m.device }}
@@ -26,7 +26,9 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    {% if request.user|has_perms:device_weight_tab_perms %}
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    {% endif %}
                 </form>
             {% else %}
                 <div class="panel-body">
