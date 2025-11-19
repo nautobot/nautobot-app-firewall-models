@@ -1,14 +1,14 @@
 {% load helpers %}
 <div class="row">
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
                 <strong>Assign Policy Weight to Dynamic Group</strong>
             </div>
             {% if object.policydynamicgroupm2m_set.all %}
                 <form action="{% url 'plugins:nautobot_firewall_models:policy_dynamic-groups' pk=object.id %}" method="post" enctype="multipart/form-data" class="form form-horizontal">
                     {% csrf_token %}
-                    <table class="table table-hover panel-body">
+                    <table class="table table-hover card-body">
                         <tr>
                             <th>Weight</th>
                             <th>Dynamic Group</th>
@@ -17,7 +17,7 @@
                             {% for m2m in object.policydynamicgroupm2m_set.all %}
                                 <tr>
                                     <td>
-                                        <input type="number" name="{{ m2m.dynamic_group.id }}" value="{{ m2m.weight }}">
+                                        <input id="dynamicgroup-weight-input{{ forloop.counter }}" type="number" name="{{ m2m.dynamic_group.id }}" value="{{ m2m.weight }}"{% if not request.user|has_perms:dynamicgroup_weight_tab_perms %} disabled{% endif %}>
                                     </td>
                                     <td>
                                         {{ m2m.dynamic_group }}
@@ -26,11 +26,13 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    {% if request.user|has_perms:dynamicgroup_weight_tab_perms %}
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    {% endif %}
                 </form>
             {% else %}
-                <div class="panel-body">
-                    <span class="text-muted">No Dynamic Groups assigned</span>
+                <div class="card-body">
+                    <span class="text-secondary">No Dynamic Groups assigned</span>
                 </div>
             {% endif %}
         </div>
