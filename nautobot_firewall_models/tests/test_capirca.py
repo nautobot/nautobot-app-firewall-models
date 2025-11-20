@@ -12,7 +12,12 @@ from nautobot.extras.models import Status
 from nautobot.ipam.models import IPAddress, Namespace
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
-from nautobot_firewall_models.utils.capirca import DevicePolicyToCapirca, PolicyToCapirca, generate_capirca_config, _slugify
+from nautobot_firewall_models.utils.capirca import (
+    DevicePolicyToCapirca,
+    PolicyToCapirca,
+    _slugify,
+    generate_capirca_config,
+)
 
 from .fixtures import create_capirca_env
 
@@ -279,8 +284,8 @@ class TestBasicCapirca(TestCase):
         actual_cfg = generate_capirca_config(SERVICES.split("\n"), NETWORKS.split("\n"), POLICY, "cisco")
         self.assertEqual(actual_cfg, CFG)
 
-class TestSlugify(TestCase):
 
+class TestSlugify(TestCase):
     def test_slugify_removes_accents(self):
         self.assertEqual(_slugify("Café"), "Cafe")
         self.assertEqual(_slugify("mañana"), "manana")
@@ -297,7 +302,7 @@ class TestSlugify(TestCase):
         self.assertEqual(_slugify("hello   world"), "hello-world")
         self.assertEqual(_slugify("hello---world"), "hello-world")
         self.assertEqual(_slugify("hello_ -  world"), "hello_-world")
-        
+
     def test_slugify_removes_unicode_symbols(self):
         self.assertEqual(_slugify("★Test☆string★"), "Teststring")
 
@@ -306,9 +311,10 @@ class TestSlugify(TestCase):
 
     def test_clean_slug(self):
         self.assertEqual(_slugify("Clean-Slug_123"), "Clean-Slug_123")
-    
+
     def test_empty_string(self):
         self.assertEqual(_slugify(""), "")
+
 
 class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,too-many-instance-attributes
     """Test models."""
