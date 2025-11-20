@@ -286,6 +286,8 @@ class TestBasicCapirca(TestCase):
 
 
 class TestSlugify(TestCase):
+    """Test models."""
+
     def test_slugify_removes_accents(self):
         self.assertEqual(_slugify("Café"), "Cafe")
         self.assertEqual(_slugify("mañana"), "manana")
