@@ -12,7 +12,7 @@ from nautobot.extras.models import Status
 from nautobot.ipam.models import IPAddress, Namespace
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
-from nautobot_firewall_models.utils.capirca import DevicePolicyToCapirca, PolicyToCapirca, generate_capirca_config
+from nautobot_firewall_models.utils.capirca import DevicePolicyToCapirca, PolicyToCapirca, generate_capirca_config, _slugify
 
 from .fixtures import create_capirca_env
 
@@ -279,6 +279,36 @@ class TestBasicCapirca(TestCase):
         actual_cfg = generate_capirca_config(SERVICES.split("\n"), NETWORKS.split("\n"), POLICY, "cisco")
         self.assertEqual(actual_cfg, CFG)
 
+class TestSlugify(TestCase):
+
+    def test_slugify_removes_accents(self):
+        self.assertEqual(_slugify("Café"), "Cafe")
+        self.assertEqual(_slugify("mañana"), "manana")
+
+    def test_slugify_removes_non_alphanumeric_characters(self):
+        self.assertEqual(_slugify("Hello!! World??"), "Hello-World")
+        self.assertEqual(_slugify("A*B&C(D)"), "ABCD")
+
+    def test_slugify_adds_leading_underscore_if_starts_with_digit(self):
+        self.assertEqual(_slugify("123abc"), "_123abc")
+        self.assertEqual(_slugify("9-lives"), "_9-lives")
+
+    def test_slugify_collapses_spaces_and_hyphens(self):
+        self.assertEqual(_slugify("hello   world"), "hello-world")
+        self.assertEqual(_slugify("hello---world"), "hello-world")
+        self.assertEqual(_slugify("hello_ -  world"), "hello_-world")
+        
+    def test_slugify_removes_unicode_symbols(self):
+        self.assertEqual(_slugify("★Test☆string★"), "Teststring")
+
+    def test_value_is_integer(self):
+        self.assertEqual(_slugify(1234), "_1234")
+
+    def test_clean_slug(self):
+        self.assertEqual(_slugify("Clean-Slug_123"), "Clean-Slug_123")
+    
+    def test_empty_string(self):
+        self.assertEqual(_slugify(""), "")
 
 class TestPolicyToCapirca(TestCase):  # pylint: disable=too-many-public-methods,too-many-instance-attributes
     """Test models."""
