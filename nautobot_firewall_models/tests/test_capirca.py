@@ -2,11 +2,11 @@
 
 # ruff: noqa: F403, F405
 # pylint: disable=protected-access
-from unittest import skip
+import unittest
 from unittest.mock import patch
 
 from django.core.exceptions import ValidationError
-from django.test import TestCase
+from nautobot.apps.testing import TestCase
 from nautobot.dcim.models import Device, Platform
 from nautobot.extras.models import Status
 from nautobot.ipam.models import IPAddress, Namespace
@@ -285,7 +285,7 @@ class TestBasicCapirca(TestCase):
         self.assertEqual(actual_cfg, CFG)
 
 
-class TestSlugify(TestCase):
+class TestSlugify(unittest.TestCase):
     """Test models."""
 
     def test_slugify_removes_accents(self):
@@ -669,7 +669,7 @@ class TestDevicePolicyToCapirca(TestCase):
         create_capirca_env()
         self.device_obj = Device.objects.get(name="DFW02-WAN00")
 
-    @skip("Not implemented until policy method provided to merge queries provided")
+    @unittest.skip("Not implemented until policy method provided to merge queries provided")
     def test_dynamic_group_and_device(self):
         """Test that dynamic groups are created and device is added to it, disabled."""
 
