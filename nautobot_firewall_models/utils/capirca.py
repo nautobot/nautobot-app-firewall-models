@@ -33,7 +33,7 @@ def _slugify(value):
     dashes to single dashes. Remove characters that aren't alphanumerics,
     underscores, or hyphens. Convert to lowercase. Also strip leading and
     trailing whitespace, dashes, and underscores.
-    Also adds a trailing underscore to names starting with an number to circumvent a bug in the Capirca/Aerleon parser.
+    Also adds a leading underscore to names starting with an number to circumvent a bug in the Capirca/Aerleon parser.
     """
     value = str(value)
     value = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii")
