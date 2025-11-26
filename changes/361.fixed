@@ -1,0 +1,1 @@
+Restored missing action buttons on PolicyRule and NATPolicyRule tables and fixed an issue with the UserObject q filter.
