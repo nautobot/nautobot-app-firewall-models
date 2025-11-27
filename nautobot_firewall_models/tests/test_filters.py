@@ -9,6 +9,7 @@ from nautobot.extras.models import Status
 from nautobot.ipam.models import IPAddress, Namespace, Prefix
 
 from nautobot_firewall_models import filters, models
+from nautobot_firewall_models.models import UserObject
 
 from .fixtures import create_capirca_env
 
@@ -128,3 +129,41 @@ class ApplicationObjectTestCase(FilterTestCases.FilterTestCase):
         application_object_groups[0].application_objects.set([application_objects[0]])
         application_object_groups[1].application_objects.set([application_objects[1]])
         application_object_groups[2].application_objects.set([application_objects[2]])
+
+
+class UserObjectTestCase(FilterTestCases.FilterTestCase):
+    """Test filtering operations for ApplicationObject Model."""
+
+    queryset = models.UserObject.objects.all()
+    filterset = filters.UserObjectFilterSet
+
+    @classmethod
+    def setUpTestData(cls):
+        """Set up test data."""
+
+        status_active = Status.objects.get(name="Active")
+        UserObject.objects.get_or_create(
+            username="user1",
+            name="Bob",
+            status=status_active,
+        )
+        UserObject.objects.get_or_create(
+            username="user2",
+            name="Fred",
+            status=status_active,
+        )
+        UserObject.objects.get_or_create(
+            username="user3",
+            name="Tom",
+            status=status_active,
+        )
+
+    def test_q_filter_name(self):
+        """Test q filter on name field"""
+        params = {"q": "Bob"}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)
+
+    def test_q_filter_username(self):
+        """Test q filter on username field"""
+        params = {"q": "user2"}
+        self.assertEqual(self.filterset(params, self.queryset).qs.count(), 1)

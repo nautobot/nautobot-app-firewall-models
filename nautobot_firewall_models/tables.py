@@ -198,6 +198,7 @@ class PolicyRuleTable(StatusTableMixin, BaseTable):
             "request_id",
             "log",
             "status",
+            "actions",
         )
         default_columns = (
             "pk",
@@ -219,6 +220,7 @@ class PolicyRuleTable(StatusTableMixin, BaseTable):
             "action",
             "log",
             "status",
+            "actions",
         )
 
 
@@ -277,6 +279,7 @@ class NATPolicyRuleTable(StatusTableMixin, BaseTable):
             "description",
             "log",
             "status",
+            "actions",
         )
         default_columns = (
             # pylint: disable=duplicate-code
@@ -303,6 +306,7 @@ class NATPolicyRuleTable(StatusTableMixin, BaseTable):
             "remark",
             "log",
             "status",
+            "actions",
         )
 
 
