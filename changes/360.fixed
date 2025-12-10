@@ -1,1 +1,0 @@
-Fixed an incompatibility when slugifying capirca names that start with a number by prefixing the name with an underscore.
