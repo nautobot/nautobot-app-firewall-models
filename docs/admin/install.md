@@ -86,6 +86,9 @@ The value assigned to `default_status` must match the name of an existing Nautob
 
 > Note: In Nautobot v1.x, the `default_status` must match the slug on an existing Nautobot Status object, not the name. Nautobot v2 moved away from using slugs entirely, instead using the name as an identifier.
 
-![Custom Status](../images/custom-status.png "Custom Status")
+![Custom Status](../images/custom-status-light.png#only-light "Custom Status")
+![Custom Status](../images/custom-status-dark.png#only-dark "Custom Status")
+[//]: # "`https://next.demo.nautobot.com/extras/statuses/add/`"
 
-![Existing Status](../images/existing-status.png "Existing Status")
+![Existing Status](../images/existing-status-light.png#only-light "Existing Status")
+![Existing Status](../images/existing-status-dark.png#only-dark "Existing Status")
