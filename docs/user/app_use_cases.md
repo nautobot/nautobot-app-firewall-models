@@ -25,9 +25,9 @@ Should you wish to integrate Nautobot data with firewall configuration policies,
 
 ## Screenshots
 
-![Navigation Menu](../images/navmenu.png#only-light "Navigation Menu")
-![Navigation Menu](../images/navmenu.png#only-dark "Navigation Menu")
+![Navigation Menu](../images/navmenu.png#only-light "Navigation Menu"){ .on-glb }
+![Navigation Menu](../images/navmenu.png#only-dark "Navigation Menu"){ .on-glb }
 
-![Policy View](../images/policy-light.png#only-light "Policy View")
-![Policy View](../images/policy-dark.png#only-dark "Policy View")
+![Policy View](../images/policy-light.png#only-light "Policy View"){ .on-glb }
+![Policy View](../images/policy-dark.png#only-dark "Policy View"){ .on-glb }
 [//]: # "`https://next.demo.nautobot.com/plugins/firewall/policy/423c6387-59e2-4573-a5c5-dc646b024dd3/?tab=policy-rules`"
