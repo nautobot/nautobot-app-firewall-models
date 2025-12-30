@@ -199,9 +199,9 @@ jobs:
           - python-version: "3.10"
             db-backend: "postgresql"
             nautobot-version: "3.0.0"
-          - python-version: "3.13"
-            db-backend: "mysql"
-            nautobot-version: "stable"
+          # - python-version: "3.13"  TODO: Enable once #268 is resolved.
+          #   db-backend: "mysql"
+          #   nautobot-version: "stable"
     runs-on: "ubuntu-latest"
     env:
       INVOKE_NAUTOBOT_FIREWALL_MODELS_PYTHON_VER: "${{ matrix.python-version }}"
