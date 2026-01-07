@@ -1,4 +1,4 @@
-{% extends 'generic/object_edit.html' %}
+{% extends "generic/object_create.html" %}
 {% load form_helpers %}
 {% load helpers %}
 
@@ -9,7 +9,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Duplicate Service Objects</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -28,14 +28,14 @@
             <div class="modal-footer">
               <button type="submit" name="_create" class="btn btn-primary">Create</button>
               <button type="submit" name="_addanother" class="btn btn-primary">Create and Add Another</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
           </form>
         </div>
       </div>
     </div>
     <script>
-      $(".form-horizontal").submit(function(event) {
+      $("form[action='']").on("submit", function(event) {
         event.preventDefault();
         $("button[name='_create']").prop("disabled", true);
         $("button[name='_addanother']").prop("disabled", true);
@@ -47,10 +47,11 @@
         var status = $("#id_status").val();
         var tags = $("#id_tags").children().clone();
         $.get(
-          "{% url 'plugins-api:nautobot_firewall_models-api:serviceobject-list' %}", 
+          "{% url 'plugins-api:nautobot_firewall_models-api:serviceobject-list' %}",
           {port: port, ip_protocol: ip_protocol}
         ).done(function(data){
           if (data.count > 0) {
+            $("#duplicate_results").empty();
             for (let i = 0; i < data.results.length; i++) {
               $("#duplicate_results").append(
                 $("<li>").append(
@@ -66,7 +67,8 @@
             $("#confirm_tags").html(tags);
             $("button[name='_create']").prop("disabled", false);
             $("button[name='_addanother']").prop("disabled", false);
-            $("#exampleModal").modal();
+            const modalWindow = new bootstrap.Modal(document.getElementById("exampleModal"));
+            modalWindow.show();
           } else {
             event.currentTarget.submit();
           }
@@ -74,4 +76,4 @@
       });
     </script>
     {% endif %}
-{% endblock %}
+{% endblock javascript %}

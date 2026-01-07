@@ -3,8 +3,7 @@
 import json
 
 from django.apps import apps as django_apps
-from django.utils.module_loading import import_string
-from nautobot.core.models.utils import serialize_object_v2
+from nautobot.apps.models import serialize_object_v2
 
 try:
     from nautobot.extras.management import STATUS_COLOR_MAP, STATUS_DESCRIPTION_MAP
@@ -82,10 +81,6 @@ def get_firewall_models_with_status_field(apps=django_apps):
     return model_content_types
 
 
-def model_to_json(obj, cls=None):
+def model_to_json(obj):
     """Convenience method to convert object to json via a serializer."""
-    if cls:
-        # By default serialize_object_v2 will find a serializer, this is used to send in the serializer
-        # you would prefer, via a `import_string` dotted path to the serializer
-        return json.loads(JSONRenderer().render(import_string(cls)(obj, context={"request": None}).data))
     return json.loads(JSONRenderer().render(serialize_object_v2(obj)))

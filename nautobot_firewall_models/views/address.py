@@ -2,7 +2,7 @@
 
 from nautobot.apps.views import NautobotUIViewSet
 
-from nautobot_firewall_models import filters, forms, models, tables
+from nautobot_firewall_models import details, filters, forms, models, tables
 from nautobot_firewall_models.api import serializers
 
 
@@ -16,6 +16,7 @@ class AddressObjectUIViewSet(NautobotUIViewSet):
     queryset = models.AddressObject.objects.all()
     serializer_class = serializers.AddressObjectSerializer
     table_class = tables.AddressObjectTable
+    object_detail_content = details.address_object
 
     lookup_field = "pk"
 
@@ -30,6 +31,7 @@ class AddressObjectGroupUIViewSet(NautobotUIViewSet):
     queryset = models.AddressObjectGroup.objects.all()
     serializer_class = serializers.AddressObjectGroupSerializer
     table_class = tables.AddressObjectGroupTable
+    object_detail_content = details.address_object_group
 
     lookup_field = "pk"
 
@@ -44,6 +46,7 @@ class FQDNUIViewSet(NautobotUIViewSet):
     queryset = models.FQDN.objects.all()
     serializer_class = serializers.FQDNSerializer
     table_class = tables.FQDNTable
+    object_detail_content = details.fqdn
 
     lookup_field = "pk"
 
@@ -58,5 +61,6 @@ class IPRangeUIViewSet(NautobotUIViewSet):
     queryset = models.IPRange.objects.all()
     serializer_class = serializers.IPRangeSerializer
     table_class = tables.IPRangeTable
+    object_detail_content = details.ip_range
 
     lookup_field = "pk"

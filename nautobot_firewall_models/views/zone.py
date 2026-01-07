@@ -2,7 +2,7 @@
 
 from nautobot.apps.views import NautobotUIViewSet
 
-from nautobot_firewall_models import filters, forms, models, tables
+from nautobot_firewall_models import details, filters, forms, models, tables
 from nautobot_firewall_models.api import serializers
 
 
@@ -16,5 +16,6 @@ class ZoneUIViewSet(NautobotUIViewSet):
     queryset = models.Zone.objects.all()
     serializer_class = serializers.ZoneSerializer
     table_class = tables.ZoneTable
+    object_detail_content = details.zone
 
     lookup_field = "pk"

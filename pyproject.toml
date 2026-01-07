@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nautobot-firewall-models"
-version = "2.3.0"
+version = "3.0.0"
 description = "Nautobot app to model firewall objects."
 authors = ["Network to Code, LLC <opensource@networktocode.com>"]
 license = "Apache-2.0"
@@ -13,10 +13,10 @@ classifiers = [
     "Intended Audience :: Developers",
     "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 packages = [
     { include = "nautobot_firewall_models" },
@@ -27,10 +27,9 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9.2,<3.13"
+python = ">=3.10,<3.14"
 # Used for local development
-nautobot = ">=2.4.2,<3.0.0"
-netutils = "^1.0.0"
+nautobot = ">=3.0.0,<4.0.0"
 capirca = "^2.0.6"
 
 [tool.poetry.group.dev.dependencies]
@@ -40,9 +39,9 @@ django-debug-toolbar = "<6.0.0"
 invoke = "*"
 ipython = "*"
 pylint = "*"
-pylint-django = "*"
-pylint-nautobot = "*"
-ruff = "0.5.5"
+pylint-django = ">=2.5.4"
+pylint-nautobot = ">=0.3.1"
+ruff = "~0.8.6"
 yamllint = "*"
 toml = "*"
 # Python implementation of markdownlint
@@ -53,17 +52,18 @@ to-json-schema = "*"
 jsonschema = "*"
 djlint = ">=1.36.4,<2.0.0"
 djhtml = ">=3.0.8,<4.0.0"
+tomli = { version = "*", markers = "python_version < '3.11'" }  # tomli is included in the stdlib as of Python 3.11
 
 [tool.poetry.group.docs.dependencies]
 # Render custom markdown for version added/changed/remove notes
 markdown-version-annotations = "1.0.1"
 # Rendering docs to HTML
-mkdocs = "1.6.0"
+mkdocs = "1.6.1"
 # Material for MkDocs theme
-mkdocs-material = "9.5.32"
+mkdocs-material = "9.5.50"
 # Automatic documentation from sources, for MkDocs
-mkdocstrings = "0.25.2"
-mkdocstrings-python = "1.10.8"
+mkdocstrings = "0.27.0"
+mkdocstrings-python = "1.13.0"
 mkdocs-autorefs = "1.2.0"
 griffe = "1.1.1"
 
@@ -90,6 +90,7 @@ disable = """,
     nb-warn-dunder-filter-field,
     nb-no-search-function,
     nb-no-char-filter-q,
+    duplicate-code,
 """
 
 [tool.pylint.miscellaneous]
@@ -98,11 +99,6 @@ notes = """,
     FIXME,
     XXX,
     """
-
-[tool.pylint-nautobot]
-supported_nautobot_versions = [
-    "2"
-]
 
 [tool.ruff]
 line-length = 120
@@ -170,10 +166,15 @@ build-backend = "poetry.core.masonry.api"
 [tool.towncrier]
 package = "nautobot_firewall_models"
 directory = "changes"
-filename = "docs/admin/release_notes/version_X.Y.md"
+filename = "docs/admin/release_notes/version_3.0.md"
 template = "development/towncrier_template.j2"
 start_string = "<!-- towncrier release notes start -->"
 issue_format = "[#{issue}](https://github.com/nautobot/nautobot-app-firewall-models/issues/{issue})"
+
+[[tool.towncrier.type]]
+directory = "breaking"
+name = "Breaking Changes"
+showcontent = true
 
 [[tool.towncrier.type]]
 directory = "security"

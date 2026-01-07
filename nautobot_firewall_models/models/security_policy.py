@@ -34,16 +34,25 @@ class PolicyRule(PrimaryModel):
 
     name = models.CharField(max_length=CHARFIELD_MAX_LENGTH)
     source_users = models.ManyToManyField(
-        blank=True, to="nautobot_firewall_models.UserObject", related_name="policy_rules"
+        blank=True, to="nautobot_firewall_models.UserObject", related_name="policy_rules", verbose_name="Source Users"
     )
     source_user_groups = models.ManyToManyField(
-        blank=True, to="nautobot_firewall_models.UserObjectGroup", related_name="policy_rules"
+        blank=True,
+        to="nautobot_firewall_models.UserObjectGroup",
+        related_name="policy_rules",
+        verbose_name="Source User Groups",
     )
     source_addresses = models.ManyToManyField(
-        blank=True, to="nautobot_firewall_models.AddressObject", related_name="source_policy_rules"
+        blank=True,
+        to="nautobot_firewall_models.AddressObject",
+        related_name="source_policy_rules",
+        verbose_name="Source Addresses",
     )
     source_address_groups = models.ManyToManyField(
-        blank=True, to="nautobot_firewall_models.AddressObjectGroup", related_name="source_policy_rules"
+        blank=True,
+        to="nautobot_firewall_models.AddressObjectGroup",
+        related_name="source_policy_rules",
+        verbose_name="Source Address Groups",
     )
     source_zone = models.ForeignKey(
         to="nautobot_firewall_models.Zone",
@@ -53,18 +62,28 @@ class PolicyRule(PrimaryModel):
         related_name="source_policy_rules",
     )
     source_services = models.ManyToManyField(
-        blank=True, to="nautobot_firewall_models.ServiceObject", related_name="source_policy_rules"
+        blank=True,
+        to="nautobot_firewall_models.ServiceObject",
+        related_name="source_policy_rules",
+        verbose_name="Source Services",
     )
     source_service_groups = models.ManyToManyField(
-        blank=True, to="nautobot_firewall_models.ServiceObjectGroup", related_name="source_policy_rules"
+        blank=True,
+        to="nautobot_firewall_models.ServiceObjectGroup",
+        related_name="source_policy_rules",
+        verbose_name="Source Service Groups",
     )
     destination_addresses = models.ManyToManyField(
-        blank=True, to="nautobot_firewall_models.AddressObject", related_name="destination_policy_rules"
+        blank=True,
+        to="nautobot_firewall_models.AddressObject",
+        related_name="destination_policy_rules",
+        verbose_name="Destination Addresses",
     )
     destination_address_groups = models.ManyToManyField(
         blank=True,
         to="nautobot_firewall_models.AddressObjectGroup",
         related_name="destination_policy_rules",
+        verbose_name="Destination Address Groups",
     )
     destination_zone = models.ForeignKey(
         to="nautobot_firewall_models.Zone",
@@ -72,14 +91,19 @@ class PolicyRule(PrimaryModel):
         null=True,
         blank=True,
         related_name="destination_policy_rules",
+        verbose_name="Destination Zone",
     )
     destination_services = models.ManyToManyField(
-        blank=True, to="nautobot_firewall_models.ServiceObject", related_name="destination_policy_rules"
+        blank=True,
+        to="nautobot_firewall_models.ServiceObject",
+        related_name="destination_policy_rules",
+        verbose_name="Destination Services",
     )
     destination_service_groups = models.ManyToManyField(
         blank=True,
         to="nautobot_firewall_models.ServiceObjectGroup",
         related_name="destination_policy_rules",
+        verbose_name="Destination Service Groups",
     )
     action = models.CharField(choices=choices.ACTION_CHOICES, max_length=CHARFIELD_MAX_LENGTH)
     log = models.BooleanField(default=False)
@@ -92,9 +116,12 @@ class PolicyRule(PrimaryModel):
         blank=True, to="nautobot_firewall_models.ApplicationObject", related_name="policy_rules"
     )
     application_groups = models.ManyToManyField(
-        blank=True, to="nautobot_firewall_models.ApplicationObjectGroup", related_name="policy_rules"
+        blank=True,
+        to="nautobot_firewall_models.ApplicationObjectGroup",
+        related_name="policy_rules",
+        verbose_name="Application Groups",
     )
-    request_id = models.CharField(max_length=CHARFIELD_MAX_LENGTH, blank=True)
+    request_id = models.CharField(max_length=CHARFIELD_MAX_LENGTH, blank=True, verbose_name="Request ID")
     description = models.CharField(max_length=1024, blank=True)
     index = models.PositiveSmallIntegerField(null=True, blank=True)
 
@@ -182,18 +209,22 @@ class Policy(PrimaryModel):
         blank=True,
     )
     name = models.CharField(max_length=CHARFIELD_MAX_LENGTH, unique=True)
-    policy_rules = models.ManyToManyField(to=PolicyRule, blank=True, related_name="policies")
+    policy_rules = models.ManyToManyField(
+        to=PolicyRule, blank=True, related_name="policies", verbose_name="Policy Rules"
+    )
     assigned_devices = models.ManyToManyField(
         to="dcim.Device",
         through="PolicyDeviceM2M",
         related_name="firewall_policies",
         blank=True,
+        verbose_name="Assigned Devices",
     )
     assigned_dynamic_groups = models.ManyToManyField(
         to="extras.DynamicGroup",
         through="PolicyDynamicGroupM2M",
         related_name="firewall_policies",
         blank=True,
+        verbose_name="Assigned Dynamic Groups",
     )
     status = StatusField(
         on_delete=models.PROTECT,
@@ -224,7 +255,7 @@ class Policy(PrimaryModel):
 
     def to_json(self):
         """Convience method to convert to json."""
-        return model_to_json(self, "nautobot_firewall_models.api.serializers.PolicySerializer")
+        return model_to_json(self)
 
     def __str__(self):
         """Stringify instance."""
@@ -258,7 +289,7 @@ class PolicyDynamicGroupM2M(BaseModel):
     """Through model to add weight to the the Policy & DynamicGroup relationship."""
 
     policy = models.ForeignKey("nautobot_firewall_models.Policy", on_delete=models.CASCADE)
-    dynamic_group = models.ForeignKey("extras.DynamicGroup", on_delete=models.PROTECT)
+    dynamic_group = models.ForeignKey("extras.DynamicGroup", on_delete=models.PROTECT, verbose_name="Dynamic Group")
     weight = models.PositiveSmallIntegerField(default=100)
 
     class Meta:

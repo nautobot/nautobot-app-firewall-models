@@ -1,12 +1,12 @@
 {% block content %}
-<div class="panel panel-default">
-    <div class="panel-heading"><strong>Security Policies</strong></div>
+<div class="card">
+    <div class="card-header"><strong>Security Policies</strong></div>
     {% if not policies %}
-    <div class="panel-body">
-        <span class="text-muted">None</span>
+    <div class="card-body">
+        <span class="text-secondary">None</span>
     </div>
     {% else %}
-    <table class="table table-hover panel-body">
+    <table class="table table-hover card-body">
         <tr>
             <th>Policy</th>
             <th>Weight</th>
@@ -40,12 +40,12 @@
                 </tr>
             {% endfor %}
             {% if policies|length == 0 and nat_policies|length == 0 %}
-                <div class="panel-body">
-                    <span class="text-muted">None</span>
+                <div class="card-body">
+                    <span class="text-secondary">None</span>
                 </div>
             {% endif %}
         </tbody>
     </table>
     {% endif %}
 </div>
-{% endblock %}
+{% endblock content %}
