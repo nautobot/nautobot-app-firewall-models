@@ -21,7 +21,7 @@ More screenshots can be found in the [Using the App](https://docs.nautobot.com/p
 
 ![Navigation Menu](https://raw.githubusercontent.com/nautobot/nautobot-app-firewall-models/develop/docs/images/navmenu.png "Navigation Menu")
 
-![Policy View](https://raw.githubusercontent.com/nautobot/nautobot-app-firewall-models/develop/docs/images/policy.png "Policy View")
+![Policy View](https://raw.githubusercontent.com/nautobot/nautobot-app-firewall-models/develop/docs/images/policy-dark.png "Policy View")
 
 ## Try it out!
 
