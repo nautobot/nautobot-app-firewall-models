@@ -1,6 +1,6 @@
 {
     "cookiecutter": {
-        "codeowner_github_usernames": "@whitej6 @itdependsnetworks @jdrew82",
+        "codeowner_github_usernames": "@itdependsnetworks @jdrew82",
         "full_name": "Network to Code, LLC",
         "email": "opensource@networktocode.com",
         "github_org": "nautobot",
