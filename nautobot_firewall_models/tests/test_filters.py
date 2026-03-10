@@ -14,13 +14,8 @@ from nautobot_firewall_models.models import UserObject
 from .fixtures import create_capirca_env
 
 
-<<<<<<< HEAD
-class CapircaPolicyModelTestCase(TestCase):
+class CapircaPolicyModelTestCase(TestCase):  # pylint: disable=too-many-ancestors
     """Test filtering operations for CapircaPolicy Model."""
-=======
-class IPRangeFilterTestCase(FilterTestCases.FilterTestCase):  # pylint: disable=too-many-ancestors
-    """IPRange Filter Test Case."""
->>>>>>> 7b3db7d (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
     queryset = models.CapircaPolicy.objects.all()
     filterset = filters.CapircaPolicyFilterSet

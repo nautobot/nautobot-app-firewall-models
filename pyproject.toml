@@ -1,12 +1,7 @@
 [tool.poetry]
 name = "nautobot-firewall-models"
-<<<<<<< HEAD
 version = "3.0.1a0"
-description = "Nautobot app to model firewall objects."
-=======
-version = "0.1.0a0"
 description = "Nautobot App to model firewall and security objects. Allows users to model policies in a vendor-neutral manner and use that data to drive network security automation"
->>>>>>> 7b3db7d (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 authors = ["Network to Code, LLC <opensource@networktocode.com>"]
 license = "Apache-2.0"
 readme = "README.md"

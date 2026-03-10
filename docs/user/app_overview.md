@@ -7,7 +7,6 @@ This document provides an overview of the App including critical information and
 
 ## Description
 
-<<<<<<< HEAD
 An app for [Nautobot](https://github.com/nautobot/nautobot) that is meant to model any of the following:
 
 - Layer 4 firewall policies
@@ -16,10 +15,6 @@ An app for [Nautobot](https://github.com/nautobot/nautobot) that is meant to mod
 - Generation of firewall configurations, via Capirca
 
 Future development will include the ability to onboard an existing access list from a device and the ability to generate device configuration.
-=======
-![Main Page](../media/ss_main_page_light.png#only-light)
-![Main Page](../media/ss_main_page_dark.png#only-dark)
->>>>>>> 7b3db7d (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
 
 ## Audience (User Personas) - Who should use this App?
 

@@ -191,11 +191,7 @@ class AddressObjectGroupBulkEditForm(NautobotBulkEditForm):
         ]
 
 
-<<<<<<< HEAD
-class ApplicationObjectFilterForm(NautobotFilterForm):
-=======
-class IPRangeFilterForm(NautobotFilterForm):  # pylint: disable=too-many-ancestors
->>>>>>> 7b3db7d (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
+class ApplicationObjectFilterForm(NautobotFilterForm):  # pylint: disable=too-many-ancestors
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]
