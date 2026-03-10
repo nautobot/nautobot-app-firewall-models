@@ -31,7 +31,7 @@ class IPRangeBulkEditForm(TagsBulkEditFormMixin, NautobotBulkEditForm):  # pylin
         ]
 
 
-class IPRangeFilterForm(NautobotFilterForm):
+class IPRangeFilterForm(NautobotFilterForm):  # pylint: disable=too-many-ancestors
     """Filter form to filter searches."""
 
     model = models.IPRange

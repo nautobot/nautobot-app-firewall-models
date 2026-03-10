@@ -6,7 +6,7 @@ from nautobot_firewall_models import filters, models
 from nautobot_firewall_models.tests import fixtures
 
 
-class IPRangeFilterTestCase(FilterTestCases.FilterTestCase):
+class IPRangeFilterTestCase(FilterTestCases.FilterTestCase):  # pylint: disable=too-many-ancestors
     """IPRange Filter Test Case."""
 
     queryset = models.IPRange.objects.all()
