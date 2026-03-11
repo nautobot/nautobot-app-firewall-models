@@ -14,7 +14,7 @@ from nautobot_firewall_models.models import UserObject
 from .fixtures import create_capirca_env
 
 
-class CapircaPolicyModelTestCase(TestCase):
+class CapircaPolicyModelTestCase(TestCase):  # pylint: disable=too-many-ancestors
     """Test filtering operations for CapircaPolicy Model."""
 
     queryset = models.CapircaPolicy.objects.all()
