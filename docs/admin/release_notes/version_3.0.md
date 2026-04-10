@@ -14,6 +14,27 @@ We will continue to support the previous major release for users of Nautobot LTM
 
 <!-- towncrier release notes start -->
 
+## [v3.0.1 (2026-04-10)](https://github.com/nautobot/nautobot-app-firewall-models/releases/tag/v3.0.1)
+
+### Removed
+
+- [#366](https://github.com/nautobot/nautobot-app-firewall-models/issues/366) - Removed former employee from codeowners and cookiecutter.
+
+### Fixed
+
+- [#319](https://github.com/nautobot/nautobot-app-firewall-models/issues/319) - Fixed an incompatibility when slugifying capirca names that start with a number by prefixing the name with an underscore.
+- [#361](https://github.com/nautobot/nautobot-app-firewall-models/issues/361) - Restored missing action buttons on PolicyRule and NATPolicyRule tables and fixed an issue with the UserObject q filter.
+
+### Documentation
+
+- [#367](https://github.com/nautobot/nautobot-app-firewall-models/issues/367) - Updated the documentation to include version 3.0 screenshots.
+
+### Housekeeping
+
+- Rebaked from the cookie `nautobot-app-v3.0.0`.
+- Rebaked from the cookie `nautobot-app-v3.1.2`.
+- Rebaked from the cookie `nautobot-app-v3.1.3`.
+
 ## [v3.0.0 (2025-11-17)](https://github.com/nautobot/nautobot-app-firewall-models/releases/tag/v3.0.0)
 
 ### Added
