@@ -191,7 +191,7 @@ class AddressObjectGroupBulkEditForm(NautobotBulkEditForm):
         ]
 
 
-class ApplicationObjectFilterForm(NautobotFilterForm):
+class ApplicationObjectFilterForm(NautobotFilterForm):  # pylint: disable=too-many-ancestors
     """Filter form to filter searches."""
 
     field_order = ["q", "name"]

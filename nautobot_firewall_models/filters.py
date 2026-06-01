@@ -125,8 +125,15 @@ class ServiceObjectGroupFilterSet(BaseFilterSet, NautobotFilterSet):
         fields = [i.name for i in model._meta.get_fields() if not isinstance(i, GenericRelation)]
 
 
-class UserObjectFilterSet(BaseFilterSet, NautobotFilterSet):
+class UserObjectFilterSet(NautobotFilterSet):
     """Filter for UserObject."""
+
+    q = SearchFilter(
+        filter_predicates={
+            "name": "icontains",
+            "username": "icontains",
+        }
+    )
 
     class Meta:
         """Meta attributes for filter."""
