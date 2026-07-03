@@ -15,15 +15,24 @@
                 {% comment %}This template is used in two places: the Policy detail view (where object is a Policy instance) and the PolicyRule detail view (where object is a PolicyRule instance). 
                 If we're in the Policy detail view, loop through all associated PolicyRules. If we're in the PolicyRule detail view, just display that single rule.{% endcomment %}
                 {% if object.policy_rules %}
-                    {% with rules=object.policy_rules.all %}
-                        {% for rule in rules %}
+                    {% if policy_rules_page %}
+                        {% for rule in policy_rules_page %}
                             {% include "nautobot_firewall_models/inc/policy_rules_tablerow.html" with rule=rule %}
                         {% endfor %}
-                    {% endwith %}
+                    {% else %}
+                        {% with rules=object.policy_rules.all %}
+                            {% for rule in rules %}
+                                {% include "nautobot_firewall_models/inc/policy_rules_tablerow.html" with rule=rule %}
+                            {% endfor %}
+                        {% endwith %}
+                    {% endif %}
                 {% else %}
                     {% include "nautobot_firewall_models/inc/policy_rules_tablerow.html" with rule=object %}
                 {% endif %}
             </table>
+            {% if policy_rules_page %}
+                {% include "inc/paginator.html" with page=policy_rules_page paginator=policy_rules_paginator %}
+            {% endif %}
         </div>
     </div>
 </div>
