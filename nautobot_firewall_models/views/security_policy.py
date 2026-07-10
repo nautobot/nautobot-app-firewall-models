@@ -3,6 +3,7 @@
 from django.shortcuts import redirect
 from django.urls import reverse
 from nautobot.apps.views import NautobotUIViewSet
+from nautobot.core.views.paginator import EnhancedPaginator, get_paginate_count
 from rest_framework.decorators import action
 
 from nautobot_firewall_models import details, filters, forms, models, tables
@@ -68,6 +69,15 @@ class PolicyUIViewSet(NautobotUIViewSet):
             "extras.change_dynamicgroup",
             "nautobot_firewall_models.change_policy",
         ]
+
+        if instance:
+            rules = instance.policy_rules.all()
+            per_page = get_paginate_count(request)
+            page_number = request.GET.get("page", 1)
+            paginator = EnhancedPaginator(rules, per_page)
+            rules_page = paginator.get_page(page_number)
+            context["policy_rules_page"] = rules_page
+            context["policy_rules_paginator"] = paginator
 
         return context
 
