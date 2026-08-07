@@ -7,7 +7,7 @@ labels:
 
 ### Environment
 * Python version:  <!-- Example: 3.11.4 -->
-* Nautobot version:  <!-- Example: 3.0.0 -->
+* Nautobot version:  <!-- Example: 3.1.0 -->
 * nautobot-firewall-models version:  <!-- Example: 1.0.0 -->
 
 <!-- What did you expect to happen? -->
