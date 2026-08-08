@@ -216,17 +216,10 @@ jobs:
         include:
           - python-version: "3.10"
             db-backend: "postgresql"
-<<<<<<< HEAD
-            nautobot-version: "3.0.0"
-          # - python-version: "3.13"  TODO: Enable once #268 is resolved.
+            nautobot-version: "3.1.0"
+          # - python-version: "3.14"  TODO: Enable once #268 is resolved.
           #   db-backend: "mysql"
           #   nautobot-version: "stable"
-=======
-            nautobot-version: "3.1.0"
-          - python-version: "3.14"
-            db-backend: "mysql"
-            nautobot-version: "stable"
->>>>>>> 896c4cf (Cookie updated targeting develop by NetworkToCode Cookie Drift Manager Tool)
     runs-on: "ubuntu-latest"
     env:
       INVOKE_NAUTOBOT_FIREWALL_MODELS_PYTHON_VER: "${{ matrix.python-version }}"
