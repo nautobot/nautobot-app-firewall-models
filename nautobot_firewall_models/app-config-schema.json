@@ -1,17 +1,13 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nautobot/nautobot-app-firewall-models/develop/nautobot_firewall_models/app-config-schema.json",
-    "$comment": "TBD: Update $id, replace `develop` with the future release tag",
     "type": "object",
     "properties": {
+        "default_status": {
+            "type": "string",
+            "default": "active"
+        },
         "allowed_status": {
             "type": "array",
-            "items": {
-                "type": "string"
-            },
-            "default": [
-                "Active"
-            ]
+            "default": []
         },
         "capirca_remark_pass": {
             "type": "boolean",
@@ -19,11 +15,22 @@
         },
         "capirca_os_map": {
             "type": "object",
-            "default": {}
+            "properties": {
+                "cisco_ios": {
+                    "type": "string",
+                    "enum": ["cisco", "ciscoasa", "cisconx", "ciscoxr"],
+                    "default": "cisco"
+                },
+                "arista_eos": {
+                    "type": "string",
+                    "enum": ["arista"],
+                    "default": "arista"
+                }
+            },
+            "additionalProperties": false
         },
-        "protect_on_delete": {
-            "type": "boolean",
-            "default": true
+        "custom_capirca": {
+            "type": "string"
         }
     },
     "additionalProperties": false
