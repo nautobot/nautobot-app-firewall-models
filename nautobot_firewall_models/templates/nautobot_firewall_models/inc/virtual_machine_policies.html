@@ -1,0 +1,46 @@
+{% block content %}
+<div class="card">
+    <div class="card-header"><strong>Security Policies Directly Assigned</strong></div>
+    {% if not policies %}
+    <div class="card-body">
+        <span class="text-secondary">None</span>
+    </div>
+    {% else %}
+    <table class="table table-hover card-body">
+        <tr>
+            <th>Policy</th>
+            <th>Weight</th>
+            <th>Type</th>
+        </tr>
+        <tbody>
+            {% for policy in policies %}
+                <tr>
+                    <td>
+                        <a href="{{ policy.policy.get_absolute_url }}">{{ policy.policy }}</a>
+                    </td>
+                    <td>
+                        {{ policy.weight }}
+                    </td>
+                    <td>
+                        Firewall
+                    </td>
+                </tr>
+            {% endfor %}
+            {% for policy in nat_policies %}
+                <tr>
+                    <td>
+                        <a href="{{ policy.policy.get_absolute_url }}">{{ policy.nat_policy }}</a>
+                    </td>
+                    <td>
+                        {{ policy.weight }}
+                    </td>
+                    <td>
+                        NAT
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock content %}

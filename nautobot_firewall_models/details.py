@@ -65,6 +65,7 @@ class NATPolicyFieldsPanel(BaseFieldsPanelMixin, ui.ObjectFieldsPanel):
 
     key_and_reverse_url_string = {
         "assigned_devices__all": "dcim:device_list",
+        "assigned_virtual_machines__all": "virtualization:virtualmachine_list",
         "assigned_dynamic_groups__all": "extras:dynamicgroup_list",
     }
 
@@ -80,6 +81,7 @@ class PolicyFieldsPanel(BaseFieldsPanelMixin, ui.ObjectFieldsPanel):
 
     key_and_reverse_url_string = {
         "assigned_devices__all": "dcim:device_list",
+        "assigned_virtual_machines__all": "virtualization:virtualmachine_list",
         "assigned_dynamic_groups__all": "extras:dynamicgroup_list",
     }
 
@@ -236,9 +238,21 @@ nat_policy = ui.ObjectDetailContent(
         NATPolicyFieldsPanel(
             section=ui.SectionChoices.LEFT_HALF,
             weight=100,
-            # Replace with `__all__` once order is fixed, needs additional_fields=["assigned_devices__all", "assigned_dynamic_groups__all"]
-            fields=["name", "description", "assigned_devices__all", "assigned_dynamic_groups__all", "tenant", "status"],
-            key_transforms={"assigned_devices__all": "Devices", "assigned_dynamic_groups__all": "Dynamic Groups"},
+            # Replace with `__all__` once order is fixed, needs additional_fields=["assigned_devices__all", "assigned_virtual_machines__all", "assigned_dynamic_groups__all"]
+            fields=[
+                "name",
+                "description",
+                "assigned_devices__all",
+                "assigned_virtual_machines__all",
+                "assigned_dynamic_groups__all",
+                "tenant",
+                "status",
+            ],
+            key_transforms={
+                "assigned_devices__all": "Devices",
+                "assigned_virtual_machines__all": "Virtual Machines",
+                "assigned_dynamic_groups__all": "Dynamic Groups",
+            },
         ),
     ),
     extra_tabs=(
@@ -263,6 +277,18 @@ nat_policy = ui.ObjectDetailContent(
                     section=ui.SectionChoices.FULL_WIDTH,
                     weight=100,
                     template_path="nautobot_firewall_models/inc/nat_policy_device_weight.html",
+                ),
+            ),
+        ),
+        ui.Tab(
+            weight=ui.Tab.WEIGHT_CHANGELOG_TAB + 200,
+            tab_id="edit-virtualmachine-weight",
+            label="Edit Virtual Machine Weight",
+            panels=(
+                ui.Panel(
+                    section=ui.SectionChoices.FULL_WIDTH,
+                    weight=100,
+                    template_path="nautobot_firewall_models/inc/nat_policy_virtual_machine_weight.html",
                 ),
             ),
         ),
@@ -303,9 +329,21 @@ policy = ui.ObjectDetailContent(
         PolicyFieldsPanel(
             section=ui.SectionChoices.LEFT_HALF,
             weight=100,
-            # Replace with `__all__` once order is fixed, needs additional_fields=["assigned_devices__all", "assigned_dynamic_groups__all"]
-            fields=["name", "description", "assigned_devices__all", "assigned_dynamic_groups__all", "tenant", "status"],
-            key_transforms={"assigned_devices__all": "Devices", "assigned_dynamic_groups__all": "Dynamic Groups"},
+            # Replace with `__all__` once order is fixed, needs additional_fields=["assigned_devices__all", "assigned_virtual_machines__all", "assigned_dynamic_groups__all"]
+            fields=[
+                "name",
+                "description",
+                "assigned_devices__all",
+                "assigned_virtual_machines__all",
+                "assigned_dynamic_groups__all",
+                "tenant",
+                "status",
+            ],
+            key_transforms={
+                "assigned_devices__all": "Devices",
+                "assigned_virtual_machines__all": "Virtual Machines",
+                "assigned_dynamic_groups__all": "Dynamic Groups",
+            },
         ),
     ),
     extra_tabs=(
@@ -330,6 +368,18 @@ policy = ui.ObjectDetailContent(
                     section=ui.SectionChoices.FULL_WIDTH,
                     weight=100,
                     template_path="nautobot_firewall_models/inc/policy_device_weight.html",
+                ),
+            ),
+        ),
+        ui.Tab(
+            weight=ui.Tab.WEIGHT_CHANGELOG_TAB + 200,
+            tab_id="edit-virtualmachine-weight",
+            label="Edit Virtual Machine Weight",
+            panels=(
+                ui.Panel(
+                    section=ui.SectionChoices.FULL_WIDTH,
+                    weight=100,
+                    template_path="nautobot_firewall_models/inc/policy_virtual_machine_weight.html",
                 ),
             ),
         ),

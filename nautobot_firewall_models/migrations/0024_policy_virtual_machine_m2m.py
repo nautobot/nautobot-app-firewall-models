@@ -1,0 +1,92 @@
+import uuid
+
+import django.db.models.deletion
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+    dependencies = [
+        ("virtualization", "0001_initial"),
+        ("nautobot_firewall_models", "0023_alter_addressobject_description_and_more"),
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name="PolicyVirtualMachineM2M",
+            fields=[
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True
+                    ),
+                ),
+                ("weight", models.PositiveSmallIntegerField(default=100)),
+                (
+                    "policy",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="nautobot_firewall_models.policy"
+                    ),
+                ),
+                (
+                    "virtual_machine",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT, to="virtualization.virtualmachine"
+                    ),
+                ),
+            ],
+            options={
+                "ordering": ["weight"],
+                "unique_together": {("policy", "virtual_machine")},
+            },
+        ),
+        migrations.CreateModel(
+            name="NATPolicyVirtualMachineM2M",
+            fields=[
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True
+                    ),
+                ),
+                ("weight", models.PositiveSmallIntegerField(default=100)),
+                (
+                    "nat_policy",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="nautobot_firewall_models.natpolicy"
+                    ),
+                ),
+                (
+                    "virtual_machine",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT, to="virtualization.virtualmachine"
+                    ),
+                ),
+            ],
+            options={
+                "ordering": ["weight"],
+                "unique_together": {("nat_policy", "virtual_machine")},
+            },
+        ),
+        migrations.AddField(
+            model_name="policy",
+            name="assigned_virtual_machines",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="firewall_policies",
+                through="nautobot_firewall_models.PolicyVirtualMachineM2M",
+                to="virtualization.virtualmachine",
+                verbose_name="Assigned Virtual Machines",
+            ),
+        ),
+        migrations.AddField(
+            model_name="natpolicy",
+            name="assigned_virtual_machines",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="nat_policies",
+                through="nautobot_firewall_models.NATPolicyVirtualMachineM2M",
+                to="virtualization.virtualmachine",
+                verbose_name="Assigned Virtual Machines",
+            ),
+        ),
+    ]

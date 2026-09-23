@@ -155,6 +155,14 @@ class PolicyDynamicGroupM2MViewSet(ModelViewSet):
     filterset_class = filters.PolicyDynamicGroupM2MFilterSet
 
 
+class PolicyVirtualMachineM2MViewSet(ModelViewSet):
+    """PolicyVirtualMachineM2M viewset."""
+
+    queryset = models.PolicyVirtualMachineM2M.objects.all()
+    serializer_class = serializers.PolicyVirtualMachineM2MSerializer
+    filterset_class = filters.PolicyVirtualMachineM2MFilterSet
+
+
 class NATPolicyDeviceM2MViewSet(ModelViewSet):
     """NATPolicyDeviceM2M viewset."""
 
@@ -169,3 +177,11 @@ class NATPolicyDynamicGroupM2MViewSet(ModelViewSet):
     queryset = models.NATPolicyDynamicGroupM2M.objects.all()
     serializer_class = serializers.NATPolicyDynamicGroupM2MSerializer
     filterset_class = filters.NATPolicyDynamicGroupM2MFilterSet
+
+
+class NATPolicyVirtualMachineM2MViewSet(ModelViewSet):
+    """NATPolicyVirtualMachineM2M viewset."""
+
+    queryset = models.NATPolicyVirtualMachineM2M.objects.all()
+    serializer_class = serializers.NATPolicyVirtualMachineM2MSerializer
+    filterset_class = filters.NATPolicyVirtualMachineM2MFilterSet

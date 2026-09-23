@@ -9,6 +9,7 @@ from nautobot.dcim.models import Device, DeviceType, Location, Platform
 from nautobot.extras.models import Role, Status
 from nautobot.ipam.models import VRF, Prefix
 from nautobot.users.models import ObjectPermission
+from nautobot.virtualization.models import Cluster, VirtualMachine
 from rest_framework import status as drf_status
 
 from nautobot_firewall_models import models
@@ -493,4 +494,26 @@ class PolicyDeviceM2MAPIViewTest(APIViewTestCases.APIViewTestCase):
         cls.create_data = [
             {"device": dev1.id, "policy": policy.id, "weight": 100},
             {"device": dev2.id, "policy": policy.id, "weight": 200},
+        ]
+
+
+class PolicyVirtualMachineM2MAPIViewTest(APIViewTestCases.APIViewTestCase):
+    """Test the PolicyVirtualMachineM2M viewsets."""
+
+    model = models.PolicyVirtualMachineM2M
+    bulk_update_data = {"weight": 1000}
+
+    @classmethod
+    def setUpTestData(cls):
+        """Create test data for API calls."""
+        fixtures.assign_policies()
+        policy = models.Policy.objects.first()
+        status = Status.objects.get(name="Active")
+        cluster = Cluster.objects.get(name="DFW02 Cluster")
+        vm1 = VirtualMachine.objects.create(name="TEST-VM-01", cluster=cluster, status=status)
+        vm2 = VirtualMachine.objects.create(name="TEST-VM-02", cluster=cluster, status=status)
+
+        cls.create_data = [
+            {"virtual_machine": vm1.id, "policy": policy.id, "weight": 100},
+            {"virtual_machine": vm2.id, "policy": policy.id, "weight": 200},
         ]

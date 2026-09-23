@@ -201,7 +201,7 @@ class Policy(PrimaryModel):
     """
     The overarching model that is the full firewall policy with all underlying rules and child objects.
 
-    Each Policy can be assigned to both devices and to dynamic groups which in turn can assign the policy to a related device.
+    Each Policy can be assigned to devices, virtual machines, and to dynamic groups which in turn can assign the policy to a related device or virtual machine.
     """
 
     description = models.CharField(
@@ -218,6 +218,13 @@ class Policy(PrimaryModel):
         related_name="firewall_policies",
         blank=True,
         verbose_name="Assigned Devices",
+    )
+    assigned_virtual_machines = models.ManyToManyField(
+        to="virtualization.VirtualMachine",
+        through="PolicyVirtualMachineM2M",
+        related_name="firewall_policies",
+        blank=True,
+        verbose_name="Assigned Virtual Machines",
     )
     assigned_dynamic_groups = models.ManyToManyField(
         to="extras.DynamicGroup",
@@ -283,6 +290,26 @@ class PolicyDeviceM2M(BaseModel):
     def __str__(self):
         """Stringify instance."""
         return f"{self.policy.name} - {self.device.name} - {self.weight}"
+
+
+class PolicyVirtualMachineM2M(BaseModel):
+    """Through model to add weight to the the Policy & VirtualMachine relationship."""
+
+    policy = models.ForeignKey("nautobot_firewall_models.Policy", on_delete=models.CASCADE)
+    virtual_machine = models.ForeignKey(
+        "virtualization.VirtualMachine", on_delete=models.PROTECT, verbose_name="Virtual Machine"
+    )
+    weight = models.PositiveSmallIntegerField(default=100)
+
+    class Meta:
+        """Meta class."""
+
+        ordering = ["weight"]
+        unique_together = ["policy", "virtual_machine"]
+
+    def __str__(self):
+        """Stringify instance."""
+        return f"{self.policy.name} - {self.virtual_machine.name} - {self.weight}"
 
 
 class PolicyDynamicGroupM2M(BaseModel):
