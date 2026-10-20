@@ -1,5 +1,7 @@
 """Rule Object Viewsets."""
 
+from types import SimpleNamespace
+
 from django.shortcuts import redirect
 from django.urls import reverse
 from nautobot.apps.views import NautobotUIViewSet
@@ -78,6 +80,14 @@ class PolicyUIViewSet(NautobotUIViewSet):
             rules_page = paginator.get_page(page_number)
             context["policy_rules_page"] = rules_page
             context["policy_rules_paginator"] = paginator
+
+            # `inc/paginator.html` builds its links from `request.GET`, which does not carry the
+            # active tab (tabs are swapped client-side via pushState, not a page reload). Pass it
+            # a stand-in request whose GET already pins `tab=policy-rules`, so paging through the
+            # rules keeps that tab active on reload instead of bouncing back to the default tab.
+            policy_rules_querydict = request.GET.copy()
+            policy_rules_querydict["tab"] = "policy-rules"
+            context["policy_rules_request"] = SimpleNamespace(GET=policy_rules_querydict)
 
         return context
 

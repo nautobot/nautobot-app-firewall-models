@@ -1,2 +1,1 @@
-plaintext title="changes/382.added"
-Added pagination support for policy rules in the Policy object.
+Pagination no longer switches tabs after use.

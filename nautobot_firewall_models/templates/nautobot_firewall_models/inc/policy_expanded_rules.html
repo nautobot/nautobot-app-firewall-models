@@ -31,8 +31,7 @@
                 {% endif %}
             </table>
             {% if policy_rules_page %}
-                {% include "inc/paginator.html" with page=policy_rules_page paginator=policy_rules_paginator %}
-            {% endif %}
+                {% include "inc/paginator.html" with page=policy_rules_page paginator=policy_rules_paginator request=policy_rules_request %}            {% endif %}
         </div>
     </div>
 </div>
