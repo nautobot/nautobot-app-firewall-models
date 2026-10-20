@@ -1,0 +1,2 @@
+Added virtual machine support for NATPolicy and Policy models. Added "SECURITY POLICIES VIA DYNAMIC GROUPS"
+and "SECURITY POLICIES DIRECTLY ASSIGNED" fields to virtual machine objects.
