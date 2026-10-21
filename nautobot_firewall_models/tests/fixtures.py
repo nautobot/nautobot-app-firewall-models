@@ -418,9 +418,7 @@ def assign_policies():  # pylint: disable=too-many-locals
     NATPolicyVirtualMachineM2M.objects.get_or_create(nat_policy=nat_policy_1, virtual_machine=vm1, weight=150)
     NATPolicyVirtualMachineM2M.objects.get_or_create(nat_policy=nat_policy_2, virtual_machine=vm1, weight=200)
     NATPolicyVirtualMachineM2M.objects.get_or_create(nat_policy=nat_policy_1, virtual_machine=vm2)
-    NATPolicyDynamicGroupM2M.objects.get_or_create(
-        nat_policy=nat_policy_3, dynamic_group=vm_dynamic_group, weight=1000
-    )
+    NATPolicyDynamicGroupM2M.objects.get_or_create(nat_policy=nat_policy_3, dynamic_group=vm_dynamic_group, weight=1000)
 
 
 def create_capirca_env():

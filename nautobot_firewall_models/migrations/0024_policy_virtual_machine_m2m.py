@@ -29,9 +29,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "virtual_machine",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.PROTECT, to="virtualization.virtualmachine"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to="virtualization.virtualmachine"),
                 ),
             ],
             options={
@@ -57,9 +55,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "virtual_machine",
-                    models.ForeignKey(
-                        on_delete=django.db.models.deletion.PROTECT, to="virtualization.virtualmachine"
-                    ),
+                    models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to="virtualization.virtualmachine"),
                 ),
             ],
             options={
