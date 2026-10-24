@@ -4,10 +4,11 @@
 # pylint: disable=invalid-name
 # pylint: disable=duplicate-code
 from django.urls import reverse
-from nautobot.apps.testing import ViewTestCases, post_data
+from nautobot.apps.testing import TestCase, ViewTestCases, post_data
 from nautobot.dcim.models import Device
 from nautobot.extras.models import Status
 from nautobot.users.models import ObjectPermission
+from nautobot.virtualization.models import VirtualMachine
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
@@ -625,6 +626,29 @@ class NATPolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
         # Post succeeds
         self.assertHttpStatus(self.client.post(**post_request), 302)
+
+
+class VirtualMachineDetailViewTest(TestCase):
+    """Test the template extensions rendered on the Virtual Machine detail view."""
+
+    def setUp(self):
+        """Create test data."""
+        super().setUp()
+        self.add_permissions("virtualization.view_virtualmachine")
+        fixtures.assign_policies()
+
+    def test_virtualmachine_detail_policies(self):
+        """Test that policies and dynamic group policies are rendered on the Virtual Machine detail view."""
+        vm = VirtualMachine.objects.get(name="DFW02-VM00")
+        response = self.client.get(vm.get_absolute_url())
+        self.assertHttpStatus(response, 200)
+        content = response.content.decode()
+        for m2m in vm.policyvirtualmachinem2m_set.all():
+            self.assertIn(m2m.policy.name, content)
+        for m2m in vm.natpolicyvirtualmachinem2m_set.all():
+            self.assertIn(m2m.nat_policy.name, content)
+        for dynamic_group in vm.dynamic_groups.all():
+            self.assertIn(dynamic_group.name, content)
 
 
 class CapircaPolicyUIViewTest(ViewTestCases.GetObjectViewTestCase, ViewTestCases.ListObjectsViewTestCase):

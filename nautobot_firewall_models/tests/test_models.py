@@ -338,6 +338,24 @@ class TestNATPolicyModels(TestCase):
         )
 
 
+class TestVirtualMachineM2MModels(TestCase):
+    """Test the Virtual Machine through models."""
+
+    def setUp(self) -> None:
+        """Create the data."""
+        fixtures.assign_policies()
+
+    def test_policyvirtualmachinem2m_str(self):
+        """Test the string representation of PolicyVirtualMachineM2M."""
+        obj = PolicyVirtualMachineM2M.objects.first()
+        self.assertEqual(str(obj), f"{obj.policy.name} - {obj.virtual_machine.name} - {obj.weight}")
+
+    def test_natpolicyvirtualmachinem2m_str(self):
+        """Test the string representation of NATPolicyVirtualMachineM2M."""
+        obj = NATPolicyVirtualMachineM2M.objects.first()
+        self.assertEqual(str(obj), f"{obj.nat_policy.name} - {obj.virtual_machine.name} - {obj.weight}")
+
+
 class TestCapircaModels(TestCase):
     """Test the Capirca model."""
 
