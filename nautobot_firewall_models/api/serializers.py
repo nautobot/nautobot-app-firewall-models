@@ -226,6 +226,16 @@ class PolicyDynamicGroupM2MSerializer(ValidatedModelSerializer):
         fields = "__all__"
 
 
+class PolicyVirtualMachineM2MSerializer(ValidatedModelSerializer):
+    """PolicyVirtualMachineM2M Serializer."""
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.PolicyVirtualMachineM2M
+        fields = "__all__"
+
+
 class NATPolicyDeviceM2MSerializer(ValidatedModelSerializer):
     """NATPolicyDeviceM2M Serializer."""
 
@@ -243,4 +253,14 @@ class NATPolicyDynamicGroupM2MSerializer(ValidatedModelSerializer):
         """Meta attributes."""
 
         model = models.NATPolicyDynamicGroupM2M
+        fields = "__all__"
+
+
+class NATPolicyVirtualMachineM2MSerializer(ValidatedModelSerializer):
+    """NATPolicyVirtualMachineM2M Serializer."""
+
+    class Meta:
+        """Meta attributes."""
+
+        model = models.NATPolicyVirtualMachineM2M
         fields = "__all__"

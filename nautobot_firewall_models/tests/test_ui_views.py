@@ -4,10 +4,11 @@
 # pylint: disable=invalid-name
 # pylint: disable=duplicate-code
 from django.urls import reverse
-from nautobot.apps.testing import ViewTestCases, post_data
+from nautobot.apps.testing import TestCase, ViewTestCases, post_data
 from nautobot.dcim.models import Device
 from nautobot.extras.models import Status
 from nautobot.users.models import ObjectPermission
+from nautobot.virtualization.models import VirtualMachine
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
@@ -371,6 +372,45 @@ class PolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         # Post succeeds
         self.assertHttpStatus(self.client.post(**post_request), 302)
 
+    def test_virtualmachine_weight_permissions(self):
+        """Test that the virtual machine weights cannot be updated without virtualization.change_virtualmachine and nautobot_firewall_models.change_policy permissions."""
+        # Remove all user permissions and add view permissions for virtualization.virtualmachine and nautobot_firewall_models.policy
+        ObjectPermission.objects.all().delete()
+        self.add_permissions("virtualization.view_virtualmachine", "nautobot_firewall_models.view_policy")
+
+        # Retrieve the policy view and assert that the weight form field is disabled
+        fixtures.assign_policies()
+        policy = Policy.objects.get(name="Policy 2")
+
+        weight = policy.policyvirtualmachinem2m_set.first().weight
+        response = self.client.get(policy.get_absolute_url())
+        self.assertContains(
+            response,
+            f'<input id="virtualmachine-weight-input1" type="number" name="{policy.assigned_virtual_machines.first().pk}" value="{weight}" disabled>',
+            html=True,
+        )
+
+        # Assert that trying to submit the form with insufficient permissions fails
+        post_request = {
+            "path": reverse("plugins:nautobot_firewall_models:policy_virtual-machines", kwargs={"pk": policy.pk}),
+            "data": post_data({str(policy.assigned_virtual_machines.first().pk): "150"}),
+        }
+        self.assertHttpStatus(self.client.post(**post_request), 403)
+
+        # Give the user "change" permissions
+        self.add_permissions("virtualization.change_virtualmachine", "nautobot_firewall_models.change_policy")
+
+        # Form field is no longer disabled
+        response = self.client.get(policy.get_absolute_url())
+        self.assertContains(
+            response,
+            f'<input id="virtualmachine-weight-input1" type="number" name="{policy.assigned_virtual_machines.first().pk}" value="{weight}">',
+            html=True,
+        )
+
+        # Post succeeds
+        self.assertHttpStatus(self.client.post(**post_request), 302)
+
     def test_dynamicgroup_weight_permissions(self):
         """Test that the dynamicgroup weights cannot be updated without dcim.change_dynamicgroup and nautobot_firewall_models.change_policy permissions."""
 
@@ -508,6 +548,45 @@ class NATPolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
         # Post succeeds
         self.assertHttpStatus(self.client.post(**post_request), 302)
 
+    def test_virtualmachine_weight_permissions(self):
+        """Test that the virtual machine weights cannot be updated without virtualization.change_virtualmachine and nautobot_firewall_models.change_natpolicy permissions."""
+        # Remove all user permissions and add view permissions for virtualization.virtualmachine and nautobot_firewall_models.natpolicy
+        ObjectPermission.objects.all().delete()
+        self.add_permissions("virtualization.view_virtualmachine", "nautobot_firewall_models.view_natpolicy")
+
+        # Retrieve the policy view and assert that the weight form field is disabled
+        fixtures.assign_policies()
+        policy = NATPolicy.objects.get(name="NAT Policy 2")
+
+        weight = policy.natpolicyvirtualmachinem2m_set.first().weight
+        response = self.client.get(policy.get_absolute_url())
+        self.assertContains(
+            response,
+            f'<input id="virtualmachine-weight-input1" type="number" name="{policy.assigned_virtual_machines.first().pk}" value="{weight}" disabled>',
+            html=True,
+        )
+
+        # Assert that trying to submit the form with insufficient permissions fails
+        post_request = {
+            "path": reverse("plugins:nautobot_firewall_models:natpolicy_virtual-machines", kwargs={"pk": policy.pk}),
+            "data": post_data({str(policy.assigned_virtual_machines.first().pk): "150"}),
+        }
+        self.assertHttpStatus(self.client.post(**post_request), 403)
+
+        # Give the user "change" permissions
+        self.add_permissions("virtualization.change_virtualmachine", "nautobot_firewall_models.change_natpolicy")
+
+        # Form field is no longer disabled
+        response = self.client.get(policy.get_absolute_url())
+        self.assertContains(
+            response,
+            f'<input id="virtualmachine-weight-input1" type="number" name="{policy.assigned_virtual_machines.first().pk}" value="{weight}">',
+            html=True,
+        )
+
+        # Post succeeds
+        self.assertHttpStatus(self.client.post(**post_request), 302)
+
     def test_dynamicgroup_weight_permissions(self):
         """Test that the dynamicgroup weights cannot be updated without dcim.change_dynamicgroup and nautobot_firewall_models.change_natpolicy permissions."""
 
@@ -547,6 +626,29 @@ class NATPolicyUIViewTest(ViewTestCases.PrimaryObjectViewTestCase):
 
         # Post succeeds
         self.assertHttpStatus(self.client.post(**post_request), 302)
+
+
+class VirtualMachineDetailViewTest(TestCase):
+    """Test the template extensions rendered on the Virtual Machine detail view."""
+
+    def setUp(self):
+        """Create test data."""
+        super().setUp()
+        self.add_permissions("virtualization.view_virtualmachine")
+        fixtures.assign_policies()
+
+    def test_virtualmachine_detail_policies(self):
+        """Test that policies and dynamic group policies are rendered on the Virtual Machine detail view."""
+        vm = VirtualMachine.objects.get(name="DFW02-VM00")
+        response = self.client.get(vm.get_absolute_url())
+        self.assertHttpStatus(response, 200)
+        content = response.content.decode()
+        for m2m in vm.policyvirtualmachinem2m_set.all():
+            self.assertIn(m2m.policy.name, content)
+        for m2m in vm.natpolicyvirtualmachinem2m_set.all():
+            self.assertIn(m2m.nat_policy.name, content)
+        for dynamic_group in vm.dynamic_groups.all():
+            self.assertIn(dynamic_group.name, content)
 
 
 class CapircaPolicyUIViewTest(ViewTestCases.GetObjectViewTestCase, ViewTestCases.ListObjectsViewTestCase):

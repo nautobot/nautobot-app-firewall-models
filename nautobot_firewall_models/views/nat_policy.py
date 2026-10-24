@@ -64,6 +64,10 @@ class NATPolicyUIViewSet(NautobotUIViewSet):
         """Add extra permissions for edit-device-weight and edit-dynamicgroup-weight tabs."""
         context = super().get_extra_context(request, instance)
         context["device_weight_tab_perms"] = ["dcim.change_device", "nautobot_firewall_models.change_natpolicy"]
+        context["virtualmachine_weight_tab_perms"] = [
+            "virtualization.change_virtualmachine",
+            "nautobot_firewall_models.change_natpolicy",
+        ]
         context["dynamicgroup_weight_tab_perms"] = [
             "extras.change_dynamicgroup",
             "nautobot_firewall_models.change_natpolicy",
@@ -84,6 +88,23 @@ class NATPolicyUIViewSet(NautobotUIViewSet):
         form_data.pop("csrfmiddlewaretoken", None)
         for device, weight in form_data.items():
             m2m = models.NATPolicyDeviceM2M.objects.get(device=device, nat_policy=pk)
+            m2m.weight = weight[0]
+            m2m.validated_save()
+        return redirect(reverse("plugins:nautobot_firewall_models:natpolicy", kwargs={"pk": pk}))
+
+    @action(
+        detail=True,
+        methods=["post"],
+        custom_view_base_action="change",
+        custom_view_additional_permissions=["virtualization.change_virtualmachine"],
+    )
+    def virtual_machines(self, request, pk, *args, **kwargs):
+        # pylint: disable=invalid-name, arguments-differ
+        """Method to set weight on a VirtualMachine & NATPolicy Relationship."""
+        form_data = dict(request.POST)
+        form_data.pop("csrfmiddlewaretoken", None)
+        for virtual_machine, weight in form_data.items():
+            m2m = models.NATPolicyVirtualMachineM2M.objects.get(virtual_machine=virtual_machine, nat_policy=pk)
             m2m.weight = weight[0]
             m2m.validated_save()
         return redirect(reverse("plugins:nautobot_firewall_models:natpolicy", kwargs={"pk": pk}))

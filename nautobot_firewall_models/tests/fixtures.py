@@ -8,6 +8,7 @@ from nautobot.extras.models.statuses import Status
 from nautobot.ipam.models import VRF, Namespace, Prefix
 from nautobot.ipam.models import IPAddress as IPAddr
 from nautobot.tenancy.models import Tenant, TenantGroup
+from nautobot.virtualization.models import Cluster, ClusterType, VirtualMachine
 
 from nautobot_firewall_models.models import *  # pylint: disable=unused-wildcard-import, wildcard-import
 
@@ -391,14 +392,33 @@ def assign_policies():  # pylint: disable=too-many-locals
     )
     dynamic_group.filter = {"location": ["DFW02"]}
     dynamic_group.validated_save()
+    # Mapping policies to virtual machines
+    cluster_type, _ = ClusterType.objects.get_or_create(name="VMware")
+    cluster, _ = Cluster.objects.get_or_create(name="DFW02 Cluster", cluster_type=cluster_type, location=site1)
+    vm1, _ = VirtualMachine.objects.get_or_create(name="DFW02-VM00", cluster=cluster, status=status)
+    VirtualMachine.objects.get_or_create(name="DFW02-VM01", cluster=cluster, status=status)
+    vm2, _ = VirtualMachine.objects.get_or_create(name="HOU02-VM00", cluster=cluster, status=status)
+    vm_dynamic_group, _ = DynamicGroup.objects.get_or_create(
+        name="North Texas VMs", content_type=ContentType.objects.get_for_model(VirtualMachine)
+    )
+    vm_dynamic_group.filter = {"cluster": ["DFW02 Cluster"]}
+    vm_dynamic_group.validated_save()
     PolicyDeviceM2M.objects.get_or_create(policy=pol1, device=dev1, weight=150)
     PolicyDeviceM2M.objects.get_or_create(policy=pol2, device=dev1, weight=200)
     PolicyDeviceM2M.objects.get_or_create(policy=pol1, device=dev2)
     PolicyDynamicGroupM2M.objects.get_or_create(policy=pol3, dynamic_group=dynamic_group, weight=1000)
+    PolicyVirtualMachineM2M.objects.get_or_create(policy=pol1, virtual_machine=vm1, weight=150)
+    PolicyVirtualMachineM2M.objects.get_or_create(policy=pol2, virtual_machine=vm1, weight=200)
+    PolicyVirtualMachineM2M.objects.get_or_create(policy=pol1, virtual_machine=vm2)
+    PolicyDynamicGroupM2M.objects.get_or_create(policy=pol3, dynamic_group=vm_dynamic_group, weight=1000)
     NATPolicyDeviceM2M.objects.get_or_create(nat_policy=nat_policy_1, device=dev1, weight=150)
     NATPolicyDeviceM2M.objects.get_or_create(nat_policy=nat_policy_2, device=dev1, weight=200)
     NATPolicyDeviceM2M.objects.get_or_create(nat_policy=nat_policy_1, device=dev2)
     NATPolicyDynamicGroupM2M.objects.get_or_create(nat_policy=nat_policy_3, dynamic_group=dynamic_group, weight=1000)
+    NATPolicyVirtualMachineM2M.objects.get_or_create(nat_policy=nat_policy_1, virtual_machine=vm1, weight=150)
+    NATPolicyVirtualMachineM2M.objects.get_or_create(nat_policy=nat_policy_2, virtual_machine=vm1, weight=200)
+    NATPolicyVirtualMachineM2M.objects.get_or_create(nat_policy=nat_policy_1, virtual_machine=vm2)
+    NATPolicyDynamicGroupM2M.objects.get_or_create(nat_policy=nat_policy_3, dynamic_group=vm_dynamic_group, weight=1000)
 
 
 def create_capirca_env():

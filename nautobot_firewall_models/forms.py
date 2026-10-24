@@ -18,6 +18,7 @@ from nautobot.extras.models import DynamicGroup, Tag
 from nautobot.ipam.models import VRF, IPAddress, Prefix
 from nautobot.tenancy.forms import TenancyFilterForm, TenancyForm
 from nautobot.tenancy.models import Tenant
+from nautobot.virtualization.models import VirtualMachine
 
 from nautobot_firewall_models import choices, fields, models
 
@@ -630,7 +631,7 @@ class PolicyRuleBulkEditForm(NautobotBulkEditForm):
 class PolicyFilterForm(NautobotFilterForm, TenancyFilterForm):
     """Filter form to filter searches."""
 
-    field_order = ["q", "name", "assigned_devices", "assigned_dynamic_groups"]
+    field_order = ["q", "name", "assigned_devices", "assigned_virtual_machines", "assigned_dynamic_groups"]
 
     model = models.Policy
     q = forms.CharField(
@@ -640,6 +641,7 @@ class PolicyFilterForm(NautobotFilterForm, TenancyFilterForm):
     )
     name = forms.CharField(required=False, label="Name")
     assigned_devices = DynamicModelChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_virtual_machines = DynamicModelChoiceField(queryset=VirtualMachine.objects.all(), required=False)
     assigned_dynamic_groups = DynamicModelChoiceField(queryset=DynamicGroup.objects.all(), required=False)
 
 
@@ -647,6 +649,7 @@ class PolicyForm(NautobotModelForm, TenancyForm):
     """Policy creation/edit form."""
 
     assigned_devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_virtual_machines = DynamicModelMultipleChoiceField(queryset=VirtualMachine.objects.all(), required=False)
     assigned_dynamic_groups = DynamicModelMultipleChoiceField(queryset=DynamicGroup.objects.all(), required=False)
     policy_rules = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), required=False)
 
@@ -660,6 +663,7 @@ class PolicyForm(NautobotModelForm, TenancyForm):
             "policy_rules",
             "status",
             "assigned_devices",
+            "assigned_virtual_machines",
             "assigned_dynamic_groups",
             "tenant_group",
             "tenant",
@@ -673,6 +677,7 @@ class PolicyBulkEditForm(NautobotBulkEditForm):
     pk = DynamicModelMultipleChoiceField(queryset=models.Policy.objects.all(), widget=forms.MultipleHiddenInput)
     description = forms.CharField(required=False)
     assigned_devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_virtual_machines = DynamicModelMultipleChoiceField(queryset=VirtualMachine.objects.all(), required=False)
     assigned_dynamic_groups = DynamicModelMultipleChoiceField(queryset=DynamicGroup.objects.all(), required=False)
     policy_rules = DynamicModelMultipleChoiceField(queryset=models.PolicyRule.objects.all(), required=False)
     tenant = DynamicModelChoiceField(queryset=Tenant.objects.all(), required=False)
@@ -835,7 +840,7 @@ class NATPolicyRuleBulkEditForm(PolicyRuleBulkEditForm):
 class NATPolicyFilterForm(NautobotFilterForm, TenancyFilterForm):
     """Filter form to filter searches."""
 
-    field_order = ["q", "name", "assigned_devices", "assigned_dynamic_groups"]
+    field_order = ["q", "name", "assigned_devices", "assigned_virtual_machines", "assigned_dynamic_groups"]
 
     model = models.NATPolicy
     q = forms.CharField(
@@ -845,6 +850,7 @@ class NATPolicyFilterForm(NautobotFilterForm, TenancyFilterForm):
     )
     name = forms.CharField(required=False, label="Name")
     assigned_devices = DynamicModelChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_virtual_machines = DynamicModelChoiceField(queryset=VirtualMachine.objects.all(), required=False)
     assigned_dynamic_groups = DynamicModelChoiceField(queryset=DynamicGroup.objects.all(), required=False)
 
 
@@ -852,6 +858,7 @@ class NATPolicyForm(NautobotModelForm, TenancyForm):
     """NATPolicy creation/edit form."""
 
     assigned_devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_virtual_machines = DynamicModelMultipleChoiceField(queryset=VirtualMachine.objects.all(), required=False)
     assigned_dynamic_groups = DynamicModelMultipleChoiceField(queryset=DynamicGroup.objects.all(), required=False)
     nat_policy_rules = DynamicModelMultipleChoiceField(queryset=models.NATPolicyRule.objects.all(), required=False)
 
@@ -865,6 +872,7 @@ class NATPolicyForm(NautobotModelForm, TenancyForm):
             "nat_policy_rules",
             "status",
             "assigned_devices",
+            "assigned_virtual_machines",
             "assigned_dynamic_groups",
             "tenant_group",
             "tenant",
@@ -878,6 +886,7 @@ class NATPolicyBulkEditForm(NautobotBulkEditForm):
     pk = DynamicModelMultipleChoiceField(queryset=models.NATPolicy.objects.all(), widget=forms.MultipleHiddenInput)
     description = forms.CharField(required=False)
     assigned_devices = DynamicModelMultipleChoiceField(queryset=Device.objects.all(), required=False)
+    assigned_virtual_machines = DynamicModelMultipleChoiceField(queryset=VirtualMachine.objects.all(), required=False)
     assigned_dynamic_groups = DynamicModelMultipleChoiceField(queryset=DynamicGroup.objects.all(), required=False)
     policy_rules = DynamicModelMultipleChoiceField(queryset=models.NATPolicyRule.objects.all(), required=False)
     tenant = DynamicModelChoiceField(queryset=Tenant.objects.all(), required=False)

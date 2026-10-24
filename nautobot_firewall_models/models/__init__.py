@@ -14,12 +14,14 @@ from .nat_policy import (
     NATPolicyDeviceM2M,
     NATPolicyDynamicGroupM2M,
     NATPolicyRule,
+    NATPolicyVirtualMachineM2M,
 )
 from .security_policy import (
     Policy,
     PolicyDeviceM2M,
     PolicyDynamicGroupM2M,
     PolicyRule,
+    PolicyVirtualMachineM2M,
 )
 from .service import (
     ApplicationObject,
@@ -42,10 +44,12 @@ __all__ = (
     "NATPolicyDeviceM2M",
     "NATPolicyDynamicGroupM2M",
     "NATPolicyRule",
+    "NATPolicyVirtualMachineM2M",
     "Policy",
     "PolicyDeviceM2M",
     "PolicyDynamicGroupM2M",
     "PolicyRule",
+    "PolicyVirtualMachineM2M",
     "ServiceObject",
     "ServiceObjectGroup",
     "UserObject",

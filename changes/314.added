@@ -1,0 +1,4 @@
+Added Virtual Machine assignment support to the Policy and NATPolicy models via `assigned_virtual_machines`.
+Added `PolicyVirtualMachineM2M` and `NATPolicyVirtualMachineM2M` through models with REST API endpoints.
+Added "Edit Virtual Machine Weight" tab to the Policy and NATPolicy detail views.
+Added "Security Policies Directly Assigned" and "Security Policies via Dynamic Groups" panels to the Virtual Machine detail view.

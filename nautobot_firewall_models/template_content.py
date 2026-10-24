@@ -34,6 +34,35 @@ class DynamicGroupDevicePolicies(TemplateExtension):  # pylint: disable=abstract
         )
 
 
+class VirtualMachinePolicies(TemplateExtension):  # pylint: disable=abstract-method
+    """Add Policy to the right side of the Virtual Machine page."""
+
+    model = "virtualization.virtualmachine"
+
+    def right_page(self):
+        """Add content to the right side of the Virtual Machines detail view."""
+        return self.render(
+            "nautobot_firewall_models/inc/virtual_machine_policies.html",
+            extra_context={
+                "policies": self.context["object"].policyvirtualmachinem2m_set.all(),
+                "nat_policies": self.context["object"].natpolicyvirtualmachinem2m_set.all(),
+            },
+        )
+
+
+class DynamicGroupVirtualMachinePolicies(TemplateExtension):  # pylint: disable=abstract-method
+    """Add Policy to the right side of the Virtual Machine page."""
+
+    model = "virtualization.virtualmachine"
+
+    def right_page(self):
+        """Add content to the right side of the Virtual Machines detail view."""
+        return self.render(
+            "nautobot_firewall_models/inc/dynamic_group_device_policies.html",
+            extra_context={"dynamic_groups": self.context["object"].dynamic_groups.all()},
+        )
+
+
 class DynamicGroupPolicies(TemplateExtension):  # pylint: disable=abstract-method
     """Add Policy to the right side of the Device page."""
 
@@ -67,4 +96,11 @@ class CapircaPolicies(TemplateExtension):  # pylint: disable=abstract-method
             return ""
 
 
-template_extensions = [DynamicGroupDevicePolicies, DevicePolicies, DynamicGroupPolicies, CapircaPolicies]
+template_extensions = [
+    DynamicGroupDevicePolicies,
+    DevicePolicies,
+    DynamicGroupVirtualMachinePolicies,
+    VirtualMachinePolicies,
+    DynamicGroupPolicies,
+    CapircaPolicies,
+]
